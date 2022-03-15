@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Habit Tracker</string>
+    <string name="button_add_habit">button add item</string>
+    <string name="input_habit_name">Input habit name</string>
+    <string name="input_habit_description">Input habit description</string>
+    <string name="recurrence_time">Recurrence: %1$d time%2$s in %3$d day%4$s</string>
+    <string name="save">Save</string>
+    <string name="good">Good</string>
+    <string name="bad">Bad</string>
+    <string name="select_priority">Select priority</string>
+    <string name="select_type_of_habit">Select type of habit</string>
+    <string name="input_recurrence_number">Number</string>
+    <string name="input_recurrence_period">Period in days</string>
+    <string name="select_color">Select color</string>
+    <string name="input_recurrence_of_habit">Input recurrence of habit</string>
+    <string name="invalid_input">Invalid input</string>
+    <string name="not_all_required_fields_are_filled">Not all required fields are filled</string>
+    <string name="current_color">Current color</string>
+    <string name="rgb_color">RGB (%1$d, %2$d, %3$d)</string>
+    <string name="hsv_color">HSV (%1$d, %2$d, %3$d)</string>
+</resources>
