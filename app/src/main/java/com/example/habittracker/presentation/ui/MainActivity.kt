@@ -51,7 +51,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupAdapterClickListener() {
         habitListAdapter.onHabitListClickListener = {
-            Toast.makeText(this, it.name, Toast.LENGTH_SHORT).show()
             launchHabitItemActivityEditMode(it.id)
         }
     }
