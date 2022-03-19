@@ -42,8 +42,6 @@ class HabitItemActivity : AppCompatActivity() {
     private val colors = colorPicker.getColors()
     private val gradientColors = colorPicker.getGradientColors()
 
-//    private var habitItemId = UNDEFINED_ID
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHabitItemBinding.inflate(layoutInflater)
