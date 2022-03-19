@@ -10,7 +10,6 @@ import com.example.habittracker.domain.HabitItem
 import com.example.habittracker.domain.HabitPriority
 import com.example.habittracker.domain.HabitType
 import com.example.habittracker.presentation.color.ColorPicker
-import com.example.habittracker.presentation.recycler.HabitItemViewHolder
 import com.example.habittracker.presentation.recycler.HabitListAdapter
 import com.example.habittracker.presentation.view_models.MainViewModel
 import kotlin.random.Random
