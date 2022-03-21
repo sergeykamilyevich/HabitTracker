@@ -54,7 +54,7 @@ class HabitItemViewModel(application: Application) : AndroidViewModel(applicatio
         viewModelScope.launch {
             addHabitItemUseCase(item)
         }
-        closeItemActivity()
+        closeItemFragment()
     }
 
     fun editHabitItem(habitItem: HabitItem) {
@@ -71,11 +71,11 @@ class HabitItemViewModel(application: Application) : AndroidViewModel(applicatio
             viewModelScope.launch {
                 editHabitItemUseCase(item)
             }
-            closeItemActivity()
+            closeItemFragment()
         }
     }
 
-    private fun closeItemActivity() {
+    private fun closeItemFragment() {
         _canCloseScreen.value = Unit
     }
 

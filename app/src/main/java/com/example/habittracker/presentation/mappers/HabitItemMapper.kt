@@ -4,15 +4,14 @@ import android.graphics.drawable.ColorDrawable
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Spinner
-import com.example.habittracker.databinding.ActivityHabitItemBinding
+import com.example.habittracker.databinding.FragmentHabitItemBinding
 import com.example.habittracker.domain.HabitItem
 import com.example.habittracker.domain.HabitPriority
 import com.example.habittracker.domain.HabitType
-import java.lang.Exception
 
 class HabitItemMapper {
 
-    fun mapViewToHabitItem(binding: ActivityHabitItemBinding): HabitItem {
+    fun mapViewToHabitItem(binding: FragmentHabitItemBinding): HabitItem {
         with(binding) {
             val name = parseString(tiedName.text.toString())
             val description = parseString(tiedDescription.text.toString())
@@ -57,7 +56,7 @@ class HabitItemMapper {
 
     fun mapHabitTypeToRadioButton(
         habitType: HabitType,
-        binding: ActivityHabitItemBinding
+        binding: FragmentHabitItemBinding
     ): Int {
         return when (habitType) {
             HabitType.GOOD -> binding.rbGood.id

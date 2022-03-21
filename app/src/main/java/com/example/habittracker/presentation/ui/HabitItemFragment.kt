@@ -1,21 +1,20 @@
 package com.example.habittracker.presentation.ui
 
-import android.content.Context
-import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.habittracker.R
-import com.example.habittracker.databinding.ActivityHabitItemBinding
+import com.example.habittracker.databinding.FragmentHabitItemBinding
 import com.example.habittracker.domain.HabitItem
-import com.example.habittracker.domain.HabitItem.Companion.UNDEFINED_ID
 import com.example.habittracker.domain.HabitPriority
 import com.example.habittracker.presentation.color.ColorPicker
 import com.example.habittracker.presentation.mappers.ColorMapper
@@ -23,16 +22,19 @@ import com.example.habittracker.presentation.mappers.HabitItemMapper
 import com.example.habittracker.presentation.view_models.HabitItemViewModel
 import com.google.android.material.textfield.TextInputEditText
 
-class HabitItemActivity : AppCompatActivity() {
+class HabitItemFragment : Fragment() {
 
-    private lateinit var binding: ActivityHabitItemBinding
+    private var _binding: FragmentHabitItemBinding? = null
+    private val binding: FragmentHabitItemBinding
+        get() = _binding ?: throw RuntimeException("FragmentHabitItemBinding is null")
+
     private lateinit var viewModel: HabitItemViewModel
     private val habitItemMapper = HabitItemMapper()
     private val colorMapper = ColorMapper()
 
-    private val adapter by lazy {
+    private val spinnerAdapter by lazy {
         ArrayAdapter(
-            this,
+            requireActivity(),
             android.R.layout.simple_list_item_1,
             android.R.id.text1,
             HabitPriority.values()
@@ -42,33 +44,57 @@ class HabitItemActivity : AppCompatActivity() {
     private val colors = colorPicker.getColors()
     private val gradientColors = colorPicker.getGradientColors()
 
+    private var screenMode: String? = null
+    private var habitItemId: Int? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityHabitItemBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        viewModel = ViewModelProvider(this)[HabitItemViewModel::class.java]
+        parseArguments()
+    }
 
-        parseIntentActivityMode()
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentHabitItemBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(this)[HabitItemViewModel::class.java]
+        chooseScreenMode()
         setupSpinnerAdapter()
         setupViewModelObservers()
         setupTextChangeListeners()
         setupScrollView()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun chooseScreenMode() {
+        when (screenMode) {
+            ADD_MODE -> launchAddMode()
+            EDIT_MODE -> launchEditMode()
+            else -> throw RuntimeException("Unknown activity mode: $screenMode")
+        }
+    }
+
     private fun setupScrollView() {
         for (color in colors) {
-            val view = LayoutInflater.from(this).inflate(
+            val view = LayoutInflater.from(requireActivity()).inflate(
                 R.layout.item_color,
                 binding.llColor,
                 false
             )
             view.setBackgroundColor(color)
-
             view.setOnClickListener {
                 setupColorViews((it.background as ColorDrawable).color)
             }
             binding.llColor.addView(view)
-
         }
         val gradientDrawable =
             GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, gradientColors)
@@ -110,18 +136,16 @@ class HabitItemActivity : AppCompatActivity() {
     }
 
     private fun setupViewModelObservers() {
-        viewModel.canCloseScreen.observe(this) {
-            finish()
+        viewModel.canCloseScreen.observe(viewLifecycleOwner) {
+            requireActivity().onBackPressed()
         }
-        viewModel.errorInputRecurrenceNumber.observe(this) {
+        viewModel.errorInputRecurrenceNumber.observe(viewLifecycleOwner) {
             handleInputError(it, binding.tiedRecurrenceNumber)
         }
-
-        viewModel.errorInputRecurrencePeriod.observe(this) {
+        viewModel.errorInputRecurrencePeriod.observe(viewLifecycleOwner) {
             handleInputError(it, binding.tiedRecurrencePeriod)
         }
-
-        viewModel.errorInputName.observe(this) {
+        viewModel.errorInputName.observe(viewLifecycleOwner) {
             handleInputError(it, binding.tiedName)
         }
     }
@@ -135,7 +159,7 @@ class HabitItemActivity : AppCompatActivity() {
                 viewModel.addHabitItem(habitItemMapper.mapViewToHabitItem(binding))
             } else {
                 Toast.makeText(
-                    this,
+                    requireActivity(),
                     getString(R.string.not_all_required_fields_are_filled),
                     Toast.LENGTH_SHORT
                 ).show()
@@ -145,9 +169,9 @@ class HabitItemActivity : AppCompatActivity() {
     }
 
     private fun launchEditMode() {
-        val habitItemId = intent.getIntExtra(HABIT_ITEM_ID, UNDEFINED_ID)
-        viewModel.getHabitItem(habitItemId)
-        viewModel.habitItem.observe(this) {
+        viewModel.getHabitItem(habitItemId
+            ?: throw RuntimeException("habitItemId is null"))
+        viewModel.habitItem.observe(viewLifecycleOwner) {
             setupFields(it)
         }
         binding.btnSave.setOnClickListener {
@@ -170,18 +194,18 @@ class HabitItemActivity : AppCompatActivity() {
                 || viewModel.errorInputName.value == true)
     }
 
-    private fun parseIntentActivityMode() {
-        val activityMode = intent.getStringExtra(ACTIVITY_MODE)
-            ?: throw RuntimeException("Activity mode didn't setup")
-        when (activityMode) {
-            ADD_MODE -> launchAddMode()
-            EDIT_MODE -> launchEditMode()
-            else -> throw RuntimeException("Unknown activity mode: $activityMode")
-        }
+    private fun parseArguments() {
+        arguments?.let {
+            screenMode = it.getString(SCREEN_MODE)
+                ?: throw RuntimeException("Activity mode didn't setup")
+            if (screenMode == EDIT_MODE) {
+                    habitItemId = it.getInt(HABIT_ITEM_ID, HabitItem.UNDEFINED_ID)
+            }
+        } ?: throw java.lang.RuntimeException("Arguments didn't setup")
     }
 
     private fun setupSpinnerAdapter() {
-        binding.spinnerPriority.adapter = adapter
+        binding.spinnerPriority.adapter = spinnerAdapter
     }
 
     private fun isFieldsFilled(): Boolean {
@@ -197,7 +221,7 @@ class HabitItemActivity : AppCompatActivity() {
         with(binding) {
             tiedName.setText(habitItem.name)
             tiedDescription.setText(habitItem.description)
-            val spinnerPosition = adapter.getPosition(habitItem.priority)
+            val spinnerPosition = spinnerAdapter.getPosition(habitItem.priority)
             spinnerPriority.setSelection(spinnerPosition)
             val checkedRadioButtonId =
                 habitItemMapper.mapHabitTypeToRadioButton(habitItem.type, binding)
@@ -219,26 +243,26 @@ class HabitItemActivity : AppCompatActivity() {
         }
     }
 
-
     companion object {
 
-        private const val ACTIVITY_MODE = "activity mode"
+        private const val SCREEN_MODE = "activity mode"
         private const val ADD_MODE = "add mode"
         private const val EDIT_MODE = "edit mode"
         private const val HABIT_ITEM_ID = "habit item id"
 
-        fun newIntentAddMode(context: Context): Intent {
-            val intent = Intent(context, HabitItemActivity::class.java)
-            intent.putExtra(ACTIVITY_MODE, ADD_MODE)
-            return intent
+        @JvmStatic
+        fun newInstanceAddMode() = HabitItemFragment().apply {
+            arguments = Bundle().apply {
+                putString(SCREEN_MODE, ADD_MODE)
+            }
         }
 
-        fun newIntentEditMode(context: Context, habitItemId: Int): Intent {
-            val intent = Intent(context, HabitItemActivity::class.java)
-            intent.putExtra(ACTIVITY_MODE, EDIT_MODE)
-            intent.putExtra(HABIT_ITEM_ID, habitItemId)
-            return intent
+        @JvmStatic
+        fun newInstancetEditMode(habitItemId: Int) = HabitItemFragment().apply {
+            arguments = Bundle().apply {
+                putString(SCREEN_MODE, EDIT_MODE)
+                putInt(HABIT_ITEM_ID, habitItemId)
+            }
         }
     }
-
 }
