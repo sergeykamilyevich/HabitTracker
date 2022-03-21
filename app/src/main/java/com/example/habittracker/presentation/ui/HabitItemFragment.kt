@@ -5,13 +5,13 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.example.habittracker.R
 import com.example.habittracker.databinding.FragmentHabitItemBinding
 import com.example.habittracker.domain.HabitItem
@@ -28,7 +28,7 @@ class HabitItemFragment : Fragment() {
     private val binding: FragmentHabitItemBinding
         get() = _binding ?: throw RuntimeException("FragmentHabitItemBinding is null")
 
-    private lateinit var viewModel: HabitItemViewModel
+    private val viewModel: HabitItemViewModel by viewModels()
     private val habitItemMapper = HabitItemMapper()
     private val colorMapper = ColorMapper()
 
@@ -62,7 +62,6 @@ class HabitItemFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this)[HabitItemViewModel::class.java]
         chooseScreenMode()
         setupSpinnerAdapter()
         setupViewModelObservers()
@@ -169,8 +168,10 @@ class HabitItemFragment : Fragment() {
     }
 
     private fun launchEditMode() {
-        viewModel.getHabitItem(habitItemId
-            ?: throw RuntimeException("habitItemId is null"))
+        viewModel.getHabitItem(
+            habitItemId
+                ?: throw RuntimeException("habitItemId is null")
+        )
         viewModel.habitItem.observe(viewLifecycleOwner) {
             setupFields(it)
         }
@@ -199,7 +200,7 @@ class HabitItemFragment : Fragment() {
             screenMode = it.getString(SCREEN_MODE)
                 ?: throw RuntimeException("Activity mode didn't setup")
             if (screenMode == EDIT_MODE) {
-                    habitItemId = it.getInt(HABIT_ITEM_ID, HabitItem.UNDEFINED_ID)
+                habitItemId = it.getInt(HABIT_ITEM_ID, HabitItem.UNDEFINED_ID)
             }
         } ?: throw java.lang.RuntimeException("Arguments didn't setup")
     }

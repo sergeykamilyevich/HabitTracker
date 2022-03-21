@@ -19,8 +19,7 @@ class MainActivity : AppCompatActivity() {
     private fun launchHabitListFragment() {
         val fragment = HabitListFragment.newInstance()
         supportFragmentManager.beginTransaction()
-            .addToBackStack(null)
-            .replace(binding.mainContainer.id, fragment)
+            .add(binding.mainContainer.id, fragment)
             .commit()
     }
 }
