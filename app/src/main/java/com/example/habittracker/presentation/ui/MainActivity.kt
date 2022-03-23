@@ -12,14 +12,5 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        launchHabitListFragment()
-    }
-
-    private fun launchHabitListFragment() {
-        val fragment = HabitListFragment.newInstance()
-        supportFragmentManager.beginTransaction()
-            .add(binding.mainContainer.id, fragment)
-            .commit()
     }
 }

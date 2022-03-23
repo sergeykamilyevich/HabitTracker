@@ -42,24 +42,8 @@ class HabitItemViewModel(application: Application) : AndroidViewModel(applicatio
         get() = _canCloseScreen
 
     fun addHabitItem(habitItem: HabitItem) {
-        val item = HabitItem(
-            name = habitItem.name,
-            description = habitItem.description,
-            priority = habitItem.priority,
-            type = habitItem.type,
-            color = habitItem.color,
-            recurrenceNumber = habitItem.recurrenceNumber,
-            recurrencePeriod = habitItem.recurrencePeriod
-        )
         viewModelScope.launch {
-            addHabitItemUseCase(item)
-        }
-        closeItemFragment()
-    }
-
-    fun editHabitItem(habitItem: HabitItem) {
-        _habitItem.value?.let {
-            val item = it.copy(
+            val item = HabitItem(
                 name = habitItem.name,
                 description = habitItem.description,
                 priority = habitItem.priority,
@@ -68,10 +52,26 @@ class HabitItemViewModel(application: Application) : AndroidViewModel(applicatio
                 recurrenceNumber = habitItem.recurrenceNumber,
                 recurrencePeriod = habitItem.recurrencePeriod
             )
-            viewModelScope.launch {
-                editHabitItemUseCase(item)
-            }
+            addHabitItemUseCase(item)
             closeItemFragment()
+        }
+    }
+
+    fun editHabitItem(habitItem: HabitItem) {
+        _habitItem.value?.let {
+            viewModelScope.launch {
+                val item = it.copy(
+                    name = habitItem.name,
+                    description = habitItem.description,
+                    priority = habitItem.priority,
+                    type = habitItem.type,
+                    color = habitItem.color,
+                    recurrenceNumber = habitItem.recurrenceNumber,
+                    recurrencePeriod = habitItem.recurrencePeriod
+                )
+                editHabitItemUseCase(item)
+                closeItemFragment()
+            }
         }
     }
 

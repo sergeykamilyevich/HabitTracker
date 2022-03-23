@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.habittracker.R
 import com.example.habittracker.databinding.FragmentHabitListBinding
 import com.example.habittracker.domain.HabitItem
 import com.example.habittracker.domain.HabitPriority
@@ -115,24 +115,16 @@ class HabitListFragment : Fragment() {
     }
 
     private fun launchHabitItemActivityAddMode() {
-        val fragment = HabitItemFragment.newInstanceAddMode()
-        requireActivity().supportFragmentManager.beginTransaction()
-            .addToBackStack(null)
-            .replace(R.id.main_container, fragment)
-            .commit()
+        launchHabitListFragmentToHabitItemFragmentDirection(HabitItem.UNDEFINED_ID)
     }
 
     private fun launchHabitItemActivityEditMode(habitItemId: Int) {
-        val fragment = HabitItemFragment.newInstancetEditMode(habitItemId)
-        requireActivity().supportFragmentManager.beginTransaction()
-            .addToBackStack(null)
-            .replace(R.id.main_container, fragment)
-            .commit()
+        launchHabitListFragmentToHabitItemFragmentDirection(habitItemId)
     }
 
-    companion object {
-
-        @JvmStatic
-        fun newInstance() = HabitListFragment()
+    private fun launchHabitListFragmentToHabitItemFragmentDirection(habitItemId: Int) {
+        val direction = HabitListFragmentDirections
+            .actionHabitListFragmentToHabitItemFragment(habitItemId)
+        findNavController().navigate(direction)
     }
 }

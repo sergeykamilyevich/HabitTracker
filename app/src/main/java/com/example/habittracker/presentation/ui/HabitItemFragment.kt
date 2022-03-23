@@ -12,6 +12,8 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.habittracker.R
 import com.example.habittracker.databinding.FragmentHabitItemBinding
 import com.example.habittracker.domain.HabitItem
@@ -29,9 +31,9 @@ class HabitItemFragment : Fragment() {
         get() = _binding ?: throw RuntimeException("FragmentHabitItemBinding is null")
 
     private val viewModel: HabitItemViewModel by viewModels()
+    private val args: HabitItemFragmentArgs by navArgs()
     private val habitItemMapper = HabitItemMapper()
     private val colorMapper = ColorMapper()
-
     private val spinnerAdapter by lazy {
         ArrayAdapter(
             requireActivity(),
@@ -43,14 +45,6 @@ class HabitItemFragment : Fragment() {
     private val colorPicker = ColorPicker()
     private val colors = colorPicker.getColors()
     private val gradientColors = colorPicker.getGradientColors()
-
-    private var screenMode: String? = null
-    private var habitItemId: Int? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        parseArguments()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,10 +69,10 @@ class HabitItemFragment : Fragment() {
     }
 
     private fun chooseScreenMode() {
-        when (screenMode) {
-            ADD_MODE -> launchAddMode()
-            EDIT_MODE -> launchEditMode()
-            else -> throw RuntimeException("Unknown activity mode: $screenMode")
+        if (args.habitItemId == HabitItem.UNDEFINED_ID) {
+            launchAddMode()
+        } else {
+            launchEditMode()
         }
     }
 
@@ -136,7 +130,7 @@ class HabitItemFragment : Fragment() {
 
     private fun setupViewModelObservers() {
         viewModel.canCloseScreen.observe(viewLifecycleOwner) {
-            requireActivity().onBackPressed()
+            findNavController().popBackStack()
         }
         viewModel.errorInputRecurrenceNumber.observe(viewLifecycleOwner) {
             handleInputError(it, binding.tiedRecurrenceNumber)
@@ -168,10 +162,7 @@ class HabitItemFragment : Fragment() {
     }
 
     private fun launchEditMode() {
-        viewModel.getHabitItem(
-            habitItemId
-                ?: throw RuntimeException("habitItemId is null")
-        )
+        viewModel.getHabitItem(args.habitItemId)
         viewModel.habitItem.observe(viewLifecycleOwner) {
             setupFields(it)
         }
@@ -193,16 +184,6 @@ class HabitItemFragment : Fragment() {
         binding.btnSave.isEnabled = !(viewModel.errorInputRecurrenceNumber.value == true
                 || viewModel.errorInputRecurrencePeriod.value == true
                 || viewModel.errorInputName.value == true)
-    }
-
-    private fun parseArguments() {
-        arguments?.let {
-            screenMode = it.getString(SCREEN_MODE)
-                ?: throw RuntimeException("Activity mode didn't setup")
-            if (screenMode == EDIT_MODE) {
-                habitItemId = it.getInt(HABIT_ITEM_ID, HabitItem.UNDEFINED_ID)
-            }
-        } ?: throw java.lang.RuntimeException("Arguments didn't setup")
     }
 
     private fun setupSpinnerAdapter() {
@@ -241,29 +222,6 @@ class HabitItemFragment : Fragment() {
                 getString(R.string.rgb_color, color.red, color.green, color.blue)
             tvCurrentColorHsv.text =
                 getString(R.string.hsv_color, color.hue, color.saturation, color.value)
-        }
-    }
-
-    companion object {
-
-        private const val SCREEN_MODE = "activity mode"
-        private const val ADD_MODE = "add mode"
-        private const val EDIT_MODE = "edit mode"
-        private const val HABIT_ITEM_ID = "habit item id"
-
-        @JvmStatic
-        fun newInstanceAddMode() = HabitItemFragment().apply {
-            arguments = Bundle().apply {
-                putString(SCREEN_MODE, ADD_MODE)
-            }
-        }
-
-        @JvmStatic
-        fun newInstancetEditMode(habitItemId: Int) = HabitItemFragment().apply {
-            arguments = Bundle().apply {
-                putString(SCREEN_MODE, EDIT_MODE)
-                putInt(HABIT_ITEM_ID, habitItemId)
-            }
         }
     }
 }
