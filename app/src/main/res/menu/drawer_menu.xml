@@ -3,9 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
     <item
-        android:id="@+id/habitListActivity"
+        android:id="@+id/habitListFragment"
         android:icon="@drawable/ic_baseline_list_24"
         android:title="@string/habits" />
+    <item
+        android:id="@+id/habitListActivity"
+        android:icon="@drawable/ic_baseline_list_24"
+        android:title="Sorted habits" />
     <item
         android:id="@+id/aboutFragment"
         android:icon="@drawable/ic_baseline_info_24"

@@ -31,7 +31,7 @@ class HabitListFragment : Fragment(), HasTitle {
     private val colorPicker = ColorPicker()
     private val colors = colorPicker.getColors()
 
-    private var listMode: String? = null
+    private var listMode: String = ALL_HABITS_MODE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,8 +41,8 @@ class HabitListFragment : Fragment(), HasTitle {
     private fun parseArguments() {
         arguments?.let {
             listMode = it.getString(LIST_MODE)
-                ?: throw RuntimeException("List mode didn't setup")
-        } ?: throw RuntimeException("Arguments didn't setup")
+                ?: ALL_HABITS_MODE
+        }
     }
 
     override fun onCreateView(
@@ -142,6 +142,7 @@ class HabitListFragment : Fragment(), HasTitle {
     }
 
     private fun launchHabitItemActivityEditMode(habitItemId: Int) {
+        findNavController()
         launchHabitListFragmentToHabitItemFragmentDirection(habitItemId)
     }
 
@@ -158,7 +159,6 @@ class HabitListFragment : Fragment(), HasTitle {
         private const val LIST_MODE = "list mode"
         private const val ALL_HABITS_MODE = "all habits"
         private const val GOOD_HABITS_MODE = "good habits"
-
         private const val BAD_HABITS_MODE = "bad habits"
 
         fun newInstanceAllHabits() = HabitListFragment().apply {

@@ -30,6 +30,9 @@
     <string name="version_code">Version code: %1$d</string>
     <string name="app_description">This application will help you form good habits and get rid of bad ones.</string>
     <string name="habits">Habits</string>
+    <string name="all_habits">All habits</string>
+    <string name="good_habits">Good habits</string>
+    <string name="bad_habits">Bad habits</string>
 
     <plurals name="plurals_times">
         <item quantity="one">%d time</item>
