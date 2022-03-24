@@ -5,6 +5,7 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,7 +33,6 @@ class HabitItemFragment : Fragment(), HasTitle {
         get() = _binding ?: throw RuntimeException("FragmentHabitItemBinding is null")
 
     private val viewModel: HabitItemViewModel by viewModels()
-//    private val args: HabitItemFragmentArgs by navArgs()
     private var habitItemId: Int = 0
     private val habitItemMapper = HabitItemMapper()
     private val colorMapper = ColorMapper()
@@ -48,11 +48,10 @@ class HabitItemFragment : Fragment(), HasTitle {
     private val colors = colorPicker.getColors()
     private val gradientColors = colorPicker.getGradientColors()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        habitItemId = arguments?.getInt(HABIT_ITEM_ID, 0)
-//            ?: throw RuntimeException("Unknown habitItemId")
+        habitItemId = arguments?.getInt(HABIT_ITEM_ID, 0)
+            ?: throw RuntimeException("Unknown habitItemId")
 
     }
 
