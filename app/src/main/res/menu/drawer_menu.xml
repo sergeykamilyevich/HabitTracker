@@ -7,10 +7,6 @@
         android:icon="@drawable/ic_baseline_list_24"
         android:title="@string/habits" />
     <item
-        android:id="@+id/habitListActivity"
-        android:icon="@drawable/ic_baseline_list_24"
-        android:title="Sorted habits" />
-    <item
         android:id="@+id/aboutFragment"
         android:icon="@drawable/ic_baseline_info_24"
         android:title="@string/about" />

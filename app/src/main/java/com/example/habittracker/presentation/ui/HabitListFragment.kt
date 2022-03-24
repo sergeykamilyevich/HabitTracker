@@ -1,6 +1,7 @@
 package com.example.habittracker.presentation.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -138,18 +139,16 @@ class HabitListFragment : Fragment(), HasTitle {
     }
 
     private fun launchHabitItemActivityAddMode() {
-        launchHabitListFragmentToHabitItemFragmentDirection(HabitItem.UNDEFINED_ID)
+        launchDestination(R.id.habitItemFragment, HabitItemFragment.createArgs(HabitItem.UNDEFINED_ID))
     }
 
     private fun launchHabitItemActivityEditMode(habitItemId: Int) {
-        findNavController()
-        launchHabitListFragmentToHabitItemFragmentDirection(habitItemId)
+        launchDestination(R.id.habitItemFragment, HabitItemFragment.createArgs(habitItemId))
+
     }
 
-    private fun launchHabitListFragmentToHabitItemFragmentDirection(habitItemId: Int) {
-        val direction = HabitListFragmentDirections
-            .actionHabitListFragmentToHabitItemFragment(habitItemId)
-        findNavController().navigate(direction)
+    private fun launchDestination(destinationId: Int, args: Bundle) {
+        findNavController().navigate(destinationId, args)
     }
 
     override fun getTitleResId(): Int = R.string.habit_list

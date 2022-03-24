@@ -10,9 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HabitTracker">
         <activity
-            android:name=".presentation.ui.HabitListActivity"
-            android:exported="false" />
-        <activity
             android:name=".presentation.ui.MainActivity"
             android:exported="true">
             <intent-filter>

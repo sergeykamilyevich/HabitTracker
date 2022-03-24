@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -31,7 +32,8 @@ class HabitItemFragment : Fragment(), HasTitle {
         get() = _binding ?: throw RuntimeException("FragmentHabitItemBinding is null")
 
     private val viewModel: HabitItemViewModel by viewModels()
-    private val args: HabitItemFragmentArgs by navArgs()
+//    private val args: HabitItemFragmentArgs by navArgs()
+    private var habitItemId: Int = 0
     private val habitItemMapper = HabitItemMapper()
     private val colorMapper = ColorMapper()
     private val spinnerAdapter by lazy {
@@ -45,6 +47,14 @@ class HabitItemFragment : Fragment(), HasTitle {
     private val colorPicker = ColorPicker()
     private val colors = colorPicker.getColors()
     private val gradientColors = colorPicker.getGradientColors()
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+//        habitItemId = arguments?.getInt(HABIT_ITEM_ID, 0)
+//            ?: throw RuntimeException("Unknown habitItemId")
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,7 +79,7 @@ class HabitItemFragment : Fragment(), HasTitle {
     }
 
     private fun chooseScreenMode() {
-        if (args.habitItemId == HabitItem.UNDEFINED_ID) {
+        if (habitItemId == HabitItem.UNDEFINED_ID) {
             launchAddMode()
         } else {
             launchEditMode()
@@ -162,7 +172,7 @@ class HabitItemFragment : Fragment(), HasTitle {
     }
 
     private fun launchEditMode() {
-        viewModel.getHabitItem(args.habitItemId)
+        viewModel.getHabitItem(habitItemId)
         viewModel.habitItem.observe(viewLifecycleOwner) {
             setupFields(it)
         }
@@ -226,4 +236,13 @@ class HabitItemFragment : Fragment(), HasTitle {
     }
 
     override fun getTitleResId(): Int = R.string.habit_item
+
+    companion object {
+
+        private const val HABIT_ITEM_ID = "habit item id"
+        fun createArgs(habitItemId: Int) =
+            Bundle().apply {
+                putInt(HABIT_ITEM_ID, habitItemId)
+            }
+    }
 }

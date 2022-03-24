@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
-    app:startDestination="@id/habitListFragment">
+    app:startDestination="@id/habitListPagerFragment2">
 
     <fragment
         android:id="@+id/habitListFragment"
@@ -18,19 +18,15 @@
         android:id="@+id/habitItemFragment"
         android:name="com.example.habittracker.presentation.ui.HabitItemFragment"
         android:label="fragment_habit_item"
-        tools:layout="@layout/fragment_habit_item">
-        <argument
-            android:name="habitItemId"
-            app:argType="integer" />
-    </fragment>
+        tools:layout="@layout/fragment_habit_item"/>
     <fragment
         android:id="@+id/aboutFragment"
         android:name="com.example.habittracker.presentation.ui.AboutFragment"
         android:label="fragment_about"
         tools:layout="@layout/fragment_about" />
-    <activity
-        android:id="@+id/habitListActivity"
-        android:name="com.example.habittracker.presentation.ui.HabitListActivity"
-        android:label="activity_habit_list"
-        tools:layout="@layout/activity_habit_list" />
+    <fragment
+        android:id="@+id/habitListPagerFragment2"
+        android:name="com.example.habittracker.presentation.ui.HabitListPagerFragment"
+        android:label="fragment_habit_list_pager"
+        tools:layout="@layout/fragment_habit_list_pager" />
 </navigation>
