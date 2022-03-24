@@ -6,14 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import com.example.habittracker.BuildConfig
 import com.example.habittracker.R
-import com.example.habittracker.databinding.FragmentAboutBinding
 import com.example.habittracker.databinding.FragmentHabitListPagerBinding
 import com.example.habittracker.presentation.view_pager.ViewPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
-
 
 class HabitListPagerFragment : Fragment(), HasTitle {
 

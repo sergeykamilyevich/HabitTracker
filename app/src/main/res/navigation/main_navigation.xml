@@ -9,11 +9,7 @@
         android:id="@+id/habitListFragment"
         android:name="com.example.habittracker.presentation.ui.HabitListFragment"
         android:label="fragment_habit_list"
-        tools:layout="@layout/fragment_habit_list">
-        <action
-            android:id="@+id/action_habitListFragment_to_habitItemFragment"
-            app:destination="@id/habitItemFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_habit_list"/>
     <fragment
         android:id="@+id/habitItemFragment"
         android:name="com.example.habittracker.presentation.ui.HabitItemFragment"
