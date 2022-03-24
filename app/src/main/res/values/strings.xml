@@ -5,6 +5,7 @@
     <string name="input_habit_description">Input habit description</string>
     <string name="recurrence">Recurrence: %1$s in %2$s</string>
     <string name="save">Save</string>
+    <string name="ok">OK</string>
     <string name="good">Good</string>
     <string name="bad">Bad</string>
     <string name="select_priority">Select priority</string>
@@ -20,6 +21,16 @@
     <string name="hsv_color">HSV (%1$d, %2$d, %3$d)</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="plural_ending">s</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="about">About</string>
+    <string name="habit_list">Habit List</string>
+    <string name="habit_item">Habit Item</string>
+    <string name="version_name">Version name: %1$s</string>
+    <string name="version_code">Version code: %1$d</string>
+    <string name="app_description">This application will help you form good habits and get rid of bad ones.</string>
+    <string name="habits">Habits</string>
+
     <plurals name="plurals_times">
         <item quantity="one">%d time</item>
         <item quantity="other">%d times</item>

@@ -24,7 +24,7 @@ import com.example.habittracker.presentation.mappers.HabitItemMapper
 import com.example.habittracker.presentation.view_models.HabitItemViewModel
 import com.google.android.material.textfield.TextInputEditText
 
-class HabitItemFragment : Fragment() {
+class HabitItemFragment : Fragment(), HasTitle {
 
     private var _binding: FragmentHabitItemBinding? = null
     private val binding: FragmentHabitItemBinding
@@ -224,4 +224,6 @@ class HabitItemFragment : Fragment() {
                 getString(R.string.hsv_color, color.hue, color.saturation, color.value)
         }
     }
+
+    override fun getTitleResId(): Int = R.string.habit_item
 }

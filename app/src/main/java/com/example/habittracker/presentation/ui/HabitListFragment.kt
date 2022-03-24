@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.example.habittracker.R
 import com.example.habittracker.databinding.FragmentHabitListBinding
 import com.example.habittracker.domain.HabitItem
 import com.example.habittracker.domain.HabitPriority
@@ -19,7 +20,7 @@ import com.example.habittracker.presentation.view_models.MainViewModel
 import kotlin.random.Random
 
 
-class HabitListFragment : Fragment() {
+class HabitListFragment : Fragment(), HasTitle {
 
     private var _binding: FragmentHabitListBinding? = null
     private val binding: FragmentHabitListBinding
@@ -29,6 +30,20 @@ class HabitListFragment : Fragment() {
     private lateinit var habitListAdapter: HabitListAdapter
     private val colorPicker = ColorPicker()
     private val colors = colorPicker.getColors()
+
+    private var listMode: String? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        parseArguments()
+    }
+
+    private fun parseArguments() {
+        arguments?.let {
+            listMode = it.getString(LIST_MODE)
+                ?: throw RuntimeException("List mode didn't setup")
+        } ?: throw RuntimeException("Arguments didn't setup")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,8 +69,16 @@ class HabitListFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        viewModel.habitList.observe(viewLifecycleOwner) {
-            habitListAdapter.submitList(it)
+        when (listMode) {
+            ALL_HABITS_MODE -> viewModel.habitList.observe(viewLifecycleOwner) {
+                habitListAdapter.submitList(it)
+            }
+            GOOD_HABITS_MODE -> viewModel.habitGoodList.observe(viewLifecycleOwner) {
+                habitListAdapter.submitList(it)
+            }
+            BAD_HABITS_MODE -> viewModel.habitBadList.observe(viewLifecycleOwner) {
+                habitListAdapter.submitList(it)
+            }
         }
     }
 
@@ -126,5 +149,34 @@ class HabitListFragment : Fragment() {
         val direction = HabitListFragmentDirections
             .actionHabitListFragmentToHabitItemFragment(habitItemId)
         findNavController().navigate(direction)
+    }
+
+    override fun getTitleResId(): Int = R.string.habit_list
+
+
+    companion object {
+        private const val LIST_MODE = "list mode"
+        private const val ALL_HABITS_MODE = "all habits"
+        private const val GOOD_HABITS_MODE = "good habits"
+
+        private const val BAD_HABITS_MODE = "bad habits"
+
+        fun newInstanceAllHabits() = HabitListFragment().apply {
+            arguments = Bundle().apply {
+                putString(LIST_MODE, ALL_HABITS_MODE)
+            }
+        }
+
+        fun newInstanceGoodHabits() = HabitListFragment().apply {
+            arguments = Bundle().apply {
+                putString(LIST_MODE, GOOD_HABITS_MODE)
+            }
+        }
+
+        fun newInstanceBadHabits() = HabitListFragment().apply {
+            arguments = Bundle().apply {
+                putString(LIST_MODE, BAD_HABITS_MODE)
+            }
+        }
     }
 }

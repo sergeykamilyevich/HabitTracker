@@ -5,18 +5,20 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.habittracker.data.HabitListRepositoryImpl
 import com.example.habittracker.domain.HabitItem
-import com.example.habittracker.domain.usecases.AddHabitItemUseCase
-import com.example.habittracker.domain.usecases.DeleteHabitItemUseCase
-import com.example.habittracker.domain.usecases.GetHabitListUseCase
+import com.example.habittracker.domain.usecases.*
 import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = HabitListRepositoryImpl(application)
     private val getHabitListUseCase = GetHabitListUseCase(repository)
+    private val getHabitGoodListUseCase = GetHabitGoodListUseCase(repository)
+    private val getHabitBadListUseCase = GetHabitBadListUseCase(repository)
     private val addHabitItemUseCase = AddHabitItemUseCase(repository)
     private val deleteHabitItemUseCase = DeleteHabitItemUseCase(repository)
     val habitList = getHabitListUseCase()
+    val habitGoodList = getHabitGoodListUseCase()
+    val habitBadList = getHabitBadListUseCase()
 
     fun addHabitItem(habitItem: HabitItem) {
         viewModelScope.launch {

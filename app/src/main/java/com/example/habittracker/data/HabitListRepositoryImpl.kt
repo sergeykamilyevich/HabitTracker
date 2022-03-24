@@ -20,6 +20,22 @@ class HabitListRepositoryImpl(application: Application) : HabitListRepository {
         }
     }
 
+    override fun getGoodList(): LiveData<List<HabitItem>> {
+        val listHabitItemDbModel = habitListDao.getGoodList()
+            ?: throw RuntimeException("List of habits is empty")
+        return Transformations.map(listHabitItemDbModel) {
+            mapper.mapListDbModelToEntity(it)
+        }
+    }
+
+    override fun getBadList(): LiveData<List<HabitItem>> {
+        val listHabitItemDbModel = habitListDao.getBadList()
+            ?: throw RuntimeException("List of habits is empty")
+        return Transformations.map(listHabitItemDbModel) {
+            mapper.mapListDbModelToEntity(it)
+        }
+    }
+
     override suspend fun getById(habitItemId: Int): HabitItem {
         val habitItemDbModel = habitListDao.getById(habitItemId)
             ?: throw RuntimeException("Habit with id $habitItemId not found")

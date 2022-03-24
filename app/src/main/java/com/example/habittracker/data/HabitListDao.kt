@@ -10,6 +10,12 @@ interface HabitListDao {
     @Query("SELECT * FROM habit_items")
     fun getList(): LiveData<List<HabitItemDbModel>>?
 
+    @Query("SELECT * FROM habit_items WHERE type = 'GOOD'")
+    fun getGoodList(): LiveData<List<HabitItemDbModel>>?
+
+    @Query("SELECT * FROM habit_items WHERE type = 'BAD'")
+    fun getBadList(): LiveData<List<HabitItemDbModel>>?
+
     @Query("SELECT * FROM habit_items WHERE id = :habitItemId LIMIT 1")
     suspend fun getById(habitItemId: Int): HabitItemDbModel?
 
