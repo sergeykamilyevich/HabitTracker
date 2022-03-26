@@ -17,8 +17,6 @@ class HabitListViewModel(application: Application) : AndroidViewModel(applicatio
     private val addHabitItemUseCase = AddHabitItemUseCase(repository)
     private val deleteHabitItemUseCase = DeleteHabitItemUseCase(repository)
     var habitList = getHabitFilteredListUseCase(null)
-    val habitGoodList = getHabitFilteredListUseCase(HabitType.GOOD)
-    val habitBadList = getHabitFilteredListUseCase(HabitType.BAD)
 
     fun addHabitItem(habitItem: HabitItem) {
         viewModelScope.launch {
@@ -32,8 +30,8 @@ class HabitListViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    fun getFilteredHabitList(habitType: HabitType) {
-        habitList = getHabitFilteredListUseCase(habitType)
+    fun getFilteredHabitList(habitTypeFilter: HabitType?) {
+        habitList = getHabitFilteredListUseCase(habitTypeFilter)
     }
 
 }

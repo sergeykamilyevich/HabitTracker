@@ -1,6 +1,7 @@
 package com.example.habittracker.presentation.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,7 +32,7 @@ class HabitListFragment : Fragment(), HasTitle {
     private val colorPicker = ColorPicker()
     private val colors = colorPicker.getColors()
 
-    private var listMode: String = ALL_HABITS_MODE
+    private var listMode: HabitType? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,8 +41,7 @@ class HabitListFragment : Fragment(), HasTitle {
 
     private fun parseArguments() {
         arguments?.let {
-            listMode = it.getString(LIST_MODE)
-                ?: throw RuntimeException("List mode in null")
+            listMode = it.getParcelable(LIST_MODE)
         }
     }
 
@@ -69,17 +69,9 @@ class HabitListFragment : Fragment(), HasTitle {
     }
 
     private fun setupViewModel() {
-        when (listMode) {
-            ALL_HABITS_MODE -> viewModel.habitList.observe(viewLifecycleOwner) {
-                habitListAdapter.submitList(it)
-            }
-            GOOD_HABITS_MODE -> viewModel.habitGoodList.observe(viewLifecycleOwner) {
-                habitListAdapter.submitList(it)
-            }
-            BAD_HABITS_MODE -> viewModel.habitBadList.observe(viewLifecycleOwner) {
-                habitListAdapter.submitList(it)
-            }
-            else -> throw RuntimeException("Unknown list mode: $listMode")
+        viewModel.getFilteredHabitList(listMode)
+        viewModel.habitList.observe(viewLifecycleOwner) {
+            habitListAdapter.submitList(it)
         }
     }
 
@@ -156,25 +148,10 @@ class HabitListFragment : Fragment(), HasTitle {
 
     companion object {
         private const val LIST_MODE = "list mode"
-        private const val ALL_HABITS_MODE = "all habits"
-        private const val GOOD_HABITS_MODE = "good habits"
-        private const val BAD_HABITS_MODE = "bad habits"
 
-        fun newInstanceAllHabits() = HabitListFragment().apply {
+        fun newInstance(habitTypeFilter: HabitType?) = HabitListFragment().apply {
             arguments = Bundle().apply {
-                putString(LIST_MODE, ALL_HABITS_MODE)
-            }
-        }
-
-        fun newInstanceGoodHabits() = HabitListFragment().apply {
-            arguments = Bundle().apply {
-                putString(LIST_MODE, GOOD_HABITS_MODE)
-            }
-        }
-
-        fun newInstanceBadHabits() = HabitListFragment().apply {
-            arguments = Bundle().apply {
-                putString(LIST_MODE, BAD_HABITS_MODE)
+                putParcelable(LIST_MODE, habitTypeFilter)
             }
         }
     }

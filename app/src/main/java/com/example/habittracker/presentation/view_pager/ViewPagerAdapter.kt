@@ -2,8 +2,8 @@ package com.example.habittracker.presentation.view_pager
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.habittracker.domain.HabitType
 import com.example.habittracker.presentation.ui.HabitListFragment
 
 class ViewPagerAdapter(activity: AppCompatActivity) : FragmentStateAdapter(activity) {
@@ -11,9 +11,9 @@ class ViewPagerAdapter(activity: AppCompatActivity) : FragmentStateAdapter(activ
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> HabitListFragment.newInstanceAllHabits()
-            1 -> HabitListFragment.newInstanceGoodHabits()
-            2 -> HabitListFragment.newInstanceBadHabits()
+            0 -> HabitListFragment.newInstance(null)
+            1 -> HabitListFragment.newInstance(HabitType.GOOD)
+            2 -> HabitListFragment.newInstance(HabitType.BAD)
             else -> throw RuntimeException("Adapter position is out of range")
         }
     }
