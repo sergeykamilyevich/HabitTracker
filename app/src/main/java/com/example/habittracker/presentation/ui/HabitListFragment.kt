@@ -41,7 +41,7 @@ class HabitListFragment : Fragment(), HasTitle {
     private fun parseArguments() {
         arguments?.let {
             listMode = it.getString(LIST_MODE)
-                ?: ALL_HABITS_MODE
+                ?: throw RuntimeException("List mode in null")
         }
     }
 
@@ -79,6 +79,7 @@ class HabitListFragment : Fragment(), HasTitle {
             BAD_HABITS_MODE -> viewModel.habitBadList.observe(viewLifecycleOwner) {
                 habitListAdapter.submitList(it)
             }
+            else -> throw RuntimeException("Unknown list mode: $listMode")
         }
     }
 
