@@ -6,9 +6,7 @@ interface HabitListRepository {
 
     fun getList(): LiveData<List<HabitItem>>
 
-    fun getGoodList(): LiveData<List<HabitItem>>
-
-    fun getBadList(): LiveData<List<HabitItem>>
+    fun getFilteredList(habitType: HabitType?): LiveData<List<HabitItem>>
 
     suspend fun getById(habitItemId: Int): HabitItem
 

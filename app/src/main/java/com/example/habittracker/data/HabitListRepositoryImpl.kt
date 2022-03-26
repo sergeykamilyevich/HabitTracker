@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.example.habittracker.domain.HabitItem
 import com.example.habittracker.domain.HabitListRepository
+import com.example.habittracker.domain.HabitType
 import java.lang.RuntimeException
 
 class HabitListRepositoryImpl(application: Application) : HabitListRepository {
@@ -20,21 +21,18 @@ class HabitListRepositoryImpl(application: Application) : HabitListRepository {
         }
     }
 
-    override fun getGoodList(): LiveData<List<HabitItem>> {
-        val listHabitItemDbModel = habitListDao.getGoodList()
+    override fun getFilteredList(habitType: HabitType?): LiveData<List<HabitItem>> {
+        val habitTypeFilter =
+            if (habitType == null) getAllHabitTypesToStringList()
+            else listOf(habitType.toString())
+        val listHabitItemDbModel = habitListDao.getFilteredList(habitTypeFilter)
             ?: throw RuntimeException("List of habits is empty")
         return Transformations.map(listHabitItemDbModel) {
             mapper.mapListDbModelToEntity(it)
         }
     }
 
-    override fun getBadList(): LiveData<List<HabitItem>> {
-        val listHabitItemDbModel = habitListDao.getBadList()
-            ?: throw RuntimeException("List of habits is empty")
-        return Transformations.map(listHabitItemDbModel) {
-            mapper.mapListDbModelToEntity(it)
-        }
-    }
+    private fun getAllHabitTypesToStringList() = HabitType.values().map { it.toString() }
 
     override suspend fun getById(habitItemId: Int): HabitItem {
         val habitItemDbModel = habitListDao.getById(habitItemId)
