@@ -1,6 +1,7 @@
 package com.example.habittracker.presentation.mappers
 
 import android.graphics.drawable.ColorDrawable
+import android.text.Editable
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Spinner
@@ -13,12 +14,12 @@ class HabitItemMapper {
 
     fun mapViewToHabitItem(binding: FragmentHabitItemBinding): HabitItem {
         with(binding) {
-            val name = parseString(tiedName.text.toString())
-            val description = parseString(tiedDescription.text.toString())
+            val name = parseString(tiedName.text)
+            val description = parseString(tiedDescription.text)
             val priority = mapSpinnerToHabitPriority(binding.spinnerPriority)
             val type = mapRadioButtonToHabitType(binding.radioGroup)
-            val recurrenceNumber = parseNumber(tiedRecurrenceNumber.text.toString())
-            val recurrencePeriod = parseNumber(tiedRecurrencePeriod.text.toString())
+            val recurrenceNumber = parseNumber(tiedRecurrenceNumber.text)
+            val recurrencePeriod = parseNumber(tiedRecurrencePeriod.text)
             val color = (currentColor.background as ColorDrawable).color
             return HabitItem(
                 name,
@@ -43,10 +44,10 @@ class HabitItemMapper {
         return HabitPriority.valueOf(spinner.selectedItem.toString().uppercase())
     }
 
-    fun parseString(input: CharSequence?): String =
+    fun parseString(input: Editable?): String =
         input?.trim()?.toString() ?: EMPTY_STRING
 
-    fun parseNumber(input: CharSequence?): Int {
+    fun parseNumber(input: Editable?): Int {
         return try {
             input?.trim()?.toString()?.toInt() ?: DEFAULT_NUMBER
         } catch (e: Exception) {

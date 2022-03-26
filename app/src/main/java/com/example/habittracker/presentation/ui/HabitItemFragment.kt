@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -38,7 +39,7 @@ class HabitItemFragment : Fragment(), HasTitle {
             requireActivity(),
             android.R.layout.simple_list_item_1,
             android.R.id.text1,
-            HabitPriority.values()
+            HabitPriority.values().map { getString(it.resourceId) }
         )
     }
     private val colorPicker = ColorPicker()
@@ -101,37 +102,17 @@ class HabitItemFragment : Fragment(), HasTitle {
     }
 
     private fun setupTextChangeListeners() {
-        binding.tiedName.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+        binding.tiedName.addTextChangedListener {
+            viewModel.validateName(it)
+        }
 
-            override fun afterTextChanged(p0: Editable?) {}
+        binding.tiedRecurrenceNumber.addTextChangedListener {
+            viewModel.validateRecurrenceNumber(it)
+        }
 
-            override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.validateName(text)
-            }
-
-        })
-
-        binding.tiedRecurrenceNumber.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-            override fun afterTextChanged(p0: Editable?) {}
-
-            override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.validateRecurrenceNumber(text)
-            }
-
-        })
-
-        binding.tiedRecurrencePeriod.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-            override fun afterTextChanged(p0: Editable?) {}
-
-            override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.validateRecurrencePeriod(text)
-            }
-        })
+        binding.tiedRecurrencePeriod.addTextChangedListener {
+            viewModel.validateRecurrencePeriod(it)
+        }
     }
 
     private fun setupViewModelObservers() {
@@ -178,11 +159,7 @@ class HabitItemFragment : Fragment(), HasTitle {
     }
 
     private fun handleInputError(error: Boolean, textInputEditText: TextInputEditText) {
-        if (error) {
-            textInputEditText.error = getString(R.string.invalid_input)
-        } else {
-            textInputEditText.error = null
-        }
+        textInputEditText.error = if (error) getString(R.string.invalid_input) else null
         checkStatusBtnSave()
     }
 
@@ -201,7 +178,6 @@ class HabitItemFragment : Fragment(), HasTitle {
             tiedName.text?.isNotEmpty() == true
                     && tiedRecurrenceNumber.text?.isNotEmpty() == true
                     && tiedRecurrencePeriod.text?.isNotEmpty() == true
-
         }
     }
 
@@ -209,7 +185,8 @@ class HabitItemFragment : Fragment(), HasTitle {
         with(binding) {
             tiedName.setText(habitItem.name)
             tiedDescription.setText(habitItem.description)
-            val spinnerPosition = spinnerAdapter.getPosition(habitItem.priority)
+            val spinnerPosition = spinnerAdapter
+                .getPosition(getString(habitItem.priority.resourceId))
             spinnerPriority.setSelection(spinnerPosition)
             val checkedRadioButtonId =
                 habitItemMapper.mapHabitTypeToRadioButton(habitItem.type, binding)

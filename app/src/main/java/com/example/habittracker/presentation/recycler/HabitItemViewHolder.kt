@@ -14,8 +14,8 @@ class HabitItemViewHolder(
         with(binding) {
             tvDescription.text = habitItem.description
             tvName.text = habitItem.name
-            tvPriority.text = habitItem.priority.toString()
-            tvType.text = habitItem.type.toString()
+            tvPriority.text = root.resources.getString(habitItem.priority.resourceId)
+            tvType.text = root.resources.getString(habitItem.type.resourceId)
             viewColor.setBackgroundColor(habitItem.color)
             val recurrenceNumber = habitItem.recurrenceNumber
             val recurrenceTimes = root.resources.getQuantityString(

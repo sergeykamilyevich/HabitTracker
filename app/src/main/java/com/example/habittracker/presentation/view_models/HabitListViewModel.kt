@@ -8,7 +8,7 @@ import com.example.habittracker.domain.HabitItem
 import com.example.habittracker.domain.usecases.*
 import kotlinx.coroutines.launch
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
+class HabitListViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = HabitListRepositoryImpl(application)
     private val getHabitListUseCase = GetHabitListUseCase(repository)

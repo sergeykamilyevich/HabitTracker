@@ -1,233 +1,238 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".presentation.ui.HabitItemFragment">
+    android:layout_height="match_parent">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_name"
-        style="@style/ViewStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/til_description"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tied_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/input_habit_name"
-            android:inputType="textCapSentences" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_description"
-        style="@style/ViewStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/tv_select_type"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/til_name">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tied_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/input_habit_description"
-            android:inputType="textCapSentences" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <TextView
-        android:id="@+id/tv_select_priority"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="12dp"
-        android:text="@string/select_priority"
-        app:layout_constraintBottom_toTopOf="@id/spinner_priority"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_select_type" />
-
-    <Spinner
-        android:id="@+id/spinner_priority"
-        android:layout_marginHorizontal="8dp"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@id/guideline_middle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_select_priority" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_middle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+        tools:context=".presentation.ui.HabitItemFragment">
 
-    <TextView
-        android:id="@+id/tv_select_type"
-        style="@style/TextViewStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/select_type_of_habit"
-        app:layout_constraintBottom_toTopOf="@id/radio_group"
-        app:layout_constraintStart_toStartOf="@id/guideline_middle"
-        app:layout_constraintTop_toBottomOf="@id/til_description" />
-
-    <RadioGroup
-        android:id="@+id/radio_group"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
-        android:layout_marginBottom="10dp"
-        android:checkedButton="@id/rb_good"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@id/tv_input_recurrence"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/guideline_middle"
-        app:layout_constraintTop_toBottomOf="@id/tv_select_type">
-
-        <RadioButton
-            android:id="@+id/rb_good"
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_name"
+            style="@style/ViewStyle"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/good" />
+            app:layout_constraintBottom_toTopOf="@id/til_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed">
 
-        <RadioButton
-            android:id="@+id/rb_bad"
-            android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tied_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/input_habit_name"
+                android:inputType="textCapSentences" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_description"
+            style="@style/ViewStyle"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/bad" />
-    </RadioGroup>
+            app:layout_constraintBottom_toTopOf="@id/tv_select_type"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/til_name">
 
-    <TextView
-        android:id="@+id/tv_input_recurrence"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="12dp"
-        android:text="@string/input_recurrence_of_habit"
-        app:layout_constraintBottom_toTopOf="@id/til_recurrence_number"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/radio_group" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tied_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/input_habit_description"
+                android:inputType="textCapSentences" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_recurrence_number"
-        style="@style/ViewStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/tv_current_color"
-        app:layout_constraintEnd_toStartOf="@id/til_recurrence_period"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_input_recurrence">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tied_recurrence_number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/input_recurrence_number"
-            android:inputType="number" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_recurrence_period"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/til_recurrence_number"
-        app:layout_constraintTop_toTopOf="@id/til_recurrence_number">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tied_recurrence_period"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/input_recurrence_period"
-            android:inputType="number" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <TextView
-        android:id="@+id/tv_current_color"
-        style="@style/TextViewStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/current_color"
-        app:layout_constraintBottom_toTopOf="@id/current_color"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/til_recurrence_number" />
-
-    <TextView
-        android:id="@+id/current_color"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/ic_rectangle"
-        app:layout_constraintBottom_toTopOf="@id/tv_select_color"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_current_color" />
-
-    <TextView
-        android:id="@+id/tv_current_color_rgb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="12dp"
-        android:text="@string/rgb_color"
-        app:layout_constraintBottom_toTopOf="@id/tv_current_color_hsv"
-        app:layout_constraintStart_toEndOf="@id/current_color"
-        app:layout_constraintTop_toTopOf="@id/current_color" />
-
-    <TextView
-        android:id="@+id/tv_current_color_hsv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="12dp"
-        android:text="@string/hsv_color"
-        app:layout_constraintBottom_toBottomOf="@id/current_color"
-        app:layout_constraintStart_toEndOf="@id/current_color"
-        app:layout_constraintTop_toBottomOf="@id/tv_current_color_rgb" />
-
-    <TextView
-        android:id="@+id/tv_select_color"
-        style="@style/TextViewStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/select_color"
-        app:layout_constraintBottom_toTopOf="@id/sv_color"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/current_color" />
-
-    <HorizontalScrollView
-        android:id="@+id/sv_color"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="12dp"
-        android:layout_marginTop="5dp"
-        app:layout_constraintBottom_toTopOf="@id/btn_save"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_select_color">
-
-        <LinearLayout
-            android:id="@+id/ll_color"
+        <TextView
+            android:id="@+id/tv_select_priority"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" />
-    </HorizontalScrollView>
+            android:layout_marginHorizontal="12dp"
+            android:text="@string/select_priority"
+            app:layout_constraintBottom_toTopOf="@id/spinner_priority"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_select_type" />
 
-    <Button
-        android:id="@+id/btn_save"
-        style="@style/ViewStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/save"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <Spinner
+            android:id="@+id/spinner_priority"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="@id/guideline_middle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_select_priority" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_middle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <TextView
+            android:id="@+id/tv_select_type"
+            style="@style/TextViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_type_of_habit"
+            app:layout_constraintBottom_toTopOf="@id/radio_group"
+            app:layout_constraintStart_toStartOf="@id/guideline_middle"
+            app:layout_constraintTop_toBottomOf="@id/til_description" />
+
+        <RadioGroup
+            android:id="@+id/radio_group"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginBottom="10dp"
+            android:checkedButton="@id/rb_good"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@id/tv_input_recurrence"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline_middle"
+            app:layout_constraintTop_toBottomOf="@id/tv_select_type">
+
+            <RadioButton
+                android:id="@+id/rb_good"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/good" />
+
+            <RadioButton
+                android:id="@+id/rb_bad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/bad" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/tv_input_recurrence"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:text="@string/input_recurrence_of_habit"
+            app:layout_constraintBottom_toTopOf="@id/til_recurrence_number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/radio_group" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_recurrence_number"
+            style="@style/ViewStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/tv_current_color"
+            app:layout_constraintEnd_toStartOf="@id/til_recurrence_period"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_input_recurrence">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tied_recurrence_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/input_recurrence_number"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_recurrence_period"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/til_recurrence_number"
+            app:layout_constraintTop_toTopOf="@id/til_recurrence_number">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tied_recurrence_period"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/input_recurrence_period"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_current_color"
+            style="@style/TextViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/current_color"
+            app:layout_constraintBottom_toTopOf="@id/current_color"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/til_recurrence_number" />
+
+        <TextView
+            android:id="@+id/current_color"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/ic_rectangle"
+            app:layout_constraintBottom_toTopOf="@id/tv_select_color"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_current_color" />
+
+        <TextView
+            android:id="@+id/tv_current_color_rgb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:text="@string/rgb_color"
+            app:layout_constraintBottom_toTopOf="@id/tv_current_color_hsv"
+            app:layout_constraintStart_toEndOf="@id/current_color"
+            app:layout_constraintTop_toTopOf="@id/current_color" />
+
+        <TextView
+            android:id="@+id/tv_current_color_hsv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:text="@string/hsv_color"
+            app:layout_constraintBottom_toBottomOf="@id/current_color"
+            app:layout_constraintStart_toEndOf="@id/current_color"
+            app:layout_constraintTop_toBottomOf="@id/tv_current_color_rgb" />
+
+        <TextView
+            android:id="@+id/tv_select_color"
+            style="@style/TextViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_color"
+            app:layout_constraintBottom_toTopOf="@id/sv_color"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/current_color" />
+
+        <HorizontalScrollView
+            android:id="@+id/sv_color"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintBottom_toTopOf="@id/btn_save"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_select_color">
+
+            <LinearLayout
+                android:id="@+id/ll_color"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+
+        <Button
+            android:id="@+id/btn_save"
+            style="@style/ViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

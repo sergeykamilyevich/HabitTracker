@@ -1,6 +1,7 @@
 package com.example.habittracker.presentation.view_models
 
 import android.app.Application
+import android.text.Editable
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -86,17 +87,17 @@ class HabitItemViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    fun validateName(input: CharSequence?) {
+    fun validateName(input: Editable?) {
         val name = mapper.parseString(input)
         _errorInputName.value = !validateString(name)
     }
 
-    fun validateRecurrenceNumber(input: CharSequence?) {
+    fun validateRecurrenceNumber(input: Editable?) {
         val recurrenceNumber = mapper.parseNumber(input)
         _errorInputRecurrenceNumber.value = !validateNumber(recurrenceNumber)
     }
 
-    fun validateRecurrencePeriod(input: CharSequence?) {
+    fun validateRecurrencePeriod(input: Editable?) {
         val recurrencePeriod = mapper.parseNumber(input)
         _errorInputRecurrencePeriod.value = !validateNumber(recurrencePeriod)
     }

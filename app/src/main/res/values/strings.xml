@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">Habit Tracker</string>
     <string name="button_add_habit">button add item</string>
+    <string name="bad_habit_type">Bad</string>
+    <string name="good_habit_type">Good</string>
+    <string name="lowest_priority">Lowest</string>
+    <string name="low_priority">Low</string>
+    <string name="normal_priority">Normal</string>
+    <string name="high_priority">High</string>
+    <string name="highest_priority">Highest</string>
     <string name="input_habit_name">Input habit name</string>
     <string name="input_habit_description">Input habit description</string>
     <string name="recurrence">Recurrence: %1$s in %2$s</string>

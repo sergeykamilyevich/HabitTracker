@@ -44,7 +44,6 @@ class HabitListPagerFragment : Fragment(), HasTitle {
             tab.text = tabNames[position]
         }.attach()
     }
+
     override fun getTitleResId(): Int = R.string.habit_list
-
-
 }

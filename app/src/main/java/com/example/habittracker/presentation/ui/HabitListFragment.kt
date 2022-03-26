@@ -16,7 +16,7 @@ import com.example.habittracker.domain.HabitPriority
 import com.example.habittracker.domain.HabitType
 import com.example.habittracker.presentation.color.ColorPicker
 import com.example.habittracker.presentation.recycler.HabitListAdapter
-import com.example.habittracker.presentation.view_models.MainViewModel
+import com.example.habittracker.presentation.view_models.HabitListViewModel
 import kotlin.random.Random
 
 
@@ -26,7 +26,7 @@ class HabitListFragment : Fragment(), HasTitle {
     private val binding: FragmentHabitListBinding
         get() = _binding ?: throw RuntimeException("FragmentHabitListBinding is null")
 
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: HabitListViewModel by viewModels()
     private lateinit var habitListAdapter: HabitListAdapter
     private val colorPicker = ColorPicker()
     private val colors = colorPicker.getColors()
