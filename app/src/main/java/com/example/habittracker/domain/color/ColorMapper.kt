@@ -1,7 +1,6 @@
-package com.example.habittracker.presentation.mappers
+package com.example.habittracker.domain.color
 
 import android.graphics.Color
-import com.example.habittracker.presentation.color.ColorRgbHsv
 
 class ColorMapper {
 

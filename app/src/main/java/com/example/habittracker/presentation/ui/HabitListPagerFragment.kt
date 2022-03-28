@@ -1,14 +1,20 @@
 package com.example.habittracker.presentation.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.Button
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.example.habittracker.R
 import com.example.habittracker.databinding.FragmentHabitListPagerBinding
+import com.example.habittracker.domain.HabitListOrderBy
+import com.example.habittracker.presentation.view_models.HabitListViewModel
 import com.example.habittracker.presentation.view_pager.ViewPagerAdapter
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayoutMediator
 
 class HabitListPagerFragment : Fragment(), HasTitle {
@@ -18,6 +24,9 @@ class HabitListPagerFragment : Fragment(), HasTitle {
         get() = _binding ?: throw RuntimeException("FragmentHabitListPagerBinding is null")
 
     private lateinit var viewPagerAdapter: ViewPagerAdapter
+    private val viewModel: HabitListViewModel by activityViewModels()
+
+    private lateinit var buttons: ArrayList<Button>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +39,88 @@ class HabitListPagerFragment : Fragment(), HasTitle {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViewPager()
+        setupBottomSheet()
+//        viewModel.updateHabitListOrderBy()
+//        viewModel.myMode = "Pager"
+    }
+
+    private fun setupBottomSheet() {
+        setupBottomSheetBehavior()
+        setupBottomSheetButtons()
+        setupBottomSheetTied()
+    }
+
+    private fun setupBottomSheetBehavior() {
+        BottomSheetBehavior.from(binding.bottomSheet).apply {
+            peekHeight = 110
+            this.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+    }
+
+    private fun setupBottomSheetTied() {
+        binding.tiedSearch.addTextChangedListener {
+            viewModel.updateFilter(it)
+            Log.d("999", "updateFilter(it) = ${it}")
+
+            //            viewModel.updateFilter(it)
+//            viewModel.getHabitList(null, orderBy = HabitListOrderBy.NAME_DESC)
+        }
+    }
+    private fun setHabitListOrderByFromSelectedButton(button: Button) {
+        val habitListOrderBy = with(binding) {
+            when (button.id) {
+                btnNameAsc.id -> HabitListOrderBy.NAME_ASC
+                btnNameDesc.id -> HabitListOrderBy.NAME_DESC
+                btnCreationAsc.id -> HabitListOrderBy.TIME_CREATION_ASC
+                btnCreationDesc.id -> HabitListOrderBy.TIME_CREATION_DESC
+                else -> throw RuntimeException("Unknown button: ${button.id}")
+            }
+        }
+        Log.d("999", "updateHabitListOrderBy(habitListOrderBy) = ${habitListOrderBy}")
+        viewModel.updateHabitListOrderBy(habitListOrderBy)
+
+    }
+
+    private fun setSelectedButtonFromHabitListOrderBy(habitListOrderBy: HabitListOrderBy) {
+        with(binding) {
+            when (habitListOrderBy) {
+                HabitListOrderBy.NAME_ASC -> btnNameAsc.isSelected = true
+                HabitListOrderBy.NAME_DESC -> btnNameDesc.isSelected = true
+                HabitListOrderBy.TIME_CREATION_ASC -> btnCreationAsc.isSelected = true
+                HabitListOrderBy.TIME_CREATION_DESC -> btnCreationDesc.isSelected = true
+            }
+        }
+    }
+
+    private fun setupBottomSheetButtons() {
+        buttons = arrayListOf(
+            binding.btnNameAsc,
+            binding.btnNameDesc,
+            binding.btnCreationAsc,
+            binding.btnCreationDesc
+        )
+        buttons.forEachIndexed { index, button ->
+            button.setOnClickListener {
+                setButtonsState(index)
+                setHabitListOrderByFromSelectedButton(button)
+//                viewModel.log1()
+            }
+        }
+        if (viewModel.habitListFilter.value?.orderBy == null) {
+            setDefaultButtonsState()
+        } else {
+            setSelectedButtonFromHabitListOrderBy(viewModel.habitListFilter.value!!.orderBy) //TODO !!
+        }
+    }
+
+    private fun setButtonsState(selectedButtonIndex: Int) {
+        buttons.forEachIndexed { index, button ->
+            button.isSelected = (index == selectedButtonIndex)
+        }
+    }
+    private fun setDefaultButtonsState() {
+        setButtonsState(0)
+        setHabitListOrderByFromSelectedButton(buttons[0])
     }
 
     private fun setupViewPager() {
@@ -38,7 +129,7 @@ class HabitListPagerFragment : Fragment(), HasTitle {
             getString(R.string.good_habits),
             getString(R.string.bad_habits)
         )
-        viewPagerAdapter = ViewPagerAdapter(activity as AppCompatActivity)
+        viewPagerAdapter = ViewPagerAdapter(this)
         binding.viewPager2Fragment.adapter = viewPagerAdapter
         TabLayoutMediator(binding.tabLayoutFragment, binding.viewPager2Fragment) { tab, position ->
             tab.text = tabNames[position]

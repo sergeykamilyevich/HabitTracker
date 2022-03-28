@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +15,7 @@ import com.example.habittracker.databinding.FragmentHabitListBinding
 import com.example.habittracker.domain.HabitItem
 import com.example.habittracker.domain.HabitPriority
 import com.example.habittracker.domain.HabitType
-import com.example.habittracker.presentation.color.ColorPicker
+import com.example.habittracker.domain.color.ColorPicker
 import com.example.habittracker.presentation.recycler.HabitListAdapter
 import com.example.habittracker.presentation.view_models.HabitListViewModel
 import kotlin.random.Random
@@ -27,7 +27,7 @@ class HabitListFragment : Fragment(), HasTitle {
     private val binding: FragmentHabitListBinding
         get() = _binding ?: throw RuntimeException("FragmentHabitListBinding is null")
 
-    private val viewModel: HabitListViewModel by viewModels()
+    private val viewModel: HabitListViewModel by activityViewModels()
     private lateinit var habitListAdapter: HabitListAdapter
     private val colorPicker = ColorPicker()
     private val colors = colorPicker.getColors()
@@ -69,9 +69,13 @@ class HabitListFragment : Fragment(), HasTitle {
     }
 
     private fun setupViewModel() {
-        viewModel.getFilteredHabitList(listMode)
+        viewModel.getHabitList(listMode)
+
         viewModel.habitList.observe(viewLifecycleOwner) {
             habitListAdapter.submitList(it)
+        }
+        viewModel.habitListFilter.observe(viewLifecycleOwner) {
+            viewModel.getHabitList(listMode)
         }
     }
 
@@ -131,7 +135,10 @@ class HabitListFragment : Fragment(), HasTitle {
     }
 
     private fun launchHabitItemActivityAddMode() {
-        launchDestination(R.id.habitItemFragment, HabitItemFragment.createArgs(HabitItem.UNDEFINED_ID))
+        launchDestination(
+            R.id.habitItemFragment,
+            HabitItemFragment.createArgs(HabitItem.UNDEFINED_ID)
+        )
     }
 
     private fun launchHabitItemActivityEditMode(habitItemId: Int) {
@@ -144,7 +151,6 @@ class HabitListFragment : Fragment(), HasTitle {
     }
 
     override fun getTitleResId(): Int = R.string.habit_list
-
 
     companion object {
         private const val LIST_MODE = "list mode"

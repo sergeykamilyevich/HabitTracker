@@ -6,7 +6,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.habittracker.domain.HabitType
 import com.example.habittracker.presentation.ui.HabitListFragment
 
-class ViewPagerAdapter(activity: AppCompatActivity) : FragmentStateAdapter(activity) {
+class ViewPagerAdapter(parentFragment: Fragment) : FragmentStateAdapter(parentFragment) {
     override fun getItemCount(): Int = 3
 
     override fun createFragment(position: Int): Fragment {

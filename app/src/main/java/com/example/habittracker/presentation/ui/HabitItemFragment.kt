@@ -3,8 +3,6 @@ package com.example.habittracker.presentation.ui
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,8 +16,8 @@ import com.example.habittracker.R
 import com.example.habittracker.databinding.FragmentHabitItemBinding
 import com.example.habittracker.domain.HabitItem
 import com.example.habittracker.domain.HabitPriority
-import com.example.habittracker.presentation.color.ColorPicker
-import com.example.habittracker.presentation.mappers.ColorMapper
+import com.example.habittracker.domain.color.ColorMapper
+import com.example.habittracker.domain.color.ColorPicker
 import com.example.habittracker.presentation.mappers.HabitItemMapper
 import com.example.habittracker.presentation.view_models.HabitItemViewModel
 import com.google.android.material.textfield.TextInputEditText
@@ -50,7 +48,6 @@ class HabitItemFragment : Fragment(), HasTitle {
         super.onCreate(savedInstanceState)
         habitItemId = arguments?.getInt(HABIT_ITEM_ID, 0)
             ?: throw RuntimeException("Unknown habitItemId")
-
     }
 
     override fun onCreateView(
@@ -67,7 +64,7 @@ class HabitItemFragment : Fragment(), HasTitle {
         setupSpinnerAdapter()
         setupViewModelObservers()
         setupTextChangeListeners()
-        setupScrollView()
+        setupColorScrollView()
     }
 
     override fun onDestroyView() {
@@ -76,14 +73,10 @@ class HabitItemFragment : Fragment(), HasTitle {
     }
 
     private fun chooseScreenMode() {
-        if (habitItemId == HabitItem.UNDEFINED_ID) {
-            launchAddMode()
-        } else {
-            launchEditMode()
-        }
+        if (habitItemId == HabitItem.UNDEFINED_ID) launchAddMode() else launchEditMode()
     }
 
-    private fun setupScrollView() {
+    private fun setupColorScrollView() {
         for (color in colors) {
             val view = LayoutInflater.from(requireActivity()).inflate(
                 R.layout.item_color,
@@ -144,7 +137,6 @@ class HabitItemFragment : Fragment(), HasTitle {
                     Toast.LENGTH_SHORT
                 ).show()
             }
-
         }
     }
 

@@ -1,4 +1,4 @@
-package com.example.habittracker.data
+package com.example.habittracker.data.room
 
 import com.example.habittracker.domain.HabitItem
 

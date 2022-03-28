@@ -1,6 +1,4 @@
-package com.example.habittracker.presentation.color
-
-import com.example.habittracker.presentation.mappers.ColorMapper
+package com.example.habittracker.domain.color
 
 class ColorPicker {
 

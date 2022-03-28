@@ -44,8 +44,7 @@ class HabitItemMapper {
         return HabitPriority.valueOf(spinner.selectedItem.toString().uppercase())
     }
 
-    fun parseString(input: Editable?): String =
-        input?.trim()?.toString() ?: EMPTY_STRING
+    fun parseString(input: Editable?): String = input?.trim()?.toString() ?: EMPTY_STRING
 
     fun parseNumber(input: Editable?): Int {
         return try {

@@ -4,9 +4,7 @@ import androidx.lifecycle.LiveData
 
 interface HabitListRepository {
 
-    fun getList(): LiveData<List<HabitItem>>
-
-    fun getFilteredList(habitType: HabitType?): LiveData<List<HabitItem>>
+    fun getList(habitType: HabitType?, habitListFilter: HabitListFilter): LiveData<List<HabitItem>>
 
     suspend fun getById(habitItemId: Int): HabitItem
 

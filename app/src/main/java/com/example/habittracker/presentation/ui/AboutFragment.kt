@@ -34,10 +34,7 @@ class AboutFragment : Fragment(), HasTitle {
                 findNavController().popBackStack()
             }
         }
-
     }
 
     override fun getTitleResId(): Int = R.string.about
-
-
 }
