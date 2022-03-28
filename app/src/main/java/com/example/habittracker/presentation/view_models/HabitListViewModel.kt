@@ -2,14 +2,15 @@ package com.example.habittracker.presentation.view_models
 
 import android.app.Application
 import android.text.Editable
-import android.util.Log
 import androidx.lifecycle.*
 import com.example.habittracker.data.HabitListRepositoryImpl
 import com.example.habittracker.domain.HabitItem
 import com.example.habittracker.domain.HabitListFilter
 import com.example.habittracker.domain.HabitListOrderBy
 import com.example.habittracker.domain.HabitType
-import com.example.habittracker.domain.usecases.*
+import com.example.habittracker.domain.usecases.AddHabitItemUseCase
+import com.example.habittracker.domain.usecases.DeleteHabitItemUseCase
+import com.example.habittracker.domain.usecases.GetHabitListUseCase
 import kotlinx.coroutines.launch
 
 class HabitListViewModel(application: Application) : AndroidViewModel(application) {
@@ -56,6 +57,6 @@ class HabitListViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     companion object {
-        private const val EMPTY_STRING = "" //TODO double const
+        private const val EMPTY_STRING = ""
     }
 }
