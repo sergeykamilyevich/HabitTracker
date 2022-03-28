@@ -9,8 +9,10 @@ import android.widget.Button
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.habittracker.R
 import com.example.habittracker.databinding.FragmentHabitListPagerBinding
+import com.example.habittracker.domain.HabitItem
 import com.example.habittracker.domain.HabitListOrderBy
 import com.example.habittracker.presentation.view_models.HabitListViewModel
 import com.example.habittracker.presentation.view_pager.ViewPagerAdapter
@@ -40,9 +42,21 @@ class HabitListPagerFragment : Fragment(), HasTitle {
         super.onViewCreated(view, savedInstanceState)
         setupViewPager()
         setupBottomSheet()
-//        viewModel.updateHabitListOrderBy()
-//        viewModel.myMode = "Pager"
+        setupAddButtonClickListener()
     }
+
+    private fun setupAddButtonClickListener() {
+        binding.btnAddWord.setOnClickListener {
+            launchHabitItemActivityAddMode()
+        }
+    }
+
+    private fun launchHabitItemActivityAddMode() {
+        val destinationId = R.id.habitItemFragment
+        val args = HabitItemFragment.createArgs(HabitItem.UNDEFINED_ID)
+        findNavController().navigate(destinationId, args)
+    }
+
 
     private fun setupBottomSheet() {
         setupBottomSheetBehavior()
@@ -53,7 +67,7 @@ class HabitListPagerFragment : Fragment(), HasTitle {
     private fun setupBottomSheetBehavior() {
         BottomSheetBehavior.from(binding.bottomSheet).apply {
             peekHeight = 110
-            this.state = BottomSheetBehavior.STATE_COLLAPSED
+            state = BottomSheetBehavior.STATE_COLLAPSED
         }
     }
 
@@ -61,11 +75,9 @@ class HabitListPagerFragment : Fragment(), HasTitle {
         binding.tiedSearch.addTextChangedListener {
             viewModel.updateFilter(it)
             Log.d("999", "updateFilter(it) = ${it}")
-
-            //            viewModel.updateFilter(it)
-//            viewModel.getHabitList(null, orderBy = HabitListOrderBy.NAME_DESC)
         }
     }
+
     private fun setHabitListOrderByFromSelectedButton(button: Button) {
         val habitListOrderBy = with(binding) {
             when (button.id) {
@@ -76,7 +88,6 @@ class HabitListPagerFragment : Fragment(), HasTitle {
                 else -> throw RuntimeException("Unknown button: ${button.id}")
             }
         }
-        Log.d("999", "updateHabitListOrderBy(habitListOrderBy) = ${habitListOrderBy}")
         viewModel.updateHabitListOrderBy(habitListOrderBy)
 
     }
@@ -106,10 +117,12 @@ class HabitListPagerFragment : Fragment(), HasTitle {
 //                viewModel.log1()
             }
         }
-        if (viewModel.habitListFilter.value?.orderBy == null) {
+        if (viewModel.habitListFilter.value == null) {
             setDefaultButtonsState()
         } else {
-            setSelectedButtonFromHabitListOrderBy(viewModel.habitListFilter.value!!.orderBy) //TODO !!
+            setSelectedButtonFromHabitListOrderBy(
+                viewModel.habitListFilter.value?.orderBy ?: HabitListOrderBy.NAME_ASC
+            )
         }
     }
 
@@ -118,6 +131,7 @@ class HabitListPagerFragment : Fragment(), HasTitle {
             button.isSelected = (index == selectedButtonIndex)
         }
     }
+
     private fun setDefaultButtonsState() {
         setButtonsState(0)
         setHabitListOrderByFromSelectedButton(buttons[0])

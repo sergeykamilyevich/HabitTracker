@@ -59,7 +59,7 @@ class HabitListFragment : Fragment(), HasTitle {
         setupViewModel()
         setupRecyclerView()
         setupAdapterClickListener()
-        setupAddButtonClickListener()
+//        setupAddButtonClickListener()
         setupSwipeListener()
     }
 
@@ -90,11 +90,11 @@ class HabitListFragment : Fragment(), HasTitle {
         }
     }
 
-    private fun setupAddButtonClickListener() {
-        binding.btnAddWord.setOnClickListener {
-            launchHabitItemActivityAddMode()
-        }
-    }
+//    private fun setupAddButtonClickListener() {
+//        binding.btnAddWord.setOnClickListener {
+//            launchHabitItemActivityAddMode()
+//        }
+//    }
 
     private fun setupSwipeListener() {
         val callback = object : ItemTouchHelper.SimpleCallback(
@@ -134,19 +134,9 @@ class HabitListFragment : Fragment(), HasTitle {
         }
     }
 
-    private fun launchHabitItemActivityAddMode() {
-        launchDestination(
-            R.id.habitItemFragment,
-            HabitItemFragment.createArgs(HabitItem.UNDEFINED_ID)
-        )
-    }
-
     private fun launchHabitItemActivityEditMode(habitItemId: Int) {
-        launchDestination(R.id.habitItemFragment, HabitItemFragment.createArgs(habitItemId))
-
-    }
-
-    private fun launchDestination(destinationId: Int, args: Bundle) {
+        val destinationId = R.id.habitItemFragment
+        val args = HabitItemFragment.createArgs(habitItemId)
         findNavController().navigate(destinationId, args)
     }
 
