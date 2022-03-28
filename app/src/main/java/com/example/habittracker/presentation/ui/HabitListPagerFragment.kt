@@ -42,21 +42,21 @@ class HabitListPagerFragment : Fragment(), HasTitle {
         super.onViewCreated(view, savedInstanceState)
         setupViewPager()
         setupBottomSheet()
-        setupAddButtonClickListener()
+        setupAddButton()
     }
 
-    private fun setupAddButtonClickListener() {
-        binding.btnAddWord.setOnClickListener {
-            launchHabitItemActivityAddMode()
-        }
+    private fun setupViewPager() {
+        val tabNames: Array<String> = arrayOf(
+            getString(R.string.all_habits),
+            getString(R.string.good_habits),
+            getString(R.string.bad_habits)
+        )
+        viewPagerAdapter = ViewPagerAdapter(this)
+        binding.viewPager2Fragment.adapter = viewPagerAdapter
+        TabLayoutMediator(binding.tabLayoutFragment, binding.viewPager2Fragment) { tab, position ->
+            tab.text = tabNames[position]
+        }.attach()
     }
-
-    private fun launchHabitItemActivityAddMode() {
-        val destinationId = R.id.habitItemFragment
-        val args = HabitItemFragment.createArgs(HabitItem.UNDEFINED_ID)
-        findNavController().navigate(destinationId, args)
-    }
-
 
     private fun setupBottomSheet() {
         setupBottomSheetBehavior()
@@ -71,10 +71,31 @@ class HabitListPagerFragment : Fragment(), HasTitle {
         }
     }
 
+    private fun setupBottomSheetButtons() {
+        buttons = arrayListOf(
+            binding.btnNameAsc,
+            binding.btnNameDesc,
+            binding.btnCreationAsc,
+            binding.btnCreationDesc
+        )
+        buttons.forEachIndexed { index, button ->
+            button.setOnClickListener {
+                setCurrentButtonIsSelected(index)
+                setHabitListOrderByFromSelectedButton(button)
+            }
+        }
+        if (viewModel.habitListFilter.value == null) {
+            setDefaultButtonsState()
+        } else {
+            setSelectedButtonFromHabitListOrderBy(
+                viewModel.habitListFilter.value?.orderBy ?: HabitListOrderBy.NAME_ASC
+            )
+        }
+    }
+
     private fun setupBottomSheetTied() {
         binding.tiedSearch.addTextChangedListener {
             viewModel.updateFilter(it)
-            Log.d("999", "updateFilter(it) = ${it}")
         }
     }
 
@@ -103,51 +124,27 @@ class HabitListPagerFragment : Fragment(), HasTitle {
         }
     }
 
-    private fun setupBottomSheetButtons() {
-        buttons = arrayListOf(
-            binding.btnNameAsc,
-            binding.btnNameDesc,
-            binding.btnCreationAsc,
-            binding.btnCreationDesc
-        )
-        buttons.forEachIndexed { index, button ->
-            button.setOnClickListener {
-                setButtonsState(index)
-                setHabitListOrderByFromSelectedButton(button)
-//                viewModel.log1()
-            }
-        }
-        if (viewModel.habitListFilter.value == null) {
-            setDefaultButtonsState()
-        } else {
-            setSelectedButtonFromHabitListOrderBy(
-                viewModel.habitListFilter.value?.orderBy ?: HabitListOrderBy.NAME_ASC
-            )
-        }
-    }
-
-    private fun setButtonsState(selectedButtonIndex: Int) {
+    private fun setCurrentButtonIsSelected(selectedButtonIndex: Int) {
         buttons.forEachIndexed { index, button ->
             button.isSelected = (index == selectedButtonIndex)
         }
     }
 
     private fun setDefaultButtonsState() {
-        setButtonsState(0)
+        setCurrentButtonIsSelected(0)
         setHabitListOrderByFromSelectedButton(buttons[0])
     }
 
-    private fun setupViewPager() {
-        val tabNames: Array<String> = arrayOf(
-            getString(R.string.all_habits),
-            getString(R.string.good_habits),
-            getString(R.string.bad_habits)
-        )
-        viewPagerAdapter = ViewPagerAdapter(this)
-        binding.viewPager2Fragment.adapter = viewPagerAdapter
-        TabLayoutMediator(binding.tabLayoutFragment, binding.viewPager2Fragment) { tab, position ->
-            tab.text = tabNames[position]
-        }.attach()
+    private fun setupAddButton() {
+        binding.btnAddWord.setOnClickListener {
+            launchHabitItemActivityAddMode()
+        }
+    }
+
+    private fun launchHabitItemActivityAddMode() {
+        val destinationId = R.id.habitItemFragment
+        val args = HabitItemFragment.createArgs(HabitItem.UNDEFINED_ID)
+        findNavController().navigate(destinationId, args)
     }
 
     override fun getTitleResId(): Int = R.string.habit_list
