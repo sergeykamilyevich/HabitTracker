@@ -59,16 +59,8 @@ class HabitListPagerFragment : Fragment(), HasTitle {
     }
 
     private fun setupBottomSheet() {
-        setupBottomSheetBehavior()
         setupBottomSheetButtons()
         setupBottomSheetTied()
-    }
-
-    private fun setupBottomSheetBehavior() {
-        BottomSheetBehavior.from(binding.bottomSheet).apply {
-            peekHeight = 110
-            state = BottomSheetBehavior.STATE_COLLAPSED
-        }
     }
 
     private fun setupBottomSheetButtons() {

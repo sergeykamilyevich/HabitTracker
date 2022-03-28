@@ -41,7 +41,7 @@
     <string name="good_habits">Good habits</string>
     <string name="bad_habits">Bad habits</string>
     <string name="filters_and_sort">Filters and sort</string>
-    <string name="search_in_habits">Search in habits</string>
+    <string name="search_by_name">Search by name</string>
     <string name="order_by">Order by:</string>
     <string name="order_by_creation">creation</string>
     <string name="order_by_name">name</string>

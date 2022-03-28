@@ -59,7 +59,6 @@ class HabitListFragment : Fragment(), HasTitle {
         setupViewModel()
         setupRecyclerView()
         setupAdapterClickListener()
-//        setupAddButtonClickListener()
         setupSwipeListener()
     }
 
@@ -89,12 +88,6 @@ class HabitListFragment : Fragment(), HasTitle {
             launchHabitItemActivityEditMode(it.id)
         }
     }
-
-//    private fun setupAddButtonClickListener() {
-//        binding.btnAddWord.setOnClickListener {
-//            launchHabitItemActivityAddMode()
-//        }
-//    }
 
     private fun setupSwipeListener() {
         val callback = object : ItemTouchHelper.SimpleCallback(
