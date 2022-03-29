@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.habittracker.data.HabitListRepositoryImpl
 import com.example.habittracker.domain.HabitItem
+import com.example.habittracker.domain.HabitTime
 import com.example.habittracker.domain.usecases.AddHabitItemUseCase
 import com.example.habittracker.domain.usecases.EditHabitItemUseCase
 import com.example.habittracker.domain.usecases.GetHabitItemUseCase
@@ -21,6 +22,7 @@ class HabitItemViewModel(application: Application) : AndroidViewModel(applicatio
     private val editHabitItemUseCase = EditHabitItemUseCase(repository)
     private val getHabitItemUseCase = GetHabitItemUseCase(repository)
     private val mapper = HabitItemMapper()
+    private val habitTime = HabitTime()
 
     private val _habitItem = MutableLiveData<HabitItem>()
     val habitItem: LiveData<HabitItem>
@@ -51,7 +53,8 @@ class HabitItemViewModel(application: Application) : AndroidViewModel(applicatio
                 type = habitItem.type,
                 color = habitItem.color,
                 recurrenceNumber = habitItem.recurrenceNumber,
-                recurrencePeriod = habitItem.recurrencePeriod
+                recurrencePeriod = habitItem.recurrencePeriod,
+                date = habitTime.getCurrentUtcDateInInt()
             )
             addHabitItemUseCase(item)
             closeItemFragment()

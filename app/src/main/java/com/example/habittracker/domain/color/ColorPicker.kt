@@ -15,7 +15,7 @@ class ColorPicker {
         val colors = IntArray(NUMBER_OF_COLORS)
         val positionOfFirstSquare = ((freeSpaceSizeInHue + squareSizeInHue) / 2)
         for (i in colors.indices) {
-            val hue =  (i *(freeSpaceSizeInHue + squareSizeInHue) + positionOfFirstSquare)
+            val hue = (i * (freeSpaceSizeInHue + squareSizeInHue) + positionOfFirstSquare)
             colors[i] = mapper.mapHueToColor(hue)
         }
         return colors
@@ -24,7 +24,7 @@ class ColorPicker {
     fun getGradientColors(): IntArray {
         val colors = IntArray(NUMBER_OF_COLORS + 1)
         for (i in colors.indices) {
-            val hue =  (i *(freeSpaceSizeInHue + squareSizeInHue))
+            val hue = (i * (freeSpaceSizeInHue + squareSizeInHue))
             colors[i] = mapper.mapHueToColor(hue)
         }
         return colors

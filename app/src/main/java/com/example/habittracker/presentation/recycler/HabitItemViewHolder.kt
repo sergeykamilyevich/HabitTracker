@@ -4,18 +4,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.habittracker.R
 import com.example.habittracker.databinding.ItemHabitBinding
 import com.example.habittracker.domain.HabitItem
+import com.example.habittracker.domain.HabitTime
+
 
 class HabitItemViewHolder(
     private val binding: ItemHabitBinding,
     private val onHabitListClickListener: ((HabitItem) -> Unit)?
 ) : RecyclerView.ViewHolder(binding.root) {
 
+    private val habitTime = HabitTime()
+
     fun bindItem(habitItem: HabitItem) {
         with(binding) {
             tvDescription.text = habitItem.description
             tvName.text = habitItem.name
-            tvPriority.text = root.resources.getString(habitItem.priority.resourceId)
+            tvDate.text = habitTime.mapUtcDateInIntToString(habitItem.date)
             tvType.text = root.resources.getString(habitItem.type.resourceId)
+            tvPriority.text = root.resources.getString(habitItem.priority.resourceId)
             viewColor.setBackgroundColor(habitItem.color)
             val recurrenceNumber = habitItem.recurrenceNumber
             val recurrenceTimes = root.resources.getQuantityString(

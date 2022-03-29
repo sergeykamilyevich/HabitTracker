@@ -22,5 +22,6 @@ data class HabitItemDbModel(
     @ColumnInfo(name = "recurrence_number")
     var recurrenceNumber: Int,
     @ColumnInfo(name = "recurrence_period")
-    var recurrencePeriod: Int
+    var recurrencePeriod: Int,
+    val date: Int
 )

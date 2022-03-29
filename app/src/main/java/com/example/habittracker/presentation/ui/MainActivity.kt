@@ -33,13 +33,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateTitle() {
-        val fragment = currentFragment
-        if (fragment is HasTitle) {
-            binding.toolbar.title = getString(fragment.getTitleResId())
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentListener, true)
         super.onCreate(savedInstanceState)
@@ -59,6 +52,13 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
         NavigationUI.setupWithNavController(binding.navigationView, navController)
         NavigationUI.setupActionBarWithNavController(this, navController, binding.drawerLayout)
+    }
+
+    private fun updateTitle() {
+        val fragment = currentFragment
+        if (fragment is HasTitle) {
+            binding.toolbar.title = getString(fragment.getTitleResId())
+        }
     }
 
     override fun onDestroy() {

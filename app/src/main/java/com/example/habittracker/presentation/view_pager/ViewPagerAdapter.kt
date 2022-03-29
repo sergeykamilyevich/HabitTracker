@@ -1,6 +1,5 @@
 package com.example.habittracker.presentation.view_pager
 
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.habittracker.domain.HabitType

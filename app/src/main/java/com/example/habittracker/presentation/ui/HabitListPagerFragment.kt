@@ -1,7 +1,6 @@
 package com.example.habittracker.presentation.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,6 @@ import com.example.habittracker.domain.HabitItem
 import com.example.habittracker.domain.HabitListOrderBy
 import com.example.habittracker.presentation.view_models.HabitListViewModel
 import com.example.habittracker.presentation.view_pager.ViewPagerAdapter
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayoutMediator
 
 class HabitListPagerFragment : Fragment(), HasTitle {

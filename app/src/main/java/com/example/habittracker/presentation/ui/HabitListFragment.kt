@@ -1,7 +1,6 @@
 package com.example.habittracker.presentation.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +13,7 @@ import com.example.habittracker.R
 import com.example.habittracker.databinding.FragmentHabitListBinding
 import com.example.habittracker.domain.HabitItem
 import com.example.habittracker.domain.HabitPriority
+import com.example.habittracker.domain.HabitTime
 import com.example.habittracker.domain.HabitType
 import com.example.habittracker.domain.color.ColorPicker
 import com.example.habittracker.presentation.recycler.HabitListAdapter
@@ -121,7 +121,8 @@ class HabitListFragment : Fragment(), HasTitle {
                     HabitType.GOOD,
                     colors[Random.nextInt(16)],
                     Random.nextInt(10) + 1,
-                    Random.nextInt(30) + 1
+                    Random.nextInt(30) + 1,
+                    date = HabitTime().getCurrentUtcDateInInt()
                 )
             )
         }

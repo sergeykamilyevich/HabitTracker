@@ -12,7 +12,8 @@ class HabitListMapper {
         type = habitItem.type,
         color = habitItem.color,
         recurrenceNumber = habitItem.recurrenceNumber,
-        recurrencePeriod = habitItem.recurrencePeriod
+        recurrencePeriod = habitItem.recurrencePeriod,
+        date = habitItem.date
     )
 
     fun mapDbModelToEntity(habitItemDbModel: HabitItemDbModel) = HabitItem(
@@ -23,7 +24,8 @@ class HabitListMapper {
         color = habitItemDbModel.color,
         recurrenceNumber = habitItemDbModel.recurrenceNumber,
         recurrencePeriod = habitItemDbModel.recurrencePeriod,
-        id = habitItemDbModel.id
+        id = habitItemDbModel.id,
+        date = habitItemDbModel.date
     )
 
     fun mapListDbModelToEntity(list: List<HabitItemDbModel>) = list.map {

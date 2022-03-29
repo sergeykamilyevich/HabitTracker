@@ -26,7 +26,7 @@ class HabitListViewModel(application: Application) : AndroidViewModel(applicatio
 
     private var currentHabitListFilter = HabitListFilter(HabitListOrderBy.NAME_ASC, "")
 
-    lateinit var habitList : LiveData<List<HabitItem>>
+    lateinit var habitList: LiveData<List<HabitItem>>
 
     fun addHabitItem(habitItem: HabitItem) {
         viewModelScope.launch {
