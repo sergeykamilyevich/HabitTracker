@@ -47,117 +47,18 @@
             app:layout_anchorGravity="top|end"
             app:srcCompat="@drawable/ic_add" />
 
-        <FrameLayout
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/bottom_sheet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:name="com.example.habittracker.presentation.ui.BottomSheetFragment"
             android:background="@drawable/rounded_rectangle"
             app:layout_behavior="com.example.habittracker.presentation.ui.AutoCollapseBottomSheetBehavior"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/tv_bottom_sheet_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="30dp"
-                    android:layout_marginTop="10dp"
-                    android:gravity="center"
-                    android:text="@string/filters_and_sort"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tied_search"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:hint="@string/search_by_name"
-                    android:inputType="text"
-                    android:textSize="15sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_bottom_sheet_title" />
-
-                <TextView
-                    android:id="@+id/tv_order_by"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/order_by"
-
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tied_search" />
-
-                <Button
-                    android:id="@+id/btn_name_asc"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:backgroundTint="@drawable/button_bg_color"
-                    android:drawableEnd="@drawable/ic_baseline_south_20"
-                    android:text="@string/order_by_name"
-                    android:textAllCaps="false"
-                    android:textColor="@drawable/button_text_color"
-                    app:layout_constraintEnd_toStartOf="@id/btn_name_desc"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_order_by" />
-
-                <Button
-                    android:id="@+id/btn_name_desc"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:backgroundTint="@drawable/button_bg_color"
-                    android:drawableEnd="@drawable/ic_baseline_north_20"
-                    android:text="@string/order_by_name"
-                    android:textAllCaps="false"
-                    android:textColor="@drawable/button_text_color"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/btn_name_asc"
-                    app:layout_constraintTop_toBottomOf="@id/tv_order_by" />
-
-                <Button
-                    android:id="@+id/btn_creation_asc"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:backgroundTint="@drawable/button_bg_color"
-                    android:drawableEnd="@drawable/ic_baseline_south_20"
-                    android:text="@string/order_by_creation"
-                    android:textAllCaps="false"
-                    android:textColor="@drawable/button_text_color"
-                    app:layout_constraintEnd_toStartOf="@id/btn_creation_desc"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/btn_name_asc" />
-
-                <Button
-                    android:id="@+id/btn_creation_desc"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:backgroundTint="@drawable/button_bg_color"
-                    android:drawableEnd="@drawable/ic_baseline_north_20"
-                    android:text="@string/order_by_creation"
-                    android:textAllCaps="false"
-                    android:textColor="@drawable/button_text_color"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/btn_creation_asc"
-                    app:layout_constraintTop_toBottomOf="@id/btn_name_asc" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </FrameLayout>
+        </androidx.fragment.app.FragmentContainerView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

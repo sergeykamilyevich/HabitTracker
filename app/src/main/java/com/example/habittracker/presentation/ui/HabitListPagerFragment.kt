@@ -24,9 +24,9 @@ class HabitListPagerFragment : Fragment(), HasTitle {
         get() = _binding ?: throw RuntimeException("FragmentHabitListPagerBinding is null")
 
     private lateinit var viewPagerAdapter: ViewPagerAdapter
-    private val viewModel: HabitListViewModel by activityViewModels()
+//    private val viewModel: HabitListViewModel by activityViewModels()
 
-    private lateinit var buttons: ArrayList<Button>
+//    private lateinit var buttons: ArrayList<Button>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,7 +39,7 @@ class HabitListPagerFragment : Fragment(), HasTitle {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViewPager()
-        setupBottomSheet()
+//        setupBottomSheet()
         setupAddButton()
     }
 
@@ -56,74 +56,74 @@ class HabitListPagerFragment : Fragment(), HasTitle {
         }.attach()
     }
 
-    private fun setupBottomSheet() {
-        setupBottomSheetButtons()
-        setupBottomSheetTied()
-    }
+//    private fun setupBottomSheet() {
+//        setupBottomSheetButtons()
+//        setupBottomSheetTied()
+//    }
 
-    private fun setupBottomSheetButtons() {
-        buttons = arrayListOf(
-            binding.btnNameAsc,
-            binding.btnNameDesc,
-            binding.btnCreationAsc,
-            binding.btnCreationDesc
-        )
-        buttons.forEachIndexed { index, button ->
-            button.setOnClickListener {
-                setCurrentButtonIsSelected(index)
-                setHabitListOrderByFromSelectedButton(button)
-            }
-        }
-        if (viewModel.habitListFilter.value == null) {
-            setDefaultButtonsState()
-        } else {
-            setSelectedButtonFromHabitListOrderBy(
-                viewModel.habitListFilter.value?.orderBy ?: HabitListOrderBy.NAME_ASC
-            )
-        }
-    }
+//    private fun setupBottomSheetButtons() {
+//        buttons = arrayListOf(
+//            binding.btnNameAsc,
+//            binding.btnNameDesc,
+//            binding.btnCreationAsc,
+//            binding.btnCreationDesc
+//        )
+//        buttons.forEachIndexed { index, button ->
+//            button.setOnClickListener {
+//                setCurrentButtonIsSelected(index)
+//                setHabitListOrderByFromSelectedButton(button)
+//            }
+//        }
+//        if (viewModel.habitListFilter.value == null) {
+//            setDefaultButtonsState()
+//        } else {
+//            setSelectedButtonFromHabitListOrderBy(
+//                viewModel.habitListFilter.value?.orderBy ?: HabitListOrderBy.NAME_ASC
+//            )
+//        }
+//    }
 
-    private fun setupBottomSheetTied() {
-        binding.tiedSearch.addTextChangedListener {
-            viewModel.updateFilter(it)
-        }
-    }
+//    private fun setupBottomSheetTied() {
+//        binding.tiedSearch.addTextChangedListener {
+//            viewModel.updateFilter(it)
+//        }
+//    }
 
-    private fun setHabitListOrderByFromSelectedButton(button: Button) {
-        val habitListOrderBy = with(binding) {
-            when (button.id) {
-                btnNameAsc.id -> HabitListOrderBy.NAME_ASC
-                btnNameDesc.id -> HabitListOrderBy.NAME_DESC
-                btnCreationAsc.id -> HabitListOrderBy.TIME_CREATION_ASC
-                btnCreationDesc.id -> HabitListOrderBy.TIME_CREATION_DESC
-                else -> throw RuntimeException("Unknown button: ${button.id}")
-            }
-        }
-        viewModel.updateHabitListOrderBy(habitListOrderBy)
+//    private fun setHabitListOrderByFromSelectedButton(button: Button) {
+//        val habitListOrderBy = with(binding) {
+//            when (button.id) {
+//                btnNameAsc.id -> HabitListOrderBy.NAME_ASC
+//                btnNameDesc.id -> HabitListOrderBy.NAME_DESC
+//                btnCreationAsc.id -> HabitListOrderBy.TIME_CREATION_ASC
+//                btnCreationDesc.id -> HabitListOrderBy.TIME_CREATION_DESC
+//                else -> throw RuntimeException("Unknown button: ${button.id}")
+//            }
+//        }
+//        viewModel.updateHabitListOrderBy(habitListOrderBy)
+//
+//    }
 
-    }
+//    private fun setSelectedButtonFromHabitListOrderBy(habitListOrderBy: HabitListOrderBy) {
+//        with(binding) {
+//            when (habitListOrderBy) {
+//                HabitListOrderBy.NAME_ASC -> btnNameAsc.isSelected = true
+//                HabitListOrderBy.NAME_DESC -> btnNameDesc.isSelected = true
+//                HabitListOrderBy.TIME_CREATION_ASC -> btnCreationAsc.isSelected = true
+//                HabitListOrderBy.TIME_CREATION_DESC -> btnCreationDesc.isSelected = true
+//            }
+//        }
+//    }
 
-    private fun setSelectedButtonFromHabitListOrderBy(habitListOrderBy: HabitListOrderBy) {
-        with(binding) {
-            when (habitListOrderBy) {
-                HabitListOrderBy.NAME_ASC -> btnNameAsc.isSelected = true
-                HabitListOrderBy.NAME_DESC -> btnNameDesc.isSelected = true
-                HabitListOrderBy.TIME_CREATION_ASC -> btnCreationAsc.isSelected = true
-                HabitListOrderBy.TIME_CREATION_DESC -> btnCreationDesc.isSelected = true
-            }
-        }
-    }
+//    private fun setCurrentButtonIsSelected(selectedButtonIndex: Int) {
+//        buttons.forEachIndexed { index, button ->
+//            button.isSelected = (index == selectedButtonIndex)
+//        }
+//    }
 
-    private fun setCurrentButtonIsSelected(selectedButtonIndex: Int) {
-        buttons.forEachIndexed { index, button ->
-            button.isSelected = (index == selectedButtonIndex)
-        }
-    }
-
-    private fun setDefaultButtonsState() {
-        setCurrentButtonIsSelected(0)
-        setHabitListOrderByFromSelectedButton(buttons[0])
-    }
+//    private fun setDefaultButtonsState() {
+//        setCurrentButtonIsSelected(0)
+//        setHabitListOrderByFromSelectedButton(buttons[0])
+//    }
 
     private fun setupAddButton() {
         binding.btnAddWord.setOnClickListener {
