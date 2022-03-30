@@ -1,4 +1,4 @@
-package com.example.habittracker.domain
+package com.example.habittracker.domain.entities
 
 data class HabitItem(
     var name: String,

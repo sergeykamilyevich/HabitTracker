@@ -1,4 +1,4 @@
-package com.example.habittracker.domain
+package com.example.habittracker.domain.entities
 
 enum class HabitListOrderBy {
     NAME_ASC,

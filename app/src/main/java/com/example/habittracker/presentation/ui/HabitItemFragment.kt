@@ -14,8 +14,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.habittracker.R
 import com.example.habittracker.databinding.FragmentHabitItemBinding
-import com.example.habittracker.domain.HabitItem
-import com.example.habittracker.domain.HabitPriority
+import com.example.habittracker.domain.entities.HabitItem
+import com.example.habittracker.domain.entities.HabitPriority
 import com.example.habittracker.domain.color.ColorMapper
 import com.example.habittracker.domain.color.ColorPicker
 import com.example.habittracker.presentation.mappers.HabitItemMapper

@@ -1,4 +1,4 @@
-package com.example.habittracker.domain
+package com.example.habittracker.domain.entities
 
 import android.os.Parcelable
 import com.example.habittracker.R

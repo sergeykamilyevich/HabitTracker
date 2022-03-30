@@ -4,10 +4,10 @@ import android.app.Application
 import android.text.Editable
 import androidx.lifecycle.*
 import com.example.habittracker.data.HabitListRepositoryImpl
-import com.example.habittracker.domain.HabitItem
-import com.example.habittracker.domain.HabitListFilter
-import com.example.habittracker.domain.HabitListOrderBy
-import com.example.habittracker.domain.HabitType
+import com.example.habittracker.domain.entities.HabitItem
+import com.example.habittracker.domain.entities.HabitListFilter
+import com.example.habittracker.domain.entities.HabitListOrderBy
+import com.example.habittracker.domain.entities.HabitType
 import com.example.habittracker.domain.usecases.AddHabitItemUseCase
 import com.example.habittracker.domain.usecases.DeleteHabitItemUseCase
 import com.example.habittracker.domain.usecases.GetHabitListUseCase

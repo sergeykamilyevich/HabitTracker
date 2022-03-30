@@ -4,8 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.example.habittracker.domain.HabitPriority
-import com.example.habittracker.domain.HabitType
+import com.example.habittracker.domain.entities.HabitType
 
 @Entity(
     tableName = "habit_items",

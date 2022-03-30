@@ -6,9 +6,9 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Spinner
 import com.example.habittracker.databinding.FragmentHabitItemBinding
-import com.example.habittracker.domain.HabitItem
-import com.example.habittracker.domain.HabitPriority
-import com.example.habittracker.domain.HabitType
+import com.example.habittracker.domain.entities.HabitItem
+import com.example.habittracker.domain.entities.HabitPriority
+import com.example.habittracker.domain.entities.HabitType
 
 class HabitItemMapper {
 

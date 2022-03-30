@@ -1,4 +1,4 @@
-package com.example.habittracker.domain
+package com.example.habittracker.domain.entities
 
 import java.text.SimpleDateFormat
 import java.util.*

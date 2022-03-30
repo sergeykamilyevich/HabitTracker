@@ -11,10 +11,10 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habittracker.R
 import com.example.habittracker.databinding.FragmentHabitListBinding
-import com.example.habittracker.domain.HabitItem
-import com.example.habittracker.domain.HabitPriority
-import com.example.habittracker.domain.HabitTime
-import com.example.habittracker.domain.HabitType
+import com.example.habittracker.domain.entities.HabitItem
+import com.example.habittracker.domain.entities.HabitPriority
+import com.example.habittracker.domain.entities.HabitTime
+import com.example.habittracker.domain.entities.HabitType
 import com.example.habittracker.domain.color.ColorPicker
 import com.example.habittracker.presentation.recycler.HabitListAdapter
 import com.example.habittracker.presentation.view_models.HabitListViewModel

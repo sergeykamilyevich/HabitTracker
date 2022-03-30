@@ -1,7 +1,7 @@
 package com.example.habittracker.data.room
 
-import com.example.habittracker.domain.HabitItem
-import com.example.habittracker.domain.HabitPriority
+import com.example.habittracker.domain.entities.HabitItem
+import com.example.habittracker.domain.entities.HabitPriority
 
 class HabitListMapper {
 

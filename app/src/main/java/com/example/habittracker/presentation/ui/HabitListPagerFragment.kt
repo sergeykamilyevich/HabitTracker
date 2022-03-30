@@ -4,16 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.habittracker.R
 import com.example.habittracker.databinding.FragmentHabitListPagerBinding
-import com.example.habittracker.domain.HabitItem
-import com.example.habittracker.domain.HabitListOrderBy
-import com.example.habittracker.presentation.view_models.HabitListViewModel
+import com.example.habittracker.domain.entities.HabitItem
 import com.example.habittracker.presentation.view_pager.ViewPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 

@@ -1,6 +1,9 @@
 package com.example.habittracker.domain
 
 import androidx.lifecycle.LiveData
+import com.example.habittracker.domain.entities.HabitItem
+import com.example.habittracker.domain.entities.HabitListFilter
+import com.example.habittracker.domain.entities.HabitType
 
 interface HabitListRepository {
 

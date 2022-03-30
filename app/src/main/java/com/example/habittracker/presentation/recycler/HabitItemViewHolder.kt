@@ -3,8 +3,8 @@ package com.example.habittracker.presentation.recycler
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habittracker.R
 import com.example.habittracker.databinding.ItemHabitBinding
-import com.example.habittracker.domain.HabitItem
-import com.example.habittracker.domain.HabitTime
+import com.example.habittracker.domain.entities.HabitItem
+import com.example.habittracker.domain.entities.HabitTime
 
 
 class HabitItemViewHolder(

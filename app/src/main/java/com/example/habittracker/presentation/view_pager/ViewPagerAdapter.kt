@@ -2,7 +2,7 @@ package com.example.habittracker.presentation.view_pager
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.habittracker.domain.HabitType
+import com.example.habittracker.domain.entities.HabitType
 import com.example.habittracker.presentation.ui.HabitListFragment
 
 class ViewPagerAdapter(parentFragment: Fragment) : FragmentStateAdapter(parentFragment) {
