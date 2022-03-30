@@ -8,13 +8,13 @@ import androidx.room.RoomDatabase
 @Database(entities = [HabitItemDbModel::class], version = 1, exportSchema = false)
 abstract class AppDataBase : RoomDatabase() {
 
-    abstract fun habitListDao(): HabitListDao
+    abstract fun habitListDao(): HabitDao
 
     companion object {
 
         private var INSTANCE: AppDataBase? = null
         private val LOCK = Any()
-        private const val DB_NAME = "habit_item.db"
+        private const val DB_NAME = "habit.db"
 
         fun getInstance(application: Application): AppDataBase {
             INSTANCE?.let {

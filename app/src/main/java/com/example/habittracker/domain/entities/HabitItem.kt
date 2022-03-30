@@ -8,12 +8,13 @@ data class HabitItem(
     var color: Int,
     var recurrenceNumber: Int,
     var recurrencePeriod: Int,
-    var id: Int = UNDEFINED_ID,
-    var date: Int = 0,
-    val doneDates: MutableList<Int> = mutableListOf()
+    val id: Int = UNDEFINED_ID,
+    val date: Int,
+//    val doneDates: MutableList<Int> = mutableListOf()
 ) {
 
     companion object {
         const val UNDEFINED_ID = 0
+        const val UNDEFINED_DATE = 0
     }
 }

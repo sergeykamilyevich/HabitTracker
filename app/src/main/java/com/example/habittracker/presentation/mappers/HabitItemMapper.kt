@@ -9,26 +9,24 @@ import com.example.habittracker.databinding.FragmentHabitItemBinding
 import com.example.habittracker.domain.entities.HabitItem
 import com.example.habittracker.domain.entities.HabitPriority
 import com.example.habittracker.domain.entities.HabitType
+import com.example.habittracker.presentation.view_models.HabitItemViewModel
 
 class HabitItemMapper {
 
-    fun mapViewToHabitItem(binding: FragmentHabitItemBinding): HabitItem {
+    fun mapViewToHabitItem(
+        binding: FragmentHabitItemBinding,
+        viewModel: HabitItemViewModel
+    ): HabitItem {
         with(binding) {
-            val name = parseString(tiedName.text)
-            val description = parseString(tiedDescription.text)
-            val priority = mapSpinnerToHabitPriority(binding.spinnerPriority)
-            val type = mapRadioButtonToHabitType(binding.radioGroup)
-            val recurrenceNumber = parseNumber(tiedRecurrenceNumber.text)
-            val recurrencePeriod = parseNumber(tiedRecurrencePeriod.text)
-            val color = (currentColor.background as ColorDrawable).color
             return HabitItem(
-                name,
-                description,
-                priority,
-                type,
-                color,
-                recurrenceNumber,
-                recurrencePeriod
+                name = parseString(tiedName.text),
+                description = parseString(tiedDescription.text),
+                priority = mapSpinnerToHabitPriority(binding.spinnerPriority),
+                type = mapRadioButtonToHabitType(binding.radioGroup),
+                color = (currentColor.background as ColorDrawable).color,
+                recurrenceNumber = parseNumber(tiedRecurrenceNumber.text),
+                recurrencePeriod = parseNumber(tiedRecurrencePeriod.text),
+                date = viewModel.habitItem.value?.date ?:HabitItem.UNDEFINED_DATE
             )
         }
     }

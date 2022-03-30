@@ -1,11 +1,11 @@
 package com.example.habittracker.domain.usecases
 
 import com.example.habittracker.domain.entities.HabitItem
-import com.example.habittracker.domain.HabitListRepository
+import com.example.habittracker.domain.HabitRepository
 
-class GetHabitItemUseCase(private val habitListRepository: HabitListRepository) {
+class GetHabitItemUseCase(private val habitRepository: HabitRepository) {
 
     suspend operator fun invoke(habitItemId: Int): HabitItem {
-        return habitListRepository.getById(habitItemId)
+        return habitRepository.getById(habitItemId)
     }
 }

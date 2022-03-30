@@ -3,9 +3,9 @@ package com.example.habittracker.data.room
 import com.example.habittracker.domain.entities.HabitItem
 import com.example.habittracker.domain.entities.HabitPriority
 
-class HabitListMapper {
+class HabitMapper {
 
-    fun mapEntityToDbModel(habitItem: HabitItem) = HabitItemDbModel(
+    fun mapHabitItemToDbModel(habitItem: HabitItem) = HabitItemDbModel(
         id = habitItem.id,
         name = habitItem.name,
         description = habitItem.description,
@@ -17,7 +17,7 @@ class HabitListMapper {
         date = habitItem.date
     )
 
-    fun mapDbModelToEntity(habitItemDbModel: HabitItemDbModel) = HabitItem(
+    fun mapDbModelToHabitItem(habitItemDbModel: HabitItemDbModel) = HabitItem(
         name = habitItemDbModel.name,
         description = habitItemDbModel.description,
         priority = HabitPriority.getPriorityById(habitItemDbModel.priority),
@@ -29,7 +29,7 @@ class HabitListMapper {
         date = habitItemDbModel.date
     )
 
-    fun mapListDbModelToEntity(list: List<HabitItemDbModel>) = list.map {
-        mapDbModelToEntity(it)
+    fun mapDbModelListToHabitList(list: List<HabitItemDbModel>) = list.map {
+        mapDbModelToHabitItem(it)
     }
 }

@@ -138,7 +138,7 @@ class HabitItemFragment : Fragment(), HasTitle {
         setupColorViews(defaultColor)
         binding.btnSave.setOnClickListener {
             if (isFieldsFilled()) {
-                viewModel.addHabitItem(habitItemMapper.mapViewToHabitItem(binding))
+                viewModel.addHabitItem(habitItemMapper.mapViewToHabitItem(binding, viewModel))
             } else {
                 Toast.makeText(
                     requireActivity(),
@@ -155,7 +155,7 @@ class HabitItemFragment : Fragment(), HasTitle {
             setupFields(it)
         }
         binding.btnSave.setOnClickListener {
-            viewModel.editHabitItem(habitItemMapper.mapViewToHabitItem(binding))
+            viewModel.editHabitItem(habitItemMapper.mapViewToHabitItem(binding, viewModel))
         }
     }
 

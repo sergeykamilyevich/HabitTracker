@@ -3,15 +3,15 @@ package com.example.habittracker.data.room
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import com.example.habittracker.domain.HabitListRepository
+import com.example.habittracker.domain.HabitRepository
 import com.example.habittracker.domain.entities.HabitItem
 import com.example.habittracker.domain.entities.HabitListFilter
 import com.example.habittracker.domain.entities.HabitType
 
-class HabitListRepositoryImpl(application: Application) : HabitListRepository {
+class HabitRoomRepositoryImpl(application: Application) : HabitRepository {
 
     private val habitListDao = AppDataBase.getInstance(application).habitListDao()
-    private val mapper = HabitListMapper()
+    private val mapper = HabitMapper()
 
     override fun getList(
         habitType: HabitType?,
@@ -27,7 +27,7 @@ class HabitListRepositoryImpl(application: Application) : HabitListRepository {
         )
             ?: throw RuntimeException("List of habits is empty")
         return Transformations.map(listHabitItemDbModel) {
-            mapper.mapListDbModelToEntity(it)
+            mapper.mapDbModelListToHabitList(it)
         }
     }
 
@@ -36,11 +36,11 @@ class HabitListRepositoryImpl(application: Application) : HabitListRepository {
     override suspend fun getById(habitItemId: Int): HabitItem {
         val habitItemDbModel = habitListDao.getById(habitItemId)
             ?: throw RuntimeException("Habit with id $habitItemId not found")
-        return mapper.mapDbModelToEntity(habitItemDbModel)
+        return mapper.mapDbModelToHabitItem(habitItemDbModel)
     }
 
     override suspend fun add(habitItem: HabitItem): HabitAlreadyExistsException? {
-        val habitItemDbModel = mapper.mapEntityToDbModel(habitItem)
+        val habitItemDbModel = mapper.mapHabitItemToDbModel(habitItem)
         runCatching {
             habitListDao.add(habitItemDbModel)
         }
@@ -55,7 +55,7 @@ class HabitListRepositoryImpl(application: Application) : HabitListRepository {
     }
 
     override suspend fun edit(habitItem: HabitItem): HabitAlreadyExistsException? {
-        val habitItemDbModel = mapper.mapEntityToDbModel(habitItem)
+        val habitItemDbModel = mapper.mapHabitItemToDbModel(habitItem)
         runCatching {
             habitListDao.edit(habitItemDbModel)
         }

@@ -7,7 +7,7 @@ import com.example.habittracker.domain.entities.HabitListFilter
 import com.example.habittracker.domain.entities.HabitType
 import java.time.Instant
 
-interface HabitListRepository {
+interface HabitRepository {
 
     fun getList(habitType: HabitType?, habitListFilter: HabitListFilter): LiveData<List<HabitItem>>
 

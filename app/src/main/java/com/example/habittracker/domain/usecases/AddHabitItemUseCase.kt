@@ -2,11 +2,11 @@ package com.example.habittracker.domain.usecases
 
 import com.example.habittracker.data.room.HabitAlreadyExistsException
 import com.example.habittracker.domain.entities.HabitItem
-import com.example.habittracker.domain.HabitListRepository
+import com.example.habittracker.domain.HabitRepository
 
-class AddHabitItemUseCase(private val habitListRepository: HabitListRepository) {
+class AddHabitItemUseCase(private val habitRepository: HabitRepository) {
 
     suspend operator fun invoke(habitItem: HabitItem): HabitAlreadyExistsException? {
-        return habitListRepository.add(habitItem)
+        return habitRepository.add(habitItem)
     }
 }
