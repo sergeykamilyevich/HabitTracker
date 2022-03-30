@@ -45,6 +45,7 @@
     <string name="order_by_name">name</string>
     <string name="order_by_priority">priority</string>
     <string name="done">Done</string>
+    <string name="habit_already_exists">A habit with name %1$s already exists</string>
 
     <plurals name="plurals_times">
         <item quantity="one">%d time</item>

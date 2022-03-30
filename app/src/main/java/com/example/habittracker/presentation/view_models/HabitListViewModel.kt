@@ -3,7 +3,7 @@ package com.example.habittracker.presentation.view_models
 import android.app.Application
 import android.text.Editable
 import androidx.lifecycle.*
-import com.example.habittracker.data.HabitListRepositoryImpl
+import com.example.habittracker.data.room.HabitListRepositoryImpl
 import com.example.habittracker.domain.entities.HabitItem
 import com.example.habittracker.domain.entities.HabitListFilter
 import com.example.habittracker.domain.entities.HabitListOrderBy

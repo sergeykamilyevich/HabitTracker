@@ -121,6 +121,15 @@ class HabitItemFragment : Fragment(), HasTitle {
         viewModel.errorInputName.observe(viewLifecycleOwner) {
             handleInputError(it, binding.tiedName)
         }
+        viewModel.habitAlreadyExistsException.observe(viewLifecycleOwner) {
+            it.transferIfNotHandled().let {
+                Toast.makeText(context, resources.getString(
+                    R.string.habit_already_exists,
+                    it
+                ), Toast.LENGTH_LONG).show()
+
+            }
+        }
     }
 
     private fun launchAddMode() {

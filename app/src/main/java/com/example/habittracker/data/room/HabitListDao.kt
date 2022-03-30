@@ -25,7 +25,7 @@ interface HabitListDao {
     @Query("SELECT * FROM habit_items WHERE id = :habitItemId LIMIT 1")
     suspend fun getById(habitItemId: Int): HabitItemDbModel?
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun add(habitItemDbModel: HabitItemDbModel)
 
     @Query("DELETE FROM habit_items WHERE id = :habitItemId")

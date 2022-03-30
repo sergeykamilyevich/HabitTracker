@@ -1,13 +1,11 @@
-package com.example.habittracker.data
+package com.example.habittracker.data.room
 
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import com.example.habittracker.data.room.AppDataBase
-import com.example.habittracker.data.room.HabitListMapper
+import com.example.habittracker.domain.HabitListRepository
 import com.example.habittracker.domain.entities.HabitItem
 import com.example.habittracker.domain.entities.HabitListFilter
-import com.example.habittracker.domain.HabitListRepository
 import com.example.habittracker.domain.entities.HabitType
 
 class HabitListRepositoryImpl(application: Application) : HabitListRepository {
@@ -41,17 +39,32 @@ class HabitListRepositoryImpl(application: Application) : HabitListRepository {
         return mapper.mapDbModelToEntity(habitItemDbModel)
     }
 
-    override suspend fun add(habitItem: HabitItem) {
+    override suspend fun add(habitItem: HabitItem): HabitAlreadyExistsException? {
         val habitItemDbModel = mapper.mapEntityToDbModel(habitItem)
-        habitListDao.add(habitItemDbModel)
+        runCatching {
+            habitListDao.add(habitItemDbModel)
+        }
+            .onFailure {
+                return HabitAlreadyExistsException(habitItem.name)
+            }
+        return null
     }
 
     override suspend fun delete(habitItem: HabitItem) {
         habitListDao.delete(habitItem.id)
     }
 
-    override suspend fun edit(habitItem: HabitItem) {
+    override suspend fun edit(habitItem: HabitItem): HabitAlreadyExistsException? {
         val habitItemDbModel = mapper.mapEntityToDbModel(habitItem)
-        habitListDao.edit(habitItemDbModel)
+        runCatching {
+            habitListDao.edit(habitItemDbModel)
+        }
+            .onFailure {
+                return HabitAlreadyExistsException(habitItem.name)
+            }
+        return null
     }
 }
+
+class HabitAlreadyExistsException(var name: String) :
+    Exception("A habit with name $name already exists")

@@ -6,7 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.habittracker.data.HabitListRepositoryImpl
+import com.example.habittracker.data.room.HabitListRepositoryImpl
 import com.example.habittracker.domain.entities.HabitItem
 import com.example.habittracker.domain.entities.HabitTime
 import com.example.habittracker.domain.usecases.AddHabitItemUseCase
@@ -44,6 +44,10 @@ class HabitItemViewModel(application: Application) : AndroidViewModel(applicatio
     val canCloseScreen: LiveData<Unit>
         get() = _canCloseScreen
 
+    private val _habitAlreadyExistsException = MutableLiveData<Event<String>>()
+    val habitAlreadyExistsException: LiveData<Event<String>>
+        get() = _habitAlreadyExistsException
+
     fun addHabitItem(habitItem: HabitItem) {
         viewModelScope.launch {
             val item = HabitItem(
@@ -56,8 +60,8 @@ class HabitItemViewModel(application: Application) : AndroidViewModel(applicatio
                 recurrencePeriod = habitItem.recurrencePeriod,
                 date = habitTime.getCurrentUtcDateInInt()
             )
-            addHabitItemUseCase(item)
-            closeItemFragment()
+            val isFailureOfAdding = addHabitItemUseCase(item)?.name
+            showErrorOrCloseHabitItemScreenSuccessfully(isFailureOfAdding)
         }
     }
 
@@ -73,9 +77,17 @@ class HabitItemViewModel(application: Application) : AndroidViewModel(applicatio
                     recurrenceNumber = habitItem.recurrenceNumber,
                     recurrencePeriod = habitItem.recurrencePeriod
                 )
-                editHabitItemUseCase(item)
-                closeItemFragment()
+                val failureOfEditing = editHabitItemUseCase(item)?.name
+                showErrorOrCloseHabitItemScreenSuccessfully(failureOfEditing)
             }
+        }
+    }
+
+    private fun showErrorOrCloseHabitItemScreenSuccessfully(isFailure: String?) {
+        if (isFailure != null) {
+            _habitAlreadyExistsException.value = Event(isFailure)
+        } else {
+            closeItemFragment()
         }
     }
 
