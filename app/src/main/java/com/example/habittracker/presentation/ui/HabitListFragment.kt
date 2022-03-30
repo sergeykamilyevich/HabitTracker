@@ -55,7 +55,7 @@ class HabitListFragment : Fragment(), HasTitle {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        createRandomHabits()
+        createRandomHabits()
         setupViewModel()
         setupRecyclerView()
         setupAdapterClickListener()

@@ -5,7 +5,14 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [HabitItemDbModel::class], version = 1, exportSchema = false)
+@Database(
+    entities = [
+        HabitItemDbModel::class,
+        HabitDoneDbModel::class
+    ],
+    version = 1,
+    exportSchema = false
+)
 abstract class AppDataBase : RoomDatabase() {
 
     abstract fun habitListDao(): HabitDao
