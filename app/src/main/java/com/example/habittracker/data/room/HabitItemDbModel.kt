@@ -16,7 +16,7 @@ data class HabitItemDbModel(
     val id: Int,
     var name: String,
     var description: String,
-    var priority: HabitPriority,
+    var priority: Int,
     var type: HabitType,
     var color: Int,
     @ColumnInfo(name = "recurrence_number")

@@ -45,7 +45,9 @@ class BottomSheetFragment : Fragment() {
             binding.btnNameAsc,
             binding.btnNameDesc,
             binding.btnCreationAsc,
-            binding.btnCreationDesc
+            binding.btnCreationDesc,
+            binding.btnPriorityAsc,
+            binding.btnPriorityDesc
         )
         buttons.forEachIndexed { index, button ->
             button.setOnClickListener {
@@ -81,6 +83,8 @@ class BottomSheetFragment : Fragment() {
                 btnNameDesc.id -> HabitListOrderBy.NAME_DESC
                 btnCreationAsc.id -> HabitListOrderBy.TIME_CREATION_ASC
                 btnCreationDesc.id -> HabitListOrderBy.TIME_CREATION_DESC
+                btnPriorityAsc.id -> HabitListOrderBy.PRIORITY_ASC
+                btnPriorityDesc.id -> HabitListOrderBy.PRIORITY_DESC
                 else -> throw RuntimeException("Unknown button: ${button.id}")
             }
         }
@@ -94,6 +98,8 @@ class BottomSheetFragment : Fragment() {
                 HabitListOrderBy.NAME_DESC -> btnNameDesc.isSelected = true
                 HabitListOrderBy.TIME_CREATION_ASC -> btnCreationAsc.isSelected = true
                 HabitListOrderBy.TIME_CREATION_DESC -> btnCreationDesc.isSelected = true
+                HabitListOrderBy.PRIORITY_ASC -> btnPriorityAsc.isSelected = true
+                HabitListOrderBy.PRIORITY_DESC -> btnPriorityDesc.isSelected = true
             }
         }
     }

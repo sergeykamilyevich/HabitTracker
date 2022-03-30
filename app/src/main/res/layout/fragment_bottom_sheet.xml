@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.ui.HabitListPagerFragment">
+    tools:context=".presentation.ui.BottomSheetFragment">
         <TextView
             android:id="@+id/tv_bottom_sheet_title"
             android:layout_width="match_parent"
@@ -99,5 +99,33 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/btn_creation_asc"
             app:layout_constraintTop_toBottomOf="@id/btn_name_asc" />
+
+        <Button
+            android:id="@+id/btn_priority_asc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:backgroundTint="@drawable/button_bg_color"
+            android:drawableEnd="@drawable/ic_baseline_south_20"
+            android:text="@string/order_by_priority"
+            android:textAllCaps="false"
+            android:textColor="@drawable/button_text_color"
+            app:layout_constraintEnd_toStartOf="@id/btn_priority_desc"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_creation_asc" />
+
+        <Button
+            android:id="@+id/btn_priority_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:backgroundTint="@drawable/button_bg_color"
+            android:drawableEnd="@drawable/ic_baseline_north_20"
+            android:text="@string/order_by_priority"
+            android:textAllCaps="false"
+            android:textColor="@drawable/button_text_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn_priority_asc"
+            app:layout_constraintTop_toBottomOf="@id/btn_creation_asc" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

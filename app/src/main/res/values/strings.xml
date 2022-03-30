@@ -43,6 +43,7 @@
     <string name="order_by">Order by:</string>
     <string name="order_by_creation">creation</string>
     <string name="order_by_name">name</string>
+    <string name="order_by_priority">priority</string>
     <string name="done">Done</string>
 
     <plurals name="plurals_times">

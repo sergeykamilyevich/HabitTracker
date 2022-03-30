@@ -1,6 +1,7 @@
 package com.example.habittracker.data.room
 
 import com.example.habittracker.domain.HabitItem
+import com.example.habittracker.domain.HabitPriority
 
 class HabitListMapper {
 
@@ -8,7 +9,7 @@ class HabitListMapper {
         id = habitItem.id,
         name = habitItem.name,
         description = habitItem.description,
-        priority = habitItem.priority,
+        priority = habitItem.priority.id,
         type = habitItem.type,
         color = habitItem.color,
         recurrenceNumber = habitItem.recurrenceNumber,
@@ -19,7 +20,7 @@ class HabitListMapper {
     fun mapDbModelToEntity(habitItemDbModel: HabitItemDbModel) = HabitItem(
         name = habitItemDbModel.name,
         description = habitItemDbModel.description,
-        priority = habitItemDbModel.priority,
+        priority = HabitPriority.getPriorityById(habitItemDbModel.priority),
         type = habitItemDbModel.type,
         color = habitItemDbModel.color,
         recurrenceNumber = habitItemDbModel.recurrenceNumber,
