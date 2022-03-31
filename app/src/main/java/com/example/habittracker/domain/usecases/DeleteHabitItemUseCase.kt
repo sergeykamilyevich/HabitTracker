@@ -6,6 +6,6 @@ import com.example.habittracker.domain.HabitRepository
 class DeleteHabitItemUseCase(private val habitRepository: HabitRepository) {
 
     suspend operator fun invoke(habitItem: HabitItem) {
-        habitRepository.delete(habitItem)
+        habitRepository.deleteHabitItem(habitItem)
     }
 }

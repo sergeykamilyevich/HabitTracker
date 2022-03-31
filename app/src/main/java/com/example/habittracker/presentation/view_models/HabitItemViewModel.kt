@@ -6,7 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.habittracker.data.room.HabitRoomRepositoryImpl
+import com.example.habittracker.data.room.RoomHabitRepository
 import com.example.habittracker.domain.entities.HabitItem
 import com.example.habittracker.domain.entities.HabitTime
 import com.example.habittracker.domain.usecases.AddHabitItemUseCase
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class HabitItemViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository = HabitRoomRepositoryImpl(application)
+    private val repository = RoomHabitRepository(application)
     private val addHabitItemUseCase = AddHabitItemUseCase(repository)
     private val editHabitItemUseCase = EditHabitItemUseCase(repository)
     private val getHabitItemUseCase = GetHabitItemUseCase(repository)

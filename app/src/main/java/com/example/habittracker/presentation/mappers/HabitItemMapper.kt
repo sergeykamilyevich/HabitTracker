@@ -9,37 +9,30 @@ import com.example.habittracker.databinding.FragmentHabitItemBinding
 import com.example.habittracker.domain.entities.HabitItem
 import com.example.habittracker.domain.entities.HabitPriority
 import com.example.habittracker.domain.entities.HabitType
-import com.example.habittracker.presentation.view_models.HabitItemViewModel
 
 class HabitItemMapper {
 
-    fun mapViewToHabitItem(
-        binding: FragmentHabitItemBinding,
-        viewModel: HabitItemViewModel
-    ): HabitItem {
-        with(binding) {
-            return HabitItem(
-                name = parseString(tiedName.text),
-                description = parseString(tiedDescription.text),
-                priority = mapSpinnerToHabitPriority(binding.spinnerPriority),
-                type = mapRadioButtonToHabitType(binding.radioGroup),
-                color = (currentColor.background as ColorDrawable).color,
-                recurrenceNumber = parseNumber(tiedRecurrenceNumber.text),
-                recurrencePeriod = parseNumber(tiedRecurrencePeriod.text),
-                date = viewModel.habitItem.value?.date ?:HabitItem.UNDEFINED_DATE
-            )
-        }
+    fun mapViewToHabitItem(binding: FragmentHabitItemBinding): HabitItem = with(binding) {
+        HabitItem(
+            name = parseString(tiedName.text),
+            description = parseString(tiedDescription.text),
+            priority = mapSpinnerToHabitPriority(binding.spinnerPriority),
+            type = mapRadioButtonToHabitType(binding.radioGroup),
+            color = (currentColor.background as ColorDrawable).color,
+            recurrenceNumber = parseNumber(tiedRecurrenceNumber.text),
+            recurrencePeriod = parseNumber(tiedRecurrencePeriod.text)
+        )
     }
 
     private fun mapRadioButtonToHabitType(radioGroup: RadioGroup): HabitType {
         val checkedRadioButtonId = radioGroup.checkedRadioButtonId
         val radioButton = radioGroup.findViewById<RadioButton>(checkedRadioButtonId)
         val text = radioButton.text.toString()
-        return HabitType.valueOf(text.uppercase())
+        return HabitType.valueOf(text.uppercase()) //TODO
     }
 
     private fun mapSpinnerToHabitPriority(spinner: Spinner): HabitPriority {
-        return HabitPriority.valueOf(spinner.selectedItem.toString().uppercase())
+        return HabitPriority.valueOf(spinner.selectedItem.toString().uppercase())  //TODO
     }
 
     fun parseString(input: Editable?): String = input?.trim()?.toString() ?: EMPTY_STRING

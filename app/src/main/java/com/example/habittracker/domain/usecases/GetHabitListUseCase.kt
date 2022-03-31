@@ -12,6 +12,6 @@ class GetHabitListUseCase(private val habitRepository: HabitRepository) {
         habitTypeFilter: HabitType?,
         habitListFilter: HabitListFilter
     ): LiveData<List<HabitItem>> {
-        return habitRepository.getList(habitTypeFilter, habitListFilter)
+        return habitRepository.getHabitList(habitTypeFilter, habitListFilter)
     }
 }

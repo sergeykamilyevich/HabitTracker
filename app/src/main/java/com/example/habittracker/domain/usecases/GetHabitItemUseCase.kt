@@ -6,6 +6,6 @@ import com.example.habittracker.domain.HabitRepository
 class GetHabitItemUseCase(private val habitRepository: HabitRepository) {
 
     suspend operator fun invoke(habitItemId: Int): HabitItem {
-        return habitRepository.getById(habitItemId)
+        return habitRepository.getHabitById(habitItemId)
     }
 }

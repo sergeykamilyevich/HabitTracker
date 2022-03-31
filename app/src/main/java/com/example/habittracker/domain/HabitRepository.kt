@@ -1,21 +1,25 @@
 package com.example.habittracker.domain
 
 import androidx.lifecycle.LiveData
-import com.example.habittracker.data.room.HabitAlreadyExistsException
+import com.example.habittracker.data.HabitAlreadyExistsException
+import com.example.habittracker.domain.entities.HabitDone
 import com.example.habittracker.domain.entities.HabitItem
 import com.example.habittracker.domain.entities.HabitListFilter
 import com.example.habittracker.domain.entities.HabitType
-import java.time.Instant
 
 interface HabitRepository {
 
-    fun getList(habitType: HabitType?, habitListFilter: HabitListFilter): LiveData<List<HabitItem>>
+    fun getHabitList(habitType: HabitType?, habitListFilter: HabitListFilter): LiveData<List<HabitItem>>
 
-    suspend fun getById(habitItemId: Int): HabitItem
+    suspend fun getHabitById(habitItemId: Int): HabitItem
 
-    suspend fun add(habitItem: HabitItem): HabitAlreadyExistsException?
+    suspend fun addHabitItem(habitItem: HabitItem): HabitAlreadyExistsException?
 
-    suspend fun delete(habitItem: HabitItem)
+    suspend fun deleteHabitItem(habitItem: HabitItem)
 
-    suspend fun edit(habitItem: HabitItem): HabitAlreadyExistsException?
+    suspend fun editHabitItem(habitItem: HabitItem): HabitAlreadyExistsException?
+
+    suspend fun addHabitDone(habitDone: HabitDone)
+
+    suspend fun deleteHabitDone(habitDone: HabitDone)
 }

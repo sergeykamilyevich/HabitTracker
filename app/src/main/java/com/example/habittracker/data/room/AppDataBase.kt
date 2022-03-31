@@ -10,12 +10,12 @@ import androidx.room.RoomDatabase
         HabitItemDbModel::class,
         HabitDoneDbModel::class
     ],
-    version = 1,
-    exportSchema = false
+    version = 1
 )
 abstract class AppDataBase : RoomDatabase() {
 
-    abstract fun habitListDao(): HabitDao
+    abstract fun habitItemDao(): HabitItemDao
+    abstract fun habitDoneDao(): HabitDoneDao
 
     companion object {
 

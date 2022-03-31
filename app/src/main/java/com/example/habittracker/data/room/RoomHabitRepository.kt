@@ -3,24 +3,27 @@ package com.example.habittracker.data.room
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
+import com.example.habittracker.data.HabitAlreadyExistsException
 import com.example.habittracker.domain.HabitRepository
+import com.example.habittracker.domain.entities.HabitDone
 import com.example.habittracker.domain.entities.HabitItem
 import com.example.habittracker.domain.entities.HabitListFilter
 import com.example.habittracker.domain.entities.HabitType
 
-class HabitRoomRepositoryImpl(application: Application) : HabitRepository {
+class RoomHabitRepository(application: Application) : HabitRepository {
 
-    private val habitListDao = AppDataBase.getInstance(application).habitListDao()
+    private val habitItemDao = AppDataBase.getInstance(application).habitItemDao()
+    private val habitDoneDao = AppDataBase.getInstance(application).habitDoneDao()
     private val mapper = HabitMapper()
 
-    override fun getList(
+    override fun getHabitList(
         habitType: HabitType?,
         habitListFilter: HabitListFilter
     ): LiveData<List<HabitItem>> {
         val habitTypeFilter =
             if (habitType == null) allHabitTypesToStringList()
             else listOf(habitType.toString())
-        val listHabitItemDbModel = habitListDao.getList(
+        val listHabitItemDbModel = habitItemDao.getList(
             habitTypeFilter,
             habitListFilter.orderBy.name,
             habitListFilter.search
@@ -33,16 +36,16 @@ class HabitRoomRepositoryImpl(application: Application) : HabitRepository {
 
     private fun allHabitTypesToStringList() = HabitType.values().map { it.name }
 
-    override suspend fun getById(habitItemId: Int): HabitItem {
-        val habitItemDbModel = habitListDao.getById(habitItemId)
+    override suspend fun getHabitById(habitItemId: Int): HabitItem {
+        val habitItemDbModel = habitItemDao.getById(habitItemId)
             ?: throw RuntimeException("Habit with id $habitItemId not found")
         return mapper.mapDbModelToHabitItem(habitItemDbModel)
     }
 
-    override suspend fun add(habitItem: HabitItem): HabitAlreadyExistsException? {
+    override suspend fun addHabitItem(habitItem: HabitItem): HabitAlreadyExistsException? {
         val habitItemDbModel = mapper.mapHabitItemToDbModel(habitItem)
         runCatching {
-            habitListDao.add(habitItemDbModel)
+            habitItemDao.add(habitItemDbModel)
         }
             .onFailure {
                 return HabitAlreadyExistsException(habitItem.name)
@@ -50,21 +53,30 @@ class HabitRoomRepositoryImpl(application: Application) : HabitRepository {
         return null
     }
 
-    override suspend fun delete(habitItem: HabitItem) {
-        habitListDao.delete(habitItem.id)
+    override suspend fun deleteHabitItem(habitItem: HabitItem) {
+        habitItemDao.delete(habitItem.id)
     }
 
-    override suspend fun edit(habitItem: HabitItem): HabitAlreadyExistsException? {
+    override suspend fun editHabitItem(habitItem: HabitItem): HabitAlreadyExistsException? {
         val habitItemDbModel = mapper.mapHabitItemToDbModel(habitItem)
         runCatching {
-            habitListDao.edit(habitItemDbModel)
+            habitItemDao.edit(habitItemDbModel)
         }
             .onFailure {
                 return HabitAlreadyExistsException(habitItem.name)
             }
         return null
+    }
+
+    override suspend fun addHabitDone(habitDone: HabitDone) {
+        val habitDoneDbModel = mapper.mapHabitDoneToDbModel(habitDone)
+        habitDoneDao.add(habitDoneDbModel)
+    }
+
+    override suspend fun deleteHabitDone(habitDone: HabitDone) {
+        val habitDoneDbModel = mapper.mapHabitDoneToDbModel(habitDone)
+        habitDoneDao.delete(habitDoneDbModel.id)
+
     }
 }
 
-class HabitAlreadyExistsException(var name: String) :
-    Exception("A habit with name $name already exists")

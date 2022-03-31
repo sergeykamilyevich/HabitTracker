@@ -3,7 +3,7 @@ package com.example.habittracker.presentation.view_models
 import android.app.Application
 import android.text.Editable
 import androidx.lifecycle.*
-import com.example.habittracker.data.room.HabitRoomRepositoryImpl
+import com.example.habittracker.data.room.RoomHabitRepository
 import com.example.habittracker.domain.entities.HabitItem
 import com.example.habittracker.domain.entities.HabitListFilter
 import com.example.habittracker.domain.entities.HabitListOrderBy
@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 
 class HabitListViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository = HabitRoomRepositoryImpl(application)
+    private val repository = RoomHabitRepository(application)
     private val getHabitListUseCase = GetHabitListUseCase(repository)
     private val addHabitItemUseCase = AddHabitItemUseCase(repository)
     private val deleteHabitItemUseCase = DeleteHabitItemUseCase(repository)

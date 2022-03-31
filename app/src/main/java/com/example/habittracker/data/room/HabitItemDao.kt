@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
-interface HabitDao {
+interface HabitItemDao {
 
     @Query("""
             SELECT * FROM habit_items WHERE type IN (:habitTypeFilter)

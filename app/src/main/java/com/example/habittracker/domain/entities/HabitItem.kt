@@ -9,7 +9,7 @@ data class HabitItem(
     var recurrenceNumber: Int,
     var recurrencePeriod: Int,
     val id: Int = UNDEFINED_ID,
-    val date: Int,
+    val date: Int = UNDEFINED_DATE
 //    val doneDates: MutableList<Int> = mutableListOf()
 ) {
 

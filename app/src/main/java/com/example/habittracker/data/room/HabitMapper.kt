@@ -1,5 +1,6 @@
 package com.example.habittracker.data.room
 
+import com.example.habittracker.domain.entities.HabitDone
 import com.example.habittracker.domain.entities.HabitItem
 import com.example.habittracker.domain.entities.HabitPriority
 
@@ -27,6 +28,18 @@ class HabitMapper {
         recurrencePeriod = habitItemDbModel.recurrencePeriod,
         id = habitItemDbModel.id,
         date = habitItemDbModel.date
+    )
+
+    fun mapHabitDoneToDbModel(habitDone: HabitDone) = HabitDoneDbModel(
+        id = habitDone.id,
+        habitId = habitDone.habitId,
+        date = habitDone.date
+    )
+
+    fun mapDbModelToHabitDone(habitDoneDbModel: HabitDoneDbModel) = HabitDone(
+        habitId = habitDoneDbModel.habitId,
+        date = habitDoneDbModel.date,
+        id = habitDoneDbModel.id
     )
 
     fun mapDbModelListToHabitList(list: List<HabitItemDbModel>) = list.map {
