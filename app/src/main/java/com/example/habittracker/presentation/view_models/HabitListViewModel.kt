@@ -21,9 +21,7 @@ class HabitListViewModel(application: Application) : AndroidViewModel(applicatio
     val habitListFilter: LiveData<HabitListFilter>
         get() = _habitListFilter
 
-//    private val _habitDoneIdAdded = MutableLiveData<Int?>()
     var habitDoneIdAdded: Int? = null
-//        get() = _habitDoneIdAdded
 
     private var currentHabitListFilter = HabitListFilter(HabitListOrderBy.NAME_ASC, "")
 

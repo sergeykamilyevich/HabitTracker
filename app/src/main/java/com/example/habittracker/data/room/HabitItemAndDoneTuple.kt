@@ -14,5 +14,4 @@ data class HabitItemAndDoneTuple(
     val habitDoneDbModel: HabitDoneDbModel
 ) {
 
-
 }

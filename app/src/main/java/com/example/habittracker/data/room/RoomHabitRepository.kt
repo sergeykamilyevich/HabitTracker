@@ -74,9 +74,7 @@ class RoomHabitRepository(application: Application) : HabitRepository {
     }
 
     override suspend fun deleteHabitDone(habitDoneId: Int) {
-//        val habitDoneDbModel = mapper.mapHabitDoneToDbModel(habitDone)
         habitDoneDao.delete(habitDoneId)
-
     }
 }
 
