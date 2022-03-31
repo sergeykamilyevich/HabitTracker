@@ -12,12 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.habittracker.R
 import com.example.habittracker.databinding.FragmentHabitListBinding
 import com.example.habittracker.domain.color.ColorPicker
-import com.example.habittracker.domain.entities.HabitItem
-import com.example.habittracker.domain.entities.HabitPriority
-import com.example.habittracker.domain.entities.HabitTime
-import com.example.habittracker.domain.entities.HabitType
+import com.example.habittracker.domain.entities.*
 import com.example.habittracker.presentation.recycler.HabitListAdapter
 import com.example.habittracker.presentation.view_models.HabitListViewModel
+import com.google.android.material.snackbar.Snackbar
 import kotlin.random.Random
 
 
@@ -31,6 +29,7 @@ class HabitListFragment : Fragment(), HasTitle {
     private lateinit var habitListAdapter: HabitListAdapter
     private val colorPicker = ColorPicker()
     private val colors = colorPicker.getColors()
+    private val habitTime = HabitTime()
 
     private var listMode: HabitType? = null
 
@@ -58,7 +57,7 @@ class HabitListFragment : Fragment(), HasTitle {
 //        createRandomHabits()
         setupViewModel()
         setupRecyclerView()
-        setupAdapterClickListener()
+        setupAdapterClickListeners()
         setupSwipeListener()
     }
 
@@ -83,7 +82,27 @@ class HabitListFragment : Fragment(), HasTitle {
         binding.rvHabitList.adapter = habitListAdapter
     }
 
-    private fun setupAdapterClickListener() {
+    private fun setupAdapterClickListeners() {
+        habitListAdapter.onButtonHabitDoneClickListener = {
+            viewModel.addHabitDone(
+                HabitDone(
+                    habitId = it.id,
+                    date = habitTime.getCurrentUtcDateInInt()
+                )
+            )
+            Snackbar.make(
+                binding.fragmentHabitList,
+                "You marked habit '${it.name}' as Done",
+                Snackbar.LENGTH_LONG
+            )
+                .setAction("Undo") {
+                    viewModel.habitDoneIdAdded?.let { habitDoneId ->
+                        viewModel.deleteHabitDone(habitDoneId)
+                    }
+                }
+                .setDuration(5000)
+                .show()
+        }
         habitListAdapter.onHabitListClickListener = {
             launchHabitItemActivityEditMode(it.id)
         }

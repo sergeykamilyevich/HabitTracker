@@ -68,14 +68,14 @@ class RoomHabitRepository(application: Application) : HabitRepository {
         return null
     }
 
-    override suspend fun addHabitDone(habitDone: HabitDone) {
+    override suspend fun addHabitDone(habitDone: HabitDone): Int {
         val habitDoneDbModel = mapper.mapHabitDoneToDbModel(habitDone)
-        habitDoneDao.add(habitDoneDbModel)
+        return habitDoneDao.add(habitDoneDbModel).toInt()
     }
 
-    override suspend fun deleteHabitDone(habitDone: HabitDone) {
-        val habitDoneDbModel = mapper.mapHabitDoneToDbModel(habitDone)
-        habitDoneDao.delete(habitDoneDbModel.id)
+    override suspend fun deleteHabitDone(habitDoneId: Int) {
+//        val habitDoneDbModel = mapper.mapHabitDoneToDbModel(habitDone)
+        habitDoneDao.delete(habitDoneId)
 
     }
 }

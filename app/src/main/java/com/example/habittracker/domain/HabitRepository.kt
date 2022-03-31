@@ -22,7 +22,7 @@ interface HabitRepository {
 
     suspend fun editHabitItem(habitItem: HabitItem): HabitAlreadyExistsException?
 
-    suspend fun addHabitDone(habitDone: HabitDone)
+    suspend fun addHabitDone(habitDone: HabitDone): Int
 
-    suspend fun deleteHabitDone(habitDone: HabitDone)
+    suspend fun deleteHabitDone(habitDoneId: Int)
 }

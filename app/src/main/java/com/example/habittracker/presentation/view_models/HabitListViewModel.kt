@@ -4,13 +4,8 @@ import android.app.Application
 import android.text.Editable
 import androidx.lifecycle.*
 import com.example.habittracker.data.room.RoomHabitRepository
-import com.example.habittracker.domain.entities.HabitItem
-import com.example.habittracker.domain.entities.HabitListFilter
-import com.example.habittracker.domain.entities.HabitListOrderBy
-import com.example.habittracker.domain.entities.HabitType
-import com.example.habittracker.domain.usecases.AddHabitItemUseCase
-import com.example.habittracker.domain.usecases.DeleteHabitItemUseCase
-import com.example.habittracker.domain.usecases.GetHabitListUseCase
+import com.example.habittracker.domain.entities.*
+import com.example.habittracker.domain.usecases.*
 import kotlinx.coroutines.launch
 
 class HabitListViewModel(application: Application) : AndroidViewModel(application) {
@@ -19,10 +14,16 @@ class HabitListViewModel(application: Application) : AndroidViewModel(applicatio
     private val getHabitListUseCase = GetHabitListUseCase(repository)
     private val addHabitItemUseCase = AddHabitItemUseCase(repository)
     private val deleteHabitItemUseCase = DeleteHabitItemUseCase(repository)
+    private val addHabitDoneUseCase = AddHabitDoneUseCase(repository)
+    private val deleteHabitDoneUseCase = DeleteHabitDoneUseCase(repository)
 
     private val _habitListFilter = MutableLiveData<HabitListFilter>()
     val habitListFilter: LiveData<HabitListFilter>
         get() = _habitListFilter
+
+//    private val _habitDoneIdAdded = MutableLiveData<Int?>()
+    var habitDoneIdAdded: Int? = null
+//        get() = _habitDoneIdAdded
 
     private var currentHabitListFilter = HabitListFilter(HabitListOrderBy.NAME_ASC, "")
 
@@ -37,6 +38,18 @@ class HabitListViewModel(application: Application) : AndroidViewModel(applicatio
     fun deleteHabitItem(habitItem: HabitItem) {
         viewModelScope.launch {
             deleteHabitItemUseCase(habitItem)
+        }
+    }
+
+    fun addHabitDone(habitDone: HabitDone) {
+        viewModelScope.launch {
+            habitDoneIdAdded = addHabitDoneUseCase(habitDone)
+        }
+    }
+
+    fun deleteHabitDone(habitDoneId: Int) {
+        viewModelScope.launch {
+            deleteHabitDoneUseCase(habitDoneId)
         }
     }
 

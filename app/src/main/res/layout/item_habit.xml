@@ -14,7 +14,7 @@
         android:layout_margin="16dp">
 
         <Button
-            android:id="@+id/view_color"
+            android:id="@+id/btn_habit_done"
             style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="36dp"
             android:layout_height="36dp"
@@ -35,7 +35,7 @@
             android:layout_marginEnd="10dp"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="@id/guideline"
-            app:layout_constraintStart_toEndOf="@id/view_color"
+            app:layout_constraintStart_toEndOf="@id/btn_habit_done"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Name" />
 

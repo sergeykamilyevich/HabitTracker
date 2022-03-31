@@ -8,7 +8,7 @@ import androidx.room.Query
 interface HabitDoneDao {
 
     @Insert()
-    suspend fun add(habitDoneDbModel: HabitDoneDbModel)
+    suspend fun add(habitDoneDbModel: HabitDoneDbModel): Long
 
     @Query("DELETE FROM habit_done WHERE id = :habitDoneId")
     suspend fun delete(habitDoneId: Int)

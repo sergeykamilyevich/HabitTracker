@@ -9,7 +9,8 @@ import com.example.habittracker.domain.entities.HabitTime
 
 class HabitItemViewHolder(
     private val binding: ItemHabitBinding,
-    private val onHabitListClickListener: ((HabitItem) -> Unit)?
+    private val onHabitListClickListener: ((HabitItem) -> Unit)?,
+    private val onButtonHabitDoneClickListener: ((HabitItem) -> Unit)?
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private val habitTime = HabitTime()
@@ -21,7 +22,10 @@ class HabitItemViewHolder(
             tvDate.text = habitTime.mapUtcDateInIntToString(habitItem.date)
             tvType.text = root.resources.getString(habitItem.type.resourceId)
             tvPriority.text = root.resources.getString(habitItem.priority.resourceId)
-            viewColor.setBackgroundColor(habitItem.color)
+            btnHabitDone.setBackgroundColor(habitItem.color)
+            btnHabitDone.setOnClickListener {
+                onButtonHabitDoneClickListener?.invoke(habitItem)
+            }
             val recurrenceNumber = habitItem.recurrenceNumber
             val recurrenceTimes = root.resources.getQuantityString(
                 R.plurals.plurals_times,

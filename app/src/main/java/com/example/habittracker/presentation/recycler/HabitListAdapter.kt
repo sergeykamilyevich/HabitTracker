@@ -9,6 +9,7 @@ import com.example.habittracker.domain.entities.HabitItem
 class HabitListAdapter : ListAdapter<HabitItem, HabitItemViewHolder>(HabitItemDiffCallback()) {
 
     var onHabitListClickListener: ((HabitItem) -> Unit)? = null
+    var onButtonHabitDoneClickListener: ((HabitItem) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HabitItemViewHolder {
         val binding = ItemHabitBinding.inflate(
@@ -16,7 +17,7 @@ class HabitListAdapter : ListAdapter<HabitItem, HabitItemViewHolder>(HabitItemDi
             parent,
             false
         )
-        return HabitItemViewHolder(binding, onHabitListClickListener)
+        return HabitItemViewHolder(binding, onHabitListClickListener, onButtonHabitDoneClickListener)
     }
 
     override fun onBindViewHolder(viewHolder: HabitItemViewHolder, position: Int) {
