@@ -6,7 +6,8 @@ import androidx.room.*
 @Dao
 interface HabitItemDao {
 
-    @Query("""
+    @Query(
+        """
             SELECT * FROM habit_items WHERE type IN (:habitTypeFilter)
             AND name LIKE '%' || :search || '%' ORDER BY 
             CASE WHEN :orderBy = 'NAME_ASC' THEN name END ASC,
@@ -15,7 +16,8 @@ interface HabitItemDao {
             CASE WHEN :orderBy = 'TIME_CREATION_DESC' THEN id END DESC,
             CASE WHEN :orderBy = 'PRIORITY_ASC' THEN priority END ASC,
             CASE WHEN :orderBy = 'PRIORITY_DESC' THEN priority END DESC
-            """)
+            """
+    )
     fun getList(
         habitTypeFilter: List<String>,
         orderBy: String,

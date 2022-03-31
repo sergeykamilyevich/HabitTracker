@@ -9,7 +9,10 @@ import com.example.habittracker.domain.entities.HabitType
 
 interface HabitRepository {
 
-    fun getHabitList(habitType: HabitType?, habitListFilter: HabitListFilter): LiveData<List<HabitItem>>
+    fun getHabitList(
+        habitType: HabitType?,
+        habitListFilter: HabitListFilter
+    ): LiveData<List<HabitItem>>
 
     suspend fun getHabitById(habitItemId: Int): HabitItem
 

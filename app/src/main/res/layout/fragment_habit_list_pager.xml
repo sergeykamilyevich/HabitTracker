@@ -49,9 +49,9 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/bottom_sheet"
+            android:name="com.example.habittracker.presentation.ui.BottomSheetFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:name="com.example.habittracker.presentation.ui.BottomSheetFragment"
             android:background="@drawable/rounded_rectangle"
             app:layout_behavior="com.example.habittracker.presentation.ui.AutoCollapseBottomSheetBehavior"
             app:layout_constraintBottom_toBottomOf="parent"

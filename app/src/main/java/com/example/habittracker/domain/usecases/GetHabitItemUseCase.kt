@@ -1,7 +1,7 @@
 package com.example.habittracker.domain.usecases
 
-import com.example.habittracker.domain.entities.HabitItem
 import com.example.habittracker.domain.HabitRepository
+import com.example.habittracker.domain.entities.HabitItem
 
 class GetHabitItemUseCase(private val habitRepository: HabitRepository) {
 

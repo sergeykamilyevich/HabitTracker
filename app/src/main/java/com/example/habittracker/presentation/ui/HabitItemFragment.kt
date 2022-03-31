@@ -14,10 +14,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.habittracker.R
 import com.example.habittracker.databinding.FragmentHabitItemBinding
-import com.example.habittracker.domain.entities.HabitItem
-import com.example.habittracker.domain.entities.HabitPriority
 import com.example.habittracker.domain.color.ColorMapper
 import com.example.habittracker.domain.color.ColorPicker
+import com.example.habittracker.domain.entities.HabitItem
+import com.example.habittracker.domain.entities.HabitPriority
 import com.example.habittracker.presentation.mappers.HabitItemMapper
 import com.example.habittracker.presentation.view_models.HabitItemViewModel
 import com.google.android.material.textfield.TextInputEditText
@@ -123,10 +123,12 @@ class HabitItemFragment : Fragment(), HasTitle {
         }
         viewModel.habitAlreadyExistsException.observe(viewLifecycleOwner) {
             it.transferIfNotHandled().let {
-                Toast.makeText(context, resources.getString(
-                    R.string.habit_already_exists,
-                    it
-                ), Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context, resources.getString(
+                        R.string.habit_already_exists,
+                        it
+                    ), Toast.LENGTH_LONG
+                ).show()
 
             }
         }

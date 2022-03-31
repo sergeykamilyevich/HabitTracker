@@ -1,8 +1,8 @@
 package com.example.habittracker.domain.usecases
 
 import com.example.habittracker.data.HabitAlreadyExistsException
-import com.example.habittracker.domain.entities.HabitItem
 import com.example.habittracker.domain.HabitRepository
+import com.example.habittracker.domain.entities.HabitItem
 
 class AddHabitItemUseCase(private val habitRepository: HabitRepository) {
 
