@@ -27,12 +27,20 @@ class HabitItemMapper {
     private fun mapRadioButtonToHabitType(radioGroup: RadioGroup): HabitType {
         val checkedRadioButtonId = radioGroup.checkedRadioButtonId
         val radioButton = radioGroup.findViewById<RadioButton>(checkedRadioButtonId)
-        val text = radioButton.text.toString()
-        return HabitType.valueOf(text.uppercase()) //TODO
+        HabitType.values().forEach {
+            val habitTypeText = radioButton.context.resources.getString(it.resourceId)
+            if (habitTypeText == radioButton.text) return it
+        }
+        throw RuntimeException("Unknown radiobutton selected (id = ${radioButton.id})")
+
     }
 
     private fun mapSpinnerToHabitPriority(spinner: Spinner): HabitPriority {
-        return HabitPriority.valueOf(spinner.selectedItem.toString().uppercase())  //TODO
+        HabitPriority.values().forEach {
+            val habitPriorityText = spinner.context.resources.getString(it.resourceId)
+            if (habitPriorityText == spinner.selectedItem) return it
+        }
+        throw RuntimeException("Unknown spinner selected item: ${spinner.selectedItem}")
     }
 
     fun parseString(input: Editable?): String = input?.trim()?.toString() ?: EMPTY_STRING
