@@ -14,10 +14,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.habittracker.R
 import com.example.habittracker.databinding.FragmentHabitItemBinding
-import com.example.habittracker.domain.entities.color.ColorMapper
 import com.example.habittracker.domain.entities.color.ColorPicker
 import com.example.habittracker.domain.entities.HabitItem
 import com.example.habittracker.domain.entities.HabitPriority
+import com.example.habittracker.domain.entities.color.ColorRgbHsv
 import com.example.habittracker.presentation.mappers.HabitItemMapper
 import com.example.habittracker.presentation.view_models.HabitItemViewModel
 import com.google.android.material.textfield.TextInputEditText
@@ -31,7 +31,6 @@ class HabitItemFragment : Fragment(), HasTitle {
     private val viewModel: HabitItemViewModel by viewModels()
     private var habitItemId: Int = 0
     private val habitItemMapper = HabitItemMapper()
-    private val colorMapper = ColorMapper()
     private val spinnerAdapter by lazy {
         ArrayAdapter(
             requireActivity(),
@@ -202,12 +201,12 @@ class HabitItemFragment : Fragment(), HasTitle {
 
     private fun setupColorViews(colorInt: Int) {
         with(binding) {
-            val color = colorMapper.mapColorToRgbHsv(colorInt)
+            val colorRgbHsv = ColorRgbHsv.fromColor(colorInt)
             currentColor.setBackgroundColor(colorInt)
             tvCurrentColorRgb.text =
-                getString(R.string.rgb_color, color.red, color.green, color.blue)
+                getString(R.string.rgb_color, colorRgbHsv.red, colorRgbHsv.green, colorRgbHsv.blue)
             tvCurrentColorHsv.text =
-                getString(R.string.hsv_color, color.hue, color.saturation, color.value)
+                getString(R.string.hsv_color, colorRgbHsv.hue, colorRgbHsv.saturation, colorRgbHsv.value)
         }
     }
 

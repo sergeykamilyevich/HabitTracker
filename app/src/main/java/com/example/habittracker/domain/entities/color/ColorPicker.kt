@@ -1,8 +1,9 @@
 package com.example.habittracker.domain.entities.color
 
+import android.graphics.Color
+
 class ColorPicker {
 
-    private val mapper = ColorMapper()
 
     private val squareSizeInHue =
         ((HUE_MAX - HUE_MIN) / (NUMBER_OF_COLORS
@@ -16,19 +17,20 @@ class ColorPicker {
         val positionOfFirstSquare = ((freeSpaceSizeInHue + squareSizeInHue) / 2)
         for (i in colors.indices) {
             val hue = (i * (freeSpaceSizeInHue + squareSizeInHue) + positionOfFirstSquare)
-            colors[i] = mapper.mapHueToColor(hue)
+            colors[i] = mapHueToColor(hue)
         }
         return colors
     }
-
     fun getGradientColors(): IntArray {
         val colors = IntArray(NUMBER_OF_COLORS + 1)
         for (i in colors.indices) {
             val hue = (i * (freeSpaceSizeInHue + squareSizeInHue))
-            colors[i] = mapper.mapHueToColor(hue)
+            colors[i] = mapHueToColor(hue)
         }
         return colors
     }
+
+    private fun mapHueToColor(hue: Float): Int = Color.HSVToColor(floatArrayOf(hue, 1F, 1F))
 
     companion object {
         private const val HUE_MIN = 0F
