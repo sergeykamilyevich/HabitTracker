@@ -14,7 +14,6 @@ class RoomHabitRepository(application: Application) : HabitRepository {
 
     private val habitItemDao = AppDataBase.getInstance(application).habitItemDao()
     private val habitDoneDao = AppDataBase.getInstance(application).habitDoneDao()
-    private val mapper = HabitMapper()
 
     override fun getHabitList(
         habitType: HabitType?,
@@ -23,27 +22,27 @@ class RoomHabitRepository(application: Application) : HabitRepository {
         val habitTypeFilter =
             if (habitType == null) allHabitTypesToStringList()
             else listOf(habitType.toString())
-        val listHabitItemDbModel = habitItemDao.getList(
+        val listHabitItemWithDoneDbModel = habitItemDao.getList(
             habitTypeFilter,
             habitListFilter.orderBy.name,
             habitListFilter.search
         )
             ?: throw RuntimeException("List of habits is empty")
-        return Transformations.map(listHabitItemDbModel) {
-            mapper.mapDbModelListToHabitList(it)
+        return Transformations.map(listHabitItemWithDoneDbModel) {
+            HabitItemWithDoneDbModel.mapDbModelListToHabitList(it)
         }
     }
 
     private fun allHabitTypesToStringList() = HabitType.values().map { it.name }
 
     override suspend fun getHabitById(habitItemId: Int): HabitItem {
-        val habitItemDbModel = habitItemDao.getById(habitItemId)
+        val habitItemWithDoneDbModel = habitItemDao.getById(habitItemId)
             ?: throw RuntimeException("Habit with id $habitItemId not found")
-        return mapper.mapDbModelToHabitItem(habitItemDbModel)
+        return habitItemWithDoneDbModel.toHabitItem()
     }
 
     override suspend fun addHabitItem(habitItem: HabitItem): HabitAlreadyExistsException? {
-        val habitItemDbModel = mapper.mapHabitItemToDbModel(habitItem)
+        val habitItemDbModel = HabitItemDbModel.fromHabitItem(habitItem)
         runCatching {
             habitItemDao.add(habitItemDbModel)
         }
@@ -58,7 +57,7 @@ class RoomHabitRepository(application: Application) : HabitRepository {
     }
 
     override suspend fun editHabitItem(habitItem: HabitItem): HabitAlreadyExistsException? {
-        val habitItemDbModel = mapper.mapHabitItemToDbModel(habitItem)
+        val habitItemDbModel = HabitItemDbModel.fromHabitItem(habitItem)
         runCatching {
             habitItemDao.edit(habitItemDbModel)
         }
@@ -69,7 +68,7 @@ class RoomHabitRepository(application: Application) : HabitRepository {
     }
 
     override suspend fun addHabitDone(habitDone: HabitDone): Int {
-        val habitDoneDbModel = mapper.mapHabitDoneToDbModel(habitDone)
+        val habitDoneDbModel = HabitDoneDbModel.fromHabitDone(habitDone)
         return habitDoneDao.add(habitDoneDbModel).toInt()
     }
 

@@ -6,6 +6,7 @@ import androidx.room.*
 @Dao
 interface HabitItemDao {
 
+    @Transaction
     @Query(
         """
             SELECT * FROM habit_items WHERE type IN (:habitTypeFilter)
@@ -22,10 +23,11 @@ interface HabitItemDao {
         habitTypeFilter: List<String>,
         orderBy: String,
         search: String
-    ): LiveData<List<HabitItemDbModel>>?
+    ): LiveData<List<HabitItemWithDoneDbModel>>?
 
+    @Transaction
     @Query("SELECT * FROM habit_items WHERE id = :habitItemId LIMIT 1")
-    suspend fun getById(habitItemId: Int): HabitItemDbModel?
+    suspend fun getById(habitItemId: Int): HabitItemWithDoneDbModel?
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun add(habitItemDbModel: HabitItemDbModel)
@@ -35,5 +37,6 @@ interface HabitItemDao {
 
     @Update()
     suspend fun edit(habitItemDbModel: HabitItemDbModel)
+
 
 }

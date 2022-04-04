@@ -8,6 +8,6 @@ enum class HabitPriority(val resourceId: Int, val id: Int) {
     HIGH(R.string.high_priority, 2);
 
     companion object {
-        fun getPriorityById(id: Int) = values()[id]
+        fun getPriorityByPosition(position: Int) = values()[position]
     }
 }

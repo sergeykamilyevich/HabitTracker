@@ -1,4 +1,4 @@
-package com.example.habittracker.domain.color
+package com.example.habittracker.domain.entities.color
 
 data class ColorRgbHsv(
     val red: Int,

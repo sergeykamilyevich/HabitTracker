@@ -69,6 +69,9 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt "androidx.room:room-compiler:$room_version"
 
+    implementation "com.google.dagger:dagger:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+
     implementation 'com.jaredrummler:colorpicker:1.1.0'
 
     testImplementation 'junit:junit:4.13.2'

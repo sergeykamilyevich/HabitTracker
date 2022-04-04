@@ -17,7 +17,7 @@ class HabitItemViewHolder(
 
     fun bindItem(habitItem: HabitItem) {
         with(binding) {
-            tvDescription.text = habitItem.description
+            tvDescription.text = habitItem.doneDates.toString()
             tvName.text = habitItem.name
             tvDate.text = habitTime.mapUtcDateInIntToString(habitItem.date)
             tvType.text = root.resources.getString(habitItem.type.resourceId)

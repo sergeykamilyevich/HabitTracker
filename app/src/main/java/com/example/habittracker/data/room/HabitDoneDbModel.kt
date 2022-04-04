@@ -1,6 +1,7 @@
 package com.example.habittracker.data.room
 
 import androidx.room.*
+import com.example.habittracker.domain.entities.HabitDone
 
 @Entity(
     tableName = "habit_done",
@@ -21,4 +22,12 @@ data class HabitDoneDbModel(
     @ColumnInfo(name = "habit_id")
     val habitId: Int,
     val date: Int
-)
+) {
+    companion object {
+        fun fromHabitDone(habitDone: HabitDone) = HabitDoneDbModel(
+            id = habitDone.id,
+            habitId = habitDone.habitId,
+            date = habitDone.date
+        )
+    }
+}

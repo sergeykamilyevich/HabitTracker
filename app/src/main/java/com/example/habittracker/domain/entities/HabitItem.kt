@@ -9,8 +9,8 @@ data class HabitItem(
     var recurrenceNumber: Int,
     var recurrencePeriod: Int,
     val id: Int = UNDEFINED_ID,
-    val date: Int = UNDEFINED_DATE
-//    val doneDates: MutableList<Int> = mutableListOf()
+    val date: Int = UNDEFINED_DATE,
+    val doneDates: List<Int> = listOf()
 ) {
 
     companion object {

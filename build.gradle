@@ -4,6 +4,7 @@ buildscript {
     ext.room_version = '2.4.2'
     ext.lifecycle_version = '2.4.1'
     ext.navigation_version = '2.4.1'
+    ext.dagger_version = '2.35.1'
 
     dependencies {
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$navigation_version")
