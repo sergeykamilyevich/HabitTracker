@@ -1,4 +1,4 @@
-package com.example.habittracker.domain.entities
+package com.example.habittracker.domain.models
 
 data class HabitDone(
     val habitId: Int,

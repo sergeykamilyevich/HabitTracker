@@ -19,19 +19,20 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private var currentFragment: Fragment? = null
 
-    private val fragmentListener = object : FragmentManager.FragmentLifecycleCallbacks() {
-        override fun onFragmentViewCreated(
-            fragmentManager: FragmentManager,
-            fragment: Fragment,
-            view: View,
-            savedInstanceState: Bundle?
-        ) {
-            super.onFragmentViewCreated(fragmentManager, fragment, view, savedInstanceState)
-            if (fragment is NavHostFragment) return
-            currentFragment = fragment
-            updateTitle()
+    private val fragmentListener =
+        object : FragmentManager.FragmentLifecycleCallbacks() {
+            override fun onFragmentViewCreated(
+                fragmentManager: FragmentManager,
+                fragment: Fragment,
+                view: View,
+                savedInstanceState: Bundle?
+            ) {
+                super.onFragmentViewCreated(fragmentManager, fragment, view, savedInstanceState)
+                if (fragment is NavHostFragment) return
+                currentFragment = fragment
+                updateTitle()
+            }
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentListener, true)

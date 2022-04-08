@@ -1,4 +1,4 @@
-package com.example.habittracker.data.retrofit.api_models
+package com.example.habittracker.data.retrofit.models
 
 data class ErrorApiModel(
     val code: Int,

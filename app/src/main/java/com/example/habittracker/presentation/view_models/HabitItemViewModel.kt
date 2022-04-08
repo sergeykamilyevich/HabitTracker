@@ -7,8 +7,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.habittracker.data.room.RoomHabitRepository
-import com.example.habittracker.domain.entities.HabitItem
-import com.example.habittracker.domain.entities.HabitTime
+import com.example.habittracker.domain.models.HabitItem
+import com.example.habittracker.domain.models.HabitTime
 import com.example.habittracker.domain.usecases.AddHabitItemUseCase
 import com.example.habittracker.domain.usecases.EditHabitItemUseCase
 import com.example.habittracker.domain.usecases.GetHabitItemUseCase

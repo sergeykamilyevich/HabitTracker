@@ -4,7 +4,6 @@ import android.graphics.Color
 
 class ColorPicker {
 
-
     private val squareSizeInHue =
         ((HUE_MAX - HUE_MIN) / (NUMBER_OF_COLORS
                 * (1 + (FREE_SPACE_SIZE_IN_PERCENTS / SQUARE_SIZE_IN_PERCENTS))))

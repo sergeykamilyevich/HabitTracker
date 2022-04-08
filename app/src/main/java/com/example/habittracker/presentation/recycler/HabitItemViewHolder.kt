@@ -3,11 +3,10 @@ package com.example.habittracker.presentation.recycler
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habittracker.R
 import com.example.habittracker.databinding.ItemHabitBinding
-import com.example.habittracker.domain.entities.HabitItem
-import com.example.habittracker.domain.entities.HabitTime
-import com.example.habittracker.presentation.entities.HabitPriorityApp
-import com.example.habittracker.presentation.entities.HabitTypeApp
-import java.lang.RuntimeException
+import com.example.habittracker.domain.models.HabitItem
+import com.example.habittracker.domain.models.HabitTime
+import com.example.habittracker.presentation.models.HabitPriorityApp
+import com.example.habittracker.presentation.models.HabitTypeApp
 
 
 class HabitItemViewHolder(

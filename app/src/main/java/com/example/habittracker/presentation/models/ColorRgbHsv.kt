@@ -1,4 +1,4 @@
-package com.example.habittracker.presentation.color
+package com.example.habittracker.presentation.models
 
 import android.graphics.Color
 

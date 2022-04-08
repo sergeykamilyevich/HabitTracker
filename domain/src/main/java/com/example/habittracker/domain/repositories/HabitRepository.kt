@@ -1,9 +1,6 @@
-package com.example.habittracker.domain
+package com.example.habittracker.domain.repositories
 
-import com.example.habittracker.domain.entities.HabitDone
-import com.example.habittracker.domain.entities.HabitItem
-import com.example.habittracker.domain.entities.HabitListFilter
-import com.example.habittracker.domain.entities.HabitType
+import com.example.habittracker.domain.models.*
 import kotlinx.coroutines.flow.Flow
 
 interface HabitRepository {

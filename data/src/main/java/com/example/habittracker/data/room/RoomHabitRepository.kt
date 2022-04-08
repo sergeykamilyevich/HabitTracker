@@ -1,12 +1,15 @@
 package com.example.habittracker.data.room
 
 import android.app.Application
-import com.example.habittracker.domain.HabitAlreadyExistsException
-import com.example.habittracker.domain.HabitRepository
-import com.example.habittracker.domain.entities.HabitDone
-import com.example.habittracker.domain.entities.HabitItem
-import com.example.habittracker.domain.entities.HabitListFilter
-import com.example.habittracker.domain.entities.HabitType
+import com.example.habittracker.data.room.models.HabitDoneDbModel
+import com.example.habittracker.data.room.models.HabitItemDbModel
+import com.example.habittracker.data.room.models.HabitItemWithDoneDbModel
+import com.example.habittracker.domain.models.HabitAlreadyExistsException
+import com.example.habittracker.domain.repositories.HabitRepository
+import com.example.habittracker.domain.models.HabitDone
+import com.example.habittracker.domain.models.HabitItem
+import com.example.habittracker.domain.models.HabitListFilter
+import com.example.habittracker.domain.models.HabitType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

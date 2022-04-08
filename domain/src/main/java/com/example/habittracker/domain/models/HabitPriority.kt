@@ -1,4 +1,4 @@
-package com.example.habittracker.domain.entities
+package com.example.habittracker.domain.models
 
 enum class HabitPriority(val id: Int) {
     LOW(0),

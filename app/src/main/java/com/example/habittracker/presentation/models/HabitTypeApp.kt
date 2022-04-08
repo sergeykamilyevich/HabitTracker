@@ -1,8 +1,8 @@
-package com.example.habittracker.presentation.entities
+package com.example.habittracker.presentation.models
 
 import android.os.Parcelable
 import com.example.habittracker.R
-import com.example.habittracker.domain.entities.HabitType
+import com.example.habittracker.domain.models.HabitType
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.example.habittracker.databinding.ItemHabitBinding
-import com.example.habittracker.domain.entities.HabitItem
+import com.example.habittracker.domain.models.HabitItem
 
 class HabitListAdapter : ListAdapter<HabitItem, HabitItemViewHolder>(HabitItemDiffCallback()) {
 

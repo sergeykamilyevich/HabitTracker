@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habittracker.R
 import com.example.habittracker.databinding.FragmentHabitListBinding
-import com.example.habittracker.domain.entities.*
+import com.example.habittracker.domain.models.*
 import com.example.habittracker.presentation.color.ColorPicker
-import com.example.habittracker.presentation.entities.HabitTypeApp
+import com.example.habittracker.presentation.models.HabitTypeApp
 import com.example.habittracker.presentation.recycler.HabitListAdapter
 import com.example.habittracker.presentation.view_models.HabitListViewModel
 import com.google.android.material.snackbar.Snackbar

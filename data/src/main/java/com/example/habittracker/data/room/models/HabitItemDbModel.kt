@@ -1,11 +1,11 @@
-package com.example.habittracker.data.room
+package com.example.habittracker.data.room.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.example.habittracker.domain.entities.HabitItem
-import com.example.habittracker.domain.entities.HabitType
+import com.example.habittracker.domain.models.HabitItem
+import com.example.habittracker.domain.models.HabitType
 
 @Entity(
     tableName = "habit_items",

@@ -1,9 +1,9 @@
-package com.example.habittracker.data.room
+package com.example.habittracker.data.room.models
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.example.habittracker.domain.entities.HabitItem
-import com.example.habittracker.domain.entities.HabitPriority
+import com.example.habittracker.domain.models.HabitItem
+import com.example.habittracker.domain.models.HabitPriority
 
 data class HabitItemWithDoneDbModel(
     @Embedded

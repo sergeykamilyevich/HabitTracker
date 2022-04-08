@@ -1,6 +1,6 @@
 package com.example.habittracker.domain.usecases
 
-import com.example.habittracker.domain.HabitRepository
+import com.example.habittracker.domain.repositories.HabitRepository
 
 class DeleteHabitDoneUseCase(private val habitRepository: HabitRepository) {
 

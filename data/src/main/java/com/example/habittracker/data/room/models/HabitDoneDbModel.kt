@@ -1,7 +1,7 @@
-package com.example.habittracker.data.room
+package com.example.habittracker.data.room.models
 
 import androidx.room.*
-import com.example.habittracker.domain.entities.HabitDone
+import com.example.habittracker.domain.models.HabitDone
 
 @Entity(
     tableName = "habit_done",

@@ -1,7 +1,7 @@
-package com.example.habittracker.presentation.entities
+package com.example.habittracker.presentation.models
 
 import com.example.habittracker.R
-import com.example.habittracker.domain.entities.HabitPriority
+import com.example.habittracker.domain.models.HabitPriority
 
 enum class HabitPriorityApp(val resourceId: Int, val id: Int) {
     LOW(R.string.low_priority, 0),
@@ -11,7 +11,7 @@ enum class HabitPriorityApp(val resourceId: Int, val id: Int) {
     fun toHabitPriority() = HabitPriority.valueOf(this.name)
 
     companion object {
-        fun getPriorityByPosition(position: Int) = values()[position]
+        fun getPriorityByPosition(position: Int) = values()[position] //TODO unused?
         fun fromHabitPriority(habitPriority: HabitPriority) = valueOf(habitPriority.name)
 
     }

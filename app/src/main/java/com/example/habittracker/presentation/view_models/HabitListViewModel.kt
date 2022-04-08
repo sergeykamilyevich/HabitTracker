@@ -4,7 +4,7 @@ import android.app.Application
 import android.text.Editable
 import androidx.lifecycle.*
 import com.example.habittracker.data.room.RoomHabitRepository
-import com.example.habittracker.domain.entities.*
+import com.example.habittracker.domain.models.*
 import com.example.habittracker.domain.usecases.*
 import kotlinx.coroutines.launch
 
