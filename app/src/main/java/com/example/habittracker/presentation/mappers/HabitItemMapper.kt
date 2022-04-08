@@ -9,6 +9,8 @@ import com.example.habittracker.databinding.FragmentHabitItemBinding
 import com.example.habittracker.domain.entities.HabitItem
 import com.example.habittracker.domain.entities.HabitPriority
 import com.example.habittracker.domain.entities.HabitType
+import com.example.habittracker.presentation.entities.HabitPriorityApp
+import com.example.habittracker.presentation.entities.HabitTypeApp
 
 class HabitItemMapper {
 
@@ -27,18 +29,18 @@ class HabitItemMapper {
     private fun mapRadioButtonToHabitType(radioGroup: RadioGroup): HabitType {
         val checkedRadioButtonId = radioGroup.checkedRadioButtonId
         val radioButton = radioGroup.findViewById<RadioButton>(checkedRadioButtonId)
-        HabitType.values().forEach {
+        HabitTypeApp.values().forEach {
             val habitTypeText = radioButton.context.resources.getString(it.resourceId)
-            if (habitTypeText == radioButton.text) return it
+            if (habitTypeText == radioButton.text) return it.toNonNullableHabitType()
         }
         throw RuntimeException("Unknown radiobutton selected (id = ${radioButton.id})")
 
     }
 
     private fun mapSpinnerToHabitPriority(spinner: Spinner): HabitPriority {
-        HabitPriority.values().forEach {
+        HabitPriorityApp.values().forEach {
             val habitPriorityText = spinner.context.resources.getString(it.resourceId)
-            if (habitPriorityText == spinner.selectedItem) return it
+            if (habitPriorityText == spinner.selectedItem) return it.toHabitPriority()
         }
         throw RuntimeException("Unknown spinner selected item: ${spinner.selectedItem}")
     }

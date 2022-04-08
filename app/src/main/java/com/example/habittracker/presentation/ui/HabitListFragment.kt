@@ -11,8 +11,9 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habittracker.R
 import com.example.habittracker.databinding.FragmentHabitListBinding
-import com.example.habittracker.domain.entities.color.ColorPicker
 import com.example.habittracker.domain.entities.*
+import com.example.habittracker.presentation.color.ColorPicker
+import com.example.habittracker.presentation.entities.HabitTypeApp
 import com.example.habittracker.presentation.recycler.HabitListAdapter
 import com.example.habittracker.presentation.view_models.HabitListViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -31,7 +32,7 @@ class HabitListFragment : Fragment(), HasTitle {
     private val colors = colorPicker.getColors()
     private val habitTime = HabitTime()
 
-    private var listMode: HabitType? = null
+    private var listMode: HabitTypeApp? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,14 +68,15 @@ class HabitListFragment : Fragment(), HasTitle {
     }
 
     private fun setupViewModel() {
-        viewModel.getHabitList(listMode)
+        viewModel.getHabitList(HabitTypeApp.toHabitType(listMode))
 
         viewModel.habitList.observe(viewLifecycleOwner) {
             habitListAdapter.submitList(it)
         }
         viewModel.habitListFilter.observe(viewLifecycleOwner) {
-            viewModel.getHabitList(listMode)
+            viewModel.getHabitList(HabitTypeApp.toHabitType(listMode))
         }
+//        viewModel.fetchHabits()
     }
 
     private fun setupRecyclerView() {
@@ -100,7 +102,6 @@ class HabitListFragment : Fragment(), HasTitle {
                         viewModel.deleteHabitDone(habitDoneId)
                     }
                 }
-                .setDuration(5000)
                 .show()
         }
         habitListAdapter.onHabitListClickListener = {
@@ -145,6 +146,7 @@ class HabitListFragment : Fragment(), HasTitle {
                 )
             )
         }
+        R.string.low_priority
     }
 
     private fun launchHabitItemActivityEditMode(habitItemId: Int) {
@@ -160,7 +162,9 @@ class HabitListFragment : Fragment(), HasTitle {
 
         fun newInstance(habitTypeFilter: HabitType?) = HabitListFragment().apply {
             arguments = Bundle().apply {
-                putParcelable(LIST_MODE, habitTypeFilter)
+                val habitTypeAppFilter =
+                    if (habitTypeFilter != null) HabitTypeApp.fromHabitType(habitTypeFilter) else null
+                putParcelable(LIST_MODE, habitTypeAppFilter)
             }
         }
     }

@@ -56,9 +56,9 @@ class BottomSheetFragment : Fragment() {
             }
         }
         if (viewModel.habitListFilter.value == null) {
-            setDefaultButtonsState()
+            setupDefaultButtonsState()
         } else {
-            setSelectedButtonFromHabitListOrderBy(
+            setupSelectedButtonFromHabitListOrderBy(
                 viewModel.habitListFilter.value?.orderBy ?: HabitListOrderBy.NAME_ASC
             )
         }
@@ -91,7 +91,7 @@ class BottomSheetFragment : Fragment() {
         viewModel.updateHabitListOrderBy(habitListOrderBy)
     }
 
-    private fun setSelectedButtonFromHabitListOrderBy(habitListOrderBy: HabitListOrderBy) {
+    private fun setupSelectedButtonFromHabitListOrderBy(habitListOrderBy: HabitListOrderBy) {
         with(binding) {
             when (habitListOrderBy) {
                 HabitListOrderBy.NAME_ASC -> btnNameAsc.isSelected = true
@@ -104,7 +104,7 @@ class BottomSheetFragment : Fragment() {
         }
     }
 
-    private fun setDefaultButtonsState() {
+    private fun setupDefaultButtonsState() {
         setCurrentButtonIsSelected(0)
         setHabitListOrderByFromSelectedButton(buttons[0])
     }

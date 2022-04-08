@@ -23,7 +23,7 @@ class HabitListViewModel(application: Application) : AndroidViewModel(applicatio
 
     var habitDoneIdAdded: Int? = null
 
-    private var currentHabitListFilter = HabitListFilter(HabitListOrderBy.NAME_ASC, "")
+    private var currentHabitListFilter = HabitListFilter(HabitListOrderBy.NAME_ASC,"")
 
     lateinit var habitList: LiveData<List<HabitItem>>
 
@@ -53,7 +53,7 @@ class HabitListViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun getHabitList(habitTypeFilter: HabitType?) {
         habitList = Transformations.switchMap(habitListFilter) {
-            getHabitListUseCase(habitTypeFilter, it)
+            getHabitListUseCase(habitTypeFilter, it).asLiveData()
         }
     }
 
@@ -66,6 +66,45 @@ class HabitListViewModel(application: Application) : AndroidViewModel(applicatio
         currentHabitListFilter.search = input?.toString() ?: EMPTY_STRING
         _habitListFilter.value = currentHabitListFilter
     }
+
+//    fun fetchHabits() {
+//        val api = ApiFactory.apiService
+//        viewModelScope.launch {
+//            var response: Response<List<HabitItemApiModel>>? = try {
+//                api.getHabitList()
+//            } catch (e: Exception) {
+//                Log.d("99999", "error $e")
+//                return@launch
+//            }
+//
+//            if (response?.isSuccessful == true && response.body() != null) {
+//                Log.d("99999", "${response.body()}")
+//                val rb = response.body()
+//            } else {
+//                Log.d("99999", "${response?.errorBody()}")
+//                val rb = response?.errorBody() as? ErrorApiModel
+//                Log.d("99999", "${rb}")
+//            }
+
+//            var response: Call<List<HabitItemApiModel>>? = try {
+//                RetrofitHabit.retrofit?.getHabitList()
+//            } catch (e: Exception) {
+//                Log.d("99999", "error $e")
+//                return@launch
+//            }
+//
+//            if (response?.isSuccessful == true && response.body() != null) {
+//                Log.d("99999", "${response.body()}")
+//                val rb = response.body()
+//            } else {
+//                Log.d("99999", "${response?.errorBody()}")
+//                val rb = response?.errorBody() as? ErrorApiModel
+//                Log.d("99999", "${rb}")
+//            }
+//            Log.d("99999", "${response?.body()}")
+
+//        }
+//    }
 
     companion object {
         private const val EMPTY_STRING = ""

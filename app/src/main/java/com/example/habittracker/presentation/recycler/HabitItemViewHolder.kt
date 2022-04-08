@@ -5,6 +5,9 @@ import com.example.habittracker.R
 import com.example.habittracker.databinding.ItemHabitBinding
 import com.example.habittracker.domain.entities.HabitItem
 import com.example.habittracker.domain.entities.HabitTime
+import com.example.habittracker.presentation.entities.HabitPriorityApp
+import com.example.habittracker.presentation.entities.HabitTypeApp
+import java.lang.RuntimeException
 
 
 class HabitItemViewHolder(
@@ -20,8 +23,10 @@ class HabitItemViewHolder(
             tvDescription.text = habitItem.doneDates.toString()
             tvName.text = habitItem.name
             tvDate.text = habitTime.mapUtcDateInIntToString(habitItem.date)
-            tvType.text = root.resources.getString(habitItem.type.resourceId)
-            tvPriority.text = root.resources.getString(habitItem.priority.resourceId)
+            val habitTypeApp = HabitTypeApp.fromNonNullableHabitType(habitItem.type)
+            tvType.text = root.resources.getString(habitTypeApp.resourceId)
+            val habitPriorityApp = HabitPriorityApp.fromHabitPriority(habitItem.priority)
+            tvPriority.text = root.resources.getString(habitPriorityApp.resourceId)
             btnHabitDone.setBackgroundColor(habitItem.color)
             btnHabitDone.setOnClickListener {
                 onButtonHabitDoneClickListener?.invoke(habitItem)

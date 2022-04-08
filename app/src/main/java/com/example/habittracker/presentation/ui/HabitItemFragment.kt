@@ -14,10 +14,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.habittracker.R
 import com.example.habittracker.databinding.FragmentHabitItemBinding
-import com.example.habittracker.domain.entities.color.ColorPicker
 import com.example.habittracker.domain.entities.HabitItem
 import com.example.habittracker.domain.entities.HabitPriority
-import com.example.habittracker.domain.entities.color.ColorRgbHsv
+import com.example.habittracker.presentation.color.ColorPicker
+import com.example.habittracker.presentation.color.ColorRgbHsv
+import com.example.habittracker.presentation.entities.HabitPriorityApp
 import com.example.habittracker.presentation.mappers.HabitItemMapper
 import com.example.habittracker.presentation.view_models.HabitItemViewModel
 import com.google.android.material.textfield.TextInputEditText
@@ -36,7 +37,13 @@ class HabitItemFragment : Fragment(), HasTitle {
             requireActivity(),
             android.R.layout.simple_list_item_1,
             android.R.id.text1,
-            HabitPriority.values().map { getString(it.resourceId) }
+            HabitPriority.values().map {
+                when (it) {
+                    HabitPriority.LOW -> getString(R.string.low_priority)
+                    HabitPriority.NORMAL -> getString(R.string.normal_priority)
+                    HabitPriority.HIGH -> getString(R.string.high_priority)
+                }
+            }
         )
     }
     private val colorPicker = ColorPicker()
@@ -187,8 +194,9 @@ class HabitItemFragment : Fragment(), HasTitle {
         with(binding) {
             tiedName.setText(habitItem.name)
             tiedDescription.setText(habitItem.description)
+            val habitPriorityApp = HabitPriorityApp.fromHabitPriority(habitItem.priority)
             val spinnerPosition = spinnerAdapter
-                .getPosition(getString(habitItem.priority.resourceId))
+                .getPosition(getString(habitPriorityApp.resourceId))
             spinnerPriority.setSelection(spinnerPosition)
             val checkedRadioButtonId =
                 habitItemMapper.mapHabitTypeToRadioButton(habitItem.type, binding)
@@ -206,7 +214,12 @@ class HabitItemFragment : Fragment(), HasTitle {
             tvCurrentColorRgb.text =
                 getString(R.string.rgb_color, colorRgbHsv.red, colorRgbHsv.green, colorRgbHsv.blue)
             tvCurrentColorHsv.text =
-                getString(R.string.hsv_color, colorRgbHsv.hue, colorRgbHsv.saturation, colorRgbHsv.value)
+                getString(
+                    R.string.hsv_color,
+                    colorRgbHsv.hue,
+                    colorRgbHsv.saturation,
+                    colorRgbHsv.value
+                )
         }
     }
 
