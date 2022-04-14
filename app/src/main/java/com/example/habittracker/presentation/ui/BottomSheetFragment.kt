@@ -28,9 +28,9 @@ class BottomSheetFragment : Fragment() {
 
 //    @HabitListViewModelScope
 //    @Singleton
-//    @Inject
-//    lateinit var viewModel: HabitListViewModel
-    private val viewModel: HabitListViewModel by activityViewModels()
+    @Inject
+    lateinit var viewModel: HabitListViewModel
+//    private val viewModel: HabitListViewModel by activityViewModels()
     private lateinit var buttons: ArrayList<Button>
 
     override fun onCreateView(
@@ -42,22 +42,8 @@ class BottomSheetFragment : Fragment() {
     }
 
     override fun onAttach(context: Context) {
-//        val bottomSheetFragmentComponent = context
-//            .applicationComponent
-
-//            .mainActivityComponent()
-//            .bottomSheetFragmentComponent()
-//            .create()
-//        bottomSheetFragmentComponent.inject(this)
-
-//        val habitListViewModelComponent = bottomSheetFragmentComponent
-//            .habitListViewModelComponent()
-//            .create()
-//        habitListViewModelComponent.inject(this)
-//        (activity as MainActivity).mainActivityComponent.inject(this)
         super.onAttach(context)
         (activity as MainActivity).mainActivityComponent.inject(this)
-        Log.d("99999", "${viewModel} bottomsheet onAttach")
 
 
     }
@@ -65,6 +51,8 @@ class BottomSheetFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupBottomSheet()
+        Log.d("99999", "${viewModel} bottomsheet onAttach")
+
     }
 
     private fun setupBottomSheet() {

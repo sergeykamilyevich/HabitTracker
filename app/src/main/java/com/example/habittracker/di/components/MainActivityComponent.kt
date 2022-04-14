@@ -22,15 +22,9 @@ interface MainActivityComponent {
     }
 
     fun inject(activity: MainActivity)
+
     fun inject(bottomSheetFragment: BottomSheetFragment)
+
     fun inject(habitListFragment: HabitListFragment)
 
-//    fun habitListFragmentComponent(): HabitListFragmentComponent.Factory
-
-
-//
-//    fun habitItemFragmentComponent(): HabitItemFragmentComponent.Factory
-//
-//
-//    fun bottomSheetFragmentComponent(): BottomSheetFragmentComponent.Factory
 }

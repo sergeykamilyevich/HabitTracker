@@ -13,20 +13,20 @@ import javax.inject.Inject
 
 @MainActivityScope
 class HabitListViewModel @Inject constructor(
-    application: Application
-//    private val getHabitListUseCase: GetHabitListUseCase,
-//    private val addHabitItemUseCase: AddHabitItemUseCase,
-//    private val deleteHabitItemUseCase: DeleteHabitItemUseCase,
-//    private val addHabitDoneUseCase: AddHabitDoneUseCase,
-//    private val deleteHabitDoneUseCase: DeleteHabitDoneUseCase
+    application: Application,
+    private val getHabitListUseCase: GetHabitListUseCase,
+    private val addHabitItemUseCase: AddHabitItemUseCase,
+    private val deleteHabitItemUseCase: DeleteHabitItemUseCase,
+    private val addHabitDoneUseCase: AddHabitDoneUseCase,
+    private val deleteHabitDoneUseCase: DeleteHabitDoneUseCase
 ) : AndroidViewModel(application) {
 
-    private val repository = HabitRepositoryImpl(application)
-    private val getHabitListUseCase = GetHabitListUseCase(repository)
-    private val addHabitItemUseCase = AddHabitItemUseCase(repository)
-    private val deleteHabitItemUseCase = DeleteHabitItemUseCase(repository)
-    private val addHabitDoneUseCase = AddHabitDoneUseCase(repository)
-    private val deleteHabitDoneUseCase = DeleteHabitDoneUseCase(repository)
+//    private val repository = HabitRepositoryImpl(application)
+//    private val getHabitListUseCase = GetHabitListUseCase(repository)
+//    private val addHabitItemUseCase = AddHabitItemUseCase(repository)
+//    private val deleteHabitItemUseCase = DeleteHabitItemUseCase(repository)
+//    private val addHabitDoneUseCase = AddHabitDoneUseCase(repository)
+//    private val deleteHabitDoneUseCase = DeleteHabitDoneUseCase(repository)
 
     private val _habitListFilter = MutableLiveData<HabitListFilter>()
     val habitListFilter: LiveData<HabitListFilter>
@@ -123,10 +123,12 @@ class HabitListViewModel @Inject constructor(
     }
 
     class Factory @Inject constructor(
-        private val application: Application
-//        private val addHabitItemUseCase: AddHabitItemUseCase,
-//        private val editHabitItemUseCase: EditHabitItemUseCase,
-//        private val getHabitItemUseCase: GetHabitItemUseCase,
+        private val application: Application,
+        private val getHabitListUseCase: GetHabitListUseCase,
+        private val addHabitItemUseCase: AddHabitItemUseCase,
+        private val deleteHabitItemUseCase: DeleteHabitItemUseCase,
+        private val addHabitDoneUseCase: AddHabitDoneUseCase,
+        private val deleteHabitDoneUseCase: DeleteHabitDoneUseCase
 //        private val mapper: HabitItemMapper,
 //        private val habitTime: HabitTime
     ) : ViewModelProvider.Factory {
@@ -135,9 +137,17 @@ class HabitListViewModel @Inject constructor(
 //            return HabitItemViewModel(application = application) as T
 //        }
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            require(modelClass == HabitListViewModel::class)
+            Log.d("99999", "modelClass $modelClass")
+//            require(modelClass == HabitListViewModel::class)
             Log.d("99999", "Factory")
-            return HabitListViewModel(application = application) as T
+            return HabitListViewModel(
+                application = application,
+                getHabitListUseCase = getHabitListUseCase,
+                addHabitItemUseCase = addHabitItemUseCase,
+                deleteHabitItemUseCase = deleteHabitItemUseCase,
+                addHabitDoneUseCase = addHabitDoneUseCase,
+                deleteHabitDoneUseCase = deleteHabitDoneUseCase
+            ) as T
         }
     }
 }
