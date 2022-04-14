@@ -1,32 +1,38 @@
 package com.example.habittracker.di.modules
 
+import androidx.lifecycle.ViewModelProvider
+import com.example.habittracker.di.HabitItemFragmentScope
 import com.example.habittracker.domain.models.HabitTime
-import com.example.habittracker.domain.usecases.AddHabitItemUseCase
-import com.example.habittracker.domain.usecases.EditHabitItemUseCase
-import com.example.habittracker.domain.usecases.GetHabitItemUseCase
+import com.example.habittracker.domain.usecases.*
 import com.example.habittracker.presentation.mappers.HabitItemMapper
+import com.example.habittracker.presentation.ui.HabitItemFragment
 import com.example.habittracker.presentation.view_models.HabitItemViewModel
 import dagger.Module
 import dagger.Provides
 
 @Module
-class HabitItemViewModelModule {
+object HabitItemViewModelModule {
 
-    @Provides
+    @[Provides HabitItemFragmentScope]
     fun provideHabitItemViewModel(
+        fragment: HabitItemFragment,
+        factory: ViewModelProvider.Factory
+    ): HabitItemViewModel {
+        return ViewModelProvider(fragment, factory)[HabitItemViewModel::class.java]
+    }
+
+    @[Provides HabitItemFragmentScope]
+    fun provideHabitItemViewModelFactory(
         addHabitItemUseCase: AddHabitItemUseCase,
         editHabitItemUseCase: EditHabitItemUseCase,
         getHabitItemUseCase: GetHabitItemUseCase,
         mapper: HabitItemMapper,
         habitTime: HabitTime
-
-    ): HabitItemViewModel {
-        return HabitItemViewModel(
-            addHabitItemUseCase = addHabitItemUseCase,
-            editHabitItemUseCase = editHabitItemUseCase,
-            getHabitItemUseCase = getHabitItemUseCase,
-            mapper = mapper,
-            habitTime = habitTime
-        )
-    }
+    ): ViewModelProvider.Factory = HabitItemViewModel.Factory(
+        addHabitItemUseCase = addHabitItemUseCase,
+        editHabitItemUseCase = editHabitItemUseCase,
+        getHabitItemUseCase = getHabitItemUseCase,
+        mapper = mapper,
+        habitTime = habitTime
+    )
 }

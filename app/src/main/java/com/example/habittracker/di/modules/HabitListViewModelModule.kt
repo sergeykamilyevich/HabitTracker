@@ -1,6 +1,7 @@
 package com.example.habittracker.di.modules
 
 import androidx.lifecycle.ViewModelProvider
+import com.example.habittracker.di.MainActivityScope
 import com.example.habittracker.domain.usecases.*
 import com.example.habittracker.presentation.ui.MainActivity
 import com.example.habittracker.presentation.view_models.HabitListViewModel
@@ -8,9 +9,9 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class HabitListViewModelModule {
+object HabitListViewModelModule {
 
-    @Provides
+    @[Provides MainActivityScope]
     fun provideHabitListViewModel(
         activity: MainActivity,
         factory: ViewModelProvider.Factory
@@ -18,14 +19,13 @@ class HabitListViewModelModule {
         return ViewModelProvider(activity, factory)[HabitListViewModel::class.java]
     }
 
-    @Provides
+    @[Provides MainActivityScope]
     fun provideHabitListViewModelFactory(
         getHabitListUseCase: GetHabitListUseCase,
         addHabitItemUseCase: AddHabitItemUseCase,
         deleteHabitItemUseCase: DeleteHabitItemUseCase,
         addHabitDoneUseCase: AddHabitDoneUseCase,
         deleteHabitDoneUseCase: DeleteHabitDoneUseCase
-
     ): ViewModelProvider.Factory = HabitListViewModel.Factory(
         getHabitListUseCase = getHabitListUseCase,
         addHabitItemUseCase = addHabitItemUseCase,

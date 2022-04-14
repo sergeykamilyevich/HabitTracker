@@ -21,14 +21,10 @@ class BottomSheetFragment : Fragment() {
     private val binding: FragmentBottomSheetBinding
         get() = _binding ?: throw RuntimeException("FragmentBottomSheetBinding is null")
 
+    private lateinit var buttons: ArrayList<Button>
 
-    //    @HabitListViewModelScope
-//    @Singleton
     @Inject
     lateinit var viewModel: HabitListViewModel
-
-    //    private val viewModel: HabitListViewModel by activityViewModels()
-    private lateinit var buttons: ArrayList<Button>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,15 +37,11 @@ class BottomSheetFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (activity as MainActivity).mainActivityComponent.inject(this)
-
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupBottomSheet()
-        Log.d("99999", "${viewModel} bottomsheet onAttach")
-
     }
 
     private fun setupBottomSheet() {

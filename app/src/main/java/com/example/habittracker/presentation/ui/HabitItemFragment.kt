@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,21 +32,18 @@ class HabitItemFragment : Fragment(), HasTitle {
     private val binding: FragmentHabitItemBinding
         get() = _binding ?: throw RuntimeException("FragmentHabitItemBinding is null")
 
-    //    @[Singleton Inject]
-//    lateinit var habitItemMapper: HabitItemMapper //TODO split or merge?
-    private val habitItemMapper = HabitItemMapper()
+    @Inject
+    lateinit var habitItemMapper: HabitItemMapper //TODO split or merge?
 
-    //    @[Singleton Inject]
-//    lateinit var colorPicker: ColorPicker
-    private val colorPicker = ColorPicker()
+    @Inject
+    lateinit var colorPicker: ColorPicker
+
     private val colors by lazy { colorPicker.getColors() }
     private val gradientColors by lazy { colorPicker.getGradientColors() }
 
-    //    @HabitItemViewModelScope
     @Inject
     lateinit var viewModel: HabitItemViewModel
 
-    //    private val viewModel: HabitItemViewModel by viewModels()
     private var habitItemId: Int = 0
     private val spinnerAdapter by lazy {
         ArrayAdapter(
@@ -69,23 +67,10 @@ class HabitItemFragment : Fragment(), HasTitle {
     }
 
     override fun onAttach(context: Context) {
-        val habitItemFragmentComponent =
-            context
-                .applicationComponent
-                .habitItemViewModelComponentFactory().create()
+        val habitItemFragmentComponent = context
+            .applicationComponent
+            .habitItemFragmentComponentFactory().create(this)
         habitItemFragmentComponent.inject(this)
-
-//                .mainActivityComponent()
-//                .habitItemFragmentComponent()
-//                .create()
-//        habitItemFragmentComponent.inject(this)
-
-//        val habitItemViewModelComponent =
-//            habitItemFragmentComponent
-//                .habitItemViewModelComponent()
-//                .create()
-//        habitItemViewModelComponent.inject(this)
-
         super.onAttach(context)
     }
 

@@ -6,7 +6,9 @@ import com.example.habittracker.domain.models.HabitListFilter
 import com.example.habittracker.domain.models.HabitType
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class GetHabitListUseCase @Inject constructor(private val habitRepository: HabitRepository) {
 
     operator fun invoke(

@@ -4,13 +4,18 @@ import android.app.Application
 import android.content.Context
 import com.example.habittracker.di.components.ApplicationComponent
 import com.example.habittracker.di.components.DaggerApplicationComponent
+import javax.inject.Singleton
 
-//@Singleton
+@Singleton
 class App : Application() {
-    val applicationComponent: ApplicationComponent by lazy {
-        DaggerApplicationComponent
+    lateinit var applicationComponent: ApplicationComponent
+
+    override fun onCreate() {
+        applicationComponent = DaggerApplicationComponent
             .factory()
             .create(application = this)
+        super.onCreate()
+
     }
 }
 

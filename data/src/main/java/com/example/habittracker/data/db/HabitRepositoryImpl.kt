@@ -13,7 +13,9 @@ import com.example.habittracker.domain.models.HabitType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class HabitRepositoryImpl @Inject constructor(application: Application) : HabitRepository {
 
     private val habitItemDao = AppDataBase.getInstance(application).habitItemDao()

@@ -124,13 +124,15 @@ class HabitListViewModel @Inject constructor(
             Log.d("99999", "modelClass $modelClass")
 //            require(modelClass == HabitListViewModel::class)
             Log.d("99999", "Factory")
-            return HabitListViewModel(
+            val viewModel = HabitListViewModel(
                 getHabitListUseCase = getHabitListUseCase,
                 addHabitItemUseCase = addHabitItemUseCase,
                 deleteHabitItemUseCase = deleteHabitItemUseCase,
                 addHabitDoneUseCase = addHabitDoneUseCase,
                 deleteHabitDoneUseCase = deleteHabitDoneUseCase
             ) as T
+            Log.d("99999", "$viewModel create viewmodel")
+            return viewModel
         }
     }
 }

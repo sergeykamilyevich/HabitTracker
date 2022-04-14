@@ -9,7 +9,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.example.habittracker.R
-import com.example.habittracker.app.App
+import com.example.habittracker.app.applicationComponent
 import com.example.habittracker.databinding.ActivityMainBinding
 import com.example.habittracker.di.components.MainActivityComponent
 
@@ -40,9 +40,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentListener, true)
-        mainActivityComponent =
-            (applicationContext as App).applicationComponent.mainActivityComponentFactory()
-                .create(this)
+        mainActivityComponent = applicationComponent
+            .mainActivityComponentFactory()
+            .create(this)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

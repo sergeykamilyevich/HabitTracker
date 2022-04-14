@@ -10,13 +10,5 @@ annotation class AppScope
 annotation class MainActivityScope
 
 @Scope
-annotation class HabitItemViewModelScope
-
-@Scope
-annotation class HabitListViewModelScope
-
-@Scope
+@Retention(value = AnnotationRetention.RUNTIME)
 annotation class HabitItemFragmentScope
-
-@Scope
-annotation class HabitListFragmentScope

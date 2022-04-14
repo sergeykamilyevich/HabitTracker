@@ -17,8 +17,6 @@ interface MainActivityComponent {
         fun create(@BindsInstance activity: MainActivity): MainActivityComponent
     }
 
-    fun inject(activity: MainActivity)
-
     fun inject(bottomSheetFragment: BottomSheetFragment)
 
     fun inject(habitListFragment: HabitListFragment)

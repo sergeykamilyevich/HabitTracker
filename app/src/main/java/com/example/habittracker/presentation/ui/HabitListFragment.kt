@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habittracker.R
 import com.example.habittracker.databinding.FragmentHabitListBinding
+import com.example.habittracker.di.MainActivityScope
 import com.example.habittracker.domain.models.*
 import com.example.habittracker.presentation.color.ColorPicker
 import com.example.habittracker.presentation.models.HabitTypeApp
@@ -28,49 +29,30 @@ class HabitListFragment : Fragment(), HasTitle {
     private val binding: FragmentHabitListBinding
         get() = _binding ?: throw RuntimeException("FragmentHabitListBinding is null")
 
-//    @HabitListViewModelScope
-//    @Singleton
-
-    //    @Inject
-//    lateinit var androidInjector: DispatchingAndroidInjector<Any>
     @Inject
     lateinit var viewModel: HabitListViewModel
 
-    //    private val viewModel: HabitListViewModel by activityViewModels()
     private lateinit var habitListAdapter: HabitListAdapter
 
-    //    @[Singleton Inject]
-//    lateinit var colorPicker: ColorPicker
-    private val colorPicker = ColorPicker()
+    @Inject
+    lateinit var colorPicker: ColorPicker
     private val colors by lazy { colorPicker.getColors() }
 
-    //    @[Singleton Inject]
-//    lateinit var habitTime: HabitTime
-    private val habitTime = HabitTime()
+    @Inject
+    lateinit var habitTime: HabitTime
 
     private var listMode: HabitTypeApp? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-//        AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
         parseArguments()
     }
 
     override fun onAttach(context: Context) {
-//        val habitListFragmentComponent = context
-//            .applicationComponent
 
-//            .mainActivityComponent()
-//            .habitListFragmentComponent()
-//            .create()
-//        habitListFragmentComponent.inject(this)
-
-//        val habitListViewModelComponent = habitListFragmentComponent
-//            .habitListViewModelComponent()
-//            .create()
-//        habitListViewModelComponent.inject(this)
         super.onAttach(context)
         (activity as MainActivity).mainActivityComponent.inject(this)
+
     }
 
     private fun parseArguments() {
@@ -115,7 +97,6 @@ class HabitListFragment : Fragment(), HasTitle {
     }
 
     private fun setupRecyclerView() {
-//        Log.d("99999", viewModel.toString())
         habitListAdapter = HabitListAdapter()
         binding.rvHabitList.adapter = habitListAdapter
     }
@@ -204,8 +185,4 @@ class HabitListFragment : Fragment(), HasTitle {
             }
         }
     }
-
-//    override fun androidInjector(): AndroidInjector<Any> {
-//        return androidInjector
-//    }
 }
