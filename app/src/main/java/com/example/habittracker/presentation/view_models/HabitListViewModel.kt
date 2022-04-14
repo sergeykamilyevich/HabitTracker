@@ -1,10 +1,8 @@
 package com.example.habittracker.presentation.view_models
 
-import android.app.Application
 import android.text.Editable
 import android.util.Log
 import androidx.lifecycle.*
-import com.example.habittracker.data.db.HabitRepositoryImpl
 import com.example.habittracker.di.MainActivityScope
 import com.example.habittracker.domain.models.*
 import com.example.habittracker.domain.usecases.*

@@ -14,21 +14,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class HabitItemViewModel @Inject constructor(
-    application: Application
-//    private val addHabitItemUseCase: AddHabitItemUseCase,
-//    private val editHabitItemUseCase: EditHabitItemUseCase,
-//    private val getHabitItemUseCase: GetHabitItemUseCase,
-//    private val mapper: HabitItemMapper,
-//    private val habitTime: HabitTime
-) : AndroidViewModel(application) {
-
-    private val repository = HabitRepositoryImpl(application)
-//
-    private val addHabitItemUseCase = AddHabitItemUseCase(repository)
-    private val editHabitItemUseCase = EditHabitItemUseCase(repository)
-    private val getHabitItemUseCase = GetHabitItemUseCase(repository)
-    private val mapper = HabitItemMapper()
-    private val habitTime = HabitTime()
+    private val addHabitItemUseCase: AddHabitItemUseCase,
+    private val editHabitItemUseCase: EditHabitItemUseCase,
+    private val getHabitItemUseCase: GetHabitItemUseCase,
+    private val mapper: HabitItemMapper,
+    private val habitTime: HabitTime
+) : ViewModel() {
 
     private val _habitItem = MutableLiveData<HabitItem>()
     val habitItem: LiveData<HabitItem>
@@ -126,19 +117,5 @@ class HabitItemViewModel @Inject constructor(
     private fun validateString(input: String): Boolean = input.isNotBlank()
 
     private fun validateNumber(input: Int): Boolean = input > 0
-
-//    class Factory (
-//        private val application: Application
-//        private val addHabitItemUseCase: AddHabitItemUseCase,
-//        private val editHabitItemUseCase: EditHabitItemUseCase,
-//        private val getHabitItemUseCase: GetHabitItemUseCase,
-//        private val mapper: HabitItemMapper,
-//        private val habitTime: HabitTime
-//    ) : ViewModelProvider.Factory {
-//        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//            require(modelClass == HabitItemViewModel::class)
-//            return HabitItemViewModel(application = application) as T
-//        }
-//    }
 
 }
