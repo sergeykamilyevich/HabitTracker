@@ -21,7 +21,6 @@ class HabitListViewModelModule {
 
     @Provides
     fun provideHabitListViewModelFactory(
-        application: Application,
         getHabitListUseCase: GetHabitListUseCase,
         addHabitItemUseCase: AddHabitItemUseCase,
         deleteHabitItemUseCase: DeleteHabitItemUseCase,
@@ -29,7 +28,6 @@ class HabitListViewModelModule {
         deleteHabitDoneUseCase: DeleteHabitDoneUseCase
 
     ): ViewModelProvider.Factory = HabitListViewModel.Factory(
-        application = application,
         getHabitListUseCase = getHabitListUseCase,
         addHabitItemUseCase = addHabitItemUseCase,
         deleteHabitItemUseCase = deleteHabitItemUseCase,
