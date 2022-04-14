@@ -54,9 +54,11 @@ class BottomSheetFragment : Fragment() {
 //            .habitListViewModelComponent()
 //            .create()
 //        habitListViewModelComponent.inject(this)
-        Log.d("99999", viewModel.toString())
 //        (activity as MainActivity).mainActivityComponent.inject(this)
         super.onAttach(context)
+        (activity as MainActivity).mainActivityComponent.inject(this)
+        Log.d("99999", "${viewModel} bottomsheet onAttach")
+
 
     }
 

@@ -2,9 +2,9 @@ package com.example.habittracker.presentation.view_models
 
 import android.app.Application
 import android.text.Editable
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.habittracker.data.db.HabitRepositoryImpl
-import com.example.habittracker.di.HabitListViewModelScope
 import com.example.habittracker.di.MainActivityScope
 import com.example.habittracker.domain.models.*
 import com.example.habittracker.domain.usecases.*
@@ -12,14 +12,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @MainActivityScope
-class HabitListViewModel constructor(application: Application
+class HabitListViewModel @Inject constructor(
+    application: Application
 //    private val getHabitListUseCase: GetHabitListUseCase,
 //    private val addHabitItemUseCase: AddHabitItemUseCase,
 //    private val deleteHabitItemUseCase: DeleteHabitItemUseCase,
 //    private val addHabitDoneUseCase: AddHabitDoneUseCase,
 //    private val deleteHabitDoneUseCase: DeleteHabitDoneUseCase
-    )
- : AndroidViewModel(application) {
+) : AndroidViewModel(application) {
 
     private val repository = HabitRepositoryImpl(application)
     private val getHabitListUseCase = GetHabitListUseCase(repository)
@@ -76,6 +76,7 @@ class HabitListViewModel constructor(application: Application
     fun updateFilter(input: Editable?) {
         currentHabitListFilter.search = input?.toString() ?: EMPTY_STRING
         _habitListFilter.value = currentHabitListFilter
+
     }
 
 //    fun fetchHabits() {
@@ -119,5 +120,24 @@ class HabitListViewModel constructor(application: Application
 
     companion object {
         private const val EMPTY_STRING = ""
+    }
+
+    class Factory @Inject constructor(
+        private val application: Application
+//        private val addHabitItemUseCase: AddHabitItemUseCase,
+//        private val editHabitItemUseCase: EditHabitItemUseCase,
+//        private val getHabitItemUseCase: GetHabitItemUseCase,
+//        private val mapper: HabitItemMapper,
+//        private val habitTime: HabitTime
+    ) : ViewModelProvider.Factory {
+        //        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//            require(modelClass == HabitItemViewModel::class)
+//            return HabitItemViewModel(application = application) as T
+//        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            require(modelClass == HabitListViewModel::class)
+            Log.d("99999", "Factory")
+            return HabitListViewModel(application = application) as T
+        }
     }
 }

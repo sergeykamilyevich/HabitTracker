@@ -35,6 +35,8 @@ interface ApplicationComponent
 
     fun habitItemViewModelComponentFactory(): HabitItemViewModelComponent.Factory
 
+    fun mainActivityComponentFactory(): MainActivityComponent.Factory
+
 //    fun mainActivityComponent(): MainActivityComponent.Factory
 
 //    @HabitListViewModelScope

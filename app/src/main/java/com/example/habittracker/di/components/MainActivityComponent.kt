@@ -8,6 +8,7 @@ import com.example.habittracker.presentation.ui.BottomSheetFragment
 import com.example.habittracker.presentation.ui.HabitListFragment
 import com.example.habittracker.presentation.ui.MainActivity
 import com.example.habittracker.presentation.view_models.HabitListViewModel
+import dagger.BindsInstance
 import dagger.Provides
 import dagger.Subcomponent
 
@@ -17,14 +18,14 @@ interface MainActivityComponent {
 
     @Subcomponent.Factory
     interface Factory {
-        fun create(): MainActivityComponent
+        fun create(@BindsInstance activity: MainActivity): MainActivityComponent
     }
 
     fun inject(activity: MainActivity)
     fun inject(bottomSheetFragment: BottomSheetFragment)
     fun inject(habitListFragment: HabitListFragment)
 
-    fun habitListFragmentComponent(): HabitListFragmentComponent.Factory
+//    fun habitListFragmentComponent(): HabitListFragmentComponent.Factory
 
 
 //

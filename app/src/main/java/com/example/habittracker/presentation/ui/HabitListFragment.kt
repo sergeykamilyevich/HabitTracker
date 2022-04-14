@@ -31,12 +31,12 @@ class HabitListFragment : Fragment(), HasTitle {
 
 //    @HabitListViewModelScope
 //    @Singleton
-//    @Inject
-//    lateinit var viewModel: HabitListViewModel
 
 //    @Inject
 //    lateinit var androidInjector: DispatchingAndroidInjector<Any>
-    private val viewModel: HabitListViewModel by activityViewModels()
+    @Inject
+    lateinit var viewModel: HabitListViewModel
+//    private val viewModel: HabitListViewModel by activityViewModels()
     private lateinit var habitListAdapter: HabitListAdapter
 
     //    @[Singleton Inject]
@@ -65,12 +65,12 @@ class HabitListFragment : Fragment(), HasTitle {
 //            .create()
 //        habitListFragmentComponent.inject(this)
 
-//        (activity as MainActivity).mainActivityComponent.inject(this)
 //        val habitListViewModelComponent = habitListFragmentComponent
 //            .habitListViewModelComponent()
 //            .create()
 //        habitListViewModelComponent.inject(this)
         super.onAttach(context)
+        (activity as MainActivity).mainActivityComponent.inject(this)
     }
 
     private fun parseArguments() {
@@ -94,6 +94,7 @@ class HabitListFragment : Fragment(), HasTitle {
         setupRecyclerView()
         setupAdapterClickListeners()
         setupSwipeListener()
+        Log.d("99999", "${viewModel} listfragment onViewCreated")
     }
 
     override fun onDestroyView() {
@@ -114,7 +115,7 @@ class HabitListFragment : Fragment(), HasTitle {
     }
 
     private fun setupRecyclerView() {
-        Log.d("99999", viewModel.toString())
+//        Log.d("99999", viewModel.toString())
         habitListAdapter = HabitListAdapter()
         binding.rvHabitList.adapter = habitListAdapter
     }

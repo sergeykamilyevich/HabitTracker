@@ -128,6 +128,7 @@ class HabitItemViewModel @Inject constructor(
     private fun validateNumber(input: Int): Boolean = input > 0
 
 //    class Factory (
+//        private val application: Application
 //        private val addHabitItemUseCase: AddHabitItemUseCase,
 //        private val editHabitItemUseCase: EditHabitItemUseCase,
 //        private val getHabitItemUseCase: GetHabitItemUseCase,
@@ -136,7 +137,7 @@ class HabitItemViewModel @Inject constructor(
 //    ) : ViewModelProvider.Factory {
 //        override fun <T : ViewModel> create(modelClass: Class<T>): T {
 //            require(modelClass == HabitItemViewModel::class)
-//            return HabitItemViewModel(addHabitItemUseCase, editHabitItemUseCase, getHabitItemUseCase, mapper, habitTime) as T
+//            return HabitItemViewModel(application = application) as T
 //        }
 //    }
 

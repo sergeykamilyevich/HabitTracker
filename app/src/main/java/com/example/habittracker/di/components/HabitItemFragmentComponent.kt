@@ -6,15 +6,15 @@ import com.example.habittracker.presentation.ui.HabitItemFragment
 import dagger.Subcomponent
 
 //@HabitItemFragmentScope
-@Subcomponent
-interface HabitItemFragmentComponent {
-
-    @Subcomponent.Factory
-    interface Factory {
-        fun create(): HabitItemFragmentComponent
-    }
-
-//    fun habitItemViewModelComponent(): HabitItemViewModelComponent.Factory
-
-    fun inject(habitItemFragment: HabitItemFragment)
-}
+//@Subcomponent
+//interface HabitItemFragmentComponent {
+//
+//    @Subcomponent.Factory
+//    interface Factory {
+//        fun create(): HabitItemFragmentComponent
+//    }
+//
+////    fun habitItemViewModelComponent(): HabitItemViewModelComponent.Factory
+//
+//    fun inject(habitItemFragment: HabitItemFragment)
+//}

@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private var currentFragment: Fragment? = null
 
-//    lateinit var mainActivityComponent: MainActivityComponent
+    lateinit var mainActivityComponent: MainActivityComponent
 
 //    @Inject
 //    lateinit var habitListViewModel: ViewModel
@@ -48,8 +48,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 //        applicationContext.applicationComponent.inject(this)
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentListener, true)
-//        mainActivityComponent = (applicationContext as App).applicationComponent.mainActivityComponent().create()
-//        mainActivityComponent.inject(this)
+        mainActivityComponent = (applicationContext as App).applicationComponent.mainActivityComponentFactory().create(this)
+        mainActivityComponent.inject(this)
         super.onCreate(savedInstanceState)
 //        AndroidInjection.inject(this)
         binding = ActivityMainBinding.inflate(layoutInflater)
