@@ -1,5 +1,6 @@
 package com.example.habittracker.presentation.ui
 
+import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -13,15 +14,19 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.habittracker.R
+import com.example.habittracker.app.applicationComponent
 import com.example.habittracker.databinding.FragmentHabitItemBinding
+import com.example.habittracker.di.HabitItemViewModelScope
 import com.example.habittracker.domain.models.HabitItem
 import com.example.habittracker.domain.models.HabitPriority
 import com.example.habittracker.presentation.color.ColorPicker
+import com.example.habittracker.presentation.mappers.HabitItemMapper
 import com.example.habittracker.presentation.models.ColorRgbHsv
 import com.example.habittracker.presentation.models.HabitPriorityApp
-import com.example.habittracker.presentation.mappers.HabitItemMapper
 import com.example.habittracker.presentation.view_models.HabitItemViewModel
 import com.google.android.material.textfield.TextInputEditText
+import javax.inject.Inject
+import javax.inject.Singleton
 
 class HabitItemFragment : Fragment(), HasTitle {
 
@@ -29,9 +34,21 @@ class HabitItemFragment : Fragment(), HasTitle {
     private val binding: FragmentHabitItemBinding
         get() = _binding ?: throw RuntimeException("FragmentHabitItemBinding is null")
 
-    private val viewModel: HabitItemViewModel by viewModels()
-    private var habitItemId: Int = 0
+//    @[Singleton Inject]
+//    lateinit var habitItemMapper: HabitItemMapper //TODO split or merge?
     private val habitItemMapper = HabitItemMapper()
+
+//    @[Singleton Inject]
+//    lateinit var colorPicker: ColorPicker
+    private val colorPicker = ColorPicker()
+    private val colors by lazy { colorPicker.getColors() }
+    private val gradientColors by lazy { colorPicker.getGradientColors() }
+
+//    @HabitItemViewModelScope
+    @Inject
+    lateinit var viewModel: HabitItemViewModel
+//    private val viewModel: HabitItemViewModel by viewModels()
+    private var habitItemId: Int = 0
     private val spinnerAdapter by lazy {
         ArrayAdapter(
             requireActivity(),
@@ -46,14 +63,32 @@ class HabitItemFragment : Fragment(), HasTitle {
             }
         )
     }
-    private val colorPicker = ColorPicker()
-    private val colors = colorPicker.getColors()
-    private val gradientColors = colorPicker.getGradientColors()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         habitItemId = arguments?.getInt(HABIT_ITEM_ID, 0)
             ?: throw RuntimeException("Unknown habitItemId")
+    }
+
+    override fun onAttach(context: Context) {
+        val habitItemFragmentComponent =
+            context
+                .applicationComponent
+                .habitItemViewModelComponentFactory().create()
+        habitItemFragmentComponent.inject(this)
+
+//                .mainActivityComponent()
+//                .habitItemFragmentComponent()
+//                .create()
+//        habitItemFragmentComponent.inject(this)
+
+//        val habitItemViewModelComponent =
+//            habitItemFragmentComponent
+//                .habitItemViewModelComponent()
+//                .create()
+//        habitItemViewModelComponent.inject(this)
+
+        super.onAttach(context)
     }
 
     override fun onCreateView(

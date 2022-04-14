@@ -1,4 +1,4 @@
-package com.example.habittracker.data.room.models
+package com.example.habittracker.data.db.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

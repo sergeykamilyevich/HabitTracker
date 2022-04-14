@@ -2,8 +2,9 @@ package com.example.habittracker.domain.models
 
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class HabitTime {
+class HabitTime @Inject constructor() {
 
     fun getCurrentUtcDateInInt(): Int {
         val currentMoment = Calendar.getInstance()

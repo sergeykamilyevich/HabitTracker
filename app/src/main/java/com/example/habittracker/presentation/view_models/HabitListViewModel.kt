@@ -3,14 +3,25 @@ package com.example.habittracker.presentation.view_models
 import android.app.Application
 import android.text.Editable
 import androidx.lifecycle.*
-import com.example.habittracker.data.room.RoomHabitRepository
+import com.example.habittracker.data.db.HabitRepositoryImpl
+import com.example.habittracker.di.HabitListViewModelScope
+import com.example.habittracker.di.MainActivityScope
 import com.example.habittracker.domain.models.*
 import com.example.habittracker.domain.usecases.*
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HabitListViewModel(application: Application) : AndroidViewModel(application) {
+@MainActivityScope
+class HabitListViewModel constructor(application: Application
+//    private val getHabitListUseCase: GetHabitListUseCase,
+//    private val addHabitItemUseCase: AddHabitItemUseCase,
+//    private val deleteHabitItemUseCase: DeleteHabitItemUseCase,
+//    private val addHabitDoneUseCase: AddHabitDoneUseCase,
+//    private val deleteHabitDoneUseCase: DeleteHabitDoneUseCase
+    )
+ : AndroidViewModel(application) {
 
-    private val repository = RoomHabitRepository(application)
+    private val repository = HabitRepositoryImpl(application)
     private val getHabitListUseCase = GetHabitListUseCase(repository)
     private val addHabitItemUseCase = AddHabitItemUseCase(repository)
     private val deleteHabitItemUseCase = DeleteHabitItemUseCase(repository)
@@ -23,7 +34,7 @@ class HabitListViewModel(application: Application) : AndroidViewModel(applicatio
 
     var habitDoneIdAdded: Int? = null
 
-    private var currentHabitListFilter = HabitListFilter(HabitListOrderBy.NAME_ASC,"")
+    private var currentHabitListFilter = HabitListFilter(HabitListOrderBy.NAME_ASC, "")
 
     lateinit var habitList: LiveData<List<HabitItem>>
 

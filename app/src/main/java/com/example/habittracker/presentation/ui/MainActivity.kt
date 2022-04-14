@@ -2,14 +2,20 @@ package com.example.habittracker.presentation.ui
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.example.habittracker.R
+import com.example.habittracker.app.App
+import com.example.habittracker.app.applicationComponent
 import com.example.habittracker.databinding.ActivityMainBinding
+import com.example.habittracker.di.components.MainActivityComponent
+import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
@@ -18,6 +24,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navHostFragment: NavHostFragment
     private lateinit var navController: NavController
     private var currentFragment: Fragment? = null
+
+//    lateinit var mainActivityComponent: MainActivityComponent
+
+//    @Inject
+//    lateinit var habitListViewModel: ViewModel
 
     private val fragmentListener =
         object : FragmentManager.FragmentLifecycleCallbacks() {
@@ -35,8 +46,12 @@ class MainActivity : AppCompatActivity() {
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+//        applicationContext.applicationComponent.inject(this)
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentListener, true)
+//        mainActivityComponent = (applicationContext as App).applicationComponent.mainActivityComponent().create()
+//        mainActivityComponent.inject(this)
         super.onCreate(savedInstanceState)
+//        AndroidInjection.inject(this)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar()

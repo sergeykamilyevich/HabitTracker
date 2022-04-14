@@ -2,11 +2,8 @@ package com.example.habittracker.presentation.view_models
 
 import android.app.Application
 import android.text.Editable
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.example.habittracker.data.room.RoomHabitRepository
+import androidx.lifecycle.*
+import com.example.habittracker.data.db.HabitRepositoryImpl
 import com.example.habittracker.domain.models.HabitItem
 import com.example.habittracker.domain.models.HabitTime
 import com.example.habittracker.domain.usecases.AddHabitItemUseCase
@@ -14,10 +11,19 @@ import com.example.habittracker.domain.usecases.EditHabitItemUseCase
 import com.example.habittracker.domain.usecases.GetHabitItemUseCase
 import com.example.habittracker.presentation.mappers.HabitItemMapper
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HabitItemViewModel(application: Application) : AndroidViewModel(application) {
+class HabitItemViewModel @Inject constructor(
+    application: Application
+//    private val addHabitItemUseCase: AddHabitItemUseCase,
+//    private val editHabitItemUseCase: EditHabitItemUseCase,
+//    private val getHabitItemUseCase: GetHabitItemUseCase,
+//    private val mapper: HabitItemMapper,
+//    private val habitTime: HabitTime
+) : AndroidViewModel(application) {
 
-    private val repository = RoomHabitRepository(application)
+    private val repository = HabitRepositoryImpl(application)
+//
     private val addHabitItemUseCase = AddHabitItemUseCase(repository)
     private val editHabitItemUseCase = EditHabitItemUseCase(repository)
     private val getHabitItemUseCase = GetHabitItemUseCase(repository)
@@ -120,5 +126,18 @@ class HabitItemViewModel(application: Application) : AndroidViewModel(applicatio
     private fun validateString(input: String): Boolean = input.isNotBlank()
 
     private fun validateNumber(input: Int): Boolean = input > 0
+
+//    class Factory (
+//        private val addHabitItemUseCase: AddHabitItemUseCase,
+//        private val editHabitItemUseCase: EditHabitItemUseCase,
+//        private val getHabitItemUseCase: GetHabitItemUseCase,
+//        private val mapper: HabitItemMapper,
+//        private val habitTime: HabitTime
+//    ) : ViewModelProvider.Factory {
+//        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//            require(modelClass == HabitItemViewModel::class)
+//            return HabitItemViewModel(addHabitItemUseCase, editHabitItemUseCase, getHabitItemUseCase, mapper, habitTime) as T
+//        }
+//    }
 
 }

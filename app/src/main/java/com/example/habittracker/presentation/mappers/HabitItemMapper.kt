@@ -11,8 +11,9 @@ import com.example.habittracker.domain.models.HabitPriority
 import com.example.habittracker.domain.models.HabitType
 import com.example.habittracker.presentation.models.HabitPriorityApp
 import com.example.habittracker.presentation.models.HabitTypeApp
+import javax.inject.Inject
 
-class HabitItemMapper {
+class HabitItemMapper @Inject constructor() {
 
     fun mapViewToHabitItem(binding: FragmentHabitItemBinding): HabitItem = with(binding) {
         HabitItem(

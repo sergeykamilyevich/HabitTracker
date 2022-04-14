@@ -1,9 +1,9 @@
-package com.example.habittracker.data.room
+package com.example.habittracker.data.db
 
 import android.app.Application
-import com.example.habittracker.data.room.models.HabitDoneDbModel
-import com.example.habittracker.data.room.models.HabitItemDbModel
-import com.example.habittracker.data.room.models.HabitItemWithDoneDbModel
+import com.example.habittracker.data.db.models.HabitDoneDbModel
+import com.example.habittracker.data.db.models.HabitItemDbModel
+import com.example.habittracker.data.db.models.HabitItemWithDoneDbModel
 import com.example.habittracker.domain.models.HabitAlreadyExistsException
 import com.example.habittracker.domain.repositories.HabitRepository
 import com.example.habittracker.domain.models.HabitDone
@@ -12,8 +12,9 @@ import com.example.habittracker.domain.models.HabitListFilter
 import com.example.habittracker.domain.models.HabitType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class RoomHabitRepository(application: Application) : HabitRepository {
+class HabitRepositoryImpl @Inject constructor(application: Application) : HabitRepository {
 
     private val habitItemDao = AppDataBase.getInstance(application).habitItemDao()
     private val habitDoneDao = AppDataBase.getInstance(application).habitDoneDao()

@@ -1,8 +1,9 @@
 package com.example.habittracker.presentation.color
 
 import android.graphics.Color
+import javax.inject.Inject
 
-class ColorPicker {
+class ColorPicker @Inject constructor() {
 
     private val squareSizeInHue =
         ((HUE_MAX - HUE_MIN) / (NUMBER_OF_COLORS

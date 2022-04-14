@@ -1,4 +1,4 @@
-package com.example.habittracker.data.retrofit.models
+package com.example.habittracker.data.network.models
 
 import com.google.gson.annotations.SerializedName
 

@@ -1,11 +1,11 @@
-package com.example.habittracker.data.room
+package com.example.habittracker.data.db
 
 import android.app.Application
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.habittracker.data.room.models.HabitDoneDbModel
-import com.example.habittracker.data.room.models.HabitItemDbModel
+import com.example.habittracker.data.db.models.HabitDoneDbModel
+import com.example.habittracker.data.db.models.HabitItemDbModel
 
 @Database(
     entities = [

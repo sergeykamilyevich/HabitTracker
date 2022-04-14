@@ -1,9 +1,9 @@
-package com.example.habittracker.data.room
+package com.example.habittracker.data.db
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.habittracker.data.room.models.HabitDoneDbModel
+import com.example.habittracker.data.db.models.HabitDoneDbModel
 
 @Dao
 interface HabitDoneDao {

@@ -1,8 +1,8 @@
-package com.example.habittracker.data.room
+package com.example.habittracker.data.db
 
 import androidx.room.*
-import com.example.habittracker.data.room.models.HabitItemDbModel
-import com.example.habittracker.data.room.models.HabitItemWithDoneDbModel
+import com.example.habittracker.data.db.models.HabitItemDbModel
+import com.example.habittracker.data.db.models.HabitItemWithDoneDbModel
 import kotlinx.coroutines.flow.Flow
 
 @Dao

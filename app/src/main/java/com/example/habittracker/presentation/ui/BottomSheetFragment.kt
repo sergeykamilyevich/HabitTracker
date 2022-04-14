@@ -1,6 +1,8 @@
 package com.example.habittracker.presentation.ui
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,9 +10,13 @@ import android.widget.Button
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.example.habittracker.app.applicationComponent
 import com.example.habittracker.databinding.FragmentBottomSheetBinding
+import com.example.habittracker.di.HabitListViewModelScope
 import com.example.habittracker.domain.models.HabitListOrderBy
 import com.example.habittracker.presentation.view_models.HabitListViewModel
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
 class BottomSheetFragment : Fragment() {
@@ -19,6 +25,11 @@ class BottomSheetFragment : Fragment() {
     private val binding: FragmentBottomSheetBinding
         get() = _binding ?: throw RuntimeException("FragmentBottomSheetBinding is null")
 
+
+//    @HabitListViewModelScope
+//    @Singleton
+//    @Inject
+//    lateinit var viewModel: HabitListViewModel
     private val viewModel: HabitListViewModel by activityViewModels()
     private lateinit var buttons: ArrayList<Button>
 
@@ -28,6 +39,25 @@ class BottomSheetFragment : Fragment() {
     ): View {
         _binding = FragmentBottomSheetBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onAttach(context: Context) {
+//        val bottomSheetFragmentComponent = context
+//            .applicationComponent
+
+//            .mainActivityComponent()
+//            .bottomSheetFragmentComponent()
+//            .create()
+//        bottomSheetFragmentComponent.inject(this)
+
+//        val habitListViewModelComponent = bottomSheetFragmentComponent
+//            .habitListViewModelComponent()
+//            .create()
+//        habitListViewModelComponent.inject(this)
+        Log.d("99999", viewModel.toString())
+//        (activity as MainActivity).mainActivityComponent.inject(this)
+        super.onAttach(context)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
