@@ -27,9 +27,6 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var mainActivityComponent: MainActivityComponent
 
-//    @Inject
-//    lateinit var habitListViewModel: ViewModel
-
     private val fragmentListener =
         object : FragmentManager.FragmentLifecycleCallbacks() {
             override fun onFragmentViewCreated(
@@ -46,12 +43,9 @@ class MainActivity : AppCompatActivity() {
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-//        applicationContext.applicationComponent.inject(this)
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentListener, true)
         mainActivityComponent = (applicationContext as App).applicationComponent.mainActivityComponentFactory().create(this)
-        mainActivityComponent.inject(this)
         super.onCreate(savedInstanceState)
-//        AndroidInjection.inject(this)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar()
