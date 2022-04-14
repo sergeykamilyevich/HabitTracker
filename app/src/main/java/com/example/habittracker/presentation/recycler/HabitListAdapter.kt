@@ -17,7 +17,11 @@ class HabitListAdapter : ListAdapter<HabitItem, HabitItemViewHolder>(HabitItemDi
             parent,
             false
         )
-        return HabitItemViewHolder(binding, onHabitListClickListener, onButtonHabitDoneClickListener)
+        return HabitItemViewHolder(
+            binding,
+            onHabitListClickListener,
+            onButtonHabitDoneClickListener
+        )
     }
 
     override fun onBindViewHolder(viewHolder: HabitItemViewHolder, position: Int) {

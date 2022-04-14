@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -32,11 +31,12 @@ class HabitListFragment : Fragment(), HasTitle {
 //    @HabitListViewModelScope
 //    @Singleton
 
-//    @Inject
+    //    @Inject
 //    lateinit var androidInjector: DispatchingAndroidInjector<Any>
     @Inject
     lateinit var viewModel: HabitListViewModel
-//    private val viewModel: HabitListViewModel by activityViewModels()
+
+    //    private val viewModel: HabitListViewModel by activityViewModels()
     private lateinit var habitListAdapter: HabitListAdapter
 
     //    @[Singleton Inject]

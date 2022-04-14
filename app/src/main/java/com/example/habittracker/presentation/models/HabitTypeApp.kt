@@ -15,8 +15,10 @@ enum class HabitTypeApp(val resourceId: Int, val intType: Int) : Parcelable {
     companion object {
         fun toHabitType(habitTypeApp: HabitTypeApp?) =
             if (habitTypeApp != null) HabitType.valueOf(habitTypeApp.name) else null
+
         fun fromHabitType(habitType: HabitType?) =
             if (habitType != null) valueOf(habitType.name) else null
+
         fun fromNonNullableHabitType(habitType: HabitType) = valueOf(habitType.name)
     }
 }

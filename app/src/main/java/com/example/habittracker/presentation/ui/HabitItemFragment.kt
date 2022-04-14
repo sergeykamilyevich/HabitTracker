@@ -11,12 +11,10 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.habittracker.R
 import com.example.habittracker.app.applicationComponent
 import com.example.habittracker.databinding.FragmentHabitItemBinding
-import com.example.habittracker.di.HabitItemViewModelScope
 import com.example.habittracker.domain.models.HabitItem
 import com.example.habittracker.domain.models.HabitPriority
 import com.example.habittracker.presentation.color.ColorPicker
@@ -26,7 +24,6 @@ import com.example.habittracker.presentation.models.HabitPriorityApp
 import com.example.habittracker.presentation.view_models.HabitItemViewModel
 import com.google.android.material.textfield.TextInputEditText
 import javax.inject.Inject
-import javax.inject.Singleton
 
 class HabitItemFragment : Fragment(), HasTitle {
 
@@ -34,20 +31,21 @@ class HabitItemFragment : Fragment(), HasTitle {
     private val binding: FragmentHabitItemBinding
         get() = _binding ?: throw RuntimeException("FragmentHabitItemBinding is null")
 
-//    @[Singleton Inject]
+    //    @[Singleton Inject]
 //    lateinit var habitItemMapper: HabitItemMapper //TODO split or merge?
     private val habitItemMapper = HabitItemMapper()
 
-//    @[Singleton Inject]
+    //    @[Singleton Inject]
 //    lateinit var colorPicker: ColorPicker
     private val colorPicker = ColorPicker()
     private val colors by lazy { colorPicker.getColors() }
     private val gradientColors by lazy { colorPicker.getGradientColors() }
 
-//    @HabitItemViewModelScope
+    //    @HabitItemViewModelScope
     @Inject
     lateinit var viewModel: HabitItemViewModel
-//    private val viewModel: HabitItemViewModel by viewModels()
+
+    //    private val viewModel: HabitItemViewModel by viewModels()
     private var habitItemId: Int = 0
     private val spinnerAdapter by lazy {
         ArrayAdapter(

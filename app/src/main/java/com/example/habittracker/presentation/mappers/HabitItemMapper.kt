@@ -46,7 +46,8 @@ class HabitItemMapper @Inject constructor() {
         throw RuntimeException("Unknown spinner selected item: ${spinner.selectedItem}")
     }
 
-    fun parseString(input: Editable?): String = input?.trim()?.toString() ?: EMPTY_STRING //TODO replace in other class
+    fun parseString(input: Editable?): String =
+        input?.trim()?.toString() ?: EMPTY_STRING //TODO replace in other class
 
     fun parseNumber(input: Editable?): Int {
         return try {

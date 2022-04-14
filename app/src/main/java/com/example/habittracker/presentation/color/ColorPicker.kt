@@ -21,6 +21,7 @@ class ColorPicker @Inject constructor() {
         }
         return colors
     }
+
     fun getGradientColors(): IntArray {
         val colors = IntArray(NUMBER_OF_COLORS + 1)
         for (i in colors.indices) {

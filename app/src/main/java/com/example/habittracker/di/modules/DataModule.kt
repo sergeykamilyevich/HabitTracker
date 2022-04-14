@@ -7,7 +7,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Singleton
 
 @Module(includes = [DataAbstractModule::class])
 object DataModule {
@@ -37,7 +36,7 @@ object DataModule {
         return retrofit.create(HabitApi::class.java)
     }
 
-//    companion object {
-        const val BASE_URL = "https://droid-test-server.doubletapp.ru/api/"
+    //    companion object {
+    const val BASE_URL = "https://droid-test-server.doubletapp.ru/api/"
 //    }
 }

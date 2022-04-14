@@ -1,15 +1,11 @@
 package com.example.habittracker.di.components
 
-import android.app.Application
 import com.example.habittracker.di.MainActivityScope
 import com.example.habittracker.di.modules.HabitListViewModelModule
-import com.example.habittracker.domain.usecases.*
 import com.example.habittracker.presentation.ui.BottomSheetFragment
 import com.example.habittracker.presentation.ui.HabitListFragment
 import com.example.habittracker.presentation.ui.MainActivity
-import com.example.habittracker.presentation.view_models.HabitListViewModel
 import dagger.BindsInstance
-import dagger.Provides
 import dagger.Subcomponent
 
 @MainActivityScope

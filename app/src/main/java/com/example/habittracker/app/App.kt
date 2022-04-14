@@ -6,12 +6,11 @@ import com.example.habittracker.di.components.ApplicationComponent
 import com.example.habittracker.di.components.DaggerApplicationComponent
 
 //@Singleton
-class App : Application()
-{
+class App : Application() {
     val applicationComponent: ApplicationComponent by lazy {
-                    DaggerApplicationComponent
-                .factory()
-                .create(application = this)
+        DaggerApplicationComponent
+            .factory()
+            .create(application = this)
     }
 }
 

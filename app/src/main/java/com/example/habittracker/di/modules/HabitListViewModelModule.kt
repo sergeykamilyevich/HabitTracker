@@ -1,6 +1,5 @@
 package com.example.habittracker.di.modules
 
-import android.app.Application
 import androidx.lifecycle.ViewModelProvider
 import com.example.habittracker.domain.usecases.*
 import com.example.habittracker.presentation.ui.MainActivity

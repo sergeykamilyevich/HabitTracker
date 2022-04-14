@@ -2,20 +2,16 @@ package com.example.habittracker.presentation.ui
 
 import android.os.Bundle
 import android.view.View
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.example.habittracker.R
 import com.example.habittracker.app.App
-import com.example.habittracker.app.applicationComponent
 import com.example.habittracker.databinding.ActivityMainBinding
 import com.example.habittracker.di.components.MainActivityComponent
-import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
@@ -44,7 +40,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentListener, true)
-        mainActivityComponent = (applicationContext as App).applicationComponent.mainActivityComponentFactory().create(this)
+        mainActivityComponent =
+            (applicationContext as App).applicationComponent.mainActivityComponentFactory()
+                .create(this)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
