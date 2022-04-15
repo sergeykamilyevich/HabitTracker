@@ -18,9 +18,9 @@ interface ApplicationComponent {
         ): ApplicationComponent
     }
 
-    fun habitItemFragmentComponentFactory(): HabitItemFragmentComponent.Factory
-
     fun mainActivityComponentFactory(): MainActivityComponent.Factory
+
+//    fun habitItemFragmentComponentFactory(): HabitItemFragmentComponent.Factory
 
 }
 

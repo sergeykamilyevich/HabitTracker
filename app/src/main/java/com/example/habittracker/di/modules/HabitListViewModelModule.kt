@@ -1,37 +1,59 @@
 package com.example.habittracker.di.modules
 
-import androidx.lifecycle.ViewModelProvider
-import com.example.habittracker.di.MainActivityScope
-import com.example.habittracker.domain.usecases.*
-import com.example.habittracker.presentation.ui.MainActivity
-import com.example.habittracker.presentation.view_models.HabitListViewModel
 import dagger.Module
-import dagger.Provides
 
 @Module
 object HabitListViewModelModule {
 
-    @[Provides MainActivityScope]
-    fun provideHabitListViewModel(
-        activity: MainActivity,
-        factory: ViewModelProvider.Factory
-    ): HabitListViewModel {
-        return ViewModelProvider(activity, factory)[HabitListViewModel::class.java]
-    }
-
-    @[Provides MainActivityScope]
-    fun provideHabitListViewModelFactory(
-        getHabitListUseCase: GetHabitListUseCase,
-        addHabitItemUseCase: AddHabitItemUseCase,
-        deleteHabitItemUseCase: DeleteHabitItemUseCase,
-        addHabitDoneUseCase: AddHabitDoneUseCase,
-        deleteHabitDoneUseCase: DeleteHabitDoneUseCase
-    ): ViewModelProvider.Factory = HabitListViewModel.Factory(
-        getHabitListUseCase = getHabitListUseCase,
-        addHabitItemUseCase = addHabitItemUseCase,
-        deleteHabitItemUseCase = deleteHabitItemUseCase,
-        addHabitDoneUseCase = addHabitDoneUseCase,
-        deleteHabitDoneUseCase = deleteHabitDoneUseCase
-    )
+//    @[Provides MainActivityScope HabitListViewModelQualifier]
+//    fun provideHabitListViewModel(
+//        activity: MainActivity,
+//        factory: ViewModelProvider.Factory
+//    ): HabitListViewModel {
+//        Log.d("99999", "provideHabitListViewModel")
+//        return ViewModelProvider(activity, factory)[HabitListViewModel::class.java]
+//    }
+//
+//    @[Provides MainActivityScope HabitListViewModelQualifier]
+//    fun provideHabitListViewModelFactory(
+//        getHabitListUseCase: GetHabitListUseCase,
+//        addHabitItemUseCase: AddHabitItemUseCase,
+//        deleteHabitItemUseCase: DeleteHabitItemUseCase,
+//        addHabitDoneUseCase: AddHabitDoneUseCase,
+//        deleteHabitDoneUseCase: DeleteHabitDoneUseCase
+//    ): ViewModelProvider.Factory {
+//        val factory = HabitListViewModel.Factory(
+//        getHabitListUseCase = getHabitListUseCase,
+//        addHabitItemUseCase = addHabitItemUseCase,
+//        deleteHabitItemUseCase = deleteHabitItemUseCase,
+//        addHabitDoneUseCase = addHabitDoneUseCase,
+//        deleteHabitDoneUseCase = deleteHabitDoneUseCase
+//        )
+//        Log.d("99999", "$factory provideHabitListViewModelFactory")
+//        return factory
+//    }
+//
+//    @[Provides MainActivityScope HabitItemViewModelQualifier]
+//    fun provideHabitItemViewModel(
+//        activity: MainActivity,
+//        factory: ViewModelProvider.Factory
+//    ): HabitItemViewModel {
+//        return ViewModelProvider(activity, factory)[HabitItemViewModel::class.java]
+//    }
+//
+//    @[Provides HabitItemFragmentScope HabitItemViewModelQualifier]
+//    fun provideHabitItemViewModelFactory(
+//        addHabitItemUseCase: AddHabitItemUseCase,
+//        editHabitItemUseCase: EditHabitItemUseCase,
+//        getHabitItemUseCase: GetHabitItemUseCase,
+//        mapper: HabitItemMapper,
+//        habitTime: HabitTime
+//    ): ViewModelProvider.Factory = HabitItemViewModel.Factory(
+//        addHabitItemUseCase = addHabitItemUseCase,
+//        editHabitItemUseCase = editHabitItemUseCase,
+//        getHabitItemUseCase = getHabitItemUseCase,
+//        mapper = mapper,
+//        habitTime = habitTime
+//    )
 }
 

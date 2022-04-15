@@ -1,10 +1,7 @@
 package com.example.habittracker.presentation.color
 
 import android.graphics.Color
-import com.example.habittracker.di.HabitItemFragmentScope
-import com.example.habittracker.di.MainActivityScope
 import javax.inject.Inject
-import javax.inject.Singleton
 
 class ColorPicker @Inject constructor() {
 

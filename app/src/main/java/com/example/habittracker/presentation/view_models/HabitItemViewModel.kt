@@ -3,7 +3,7 @@ package com.example.habittracker.presentation.view_models
 import android.text.Editable
 import android.util.Log
 import androidx.lifecycle.*
-import com.example.habittracker.di.HabitItemFragmentScope
+import com.example.habittracker.di.MainActivityScope
 import com.example.habittracker.domain.models.HabitItem
 import com.example.habittracker.domain.models.HabitTime
 import com.example.habittracker.domain.usecases.AddHabitItemUseCase
@@ -13,7 +13,7 @@ import com.example.habittracker.presentation.mappers.HabitItemMapper
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HabitItemFragmentScope
+@MainActivityScope
 class HabitItemViewModel @Inject constructor(
     private val addHabitItemUseCase: AddHabitItemUseCase,
     private val editHabitItemUseCase: EditHabitItemUseCase,
@@ -119,27 +119,28 @@ class HabitItemViewModel @Inject constructor(
 
     private fun validateNumber(input: Int): Boolean = input > 0
 
-    class Factory @Inject constructor(
-        private val addHabitItemUseCase: AddHabitItemUseCase,
-        private val editHabitItemUseCase: EditHabitItemUseCase,
-        private val getHabitItemUseCase: GetHabitItemUseCase,
-        private val mapper: HabitItemMapper,
-        private val habitTime: HabitTime
-    ) : ViewModelProvider.Factory {
-
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            Log.d("99999", "modelClass $modelClass")
-//            require(modelClass == HabitListViewModel::class)
-            Log.d("99999", "Factory")
-            val viewModel = HabitItemViewModel(
-                addHabitItemUseCase = addHabitItemUseCase,
-                editHabitItemUseCase = editHabitItemUseCase,
-                getHabitItemUseCase = getHabitItemUseCase,
-                mapper = mapper,
-                habitTime = habitTime
-            ) as T
-            Log.d("99999", "$viewModel create viewmodel ")
-            return viewModel
-        }
-    }
+//    class Factory @Inject constructor(
+//        private val addHabitItemUseCase: AddHabitItemUseCase,
+//        private val editHabitItemUseCase: EditHabitItemUseCase,
+//        private val getHabitItemUseCase: GetHabitItemUseCase,
+//        private val mapper: HabitItemMapper,
+//        private val habitTime: HabitTime
+//    ) : ViewModelProvider.Factory {
+//
+//        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//            Log.d("99999", "modelClass $modelClass")
+////            require(modelClass == HabitListViewModel::class)
+//            Log.d("99999", "Factory")
+//            val viewModel = HabitItemViewModel(
+//                addHabitItemUseCase = addHabitItemUseCase,
+//                editHabitItemUseCase = editHabitItemUseCase,
+//                getHabitItemUseCase = getHabitItemUseCase,
+//                mapper = mapper,
+//                habitTime = habitTime
+//            )
+//            Log.d("99999", "$viewModel create viewmodel ")
+////            return viewModel as T
+//            return modelClass.cast(viewModel) ?: throw RuntimeException("Unknown type of ViewModel")
+//        }
+//    }
 }

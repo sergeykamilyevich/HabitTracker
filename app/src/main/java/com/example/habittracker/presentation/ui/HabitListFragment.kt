@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habittracker.R
 import com.example.habittracker.databinding.FragmentHabitListBinding
-import com.example.habittracker.di.MainActivityScope
 import com.example.habittracker.domain.models.*
 import com.example.habittracker.presentation.color.ColorPicker
 import com.example.habittracker.presentation.models.HabitTypeApp
@@ -50,8 +49,9 @@ class HabitListFragment : Fragment(), HasTitle {
 
     override fun onAttach(context: Context) {
 
-        super.onAttach(context)
         (activity as MainActivity).mainActivityComponent.inject(this)
+        super.onAttach(context)
+        Log.d("99999", "${viewModel} habitListFragment onAttach")
 
     }
 
@@ -76,7 +76,6 @@ class HabitListFragment : Fragment(), HasTitle {
         setupRecyclerView()
         setupAdapterClickListeners()
         setupSwipeListener()
-        Log.d("99999", "${viewModel} listfragment onViewCreated")
     }
 
     override fun onDestroyView() {

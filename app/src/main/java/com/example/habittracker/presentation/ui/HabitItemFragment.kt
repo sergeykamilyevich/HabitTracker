@@ -14,7 +14,6 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.habittracker.R
-import com.example.habittracker.app.applicationComponent
 import com.example.habittracker.databinding.FragmentHabitItemBinding
 import com.example.habittracker.domain.models.HabitItem
 import com.example.habittracker.domain.models.HabitPriority
@@ -67,11 +66,15 @@ class HabitItemFragment : Fragment(), HasTitle {
     }
 
     override fun onAttach(context: Context) {
-        val habitItemFragmentComponent = context
-            .applicationComponent
-            .habitItemFragmentComponentFactory().create(this)
-        habitItemFragmentComponent.inject(this)
+//        val habitItemFragmentComponent =
+//            context.applicationComponent
+//            (activity as MainActivity)
+//            .mainActivityComponent
+//            .habitItemFragmentComponentFactory().create(this)
+            (activity as MainActivity).mainActivityComponent.inject(this)
+//        habitItemFragmentComponent.inject(this)
         super.onAttach(context)
+        Log.d("99999", "${viewModel} habitItemFragment onAttach")
     }
 
     override fun onCreateView(

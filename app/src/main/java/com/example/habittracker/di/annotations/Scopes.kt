@@ -3,12 +3,9 @@ package com.example.habittracker.di
 import javax.inject.Scope
 
 @Scope
-annotation class AppScope
-
-@Scope
 @Retention(value = AnnotationRetention.RUNTIME)
 annotation class MainActivityScope
-
-@Scope
-@Retention(value = AnnotationRetention.RUNTIME)
-annotation class HabitItemFragmentScope
+//
+//@Scope
+//@Retention(value = AnnotationRetention.RUNTIME)
+//annotation class HabitItemFragmentScope
