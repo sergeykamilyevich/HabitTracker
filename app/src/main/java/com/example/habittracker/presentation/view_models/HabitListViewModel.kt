@@ -111,30 +111,4 @@ class HabitListViewModel @Inject constructor(
     companion object {
         private const val EMPTY_STRING = ""
     }
-
-//    class Factory @Inject constructor(
-//        private val getHabitListUseCase: GetHabitListUseCase,
-//        private val addHabitItemUseCase: AddHabitItemUseCase,
-//        private val deleteHabitItemUseCase: DeleteHabitItemUseCase,
-//        private val addHabitDoneUseCase: AddHabitDoneUseCase,
-//        private val deleteHabitDoneUseCase: DeleteHabitDoneUseCase
-//    ) : ViewModelProvider.Factory {
-//
-//        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//            Log.d("99999", "modelClass $modelClass")
-////            require(modelClass == HabitListViewModel::class)
-//            Log.d("99999", "Factory")
-//            val viewModel = HabitListViewModel(
-//                getHabitListUseCase = getHabitListUseCase,
-//                addHabitItemUseCase = addHabitItemUseCase,
-//                deleteHabitItemUseCase = deleteHabitItemUseCase,
-//                addHabitDoneUseCase = addHabitDoneUseCase,
-//                deleteHabitDoneUseCase = deleteHabitDoneUseCase
-//            )
-//            Log.d("99999", "$viewModel create viewmodel")
-//            return modelClass.cast(viewModel) ?: throw RuntimeException("Unknown type of ViewModel")
-////            return viewModel as T
-//
-//        }
-//    }
 }

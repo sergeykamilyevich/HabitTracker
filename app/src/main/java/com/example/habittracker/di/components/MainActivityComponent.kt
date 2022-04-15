@@ -1,7 +1,6 @@
 package com.example.habittracker.di.components
 
 import com.example.habittracker.di.MainActivityScope
-import com.example.habittracker.di.modules.HabitListViewModelModule
 import com.example.habittracker.presentation.ui.BottomSheetFragment
 import com.example.habittracker.presentation.ui.HabitItemFragment
 import com.example.habittracker.presentation.ui.HabitListFragment
@@ -10,9 +9,7 @@ import dagger.BindsInstance
 import dagger.Subcomponent
 
 @MainActivityScope
-@Subcomponent(
-//    modules = [HabitListViewModelModule::class]
-)
+@Subcomponent
 interface MainActivityComponent {
 
     @Subcomponent.Factory
@@ -25,9 +22,5 @@ interface MainActivityComponent {
     fun inject(habitListFragment: HabitListFragment)
 
     fun inject(habitItemFragment: HabitItemFragment)
-
-
-//    fun habitItemFragmentComponentFactory(): HabitItemFragmentComponent.Factory
-
 
 }

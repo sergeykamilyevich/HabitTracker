@@ -20,7 +20,5 @@ interface ApplicationComponent {
 
     fun mainActivityComponentFactory(): MainActivityComponent.Factory
 
-//    fun habitItemFragmentComponentFactory(): HabitItemFragmentComponent.Factory
-
 }
 

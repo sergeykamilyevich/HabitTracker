@@ -48,10 +48,8 @@ class HabitListFragment : Fragment(), HasTitle {
     }
 
     override fun onAttach(context: Context) {
-
-        (activity as MainActivity).mainActivityComponent.inject(this)
         super.onAttach(context)
-        Log.d("99999", "${viewModel} habitListFragment onAttach")
+        (activity as MainActivity).mainActivityComponent.inject(this)
 
     }
 

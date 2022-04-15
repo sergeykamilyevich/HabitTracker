@@ -118,29 +118,4 @@ class HabitItemViewModel @Inject constructor(
     private fun validateString(input: String): Boolean = input.isNotBlank()
 
     private fun validateNumber(input: Int): Boolean = input > 0
-
-//    class Factory @Inject constructor(
-//        private val addHabitItemUseCase: AddHabitItemUseCase,
-//        private val editHabitItemUseCase: EditHabitItemUseCase,
-//        private val getHabitItemUseCase: GetHabitItemUseCase,
-//        private val mapper: HabitItemMapper,
-//        private val habitTime: HabitTime
-//    ) : ViewModelProvider.Factory {
-//
-//        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//            Log.d("99999", "modelClass $modelClass")
-////            require(modelClass == HabitListViewModel::class)
-//            Log.d("99999", "Factory")
-//            val viewModel = HabitItemViewModel(
-//                addHabitItemUseCase = addHabitItemUseCase,
-//                editHabitItemUseCase = editHabitItemUseCase,
-//                getHabitItemUseCase = getHabitItemUseCase,
-//                mapper = mapper,
-//                habitTime = habitTime
-//            )
-//            Log.d("99999", "$viewModel create viewmodel ")
-////            return viewModel as T
-//            return modelClass.cast(viewModel) ?: throw RuntimeException("Unknown type of ViewModel")
-//        }
-//    }
 }

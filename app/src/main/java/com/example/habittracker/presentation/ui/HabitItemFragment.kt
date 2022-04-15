@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,7 +35,6 @@ class HabitItemFragment : Fragment(), HasTitle {
 
     @Inject
     lateinit var colorPicker: ColorPicker
-
     private val colors by lazy { colorPicker.getColors() }
     private val gradientColors by lazy { colorPicker.getGradientColors() }
 
@@ -66,15 +64,8 @@ class HabitItemFragment : Fragment(), HasTitle {
     }
 
     override fun onAttach(context: Context) {
-//        val habitItemFragmentComponent =
-//            context.applicationComponent
-//            (activity as MainActivity)
-//            .mainActivityComponent
-//            .habitItemFragmentComponentFactory().create(this)
-            (activity as MainActivity).mainActivityComponent.inject(this)
-//        habitItemFragmentComponent.inject(this)
         super.onAttach(context)
-        Log.d("99999", "${viewModel} habitItemFragment onAttach")
+        (activity as MainActivity).mainActivityComponent.inject(this)
     }
 
     override fun onCreateView(
