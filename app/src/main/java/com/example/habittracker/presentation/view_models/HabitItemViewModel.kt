@@ -15,7 +15,6 @@ import com.example.habittracker.presentation.mappers.HabitItemMapper
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@MainActivityScope
 class HabitItemViewModel @Inject constructor(
     private val addHabitItemUseCase: AddHabitItemUseCase,
     private val editHabitItemUseCase: EditHabitItemUseCase,
