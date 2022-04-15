@@ -1,8 +1,10 @@
 package com.example.habittracker.presentation.view_models
 
 import android.text.Editable
-import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.habittracker.di.MainActivityScope
 import com.example.habittracker.domain.models.HabitItem
 import com.example.habittracker.domain.models.HabitTime
