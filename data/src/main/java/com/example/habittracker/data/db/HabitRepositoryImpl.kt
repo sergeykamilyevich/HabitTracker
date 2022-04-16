@@ -2,7 +2,6 @@ package com.example.habittracker.data.db
 
 import android.app.Application
 import android.database.sqlite.SQLiteConstraintException
-import android.util.Log
 import com.example.habittracker.data.db.models.HabitDoneDbModel
 import com.example.habittracker.data.db.models.HabitItemDbModel
 import com.example.habittracker.data.db.models.HabitItemWithDoneDbModel
@@ -47,7 +46,7 @@ class HabitRepositoryImpl @Inject constructor(application: Application) : HabitR
 
     override suspend fun upsertHabitItem(habitItem: HabitItem): UpsertException? {
         val habitItemDbModel = HabitItemDbModel.fromHabitItem(habitItem)
-        var isUpsertFailure: UpsertException? = UpsertException(DEFAULT_SQL_ERROR)
+        var isUpsertFailure: UpsertException? = UnknownSqlException(DEFAULT_SQL_ERROR)
         runCatching {
             habitItemDao.insert(habitItemDbModel)
         }
@@ -72,7 +71,7 @@ class HabitRepositoryImpl @Inject constructor(application: Application) : HabitR
                 insertExceptionMessage.contains(UNIQUE_CONSTRAINT_MESSAGE) -> {
                     isUpsertFailure = HabitAlreadyExistsException(habitItem.name)
                 }
-                insertExceptionMessage.contains(PRIMARYKEY_CONSTRAINT_MESSAGE) -> {
+                insertExceptionMessage.contains(PRIMARY_KEY_CONSTRAINT_MESSAGE) -> {
                     runCatching { habitItemDao.update(habitItemDbModel) }
                         .onSuccess { isUpsertFailure = null }
                         .onFailure { updateException ->
@@ -114,7 +113,7 @@ class HabitRepositoryImpl @Inject constructor(application: Application) : HabitR
 
     companion object {
         const val UNIQUE_CONSTRAINT_MESSAGE = "SQLITE_CONSTRAINT_UNIQUE"
-        const val PRIMARYKEY_CONSTRAINT_MESSAGE = "SQLITE_CONSTRAINT_PRIMARYKEY"
+        const val PRIMARY_KEY_CONSTRAINT_MESSAGE = "SQLITE_CONSTRAINT_PRIMARYKEY"
         const val DEFAULT_SQL_ERROR = "Unknown SQL error"
     }
 
