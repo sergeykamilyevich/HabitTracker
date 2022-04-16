@@ -2,7 +2,7 @@ package com.example.habittracker.presentation.view_models
 
 import android.text.Editable
 import androidx.lifecycle.*
-import com.example.habittracker.di.MainActivityScope
+import com.example.habittracker.di.annotations.MainActivityScope
 import com.example.habittracker.domain.models.*
 import com.example.habittracker.domain.usecases.*
 import kotlinx.coroutines.launch
@@ -11,7 +11,7 @@ import javax.inject.Inject
 @MainActivityScope
 class HabitListViewModel @Inject constructor(
     private val getHabitListUseCase: GetHabitListUseCase,
-    private val addHabitItemUseCase: AddHabitItemUseCase,
+    private val upsertHabitItemUseCase: UpsertHabitItemUseCase,
     private val deleteHabitItemUseCase: DeleteHabitItemUseCase,
     private val addHabitDoneUseCase: AddHabitDoneUseCase,
     private val deleteHabitDoneUseCase: DeleteHabitDoneUseCase
@@ -29,7 +29,7 @@ class HabitListViewModel @Inject constructor(
 
     fun addHabitItem(habitItem: HabitItem) {
         viewModelScope.launch {
-            addHabitItemUseCase(habitItem)
+            upsertHabitItemUseCase(habitItem)
         }
     }
 

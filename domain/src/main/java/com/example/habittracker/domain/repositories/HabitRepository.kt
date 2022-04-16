@@ -12,11 +12,9 @@ interface HabitRepository {
 
     suspend fun getHabitById(habitItemId: Int): HabitItem
 
-    suspend fun addHabitItem(habitItem: HabitItem): HabitAlreadyExistsException?
+    suspend fun upsertHabitItem(habitItem: HabitItem): UpsertException?
 
     suspend fun deleteHabitItem(habitItem: HabitItem)
-
-    suspend fun editHabitItem(habitItem: HabitItem): HabitAlreadyExistsException?
 
     suspend fun addHabitDone(habitDone: HabitDone): Int
 

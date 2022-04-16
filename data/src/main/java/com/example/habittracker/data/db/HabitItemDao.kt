@@ -32,13 +32,13 @@ interface HabitItemDao {
     suspend fun getById(habitItemId: Int): HabitItemWithDoneDbModel?
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun add(habitItemDbModel: HabitItemDbModel)
+    suspend fun insert(habitItemDbModel: HabitItemDbModel)
+
+    @Update(onConflict = OnConflictStrategy.ABORT)
+    suspend fun update(habitItemDbModel: HabitItemDbModel)
 
     @Query("DELETE FROM habit_items WHERE id = :habitItemId")
     suspend fun delete(habitItemId: Int)
-
-    @Update()
-    suspend fun edit(habitItemDbModel: HabitItemDbModel)
 
 
 }

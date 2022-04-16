@@ -5,19 +5,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.habittracker.di.MainActivityScope
 import com.example.habittracker.domain.models.HabitItem
 import com.example.habittracker.domain.models.HabitTime
-import com.example.habittracker.domain.usecases.AddHabitItemUseCase
-import com.example.habittracker.domain.usecases.EditHabitItemUseCase
+import com.example.habittracker.domain.models.UpsertException
 import com.example.habittracker.domain.usecases.GetHabitItemUseCase
+import com.example.habittracker.domain.usecases.UpsertHabitItemUseCase
 import com.example.habittracker.presentation.mappers.HabitItemMapper
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class HabitItemViewModel @Inject constructor(
-    private val addHabitItemUseCase: AddHabitItemUseCase,
-    private val editHabitItemUseCase: EditHabitItemUseCase,
+    private val upsertHabitItemUseCase: UpsertHabitItemUseCase,
     private val getHabitItemUseCase: GetHabitItemUseCase,
     private val mapper: HabitItemMapper,
     private val habitTime: HabitTime
@@ -43,9 +41,9 @@ class HabitItemViewModel @Inject constructor(
     val canCloseScreen: LiveData<Unit>
         get() = _canCloseScreen
 
-    private val _habitAlreadyExistsException = MutableLiveData<Event<String>>()
-    val habitAlreadyExistsException: LiveData<Event<String>>
-        get() = _habitAlreadyExistsException
+    private val _upsertException = MutableLiveData<Event<UpsertException>>()
+    val upsertException: LiveData<Event<UpsertException>>
+        get() = _upsertException
 
     fun addHabitItem(habitItem: HabitItem) {
         viewModelScope.launch {
@@ -59,7 +57,7 @@ class HabitItemViewModel @Inject constructor(
                 recurrencePeriod = habitItem.recurrencePeriod,
                 date = habitTime.getCurrentUtcDateInInt()
             )
-            val isFailureOfAdding = addHabitItemUseCase(item)?.name
+            val isFailureOfAdding = upsertHabitItemUseCase(item)
             showErrorOrCloseHabitItemScreenSuccessfully(isFailureOfAdding)
         }
     }
@@ -76,15 +74,15 @@ class HabitItemViewModel @Inject constructor(
                     recurrenceNumber = habitItem.recurrenceNumber,
                     recurrencePeriod = habitItem.recurrencePeriod
                 )
-                val failureOfEditing = editHabitItemUseCase(item)?.name
-                showErrorOrCloseHabitItemScreenSuccessfully(failureOfEditing)
+                val isFailureOfEditing = upsertHabitItemUseCase(item)
+                showErrorOrCloseHabitItemScreenSuccessfully(isFailureOfEditing)
             }
         }
     }
 
-    private fun showErrorOrCloseHabitItemScreenSuccessfully(isFailure: String?) {
+    private fun showErrorOrCloseHabitItemScreenSuccessfully(isFailure: UpsertException?) {
         if (isFailure != null) {
-            _habitAlreadyExistsException.value = Event(isFailure)
+            _upsertException.value = Event(isFailure)
         } else {
             closeItemFragment()
         }

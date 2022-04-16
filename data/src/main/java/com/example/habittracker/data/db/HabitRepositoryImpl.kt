@@ -1,15 +1,13 @@
 package com.example.habittracker.data.db
 
 import android.app.Application
+import android.database.sqlite.SQLiteConstraintException
+import android.util.Log
 import com.example.habittracker.data.db.models.HabitDoneDbModel
 import com.example.habittracker.data.db.models.HabitItemDbModel
 import com.example.habittracker.data.db.models.HabitItemWithDoneDbModel
-import com.example.habittracker.domain.models.HabitAlreadyExistsException
+import com.example.habittracker.domain.models.*
 import com.example.habittracker.domain.repositories.HabitRepository
-import com.example.habittracker.domain.models.HabitDone
-import com.example.habittracker.domain.models.HabitItem
-import com.example.habittracker.domain.models.HabitListFilter
-import com.example.habittracker.domain.models.HabitType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -37,9 +35,6 @@ class HabitRepositoryImpl @Inject constructor(application: Application) : HabitR
         return listHabitItemWithDoneDbModel.map {
             HabitItemWithDoneDbModel.mapDbModelListToHabitList(it)
         }
-//        Transformations.map(listHabitItemWithDoneDbModel) {
-//            HabitItemWithDoneDbModel.mapDbModelListToHabitList(it)
-//        }
     }
 
     private fun allHabitTypesToStringList() = HabitType.values().map { it.name }
@@ -50,30 +45,62 @@ class HabitRepositoryImpl @Inject constructor(application: Application) : HabitR
         return habitItemWithDoneDbModel.toHabitItem()
     }
 
-    override suspend fun addHabitItem(habitItem: HabitItem): HabitAlreadyExistsException? { //TODO upsert
+    override suspend fun upsertHabitItem(habitItem: HabitItem): UpsertException? {
         val habitItemDbModel = HabitItemDbModel.fromHabitItem(habitItem)
+        var isUpsertFailure: UpsertException? = UpsertException(DEFAULT_SQL_ERROR)
         runCatching {
-            habitItemDao.add(habitItemDbModel)
+            habitItemDao.insert(habitItemDbModel)
         }
-            .onFailure {
-                return HabitAlreadyExistsException(habitItem.name)
+            .onSuccess {
+                isUpsertFailure = null
             }
-        return null
+            .onFailure {
+                isUpsertFailure = handleInsertException(it, habitItem, habitItemDbModel)
+            }
+        return isUpsertFailure
+    }
+
+    private suspend fun handleInsertException(
+        insertException: Throwable,
+        habitItem: HabitItem,
+        habitItemDbModel: HabitItemDbModel
+    ): UpsertException? {
+        var isUpsertFailure: UpsertException? = UnknownSqlException(insertException.toString())
+        val insertExceptionMessage = insertException.message
+        if (insertException is SQLiteConstraintException && insertExceptionMessage != null) {
+            when {
+                insertExceptionMessage.contains(UNIQUE_CONSTRAINT_MESSAGE) -> {
+                    isUpsertFailure = HabitAlreadyExistsException(habitItem.name)
+                }
+                insertExceptionMessage.contains(PRIMARYKEY_CONSTRAINT_MESSAGE) -> {
+                    runCatching { habitItemDao.update(habitItemDbModel) }
+                        .onSuccess { isUpsertFailure = null }
+                        .onFailure { updateException ->
+                            isUpsertFailure = handleUpdateException(
+                                updateException,
+                                habitItem.name
+                            )
+                        }
+                }
+            }
+        }
+        return isUpsertFailure
+    }
+
+    private fun handleUpdateException(
+        updateException: Throwable,
+        habitItemName: String
+    ): UpsertException {
+        val updateExceptionMessage = updateException.message
+        return if (updateExceptionMessage?.contains(UNIQUE_CONSTRAINT_MESSAGE) == true) {
+            HabitAlreadyExistsException(habitItemName)
+        } else {
+            UnknownSqlException(updateException.toString())
+        }
     }
 
     override suspend fun deleteHabitItem(habitItem: HabitItem) {
         habitItemDao.delete(habitItem.id)
-    }
-
-    override suspend fun editHabitItem(habitItem: HabitItem): HabitAlreadyExistsException? {
-        val habitItemDbModel = HabitItemDbModel.fromHabitItem(habitItem)
-        runCatching {
-            habitItemDao.edit(habitItemDbModel)
-        }
-            .onFailure {
-                return HabitAlreadyExistsException(habitItem.name)
-            }
-        return null
     }
 
     override suspend fun addHabitDone(habitDone: HabitDone): Int {
@@ -84,5 +111,12 @@ class HabitRepositoryImpl @Inject constructor(application: Application) : HabitR
     override suspend fun deleteHabitDone(habitDoneId: Int) {
         habitDoneDao.delete(habitDoneId)
     }
+
+    companion object {
+        const val UNIQUE_CONSTRAINT_MESSAGE = "SQLITE_CONSTRAINT_UNIQUE"
+        const val PRIMARYKEY_CONSTRAINT_MESSAGE = "SQLITE_CONSTRAINT_PRIMARYKEY"
+        const val DEFAULT_SQL_ERROR = "Unknown SQL error"
+    }
+
 }
 

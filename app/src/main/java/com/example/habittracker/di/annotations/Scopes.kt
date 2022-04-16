@@ -1,4 +1,4 @@
-package com.example.habittracker.di
+package com.example.habittracker.di.annotations
 
 import javax.inject.Scope
 
