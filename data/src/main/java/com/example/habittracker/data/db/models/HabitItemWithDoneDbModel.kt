@@ -4,6 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import com.example.habittracker.domain.models.HabitItem
 import com.example.habittracker.domain.models.HabitPriority
+import com.example.habittracker.domain.models.HabitTime
 
 data class HabitItemWithDoneDbModel(
     @Embedded
@@ -15,20 +16,24 @@ data class HabitItemWithDoneDbModel(
     )
     val habitDoneDbModel: List<HabitDoneDbModel>
 ) {
-    fun toHabitItem() = HabitItem(
-        name = habitItemDbModel.name,
-        description = habitItemDbModel.description,
-        priority = HabitPriority.getPriorityByPosition(habitItemDbModel.priority),
-        type = habitItemDbModel.type,
-        color = habitItemDbModel.color,
-        recurrenceNumber = habitItemDbModel.recurrenceNumber,
-        recurrencePeriod = habitItemDbModel.recurrencePeriod,
-        id = habitItemDbModel.id,
-        date = habitItemDbModel.date,
-        doneDates = habitDoneDbModel.map {
-            it.date
+    fun toHabitItem(): HabitItem {
+        val currentDate = HabitTime().getCurrentUtcDateInInt()
+        val upToDateHabitDoneDates = habitDoneDbModel.filter {
+            habitItemDbModel.recurrencePeriod > (currentDate - it.date)
         }
-    )
+        return HabitItem(
+            name = habitItemDbModel.name,
+            description = habitItemDbModel.description,
+            priority = HabitPriority.getPriorityByPosition(habitItemDbModel.priority),
+            type = habitItemDbModel.type,
+            color = habitItemDbModel.color,
+            recurrenceNumber = habitItemDbModel.recurrenceNumber,
+            recurrencePeriod = habitItemDbModel.recurrencePeriod,
+            id = habitItemDbModel.id,
+            date = habitItemDbModel.date,
+            done = upToDateHabitDoneDates.size
+        )
+    }
 
     companion object {
         fun mapDbModelListToHabitList(list: List<HabitItemWithDoneDbModel>) = list.map {

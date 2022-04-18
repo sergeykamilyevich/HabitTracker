@@ -23,4 +23,6 @@ interface MainActivityComponent {
 
     fun inject(habitItemFragment: HabitItemFragment)
 
+    fun inject(mainActivity: MainActivity)
+
 }

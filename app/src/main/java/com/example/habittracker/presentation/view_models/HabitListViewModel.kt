@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.example.habittracker.di.annotations.MainActivityScope
 import com.example.habittracker.domain.models.*
 import com.example.habittracker.domain.usecases.*
+import com.example.habittracker.presentation.models.AddHabitDoneResult
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -12,6 +13,7 @@ import javax.inject.Inject
 class HabitListViewModel @Inject constructor(
     private val getHabitListUseCase: GetHabitListUseCase,
     private val upsertHabitItemUseCase: UpsertHabitItemUseCase,
+    private val getHabitItemUseCase: GetHabitItemUseCase,
     private val deleteHabitItemUseCase: DeleteHabitItemUseCase,
     private val addHabitDoneUseCase: AddHabitDoneUseCase,
     private val deleteHabitDoneUseCase: DeleteHabitDoneUseCase
@@ -21,7 +23,9 @@ class HabitListViewModel @Inject constructor(
     val habitListFilter: LiveData<HabitListFilter>
         get() = _habitListFilter
 
-    var habitDoneIdAdded: Int? = null
+    private val _showToastHabitDone = MutableLiveData<Event<AddHabitDoneResult>>()
+    val showToastHabitDone: LiveData<Event<AddHabitDoneResult>>
+        get() = _showToastHabitDone
 
     private var currentHabitListFilter = HabitListFilter(HabitListOrderBy.NAME_ASC, "")
 
@@ -41,7 +45,9 @@ class HabitListViewModel @Inject constructor(
 
     fun addHabitDone(habitDone: HabitDone) {
         viewModelScope.launch {
-            habitDoneIdAdded = addHabitDoneUseCase(habitDone)
+            val habitDoneIdAdded =  addHabitDoneUseCase(habitDone)
+            val habitItem = getHabitItemUseCase(habitDone.habitId)
+            _showToastHabitDone.value = Event(AddHabitDoneResult(habitItem, habitDoneIdAdded))
         }
     }
 

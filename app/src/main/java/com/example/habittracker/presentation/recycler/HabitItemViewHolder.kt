@@ -19,7 +19,7 @@ class HabitItemViewHolder(
 
     fun bindItem(habitItem: HabitItem) {
         with(binding) {
-            tvDescription.text = habitItem.doneDates.toString()
+            tvDescription.text = habitItem.description
             tvName.text = habitItem.name
             tvDate.text = habitTime.mapUtcDateInIntToString(habitItem.date)
             val habitTypeApp = HabitTypeApp.fromNonNullableHabitType(habitItem.type)
@@ -44,6 +44,7 @@ class HabitItemViewHolder(
             )
             tvRecurrence.text = root.resources.getString(
                 R.string.recurrence,
+                habitItem.done,
                 recurrenceTimes,
                 recurrenceDays
             )

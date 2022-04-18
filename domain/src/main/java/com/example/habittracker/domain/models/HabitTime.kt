@@ -5,6 +5,7 @@ import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
+@Singleton
 class HabitTime @Inject constructor() {
 
     fun getCurrentUtcDateInInt(): Int {

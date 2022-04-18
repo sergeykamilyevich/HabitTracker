@@ -16,7 +16,6 @@ import com.example.habittracker.presentation.color.ColorPicker
 import com.example.habittracker.presentation.models.HabitTypeApp
 import com.example.habittracker.presentation.recycler.HabitListAdapter
 import com.example.habittracker.presentation.view_models.HabitListViewModel
-import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -30,14 +29,14 @@ class HabitListFragment : Fragment(), HasTitle {
     @Inject
     lateinit var viewModel: HabitListViewModel
 
-    private lateinit var habitListAdapter: HabitListAdapter
-
     @Inject
     lateinit var colorPicker: ColorPicker
     private val colors by lazy { colorPicker.getColors() }
 
     @Inject
     lateinit var habitTime: HabitTime
+
+    private lateinit var habitListAdapter: HabitListAdapter
 
     private var listMode: HabitTypeApp? = null
 
@@ -86,9 +85,6 @@ class HabitListFragment : Fragment(), HasTitle {
         viewModel.habitList.observe(viewLifecycleOwner) {
             habitListAdapter.submitList(it)
         }
-//        viewModel.habitListFilter.observe(viewLifecycleOwner) {
-//            viewModel.getHabitList(HabitTypeApp.toHabitType(listMode))
-//        }
 //        viewModel.fetchHabits()
     }
 
@@ -105,17 +101,6 @@ class HabitListFragment : Fragment(), HasTitle {
                     date = habitTime.getCurrentUtcDateInInt()
                 )
             )
-            Snackbar.make(
-                binding.fragmentHabitList,
-                "You marked habit '${it.name}' as Done",
-                Snackbar.LENGTH_LONG
-            )
-                .setAction("Undo") {
-                    viewModel.habitDoneIdAdded?.let { habitDoneId ->
-                        viewModel.deleteHabitDone(habitDoneId)
-                    }
-                }
-                .show()
         }
         habitListAdapter.onHabitListClickListener = {
             launchHabitItemActivityEditMode(it.id)
@@ -155,7 +140,8 @@ class HabitListFragment : Fragment(), HasTitle {
                     colors[Random.nextInt(16)],
                     Random.nextInt(10) + 1,
                     Random.nextInt(30) + 1,
-                    date = HabitTime().getCurrentUtcDateInInt()
+                    date = HabitTime().getCurrentUtcDateInInt(),
+                    done = 0
                 )
             )
         }

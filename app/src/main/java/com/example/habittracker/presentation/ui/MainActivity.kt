@@ -12,6 +12,11 @@ import com.example.habittracker.R
 import com.example.habittracker.app.applicationComponent
 import com.example.habittracker.databinding.ActivityMainBinding
 import com.example.habittracker.di.components.MainActivityComponent
+import com.example.habittracker.domain.models.HabitType
+import com.example.habittracker.presentation.view_models.HabitListViewModel
+import com.google.android.material.snackbar.Snackbar
+import javax.inject.Inject
+import kotlin.math.abs
 
 
 class MainActivity : AppCompatActivity() {
@@ -22,6 +27,9 @@ class MainActivity : AppCompatActivity() {
     private var currentFragment: Fragment? = null
 
     lateinit var mainActivityComponent: MainActivityComponent
+
+    @Inject
+    lateinit var viewModel: HabitListViewModel
 
     private val fragmentListener =
         object : FragmentManager.FragmentLifecycleCallbacks() {
@@ -40,14 +48,56 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentListener, true)
-        mainActivityComponent = applicationComponent
-            .mainActivityComponentFactory()
-            .create(this)
+        setupMainActivityComponent()
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupToolbar()
         setupNavigation()
+        setupViewModel()
+    }
+
+    private fun setupMainActivityComponent() {
+        mainActivityComponent = applicationComponent
+            .mainActivityComponentFactory()
+            .create(this)
+        mainActivityComponent.inject(this)
+    }
+
+    private fun setupViewModel() {
+        viewModel.showToastHabitDone.observe(this) {
+            it.transferIfNotHandled().let { result ->
+                if (result != null) {
+                    val habitType = result.habitItem.type
+                    val habitDone = result.habitItem.done
+                    val habitRecurrenceNumber = result.habitItem.recurrenceNumber
+                    val differenceDone = abs(habitDone - habitRecurrenceNumber)
+                    val differenceDoneTimes = resources.getQuantityString(
+                        R.plurals.plurals_more_times,
+                        differenceDone,
+                        differenceDone
+                    )
+                    val snackbarText = when (habitType) {
+                        HabitType.GOOD -> {
+                            if (habitDone < habitRecurrenceNumber)
+                                getString(R.string.worth_doing_more_times, differenceDoneTimes)
+                            else getString(R.string.you_are_breathtaking)
+                        }
+                        HabitType.BAD -> {
+                            if (habitDone < habitRecurrenceNumber)
+                                getString(R.string.you_are_allowed_more_times, differenceDoneTimes)
+                            else getString(R.string.stop_doing_it)
+
+                        }
+                    }
+                    Snackbar.make(binding.drawerLayout, snackbarText, Snackbar.LENGTH_LONG)
+                        .setAction(getString(R.string.undo)) {
+                            viewModel.deleteHabitDone(result.habitDoneId)
+                        }
+                        .show()
+                }
+            }
+        }
     }
 
     private fun setupToolbar() {

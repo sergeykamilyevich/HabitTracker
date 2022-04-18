@@ -8,13 +8,14 @@ data class HabitItem(
     var color: Int,
     var recurrenceNumber: Int,
     var recurrencePeriod: Int,
+    var done: Int = UNDONE,
     val id: Int = UNDEFINED_ID,
-    val date: Int = UNDEFINED_DATE,
-    val doneDates: List<Int> = listOf()
+    val date: Int = UNDEFINED_DATE
 ) {
 
     companion object {
         const val UNDEFINED_ID = 0
         const val UNDEFINED_DATE = 0
+        const val UNDONE = 0
     }
 }
