@@ -1,22 +1,27 @@
 package com.example.habittracker.presentation.view_models
 
 import android.text.Editable
+import android.util.Log
 import androidx.lifecycle.*
+import com.example.habittracker.data.network.HabitApi
+import com.example.habittracker.data.network.models.HabitItemApiModel
 import com.example.habittracker.di.annotations.MainActivityScope
 import com.example.habittracker.domain.models.*
-import com.example.habittracker.domain.usecases.*
+import com.example.habittracker.domain.usecases.db.*
 import com.example.habittracker.presentation.models.AddHabitDoneResult
 import kotlinx.coroutines.launch
+import retrofit2.Response
 import javax.inject.Inject
 
 @MainActivityScope
 class HabitListViewModel @Inject constructor(
-    private val getHabitListUseCase: GetHabitListUseCase,
-    private val upsertHabitItemUseCase: UpsertHabitItemUseCase,
-    private val getHabitItemUseCase: GetHabitItemUseCase,
-    private val deleteHabitItemUseCase: DeleteHabitItemUseCase,
-    private val addHabitDoneUseCase: AddHabitDoneUseCase,
-    private val deleteHabitDoneUseCase: DeleteHabitDoneUseCase
+    private val getHabitListFromDbUseCase: GetHabitListFromDbUseCase,
+    private val upsertHabitToDbUseCase: UpsertHabitToDbUseCase,
+    private val getHabitFromDbUseCase: GetHabitFromDbUseCase,
+    private val deleteHabitFromDbUseCase: DeleteHabitFromDbUseCase,
+    private val addHabitDoneToDbUseCase: AddHabitDoneToDbUseCase,
+    private val deleteHabitDoneFromDbUseCase: DeleteHabitDoneFromDbUseCase,
+    private val apiService: HabitApi
 ) : ViewModel() {
 
     private val _habitListFilter = MutableLiveData<HabitListFilter>()
@@ -33,33 +38,33 @@ class HabitListViewModel @Inject constructor(
 
     fun addHabitItem(habitItem: HabitItem) {
         viewModelScope.launch {
-            upsertHabitItemUseCase(habitItem)
+            upsertHabitToDbUseCase(habitItem)
         }
     }
 
     fun deleteHabitItem(habitItem: HabitItem) {
         viewModelScope.launch {
-            deleteHabitItemUseCase(habitItem)
+            deleteHabitFromDbUseCase(habitItem)
         }
     }
 
     fun addHabitDone(habitDone: HabitDone) {
         viewModelScope.launch {
-            val habitDoneIdAdded =  addHabitDoneUseCase(habitDone)
-            val habitItem = getHabitItemUseCase(habitDone.habitId)
+            val habitDoneIdAdded =  addHabitDoneToDbUseCase(habitDone)
+            val habitItem = getHabitFromDbUseCase(habitDone.habitId)
             _showToastHabitDone.value = Event(AddHabitDoneResult(habitItem, habitDoneIdAdded))
         }
     }
 
     fun deleteHabitDone(habitDoneId: Int) {
         viewModelScope.launch {
-            deleteHabitDoneUseCase(habitDoneId)
+            deleteHabitDoneFromDbUseCase(habitDoneId)
         }
     }
 
     fun getHabitList(habitTypeFilter: HabitType?) {
         habitList = Transformations.switchMap(habitListFilter) {
-            getHabitListUseCase(habitTypeFilter, it).asLiveData()
+            getHabitListFromDbUseCase(habitTypeFilter, it).asLiveData()
         }
     }
 
@@ -74,44 +79,37 @@ class HabitListViewModel @Inject constructor(
 
     }
 
-//    fun fetchHabits() {
+    fun fetchHabits() {
+        Log.d("99999", "start fetchHabits")
 //        val api = ApiFactory.apiService
-//        viewModelScope.launch {
-//            var response: Response<List<HabitItemApiModel>>? = try {
-//                api.getHabitList()
-//            } catch (e: Exception) {
-//                Log.d("99999", "error $e")
-//                return@launch
-//            }
-//
-//            if (response?.isSuccessful == true && response.body() != null) {
-//                Log.d("99999", "${response.body()}")
-//                val rb = response.body()
-//            } else {
-//                Log.d("99999", "${response?.errorBody()}")
-//                val rb = response?.errorBody() as? ErrorApiModel
-//                Log.d("99999", "${rb}")
-//            }
+        viewModelScope.launch {
 
-//            var response: Call<List<HabitItemApiModel>>? = try {
-//                RetrofitHabit.retrofit?.getHabitList()
-//            } catch (e: Exception) {
-//                Log.d("99999", "error $e")
-//                return@launch
-//            }
-//
-//            if (response?.isSuccessful == true && response.body() != null) {
-//                Log.d("99999", "${response.body()}")
-//                val rb = response.body()
-//            } else {
-//                Log.d("99999", "${response?.errorBody()}")
-//                val rb = response?.errorBody() as? ErrorApiModel
-//                Log.d("99999", "${rb}")
-//            }
-//            Log.d("99999", "${response?.body()}")
+            val response: Response<List<HabitItemApiModel>>? = try {
+                apiService.getHabitList()
+            } catch (e: Exception) {
+                Log.d("99999", "error $e")
+                return@launch
+            }
+            Log.d("99999", "response code ${response?.code()}")
+            Log.d("99999", "response errorBody ${response?.errorBody()}")
+            Log.d("99999", "response body ${response?.body()}")
+//            response.errorBody()
 
-//        }
-//    }
+            response?.let {
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        Log.d("99999", "${response.body()}")
+
+                    }
+                } else {
+                    val rb = response.errorBody()
+                    Log.d("99999", "${rb}")
+                }
+
+            }
+
+        }
+    }
 
     companion object {
         private const val EMPTY_STRING = ""

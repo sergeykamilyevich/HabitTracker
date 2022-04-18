@@ -1,4 +1,4 @@
-package com.example.habittracker.domain.usecases
+package com.example.habittracker.domain.usecases.db
 
 import com.example.habittracker.domain.repositories.HabitRepository
 import com.example.habittracker.domain.models.HabitItem
@@ -9,7 +9,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GetHabitListUseCase @Inject constructor(private val habitRepository: HabitRepository) {
+class GetHabitListFromDbUseCase @Inject constructor(private val habitRepository: HabitRepository) {
 
     operator fun invoke(
         habitTypeFilter: HabitType?,
