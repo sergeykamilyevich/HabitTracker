@@ -9,6 +9,7 @@ data class HabitItem(
     var recurrenceNumber: Int,
     var recurrencePeriod: Int,
     var done: Int = UNDONE,
+    var apiUid: String = EMPTY_UID, //TODO val or var?
     val id: Int = UNDEFINED_ID,
     val date: Int = UNDEFINED_DATE
 ) {
@@ -17,5 +18,6 @@ data class HabitItem(
         const val UNDEFINED_ID = 0
         const val UNDEFINED_DATE = 0
         const val UNDONE = 0
+        const val EMPTY_UID = ""
     }
 }

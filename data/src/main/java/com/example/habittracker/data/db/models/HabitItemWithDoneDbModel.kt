@@ -29,9 +29,10 @@ data class HabitItemWithDoneDbModel(
             color = habitItemDbModel.color,
             recurrenceNumber = habitItemDbModel.recurrenceNumber,
             recurrencePeriod = habitItemDbModel.recurrencePeriod,
+            done = upToDateHabitDoneDates.size,
+            apiUid = habitItemDbModel.apiUid,
             id = habitItemDbModel.id,
-            date = habitItemDbModel.date,
-            done = upToDateHabitDoneDates.size
+            date = habitItemDbModel.date
         )
     }
 

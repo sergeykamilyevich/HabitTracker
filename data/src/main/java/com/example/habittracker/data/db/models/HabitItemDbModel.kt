@@ -23,7 +23,9 @@ data class HabitItemDbModel(
     var recurrenceNumber: Int,
     @ColumnInfo(name = "recurrence_period")
     var recurrencePeriod: Int,
-    val date: Int
+    val date: Int,
+    @ColumnInfo(name = "uid")
+    var apiUid: String
 ) {
     companion object {
         fun fromHabitItem(habitItem: HabitItem) = HabitItemDbModel(
@@ -35,7 +37,8 @@ data class HabitItemDbModel(
             color = habitItem.color,
             recurrenceNumber = habitItem.recurrenceNumber,
             recurrencePeriod = habitItem.recurrencePeriod,
-            date = habitItem.date
+            date = habitItem.date,
+            apiUid = habitItem.apiUid
         )
     }
 }
