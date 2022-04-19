@@ -44,46 +44,51 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
         return habitItemWithDoneDbModel.toHabitItem()
     }
 
-    override suspend fun upsertHabit(habitItem: HabitItem): UpsertException? {
+    override suspend fun upsertHabit(habitItem: HabitItem): Either<UpsertException, Int> {
         val habitItemDbModel = HabitItemDbModel.fromHabitItem(habitItem)
-        var isUpsertFailure: UpsertException? = UnknownSqlException(DEFAULT_SQL_ERROR)
+        var result: Either<UpsertException, Int> =
+            UnknownSqlException(DEFAULT_SQL_ERROR).failure()
         runCatching {
-            habitItemDao.insert(habitItemDbModel)
+            habitItemDao.insert(habitItemDbModel).toInt()
         }
             .onSuccess {
-                isUpsertFailure = null
+                return it.success()
             }
             .onFailure {
-                isUpsertFailure = handleInsertException(it, habitItem, habitItemDbModel)
+//                return it.failure()
+                result = handleInsertException(it, habitItem, habitItemDbModel)
             }
-        return isUpsertFailure
+        return result
     }
 
     private suspend fun handleInsertException(
         insertException: Throwable,
         habitItem: HabitItem,
         habitItemDbModel: HabitItemDbModel
-    ): UpsertException? {
-        var isUpsertFailure: UpsertException? = UnknownSqlException(insertException.toString())
+    ): Either<UpsertException, Int> {
+        var result: Either<UpsertException, Int> =
+            UnknownSqlException(insertException.toString()).failure()
         val insertExceptionMessage = insertException.message
         if (insertException is SQLiteConstraintException && insertExceptionMessage != null) {
             when {
                 insertExceptionMessage.contains(UNIQUE_CONSTRAINT_MESSAGE) -> {
-                    isUpsertFailure = HabitAlreadyExistsException(habitItem.name)
+                    result = HabitAlreadyExistsException(habitItem.name).failure()
                 }
                 insertExceptionMessage.contains(PRIMARY_KEY_CONSTRAINT_MESSAGE) -> {
                     runCatching { habitItemDao.update(habitItemDbModel) }
-                        .onSuccess { isUpsertFailure = null }
+                        .onSuccess {
+                            result = ITEM_NOT_ADDED.success()
+                        }
                         .onFailure { updateException ->
-                            isUpsertFailure = handleUpdateException(
+                            result = handleUpdateException(
                                 updateException,
                                 habitItem.name
-                            )
+                            ).failure()
                         }
                 }
             }
         }
-        return isUpsertFailure
+        return result
     }
 
     private fun handleUpdateException(
@@ -115,6 +120,7 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
         const val UNIQUE_CONSTRAINT_MESSAGE = "SQLITE_CONSTRAINT_UNIQUE"
         const val PRIMARY_KEY_CONSTRAINT_MESSAGE = "SQLITE_CONSTRAINT_PRIMARYKEY"
         const val DEFAULT_SQL_ERROR = "Unknown SQL error"
+        const val ITEM_NOT_ADDED = 0
     }
 
 }

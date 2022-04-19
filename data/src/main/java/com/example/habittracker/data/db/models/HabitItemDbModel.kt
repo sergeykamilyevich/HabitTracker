@@ -32,7 +32,7 @@ data class HabitItemDbModel(
             id = habitItem.id,
             name = habitItem.name,
             description = habitItem.description,
-            priority = habitItem.priority.id,
+            priority = habitItem.priority.int,
             type = habitItem.type,
             color = habitItem.color,
             recurrenceNumber = habitItem.recurrenceNumber,

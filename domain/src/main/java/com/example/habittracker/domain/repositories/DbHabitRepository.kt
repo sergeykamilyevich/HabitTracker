@@ -12,7 +12,7 @@ interface DbHabitRepository {
 
     suspend fun getHabitById(habitItemId: Int): HabitItem
 
-    suspend fun upsertHabit(habitItem: HabitItem): UpsertException?
+    suspend fun upsertHabit(habitItem: HabitItem): Either<UpsertException, Int>
 
     suspend fun deleteHabit(habitItem: HabitItem)
 

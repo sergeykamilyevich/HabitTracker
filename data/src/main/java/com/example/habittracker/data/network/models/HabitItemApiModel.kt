@@ -16,7 +16,7 @@ data class HabitItemApiModel(
     @SerializedName("description")
     val description: String,
     @SerializedName("done_dates")
-    val doneDates: List<Int>,
+    val doneDates: List<Int> = listOf(),
     @SerializedName("frequency")
     val recurrencePeriod: Int,
     @SerializedName("priority")
@@ -28,7 +28,7 @@ data class HabitItemApiModel(
     @SerializedName("uid")
     val apiUid: String
 ) {
-    fun toHabitItem() : HabitItem {
+    fun toHabitItem(): HabitItem {
         val currentDate = HabitTime().getCurrentUtcDateInInt()
         val upToDateHabitDoneDates = doneDates.filter {
             recurrencePeriod > (currentDate - it)
@@ -44,6 +44,20 @@ data class HabitItemApiModel(
             done = upToDateHabitDoneDates.size,
             apiUid = apiUid,
             date = date
+        )
+    }
+
+    companion object {
+        fun fromHabitItem(habitItem: HabitItem) = HabitItemApiModel(
+            name = habitItem.name,
+            description = habitItem.description,
+            priority = habitItem.priority.int,
+            type = habitItem.type.int,
+            color = habitItem.color,
+            recurrenceNumber = habitItem.recurrenceNumber,
+            recurrencePeriod = habitItem.recurrencePeriod,
+            date = habitItem.date,
+            apiUid = habitItem.apiUid
         )
     }
 }

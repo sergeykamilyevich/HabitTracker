@@ -35,6 +35,7 @@ class HabitListViewModel @Inject constructor(
     fun addHabitItem(habitItem: HabitItem) {
         viewModelScope.launch {
             dbUseCase.upsertHabitToDbUseCase(habitItem)
+            networkUseCase.putHabitToApiUseCase(habitItem)
         }
     }
 

@@ -32,7 +32,7 @@ interface HabitItemDao {
     suspend fun getById(habitItemId: Int): HabitItemWithDoneDbModel?
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun insert(habitItemDbModel: HabitItemDbModel)
+    suspend fun insert(habitItemDbModel: HabitItemDbModel): Long
 
     @Update(onConflict = OnConflictStrategy.ABORT)
     suspend fun update(habitItemDbModel: HabitItemDbModel)
