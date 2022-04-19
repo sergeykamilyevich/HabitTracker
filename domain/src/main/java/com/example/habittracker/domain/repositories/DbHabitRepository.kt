@@ -3,7 +3,7 @@ package com.example.habittracker.domain.repositories
 import com.example.habittracker.domain.models.*
 import kotlinx.coroutines.flow.Flow
 
-interface HabitRepository {
+interface DbHabitRepository {
 
     fun getHabitList(
         habitType: HabitType?,
@@ -12,9 +12,9 @@ interface HabitRepository {
 
     suspend fun getHabitById(habitItemId: Int): HabitItem
 
-    suspend fun upsertHabitItem(habitItem: HabitItem): UpsertException?
+    suspend fun upsertHabit(habitItem: HabitItem): UpsertException?
 
-    suspend fun deleteHabitItem(habitItem: HabitItem)
+    suspend fun deleteHabit(habitItem: HabitItem)
 
     suspend fun addHabitDone(habitDone: HabitDone): Int
 

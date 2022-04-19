@@ -6,14 +6,14 @@ import com.example.habittracker.data.db.models.HabitDoneDbModel
 import com.example.habittracker.data.db.models.HabitItemDbModel
 import com.example.habittracker.data.db.models.HabitItemWithDoneDbModel
 import com.example.habittracker.domain.models.*
-import com.example.habittracker.domain.repositories.HabitRepository
+import com.example.habittracker.domain.repositories.DbHabitRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class HabitRepositoryImpl @Inject constructor(application: Application) : HabitRepository {
+class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHabitRepository {
 
     private val habitItemDao = AppDataBase.getInstance(application).habitItemDao()
     private val habitDoneDao = AppDataBase.getInstance(application).habitDoneDao()
@@ -44,7 +44,7 @@ class HabitRepositoryImpl @Inject constructor(application: Application) : HabitR
         return habitItemWithDoneDbModel.toHabitItem()
     }
 
-    override suspend fun upsertHabitItem(habitItem: HabitItem): UpsertException? {
+    override suspend fun upsertHabit(habitItem: HabitItem): UpsertException? {
         val habitItemDbModel = HabitItemDbModel.fromHabitItem(habitItem)
         var isUpsertFailure: UpsertException? = UnknownSqlException(DEFAULT_SQL_ERROR)
         runCatching {
@@ -98,7 +98,7 @@ class HabitRepositoryImpl @Inject constructor(application: Application) : HabitR
         }
     }
 
-    override suspend fun deleteHabitItem(habitItem: HabitItem) {
+    override suspend fun deleteHabit(habitItem: HabitItem) {
         habitItemDao.delete(habitItem.id)
     }
 
