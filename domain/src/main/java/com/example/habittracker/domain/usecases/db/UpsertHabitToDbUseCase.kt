@@ -7,7 +7,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class UpsertHabitToDbUseCase @Inject constructor(val dbHabitRepository: DbHabitRepository) {
+class UpsertHabitToDbUseCase @Inject constructor(private val dbHabitRepository: DbHabitRepository) {
 
     suspend operator fun invoke(habitItem: HabitItem): UpsertException? {
         return dbHabitRepository.upsertHabit(habitItem)
