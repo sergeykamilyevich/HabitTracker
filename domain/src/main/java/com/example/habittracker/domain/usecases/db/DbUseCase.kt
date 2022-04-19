@@ -1,7 +1,9 @@
 package com.example.habittracker.domain.usecases.db
 
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class DbUseCase @Inject constructor(
     val addHabitDoneToDbUseCase: AddHabitDoneToDbUseCase,
     val deleteHabitDoneFromDbUseCase: DeleteHabitDoneFromDbUseCase,

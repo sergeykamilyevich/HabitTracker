@@ -16,8 +16,6 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class HabitItemViewModel @Inject constructor(
-//    private val upsertHabitToDbUseCase: UpsertHabitToDbUseCase,
-//    private val getHabitFromDbUseCase: GetHabitFromDbUseCase,
     private val dbUseCase: DbUseCase,
     private val mapper: HabitItemMapper,
     private val habitTime: HabitTime
