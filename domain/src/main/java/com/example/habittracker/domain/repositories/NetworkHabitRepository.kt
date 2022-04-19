@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface NetworkHabitRepository {
 
     suspend fun getHabitList(
-    ): List<HabitItem>
+    ): List<HabitItem>? //TODO is nullable good idea?
 
     suspend fun putHabit(habitItem: HabitItem)
 

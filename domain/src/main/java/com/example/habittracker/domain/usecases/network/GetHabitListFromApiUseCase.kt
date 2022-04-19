@@ -6,11 +6,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GetHabitListFromApi @Inject constructor(
+class GetHabitListFromApiUseCase @Inject constructor(
     private val networkHabitRepository: NetworkHabitRepository
 ) {
 
-    suspend operator fun invoke(): List<HabitItem> {
+    suspend operator fun invoke(): List<HabitItem>? {
         return networkHabitRepository.getHabitList()
     }
 }

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.habittracker.domain.models.HabitItem
 import com.example.habittracker.domain.models.HabitTime
 import com.example.habittracker.domain.models.UpsertException
+import com.example.habittracker.domain.usecases.db.DbUseCase
 import com.example.habittracker.domain.usecases.db.GetHabitFromDbUseCase
 import com.example.habittracker.domain.usecases.db.UpsertHabitToDbUseCase
 import com.example.habittracker.presentation.mappers.HabitItemMapper
@@ -15,8 +16,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class HabitItemViewModel @Inject constructor(
-    private val upsertHabitToDbUseCase: UpsertHabitToDbUseCase,
-    private val getHabitFromDbUseCase: GetHabitFromDbUseCase,
+//    private val upsertHabitToDbUseCase: UpsertHabitToDbUseCase,
+//    private val getHabitFromDbUseCase: GetHabitFromDbUseCase,
+    private val dbUseCase: DbUseCase,
     private val mapper: HabitItemMapper,
     private val habitTime: HabitTime
 ) : ViewModel() {
@@ -57,7 +59,7 @@ class HabitItemViewModel @Inject constructor(
                 recurrencePeriod = habitItem.recurrencePeriod,
                 date = habitTime.getCurrentUtcDateInInt()
             )
-            val isFailureOfAdding = upsertHabitToDbUseCase(item)
+            val isFailureOfAdding = dbUseCase.upsertHabitToDbUseCase(item)
             showErrorOrCloseHabitItemScreenSuccessfully(isFailureOfAdding)
         }
     }
@@ -74,7 +76,7 @@ class HabitItemViewModel @Inject constructor(
                     recurrenceNumber = habitItem.recurrenceNumber,
                     recurrencePeriod = habitItem.recurrencePeriod
                 )
-                val isFailureOfEditing = upsertHabitToDbUseCase(item)
+                val isFailureOfEditing = dbUseCase.upsertHabitToDbUseCase(item)
                 showErrorOrCloseHabitItemScreenSuccessfully(isFailureOfEditing)
             }
         }
@@ -94,7 +96,7 @@ class HabitItemViewModel @Inject constructor(
 
     fun getHabitItem(habitItemId: Int) {
         viewModelScope.launch {
-            val habitItem = getHabitFromDbUseCase(habitItemId)
+            val habitItem = dbUseCase.getHabitFromDbUseCase(habitItemId)
             _habitItem.value = habitItem
         }
     }
