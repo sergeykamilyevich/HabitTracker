@@ -116,6 +116,10 @@ class HabitItemFragment : Fragment(), HasTitle {
             viewModel.validateName(it)
         }
 
+        binding.tiedDescription.addTextChangedListener {
+            viewModel.validateDescription(it)
+        }
+
         binding.tiedRecurrenceNumber.addTextChangedListener {
             viewModel.validateRecurrenceNumber(it)
         }
@@ -137,6 +141,9 @@ class HabitItemFragment : Fragment(), HasTitle {
         }
         viewModel.errorInputName.observe(viewLifecycleOwner) {
             handleInputError(it, binding.tiedName)
+        }
+        viewModel.errorInputDescription.observe(viewLifecycleOwner) {
+            handleInputError(it, binding.tiedDescription)
         }
         viewModel.upsertResult.observe(viewLifecycleOwner) {
             it.transferIfNotHandled()?.let { result ->
@@ -187,13 +194,14 @@ class HabitItemFragment : Fragment(), HasTitle {
 
     private fun handleInputError(error: Boolean, textInputEditText: TextInputEditText) {
         textInputEditText.error = if (error) getString(R.string.invalid_input) else null
-        checkStatusBtnSave()
+        setStatusBtnSave()
     }
 
-    private fun checkStatusBtnSave() {
+    private fun setStatusBtnSave() {
         binding.btnSave.isEnabled = !(viewModel.errorInputRecurrenceNumber.value == true
                 || viewModel.errorInputRecurrencePeriod.value == true
-                || viewModel.errorInputName.value == true)
+                || viewModel.errorInputName.value == true
+                || viewModel.errorInputDescription.value == true)
     }
 
     private fun setupSpinnerAdapter() {
@@ -203,6 +211,7 @@ class HabitItemFragment : Fragment(), HasTitle {
     private fun isFieldsFilled(): Boolean {
         return with(binding) {
             tiedName.text?.isNotEmpty() == true
+                    && tiedDescription.text?.isNotEmpty() == true
                     && tiedRecurrenceNumber.text?.isNotEmpty() == true
                     && tiedRecurrencePeriod.text?.isNotEmpty() == true
         }
