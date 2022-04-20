@@ -66,8 +66,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupViewModel() {
         viewModel.showToastHabitDone.observe(this) {
-            it.transferIfNotHandled().let { result ->
-                if (result != null) {
+            it.transferIfNotHandled()?.let { result ->
                     val habitType = result.habitItem.type
                     val habitDone = result.habitItem.done
                     val habitRecurrenceNumber = result.habitItem.recurrenceNumber
@@ -95,7 +94,6 @@ class MainActivity : AppCompatActivity() {
                             viewModel.deleteHabitDone(result.habitDoneId)
                         }
                         .show()
-                }
             }
         }
     }

@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import com.example.habittracker.domain.models.HabitItem
 import com.example.habittracker.domain.models.HabitPriority
-import com.example.habittracker.domain.models.HabitTime
+import com.example.habittracker.domain.models.Time
 
 data class HabitItemWithDoneDbModel(
     @Embedded
@@ -17,7 +17,7 @@ data class HabitItemWithDoneDbModel(
     val habitDoneDbModel: List<HabitDoneDbModel>
 ) {
     fun toHabitItem(): HabitItem {
-        val currentDate = HabitTime().getCurrentUtcDateInInt()
+        val currentDate = Time().getCurrentUtcDateInInt()
         val upToDateHabitDoneDates = habitDoneDbModel.filter {
             habitItemDbModel.recurrencePeriod > (currentDate - it.date)
         }
@@ -31,8 +31,8 @@ data class HabitItemWithDoneDbModel(
             recurrencePeriod = habitItemDbModel.recurrencePeriod,
             done = upToDateHabitDoneDates.size,
             apiUid = habitItemDbModel.apiUid,
-            id = habitItemDbModel.id,
-            date = habitItemDbModel.date
+            date = habitItemDbModel.date,
+            id = habitItemDbModel.id
         )
     }
 

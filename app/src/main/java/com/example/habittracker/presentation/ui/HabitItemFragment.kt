@@ -14,10 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.habittracker.R
 import com.example.habittracker.databinding.FragmentHabitItemBinding
-import com.example.habittracker.domain.models.HabitAlreadyExistsException
-import com.example.habittracker.domain.models.HabitItem
-import com.example.habittracker.domain.models.HabitPriority
-import com.example.habittracker.domain.models.UnknownSqlException
+import com.example.habittracker.domain.models.*
 import com.example.habittracker.presentation.color.ColorPicker
 import com.example.habittracker.presentation.mappers.HabitItemMapper
 import com.example.habittracker.presentation.models.ColorRgbHsv
@@ -141,19 +138,21 @@ class HabitItemFragment : Fragment(), HasTitle {
         viewModel.errorInputName.observe(viewLifecycleOwner) {
             handleInputError(it, binding.tiedName)
         }
-        viewModel.upsertException.observe(viewLifecycleOwner) {
-            it.transferIfNotHandled().let { exception ->
-                val errorMessageFromRes = when (exception) {
-                    is HabitAlreadyExistsException -> R.string.habit_already_exists
-                    is UnknownSqlException -> R.string.sql_exception
-                    else -> throw RuntimeException("Unknown type of SQL upsert exception")
+        viewModel.upsertResult.observe(viewLifecycleOwner) {
+            it.transferIfNotHandled()?.let { result ->
+                if (result is Either.Failure) {
+                    val errorMessageFromRes = when (result.error) {
+                        is HabitAlreadyExistsException -> R.string.habit_already_exists
+                        is SqlException -> R.string.sql_exception
+                        else -> throw RuntimeException("Unknown type of SQL upsert exception")
+                    }
+                    Toast.makeText(
+                        context, resources.getString(
+                            errorMessageFromRes,
+                            result.error.message()
+                        ), Toast.LENGTH_LONG
+                    ).show()
                 }
-                Toast.makeText(
-                    context, resources.getString(
-                        errorMessageFromRes,
-                        exception.message
-                    ), Toast.LENGTH_LONG
-                ).show()
 
             }
         }

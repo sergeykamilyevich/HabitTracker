@@ -7,7 +7,7 @@ import com.example.habittracker.domain.repositories.NetworkHabitRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
-class DeleteHabitFromApiUseCase @Inject constructor(
+class DeleteHabitFromApiUseCase @Inject constructor( //TODO rename Api to Cloud
     private val networkHabitRepository: NetworkHabitRepository
     ) {
 

@@ -1,5 +1,6 @@
 package com.example.habittracker.di.modules
 
+import android.util.Log
 import com.example.habittracker.data.network.HabitApi
 import dagger.Module
 import dagger.Provides
@@ -34,8 +35,9 @@ object DataModule {
 
     @[Provides Singleton]
     fun provideApiService(retrofit: Retrofit): HabitApi {
-        return retrofit.create(HabitApi::class.java)
+        val habitApi = retrofit.create(HabitApi::class.java)
+        return habitApi
     }
 
-    const val BASE_URL = "https://droid-test-server.doubletapp.ru/api/"
+    private const val BASE_URL = "https://droid-test-server.doubletapp.ru/"
 }

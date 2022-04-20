@@ -2,24 +2,23 @@ package com.example.habittracker.data.network
 
 import com.example.habittracker.data.network.models.HabitItemApiModel
 import com.example.habittracker.data.network.models.HabitUidApiModel
+import okhttp3.RequestBody
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Headers
-import retrofit2.http.PUT
+import retrofit2.http.*
 
 interface HabitApi {
 
-    @GET("habit")
+    @GET("api/habit")
     @Headers("content-type: application/json")
     suspend fun getHabitList(
         @Header("Authorization") authorization: String = API_TOKEN
     ): Response<List<HabitItemApiModel>>
 
-    @PUT("habit")
+    @PUT("api/habit")
     @Headers("content-type: application/json")
     suspend fun putHabit(
-        @Header("Authorization") authorization: String = API_TOKEN
+        @Header("Authorization") authorization: String = API_TOKEN,
+        @Body habitItemApiModel: RequestBody
     ): Response<HabitUidApiModel>
 
     companion object {

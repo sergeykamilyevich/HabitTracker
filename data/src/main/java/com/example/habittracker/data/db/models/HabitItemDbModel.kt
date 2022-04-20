@@ -23,7 +23,7 @@ data class HabitItemDbModel(
     var recurrenceNumber: Int,
     @ColumnInfo(name = "recurrence_period")
     var recurrencePeriod: Int,
-    val date: Int,
+    var date: Int,
     @ColumnInfo(name = "uid")
     var apiUid: String
 ) {

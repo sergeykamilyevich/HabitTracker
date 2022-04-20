@@ -34,7 +34,7 @@ class HabitListFragment : Fragment(), HasTitle {
     private val colors by lazy { colorPicker.getColors() }
 
     @Inject
-    lateinit var habitTime: HabitTime
+    lateinit var time: Time
 
     private lateinit var habitListAdapter: HabitListAdapter
 
@@ -85,7 +85,7 @@ class HabitListFragment : Fragment(), HasTitle {
         viewModel.habitList.observe(viewLifecycleOwner) {
             habitListAdapter.submitList(it)
         }
-//        viewModel.fetchHabits()
+        viewModel.fetchHabits()
     }
 
     private fun setupRecyclerView() {
@@ -98,7 +98,7 @@ class HabitListFragment : Fragment(), HasTitle {
             viewModel.addHabitDone(
                 HabitDone(
                     habitId = it.id,
-                    date = habitTime.getCurrentUtcDateInInt()
+                    date = time.getCurrentUtcDateInInt()
                 )
             )
         }
@@ -140,7 +140,7 @@ class HabitListFragment : Fragment(), HasTitle {
                     colors[Random.nextInt(16)],
                     Random.nextInt(10) + 1,
                     Random.nextInt(30) + 1,
-                    date = HabitTime().getCurrentUtcDateInInt(),
+                    date = time.getCurrentUtcDateInInt(),
                     done = 0
                 )
             )

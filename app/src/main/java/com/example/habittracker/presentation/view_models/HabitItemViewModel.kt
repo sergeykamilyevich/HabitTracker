@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.habittracker.domain.models.Either
 import com.example.habittracker.domain.models.HabitItem
-import com.example.habittracker.domain.models.HabitTime
+import com.example.habittracker.domain.models.Time
 import com.example.habittracker.domain.models.UpsertException
 import com.example.habittracker.domain.usecases.db.DbUseCase
 import com.example.habittracker.domain.usecases.network.NetworkUseCase
@@ -20,7 +20,7 @@ class HabitItemViewModel @Inject constructor(
     private val dbUseCase: DbUseCase,
     private val networkUseCase: NetworkUseCase,
     private val mapper: HabitItemMapper,
-    private val habitTime: HabitTime
+    private val time: Time
 ) : ViewModel() {
 
     private val _habitItem = MutableLiveData<HabitItem>()
@@ -57,34 +57,42 @@ class HabitItemViewModel @Inject constructor(
                 color = habitItem.color,
                 recurrenceNumber = habitItem.recurrenceNumber,
                 recurrencePeriod = habitItem.recurrencePeriod,
-                date = habitTime.getCurrentUtcDateInInt()
+                date = time.getCurrentUtcDateInInt()
             )
             Log.d("OkHttp", "addHabitItem item $item")
             val resultOfAdding: Either<UpsertException, Int> =
                 dbUseCase.upsertHabitToDbUseCase(item)
-            if (resultOfAdding is Either.Success) {
-                val newHabitId = resultOfAdding.result
+            when (resultOfAdding) {
+                is Either.Success -> {
+                    closeItemFragment()
+                    val newHabitId = resultOfAdding.result
+                    Log.d("OkHttp", "newHabitId $newHabitId")
+                    val apiUid = networkUseCase.putHabitToApiUseCase(item)
+                    Log.d("OkHttp", "apiUid $apiUid")
+                    apiUid?.let {
+                        val newItemWithNewUid = item.copy(
+                            id = newHabitId,
+                            apiUid = apiUid
+                        )
+                        Log.d("OkHttp", "newItemWithNewUid $newItemWithNewUid")
+                        dbUseCase.upsertHabitToDbUseCase(newItemWithNewUid)
+                    }
+                }
+                is Either.Failure -> {
+                    _upsertResult.value = Event(resultOfAdding)
+                }
             }
+//            showErrorOrCloseHabitItemScreenSuccessfully(resultOfAdding)
 
-            showErrorOrCloseHabitItemScreenSuccessfully(resultOfAdding)
-            val apiUid = networkUseCase.putHabitToApiUseCase(item)
-            Log.d("OkHttp", "apiUid $apiUid")
-            apiUid?.let {
-                val newItemWithNewUid = item.copy(
-                    apiUid = apiUid
-                )
-                Log.d("OkHttp", "newItemWithNewUid $newItemWithNewUid")
-                dbUseCase.upsertHabitToDbUseCase(newItemWithNewUid)
-            }
 
         }
     }
 
     fun editHabitItem(habitItem: HabitItem) {
-        _habitItem.value?.let {
+        _habitItem.value?.let { oldItem ->
             Log.d("OkHttp", "habitItem $habitItem")
             viewModelScope.launch {
-                val newItem = it.copy(
+                val newItem = oldItem.copy(
                     name = habitItem.name,
                     description = habitItem.description,
                     priority = habitItem.priority,
@@ -92,19 +100,27 @@ class HabitItemViewModel @Inject constructor(
                     color = habitItem.color,
                     recurrenceNumber = habitItem.recurrenceNumber,
                     recurrencePeriod = habitItem.recurrencePeriod,
-//                    date = 19102
+                    date = time.getCurrentUtcDateInInt()
                 )
                 Log.d("OkHttp", "newItem $newItem")
-                val resultOfEditing = dbUseCase.upsertHabitToDbUseCase(newItem)
-                showErrorOrCloseHabitItemScreenSuccessfully(resultOfEditing)
-                val apiUid = networkUseCase.putHabitToApiUseCase(newItem)
-                Log.d("OkHttp", "apiUid $apiUid")
-                apiUid?.let {
-                    val newItemWithNewUid = newItem.copy(
-                        apiUid = apiUid
-                    )
-                    Log.d("OkHttp", "newItemWithNewUid $newItemWithNewUid")
-                    dbUseCase.upsertHabitToDbUseCase(newItemWithNewUid)
+                when (val resultOfEditing = dbUseCase.upsertHabitToDbUseCase(newItem)) {
+                    is Either.Success -> {
+                        closeItemFragment()
+                        val newHabitId = resultOfEditing.result
+                        Log.d("OkHttp", "resultOfEditing $newHabitId")
+                        val apiUid = networkUseCase.putHabitToApiUseCase(newItem)
+                        Log.d("OkHttp", "editHabitItem apiUid $apiUid")
+                        apiUid?.let {
+                            val newItemWithNewUid = newItem.copy(
+                                apiUid = apiUid
+                            )
+                            Log.d("OkHttp", "newItemWithNewUid $newItemWithNewUid")
+                            dbUseCase.upsertHabitToDbUseCase(newItemWithNewUid)
+                        }
+                    }
+                    is Either.Failure -> {
+                        _upsertResult.value = Event(resultOfEditing)
+                    }
                 }
             }
         }
@@ -112,9 +128,7 @@ class HabitItemViewModel @Inject constructor(
 
     private fun showErrorOrCloseHabitItemScreenSuccessfully(result: Either<UpsertException, Int>) {
         if (result is Either.Failure) {
-            _upsertResult.value = Event(result)
         } else {
-            closeItemFragment()
         }
     }
 

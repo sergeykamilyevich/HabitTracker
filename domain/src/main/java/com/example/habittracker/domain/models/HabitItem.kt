@@ -10,8 +10,8 @@ data class HabitItem(
     var recurrencePeriod: Int,
     var done: Int = UNDONE,
     var apiUid: String = EMPTY_UID, //TODO val or var?
-    val id: Int = UNDEFINED_ID,
-    val date: Int = UNDEFINED_DATE
+    var date: Int = UNDEFINED_DATE,
+    val id: Int = UNDEFINED_ID
 ) {
 
     companion object {

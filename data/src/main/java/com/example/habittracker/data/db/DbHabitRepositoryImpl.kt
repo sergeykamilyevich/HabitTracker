@@ -47,7 +47,7 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
     override suspend fun upsertHabit(habitItem: HabitItem): Either<UpsertException, Int> {
         val habitItemDbModel = HabitItemDbModel.fromHabitItem(habitItem)
         var result: Either<UpsertException, Int> =
-            UnknownSqlException(DEFAULT_SQL_ERROR).failure()
+            SqlException(DEFAULT_SQL_ERROR).failure()
         runCatching {
             habitItemDao.insert(habitItemDbModel).toInt()
         }
@@ -55,7 +55,6 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
                 return it.success()
             }
             .onFailure {
-//                return it.failure()
                 result = handleInsertException(it, habitItem, habitItemDbModel)
             }
         return result
@@ -66,25 +65,27 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
         habitItem: HabitItem,
         habitItemDbModel: HabitItemDbModel
     ): Either<UpsertException, Int> {
-        var result: Either<UpsertException, Int> =
-            UnknownSqlException(insertException.toString()).failure()
         val insertExceptionMessage = insertException.message
+        var result: Either<UpsertException, Int> =
+            SqlException(insertExceptionMessage ?: "").failure()
         if (insertException is SQLiteConstraintException && insertExceptionMessage != null) {
             when {
                 insertExceptionMessage.contains(UNIQUE_CONSTRAINT_MESSAGE) -> {
                     result = HabitAlreadyExistsException(habitItem.name).failure()
                 }
                 insertExceptionMessage.contains(PRIMARY_KEY_CONSTRAINT_MESSAGE) -> {
-                    runCatching { habitItemDao.update(habitItemDbModel) }
-                        .onSuccess {
-                            result = ITEM_NOT_ADDED.success()
-                        }
-                        .onFailure { updateException ->
-                            result = handleUpdateException(
-                                updateException,
-                                habitItem.name
-                            ).failure()
-                        }
+                    result = try {
+                        habitItemDao.update(habitItemDbModel)
+                        ITEM_NOT_ADDED.success()
+//                    }
+//                        .onSuccess {
+//                            result =
+                    } catch (updateException: Exception) {
+                        handleUpdateException(updateException, habitItem.name).failure()
+                    }
+//                        .onFailure { updateException ->
+//                            result =
+//                        }
                 }
             }
         }
@@ -99,7 +100,7 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
         return if (updateExceptionMessage?.contains(UNIQUE_CONSTRAINT_MESSAGE) == true) {
             HabitAlreadyExistsException(habitItemName)
         } else {
-            UnknownSqlException(updateException.toString())
+            SqlException(updateException.toString())
         }
     }
 

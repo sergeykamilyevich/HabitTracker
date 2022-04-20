@@ -2,7 +2,7 @@ package com.example.habittracker.data.network.models
 
 import com.example.habittracker.domain.models.HabitItem
 import com.example.habittracker.domain.models.HabitPriority
-import com.example.habittracker.domain.models.HabitTime
+import com.example.habittracker.domain.models.Time
 import com.example.habittracker.domain.models.HabitType
 import com.google.gson.annotations.SerializedName
 
@@ -29,7 +29,7 @@ data class HabitItemApiModel(
     val apiUid: String
 ) {
     fun toHabitItem(): HabitItem {
-        val currentDate = HabitTime().getCurrentUtcDateInInt()
+        val currentDate = Time().getCurrentUtcDateInInt()
         val upToDateHabitDoneDates = doneDates.filter {
             recurrencePeriod > (currentDate - it)
         }
@@ -46,6 +46,8 @@ data class HabitItemApiModel(
             date = date
         )
     }
+
+//    fun toJson():
 
     companion object {
         fun fromHabitItem(habitItem: HabitItem) = HabitItemApiModel(

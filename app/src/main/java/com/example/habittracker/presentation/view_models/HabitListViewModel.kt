@@ -42,6 +42,7 @@ class HabitListViewModel @Inject constructor(
     fun deleteHabitItem(habitItem: HabitItem) {
         viewModelScope.launch {
             dbUseCase.deleteHabitFromDbUseCase(habitItem)
+//            networkUseCase.deleteHabitFromApiUseCase(habitItem)
         }
     }
 

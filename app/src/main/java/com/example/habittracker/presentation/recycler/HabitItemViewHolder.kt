@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.habittracker.R
 import com.example.habittracker.databinding.ItemHabitBinding
 import com.example.habittracker.domain.models.HabitItem
-import com.example.habittracker.domain.models.HabitTime
+import com.example.habittracker.domain.models.Time
 import com.example.habittracker.presentation.models.HabitPriorityApp
 import com.example.habittracker.presentation.models.HabitTypeApp
 
@@ -15,7 +15,7 @@ class HabitItemViewHolder(
     private val onButtonHabitDoneClickListener: ((HabitItem) -> Unit)?
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    private val habitTime = HabitTime()
+    private val habitTime = Time()
 
     fun bindItem(habitItem: HabitItem) {
         with(binding) {
