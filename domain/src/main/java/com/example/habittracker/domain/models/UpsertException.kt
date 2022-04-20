@@ -1,8 +1,9 @@
 package com.example.habittracker.domain.models
 
-abstract class UpsertException(var message: String)
+sealed class UpsertException(private val message: String) {
+    fun message(): String = message
+}
 
-class HabitAlreadyExistsException(message: String) :
-    UpsertException("A habit with name $message already exists")
+class HabitAlreadyExistsException(message: String) : UpsertException(message)
 
-class UnknownSqlException(message: String) : UpsertException("SQL error: $message")
+class SqlException(message: String) : UpsertException(message)
