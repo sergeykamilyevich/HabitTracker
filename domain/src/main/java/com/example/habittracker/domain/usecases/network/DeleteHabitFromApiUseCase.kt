@@ -11,7 +11,7 @@ class DeleteHabitFromApiUseCase @Inject constructor( //TODO rename Api to Cloud
     private val networkHabitRepository: NetworkHabitRepository
     ) {
 
-    suspend operator fun invoke(habitItem: HabitItem) {
+    suspend operator fun invoke(habitItem: HabitItem): String? {
         return networkHabitRepository.deleteHabit(habitItem)
     }
 }

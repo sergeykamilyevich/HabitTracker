@@ -76,8 +76,34 @@ class NetworkHabitRepositoryImpl @Inject constructor(
         return null
     }
 
-    override suspend fun deleteHabit(habitItem: HabitItem) {
-        TODO("Not yet implemented")
+    override suspend fun deleteHabit(habitItem: HabitItem): String? {
+        Log.d("OkHttp", "deleteHabit start")
+        val habitUidApiModel = HabitUidApiModel(uid = habitItem.apiUid)
+        val jsonRequestBody = Gson().toJson(habitUidApiModel)
+        val requestBody = jsonRequestBody
+            .toRequestBody("application/json".toMediaTypeOrNull())
+        val response: Response<String>? = try {
+            apiService.deleteHabit(habitUidApiModel = requestBody)
+        } catch (e: Exception) {
+            Log.d("OkHttp", "error $e")
+            null
+        }
+        Log.d("OkHttp", "response deleteHabit $response")
+        response?.let {
+            if (response.isSuccessful) {
+                val responseBody = response.body()
+                Log.d("OkHttp", "responseBody ${response.body()}")
+                responseBody?.let {
+                    return ""
+                }
+            } else {
+                val rb = response.errorBody()
+                Log.d("OkHttp", "response.errorBody ${rb}")
+            }
+        }
+        return null
+
+
     }
 
     override suspend fun postHabitDone(habitDone: HabitDone) {
