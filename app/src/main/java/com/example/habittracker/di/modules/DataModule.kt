@@ -1,12 +1,9 @@
 package com.example.habittracker.di.modules
 
-import android.util.Log
 import com.example.habittracker.data.network.HabitApi
 import dagger.Module
 import dagger.Provides
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

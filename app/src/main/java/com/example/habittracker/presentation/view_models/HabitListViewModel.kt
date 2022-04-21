@@ -5,8 +5,7 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.example.habittracker.di.annotations.MainActivityScope
 import com.example.habittracker.domain.models.*
-import com.example.habittracker.domain.usecases.db.*
-import com.example.habittracker.domain.usecases.network.GetHabitListFromApiUseCase
+import com.example.habittracker.domain.usecases.db.DbUseCase
 import com.example.habittracker.domain.usecases.network.NetworkUseCase
 import com.example.habittracker.presentation.models.AddHabitDoneResult
 import kotlinx.coroutines.launch
@@ -60,7 +59,7 @@ class HabitListViewModel @Inject constructor(
 
     fun addHabitDone(habitDone: HabitDone) {
         viewModelScope.launch {
-            val habitDoneIdAdded =  dbUseCase.addHabitDoneToDbUseCase(habitDone)
+            val habitDoneIdAdded = dbUseCase.addHabitDoneToDbUseCase(habitDone)
             val habitItem = dbUseCase.getHabitFromDbUseCase(habitDone.habitId)
             _showToastHabitDone.value = Event(AddHabitDoneResult(habitItem, habitDoneIdAdded))
             networkUseCase.postHabitDoneToApiUseCase(habitDone)

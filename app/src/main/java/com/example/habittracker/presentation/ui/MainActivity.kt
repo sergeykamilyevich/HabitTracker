@@ -67,33 +67,33 @@ class MainActivity : AppCompatActivity() {
     private fun setupViewModel() {
         viewModel.showToastHabitDone.observe(this) {
             it.transferIfNotHandled()?.let { result ->
-                    val habitType = result.habitItem.type
-                    val habitDone = result.habitItem.done
-                    val habitRecurrenceNumber = result.habitItem.recurrenceNumber
-                    val differenceDone = abs(habitDone - habitRecurrenceNumber)
-                    val differenceDoneTimes = resources.getQuantityString(
-                        R.plurals.plurals_more_times,
-                        differenceDone,
-                        differenceDone
-                    )
-                    val snackbarText = when (habitType) {
-                        HabitType.GOOD -> {
-                            if (habitDone < habitRecurrenceNumber)
-                                getString(R.string.worth_doing_more_times, differenceDoneTimes)
-                            else getString(R.string.you_are_breathtaking)
-                        }
-                        HabitType.BAD -> {
-                            if (habitDone < habitRecurrenceNumber)
-                                getString(R.string.you_are_allowed_more_times, differenceDoneTimes)
-                            else getString(R.string.stop_doing_it)
-
-                        }
+                val habitType = result.habitItem.type
+                val habitDone = result.habitItem.done
+                val habitRecurrenceNumber = result.habitItem.recurrenceNumber
+                val differenceDone = abs(habitDone - habitRecurrenceNumber)
+                val differenceDoneTimes = resources.getQuantityString(
+                    R.plurals.plurals_more_times,
+                    differenceDone,
+                    differenceDone
+                )
+                val snackbarText = when (habitType) {
+                    HabitType.GOOD -> {
+                        if (habitDone < habitRecurrenceNumber)
+                            getString(R.string.worth_doing_more_times, differenceDoneTimes)
+                        else getString(R.string.you_are_breathtaking)
                     }
-                    Snackbar.make(binding.drawerLayout, snackbarText, Snackbar.LENGTH_LONG)
-                        .setAction(getString(R.string.undo)) {
-                            viewModel.deleteHabitDone(result.habitDoneId)
-                        }
-                        .show()
+                    HabitType.BAD -> {
+                        if (habitDone < habitRecurrenceNumber)
+                            getString(R.string.you_are_allowed_more_times, differenceDoneTimes)
+                        else getString(R.string.stop_doing_it)
+
+                    }
+                }
+                Snackbar.make(binding.drawerLayout, snackbarText, Snackbar.LENGTH_LONG)
+                    .setAction(getString(R.string.undo)) {
+                        viewModel.deleteHabitDone(result.habitDoneId)
+                    }
+                    .show()
             }
         }
     }
