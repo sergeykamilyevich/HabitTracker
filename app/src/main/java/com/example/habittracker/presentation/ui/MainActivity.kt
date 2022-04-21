@@ -1,6 +1,8 @@
 package com.example.habittracker.presentation.ui
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -13,7 +15,9 @@ import com.example.habittracker.app.applicationComponent
 import com.example.habittracker.databinding.ActivityMainBinding
 import com.example.habittracker.di.components.MainActivityComponent
 import com.example.habittracker.domain.models.HabitType
+import com.example.habittracker.presentation.models.AddHabitDoneResult
 import com.example.habittracker.presentation.view_models.HabitListViewModel
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 import kotlin.math.abs
@@ -86,22 +90,34 @@ class MainActivity : AppCompatActivity() {
                         if (habitDone < habitRecurrenceNumber)
                             getString(R.string.you_are_allowed_more_times, differenceDoneTimes)
                         else getString(R.string.stop_doing_it)
-
                     }
                 }
-                val snackbarCallback = SnackbarCallback(
-                    viewModel = viewModel,
-                    habitDone = result.habitDone
-                ) //TODO fix to Inject
                 Snackbar.make(binding.drawerLayout, snackbarText, Snackbar.LENGTH_LONG)
                     .setAction(getString(R.string.undo)) {
                         viewModel.deleteHabitDone(result.habitDone.id)
                     }
-                    .addCallback(snackbarCallback)
+                    .addCallback(snackbarCallback(result))
                     .show()
             }
         }
     }
+
+    private fun snackbarCallback(result: AddHabitDoneResult) =
+        object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+
+            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                super.onDismissed(transientBottomBar, event)
+                if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+                    viewModel.addHabitDoneToCloud(result.habitDone)
+                }
+                viewModel.unblockHabitDoneButtons()
+            }
+
+            override fun onShown(sb: Snackbar?) {
+                super.onShown(sb)
+                viewModel.blockHabitDoneButtons()
+            }
+        }
 
     private fun setupToolbar() {
         setSupportActionBar(binding.toolbar)
@@ -129,5 +145,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         return NavigationUI.navigateUp(navController, binding.drawerLayout)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_upload -> viewModel.uploadAllHabitsFromDbToCloud()
+            R.id.menu_download -> viewModel.downloadAllHabitsFromCloudToDb()
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
