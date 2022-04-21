@@ -95,13 +95,15 @@ class HabitListFragment : Fragment(), HasTitle {
 
     private fun setupAdapterClickListeners() {
         habitListAdapter.onButtonHabitDoneClickListener = {
-            viewModel.addHabitDone(
-                HabitDone(
-                    habitId = it.id,
-                    date = time.getCurrentUtcDateInInt(),
-                    apiUid = it.apiUid
+            if (!viewModel.isHabitDoneButtonsBlocked) {
+                viewModel.addHabitDone(
+                    HabitDone(
+                        habitId = it.id,
+                        date = time.getCurrentUtcDateInInt(),
+                        apiUid = it.apiUid
+                    )
                 )
-            )
+            }
         }
         habitListAdapter.onHabitListClickListener = {
             launchHabitItemActivityEditMode(it.id)

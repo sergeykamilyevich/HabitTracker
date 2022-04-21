@@ -89,10 +89,15 @@ class MainActivity : AppCompatActivity() {
 
                     }
                 }
+                val snackbarCallback = SnackbarCallback(
+                    viewModel = viewModel,
+                    habitDone = result.habitDone
+                ) //TODO fix to Inject
                 Snackbar.make(binding.drawerLayout, snackbarText, Snackbar.LENGTH_LONG)
                     .setAction(getString(R.string.undo)) {
-                        viewModel.deleteHabitDone(result.habitDoneId)
+                        viewModel.deleteHabitDone(result.habitDone.id)
                     }
+                    .addCallback(snackbarCallback)
                     .show()
             }
         }

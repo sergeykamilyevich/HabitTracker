@@ -25,11 +25,23 @@ class HabitListViewModel @Inject constructor(
     val showToastHabitDone: LiveData<Event<AddHabitDoneResult>>
         get() = _showToastHabitDone
 
+    var isHabitDoneButtonsBlocked: Boolean = false
+        private set
+
+
     private var currentHabitListFilter = HabitListFilter(HabitListOrderBy.NAME_ASC, "")
 
     lateinit var habitList: LiveData<List<HabitItem>>
 
     lateinit var habitListFromApi: List<HabitItem>
+
+    fun blockHabitDoneButtons() {
+        isHabitDoneButtonsBlocked = true
+    }
+
+    fun unblockHabitDoneButtons() {
+        isHabitDoneButtonsBlocked = false
+    }
 
     fun addHabitItem(habitItem: HabitItem) {
         viewModelScope.launch {
@@ -60,8 +72,19 @@ class HabitListViewModel @Inject constructor(
     fun addHabitDone(habitDone: HabitDone) {
         viewModelScope.launch {
             val habitDoneIdAdded = dbUseCase.addHabitDoneToDbUseCase(habitDone)
+            val newHabitDone = habitDone.copy(id = habitDoneIdAdded)
             val habitItem = dbUseCase.getHabitFromDbUseCase(habitDone.habitId)
-            _showToastHabitDone.value = Event(AddHabitDoneResult(habitItem, habitDoneIdAdded))
+            _showToastHabitDone.value = Event(
+                AddHabitDoneResult(
+                    habitItem = habitItem,
+                    habitDone = newHabitDone
+                )
+            )
+        }
+    }
+
+    fun addHabitDoneToCloud(habitDone: HabitDone) {
+        viewModelScope.launch {
             networkUseCase.postHabitDoneToApiUseCase(habitDone)
         }
     }

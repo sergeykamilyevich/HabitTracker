@@ -55,7 +55,6 @@ class NetworkHabitRepositoryImpl @Inject constructor(
 //        Log.d("OkHttp", "jsonObject = $jsonRequestBody")
         val requestBody = jsonRequestBody
             .toRequestBody("application/json".toMediaTypeOrNull())
-
         val response: Response<HabitUidApiModel>? = try {
             apiService.putHabit(habitItemApiModel = requestBody)
         } catch (e: Exception) {
