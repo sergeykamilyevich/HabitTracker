@@ -28,6 +28,10 @@ interface HabitItemDao {
     ): Flow<List<HabitItemWithDoneDbModel>>?
 
     @Transaction
+    @Query("SELECT * FROM habit_items")
+    suspend fun getUnfilteredList(): List<HabitItemWithDoneDbModel>?
+
+    @Transaction
     @Query("SELECT * FROM habit_items WHERE id = :habitItemId LIMIT 1")
     suspend fun getById(habitItemId: Int): HabitItemWithDoneDbModel?
 

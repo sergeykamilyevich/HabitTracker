@@ -25,6 +25,5 @@ class Time @Inject constructor() {
 
     companion object {
         const val MILLIS_IN_SECOND = 1000
-
     }
 }

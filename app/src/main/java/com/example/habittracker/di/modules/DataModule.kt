@@ -4,7 +4,9 @@ import android.util.Log
 import com.example.habittracker.data.network.HabitApi
 import dagger.Module
 import dagger.Provides
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -19,6 +21,12 @@ object DataModule {
             level = HttpLoggingInterceptor.Level.BODY
         }
         return OkHttpClient.Builder()
+            .addInterceptor { chain ->
+                val request = chain.request().newBuilder()
+                    .addHeader("Authorization", API_TOKEN)
+                    .build()
+                return@addInterceptor chain.proceed(request)
+            }
             .addInterceptor(interceptor)
             .build()
     }
@@ -40,4 +48,5 @@ object DataModule {
     }
 
     private const val BASE_URL = "https://droid-test-server.doubletapp.ru/"
+    private const val API_TOKEN = "05b550ee-1713-43f1-a842-9815d354460d"
 }

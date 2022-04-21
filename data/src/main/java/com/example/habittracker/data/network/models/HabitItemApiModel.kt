@@ -47,8 +47,6 @@ data class HabitItemApiModel(
         )
     }
 
-//    fun toJson():
-
     companion object {
         fun fromHabitItem(habitItem: HabitItem) = HabitItemApiModel(
             name = habitItem.name,

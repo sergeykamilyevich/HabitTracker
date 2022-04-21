@@ -128,5 +128,31 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/btn_priority_asc"
         app:layout_constraintTop_toBottomOf="@id/btn_creation_asc" />
+    <Button
+        android:id="@+id/btn_test"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:backgroundTint="@drawable/button_bg_color"
+        android:drawableEnd="@drawable/ic_baseline_north_20"
+        android:text="delete all from db"
+        android:textAllCaps="false"
+        android:textColor="@drawable/button_text_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_priority_asc" />
+    <Button
+        android:id="@+id/btn_test2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:backgroundTint="@drawable/button_bg_color"
+        android:drawableEnd="@drawable/ic_baseline_north_20"
+        android:text="delete all from cloud"
+        android:textAllCaps="false"
+        android:textColor="@drawable/button_text_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_test" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

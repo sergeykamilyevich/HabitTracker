@@ -70,6 +70,12 @@ class BottomSheetFragment : Fragment() {
                 viewModel.habitListFilter.value?.orderBy ?: HabitListOrderBy.NAME_ASC
             )
         }
+        binding.btnTest.setOnClickListener {
+            viewModel.deleteAllHabitsFromDb()
+        }
+        binding.btnTest2.setOnClickListener {
+            viewModel.deleteAllHabitsFromCloud()
+        }
     }
 
     private fun setCurrentButtonIsSelected(selectedButtonIndex: Int) {

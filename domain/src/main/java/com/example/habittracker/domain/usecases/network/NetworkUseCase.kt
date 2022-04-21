@@ -8,6 +8,7 @@ class NetworkUseCase @Inject constructor(
     val deleteHabitFromApiUseCase: DeleteHabitFromApiUseCase,
     val getHabitListFromApiUseCase: GetHabitListFromApiUseCase,
     val postHabitDoneToApiUseCase: PostHabitDoneToApiUseCase,
-    val putHabitToApiUseCase: PutHabitToApiUseCase
+    val putHabitToApiUseCase: PutHabitToApiUseCase,
+    val deleteAllHabitsFromApiUseCase: DeleteAllHabitsFromApiUseCase
 ) {
 }

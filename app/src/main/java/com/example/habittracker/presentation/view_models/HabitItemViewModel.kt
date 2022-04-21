@@ -31,6 +31,10 @@ class HabitItemViewModel @Inject constructor(
     val errorInputName: LiveData<Boolean>
         get() = _errorInputName
 
+    private val _errorInputDescription = MutableLiveData<Boolean>()
+    val errorInputDescription: LiveData<Boolean>
+        get() = _errorInputDescription
+
     private val _errorInputRecurrenceNumber = MutableLiveData<Boolean>()
     val errorInputRecurrenceNumber: LiveData<Boolean>
         get() = _errorInputRecurrenceNumber
@@ -146,6 +150,11 @@ class HabitItemViewModel @Inject constructor(
     fun validateName(input: Editable?) {
         val name = mapper.parseString(input)
         _errorInputName.value = !validateString(name)
+    }
+
+    fun validateDescription(input: Editable?) {
+        val name = mapper.parseString(input)
+        _errorInputDescription.value = !validateString(name)
     }
 
     fun validateRecurrenceNumber(input: Editable?) {

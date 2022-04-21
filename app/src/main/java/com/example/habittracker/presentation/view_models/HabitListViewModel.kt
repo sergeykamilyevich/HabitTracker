@@ -46,11 +46,24 @@ class HabitListViewModel @Inject constructor(
         }
     }
 
+    fun deleteAllHabitsFromCloud() {
+        viewModelScope.launch {
+            networkUseCase.deleteAllHabitsFromApiUseCase()
+        }
+    }
+
+    fun deleteAllHabitsFromDb() {
+        viewModelScope.launch {
+            dbUseCase.deleteAllHabitsFromDbUseCase()
+        }
+    }
+
     fun addHabitDone(habitDone: HabitDone) {
         viewModelScope.launch {
             val habitDoneIdAdded =  dbUseCase.addHabitDoneToDbUseCase(habitDone)
             val habitItem = dbUseCase.getHabitFromDbUseCase(habitDone.habitId)
             _showToastHabitDone.value = Event(AddHabitDoneResult(habitItem, habitDoneIdAdded))
+            networkUseCase.postHabitDoneToApiUseCase(habitDone)
         }
     }
 
@@ -78,7 +91,7 @@ class HabitListViewModel @Inject constructor(
     }
 
     fun fetchHabits() {
-        Log.d("99999", "start fetchHabits")
+        Log.d("OkHttp", "start fetchHabits")
         viewModelScope.launch {
             habitListFromApi = networkUseCase.getHabitListFromApiUseCase() ?: listOf()
             Log.d("OkHttp", "habitListFromApi ${habitListFromApi}")

@@ -1,6 +1,7 @@
 package com.example.habittracker.data.network
 
 import android.util.Log
+import com.example.habittracker.data.network.models.HabitDoneApiModel
 import com.example.habittracker.data.network.models.HabitItemApiModel
 import com.example.habittracker.data.network.models.HabitUidApiModel
 import com.example.habittracker.domain.models.HabitDone
@@ -18,19 +19,21 @@ class NetworkHabitRepositoryImpl @Inject constructor(
     private val apiService: HabitApi
 ) : NetworkHabitRepository {
     override suspend fun getHabitList(): List<HabitItem>? {
+        Log.d("OkHttp", "getHabitList start")
         val response: Response<List<HabitItemApiModel>>? = try {
+            Log.d("OkHttp", "response start")
             apiService.getHabitList()
         } catch (e: Exception) {
-            Log.d("99999", "error $e")
+            Log.d("OkHttp", "error $e")
             return null
         }
-//        Log.d("OkHttp", "response code ${response?.code()}")
-//        Log.d("OkHttp", "response errorBody ${response?.errorBody()}")
-//        Log.d("OkHttp", "response body ${response?.body()}")
+        Log.d("OkHttp", "response code ${response?.code()}")
+        Log.d("OkHttp", "response errorBody ${response?.errorBody()}")
+        Log.d("OkHttp", "response body ${response?.body()}")
         response?.let {
             if (response.isSuccessful) {
                 val responseBody = response.body()
-                Log.d("99999", "${response.body()}")
+                Log.d("OkHttp", "${response.body()}")
                 responseBody?.let {
                     return responseBody.map {
                         it.toHabitItem()
@@ -46,7 +49,7 @@ class NetworkHabitRepositoryImpl @Inject constructor(
     }
 
     override suspend fun putHabit(habitItem: HabitItem): String? {
-//        Log.d("OkHttp", "putHabit start")
+        Log.d("OkHttp", "putHabit start")
         val habitItemApiModel = HabitItemApiModel.fromHabitItem(habitItem)
         val jsonRequestBody = Gson().toJson(habitItemApiModel)
 //        Log.d("OkHttp", "jsonObject = $jsonRequestBody")
@@ -63,7 +66,7 @@ class NetworkHabitRepositoryImpl @Inject constructor(
         response?.let {
             if (response.isSuccessful) {
                 val responseBody = response.body()
-                Log.d("99999", "${response.body()}")
+                Log.d("OkHttp", "${response.body()}")
                 responseBody?.let {
                     return responseBody.uid
                 }
@@ -82,7 +85,7 @@ class NetworkHabitRepositoryImpl @Inject constructor(
         val jsonRequestBody = Gson().toJson(habitUidApiModel)
         val requestBody = jsonRequestBody
             .toRequestBody("application/json".toMediaTypeOrNull())
-        val response: Response<String>? = try {
+        val response: Response<Unit>? = try {
             apiService.deleteHabit(habitUidApiModel = requestBody)
         } catch (e: Exception) {
             Log.d("OkHttp", "error $e")
@@ -102,11 +105,42 @@ class NetworkHabitRepositoryImpl @Inject constructor(
             }
         }
         return null
-
-
     }
 
-    override suspend fun postHabitDone(habitDone: HabitDone) {
-        TODO("Not yet implemented")
+    override suspend fun postHabitDone(habitDone: HabitDone): String? {
+        Log.d("OkHttp", "postHabitDone start")
+        val habitDoneApiModel = HabitDoneApiModel.fromHabitDone(habitDone)
+        val jsonRequestBody = Gson().toJson(habitDoneApiModel)
+        Log.d("OkHttp", "jsonObject = $jsonRequestBody")
+        val requestBody = jsonRequestBody
+            .toRequestBody("application/json".toMediaTypeOrNull())
+        val response: Response<Unit>? = try {
+            apiService.postHabitDone(habitDoneApiModel = requestBody)
+        } catch (e: Exception) {
+            Log.d("OkHttp", "error $e")
+            null
+        }
+        Log.d("OkHttp", "response postHabitDone $response")
+        response?.let {
+            if (response.isSuccessful) {
+                val responseBody = response.body()
+                Log.d("OkHttp", "${response.body()}")
+                responseBody?.let {
+                    return ""
+                }
+            } else {
+                val rb = response.errorBody()
+                Log.d("OkHttp", "${rb}")
+            }
+
+        }
+        return null
+    }
+
+    override suspend fun deleteAllHabits() {
+        val habitList = getHabitList()
+        habitList?.forEach {
+            deleteHabit(it)
+        }
     }
 }

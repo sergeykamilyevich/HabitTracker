@@ -12,5 +12,7 @@ interface NetworkHabitRepository {
 
     suspend fun deleteHabit(habitItem: HabitItem): String?
 
-    suspend fun postHabitDone(habitDone: HabitDone)
+    suspend fun postHabitDone(habitDone: HabitDone): String?
+
+    suspend fun deleteAllHabits()
 }

@@ -2,6 +2,7 @@ package com.example.habittracker.data.db
 
 import android.app.Application
 import android.database.sqlite.SQLiteConstraintException
+import android.util.Log
 import com.example.habittracker.data.db.models.HabitDoneDbModel
 import com.example.habittracker.data.db.models.HabitItemDbModel
 import com.example.habittracker.data.db.models.HabitItemWithDoneDbModel
@@ -106,6 +107,14 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
 
     override suspend fun deleteHabit(habitItem: HabitItem) {
         habitItemDao.delete(habitItem.id)
+    }
+
+    override suspend fun deleteAllHabits() {
+        val habitList = habitItemDao.getUnfilteredList()
+        Log.d("99999", "$habitList")
+        habitList?.forEach {
+            deleteHabit(it.toHabitItem())
+        }
     }
 
     override suspend fun addHabitDone(habitDone: HabitDone): Int {
