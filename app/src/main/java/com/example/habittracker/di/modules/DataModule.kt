@@ -39,10 +39,7 @@ object DataModule {
     }
 
     @[Provides Singleton]
-    fun provideApiService(retrofit: Retrofit): HabitApi {
-        val habitApi = retrofit.create(HabitApi::class.java)
-        return habitApi
-    }
+    fun provideApiService(retrofit: Retrofit): HabitApi = retrofit.create(HabitApi::class.java)
 
     private const val BASE_URL = "https://droid-test-server.doubletapp.ru/"
     private const val API_TOKEN = "05b550ee-1713-43f1-a842-9815d354460d"
