@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.habittracker.domain.models.HabitItem
+import com.example.habittracker.domain.models.HabitPriority
 import com.example.habittracker.domain.models.HabitType
 
 @Entity(
@@ -27,6 +28,20 @@ data class HabitItemDbModel(
     @ColumnInfo(name = "uid")
     var apiUid: String
 ) {
+
+    fun toHabitItem(): HabitItem  = HabitItem(
+            name = name,
+            description = description,
+            priority = HabitPriority.getPriorityByPosition(priority),
+            type = type,
+            color = color,
+            recurrenceNumber = recurrenceNumber,
+            recurrencePeriod = recurrencePeriod,
+            apiUid = apiUid,
+            date = date,
+            id = id
+        )
+
     companion object {
         fun fromHabitItem(habitItem: HabitItem) = HabitItemDbModel(
             id = habitItem.id,
