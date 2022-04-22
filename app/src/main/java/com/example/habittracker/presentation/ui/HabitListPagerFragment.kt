@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.habittracker.R
 import com.example.habittracker.databinding.FragmentHabitListPagerBinding
-import com.example.habittracker.domain.models.HabitItem
+import com.example.habittracker.domain.models.Habit
 import com.example.habittracker.presentation.view_pager.ViewPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -55,7 +55,7 @@ class HabitListPagerFragment : Fragment(), HasTitle {
 
     private fun launchHabitItemActivityAddMode() {
         val destinationId = R.id.habitItemFragment
-        val args = HabitItemFragment.createArgs(HabitItem.UNDEFINED_ID)
+        val args = HabitItemFragment.createArgs(Habit.UNDEFINED_ID)
         findNavController().navigate(destinationId, args)
     }
 

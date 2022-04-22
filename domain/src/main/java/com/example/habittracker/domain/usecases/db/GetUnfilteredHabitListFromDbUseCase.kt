@@ -1,15 +1,14 @@
 package com.example.habittracker.domain.usecases.db
 
-import com.example.habittracker.domain.models.HabitDone
+import com.example.habittracker.domain.models.HabitWithDone
 import com.example.habittracker.domain.repositories.DbHabitRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AddHabitDoneToDbUseCase @Inject constructor(
+class GetUnfilteredHabitListFromDbUseCase @Inject constructor(
     private val dbHabitRepository: DbHabitRepository
-) { //TODO add dispatcher
+) {
 
-    suspend operator fun invoke(habitDone: HabitDone): Int =
-        dbHabitRepository.addHabitDone(habitDone)
+    suspend operator fun invoke(): List<HabitWithDone>? = dbHabitRepository.getUnfilteredList()
 }

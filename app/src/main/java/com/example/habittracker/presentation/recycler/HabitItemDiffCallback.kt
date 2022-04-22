@@ -1,16 +1,16 @@
 package com.example.habittracker.presentation.recycler
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.habittracker.domain.models.HabitItem
+import com.example.habittracker.domain.models.Habit
 
-class HabitItemDiffCallback : DiffUtil.ItemCallback<HabitItem>() {
+class HabitItemDiffCallback : DiffUtil.ItemCallback<Habit>() {
 
-    override fun areItemsTheSame(oldItem: HabitItem, newItem: HabitItem): Boolean {
-        return oldItem.id == newItem.id
+    override fun areItemsTheSame(old: Habit, aNew: Habit): Boolean {
+        return old.id == aNew.id
     }
 
-    override fun areContentsTheSame(oldItem: HabitItem, newItem: HabitItem): Boolean {
-        return oldItem == newItem
+    override fun areContentsTheSame(old: Habit, aNew: Habit): Boolean {
+        return old == aNew
     }
 
 }

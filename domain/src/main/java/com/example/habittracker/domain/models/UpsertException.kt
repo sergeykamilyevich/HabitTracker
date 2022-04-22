@@ -1,6 +1,6 @@
 package com.example.habittracker.domain.models
 
-sealed class UpsertException(private val message: String) {
+sealed class UpsertException(private val message: String) { //TODO rename to DbException
     fun message(): String = message
 }
 

@@ -1,7 +1,6 @@
 package com.example.habittracker.data.network.models
 
 import com.example.habittracker.domain.models.HabitDone
-import com.example.habittracker.domain.models.HabitItem
 import com.google.gson.annotations.SerializedName
 
 data class HabitDoneApiModel(
@@ -13,7 +12,7 @@ data class HabitDoneApiModel(
     companion object {
         fun fromHabitDone(habitDone: HabitDone) = HabitDoneApiModel(
             date = habitDone.date,
-            habitUid = habitDone.apiUid
+            habitUid = habitDone.habitUid
         )
     }
 }

@@ -5,8 +5,9 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.example.habittracker.di.annotations.MainActivityScope
 import com.example.habittracker.domain.models.*
+import com.example.habittracker.domain.usecases.common.SyncUseCase
 import com.example.habittracker.domain.usecases.db.DbUseCase
-import com.example.habittracker.domain.usecases.network.NetworkUseCase
+import com.example.habittracker.domain.usecases.network.CloudUseCase
 import com.example.habittracker.presentation.models.AddHabitDoneResult
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -14,7 +15,8 @@ import javax.inject.Inject
 @MainActivityScope
 class HabitListViewModel @Inject constructor(
     private val dbUseCase: DbUseCase,
-    private val networkUseCase: NetworkUseCase
+    private val cloudUseCase: CloudUseCase,
+    private val syncUseCase: SyncUseCase
 ) : ViewModel() {
 
     private val _habitListFilter = MutableLiveData<HabitListFilter>()
@@ -31,9 +33,9 @@ class HabitListViewModel @Inject constructor(
 
     private var currentHabitListFilter = HabitListFilter(HabitListOrderBy.NAME_ASC, "")
 
-    lateinit var habitList: LiveData<List<HabitItem>>
+    lateinit var habitList: LiveData<List<Habit>>
 
-    lateinit var habitListFromApi: List<HabitItem>
+    lateinit var habitListFromApi: List<Habit>
 
     fun blockHabitDoneButtons() {
         isHabitDoneButtonsBlocked = true
@@ -43,23 +45,23 @@ class HabitListViewModel @Inject constructor(
         isHabitDoneButtonsBlocked = false
     }
 
-    fun addHabitItem(habitItem: HabitItem) {
+    fun addHabitItem(habit: Habit) {
         viewModelScope.launch {
-            dbUseCase.upsertHabitToDbUseCase(habitItem)
-            networkUseCase.putHabitToApiUseCase(habitItem)
+            dbUseCase.upsertHabitToDbUseCase(habit)
+            cloudUseCase.putHabitToCloudUseCase(habit)
         }
     }
 
-    fun deleteHabitItem(habitItem: HabitItem) {
+    fun deleteHabitItem(habit: Habit) {
         viewModelScope.launch {
-            dbUseCase.deleteHabitFromDbUseCase(habitItem)
-            networkUseCase.deleteHabitFromApiUseCase(habitItem)
+            dbUseCase.deleteHabitFromDbUseCase(habit)
+            cloudUseCase.deleteHabitFromCloudUseCase(habit)
         }
     }
 
     fun deleteAllHabitsFromCloud() {
         viewModelScope.launch {
-            networkUseCase.deleteAllHabitsFromApiUseCase()
+            cloudUseCase.deleteAllHabitsFromCloudUseCase()
         }
     }
 
@@ -76,7 +78,7 @@ class HabitListViewModel @Inject constructor(
             val habitItem = dbUseCase.getHabitFromDbUseCase(habitDone.habitId)
             _showToastHabitDone.value = Event(
                 AddHabitDoneResult(
-                    habitItem = habitItem,
+                    habit = habitItem,
                     habitDone = newHabitDone
                 )
             )
@@ -85,7 +87,7 @@ class HabitListViewModel @Inject constructor(
 
     fun addHabitDoneToCloud(habitDone: HabitDone) {
         viewModelScope.launch {
-            networkUseCase.postHabitDoneToApiUseCase(habitDone)
+            cloudUseCase.postHabitDoneToCloudUseCase(habitDone)
         }
     }
 
@@ -115,8 +117,20 @@ class HabitListViewModel @Inject constructor(
     fun fetchHabits() {
         Log.d("OkHttp", "start fetchHabits")
         viewModelScope.launch {
-            habitListFromApi = networkUseCase.getHabitListFromApiUseCase() ?: listOf()
+            habitListFromApi = cloudUseCase.getHabitListFromCloudUseCase() ?: listOf()
             Log.d("OkHttp", "habitListFromApi ${habitListFromApi}")
+        }
+    }
+
+    fun uploadAllHabitsFromDbToCloud() {
+        viewModelScope.launch {
+            syncUseCase.syncAllToCloudUseCase()
+        }
+    }
+
+    fun downloadAllHabitsFromCloudToDb() {
+        viewModelScope.launch {
+            syncUseCase.syncAllFromCloudUseCase()
         }
     }
 

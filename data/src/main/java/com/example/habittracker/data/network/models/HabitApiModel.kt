@@ -1,12 +1,12 @@
 package com.example.habittracker.data.network.models
 
-import com.example.habittracker.domain.models.HabitItem
+import com.example.habittracker.domain.models.Habit
 import com.example.habittracker.domain.models.HabitPriority
-import com.example.habittracker.domain.models.Time
 import com.example.habittracker.domain.models.HabitType
+import com.example.habittracker.domain.models.Time
 import com.google.gson.annotations.SerializedName
 
-data class HabitItemApiModel(
+data class HabitApiModel(
     @SerializedName("color")
     val color: Int,
     @SerializedName("count")
@@ -28,12 +28,12 @@ data class HabitItemApiModel(
     @SerializedName("uid")
     val apiUid: String
 ) {
-    fun toHabitItem(): HabitItem {
+    fun toHabit(): Habit {
         val currentDate = Time().getCurrentUtcDateInInt()
         val upToDateHabitDoneDates = doneDates.filter {
             recurrencePeriod > (currentDate - it)
         }
-        return HabitItem(
+        return Habit(
             name = name,
             description = description,
             priority = HabitPriority.getPriorityById(priority),
@@ -42,22 +42,22 @@ data class HabitItemApiModel(
             recurrenceNumber = recurrenceNumber,
             recurrencePeriod = recurrencePeriod,
             done = upToDateHabitDoneDates.size,
-            apiUid = apiUid,
+            uid = apiUid,
             date = date
         )
     }
 
     companion object {
-        fun fromHabitItem(habitItem: HabitItem) = HabitItemApiModel(
-            name = habitItem.name,
-            description = habitItem.description,
-            priority = habitItem.priority.int,
-            type = habitItem.type.int,
-            color = habitItem.color,
-            recurrenceNumber = habitItem.recurrenceNumber,
-            recurrencePeriod = habitItem.recurrencePeriod,
-            date = habitItem.date,
-            apiUid = habitItem.apiUid
+        fun fromHabitItem(habit: Habit) = HabitApiModel(
+            name = habit.name,
+            description = habit.description,
+            priority = habit.priority.int,
+            type = habit.type.int,
+            color = habit.color,
+            recurrenceNumber = habit.recurrenceNumber,
+            recurrencePeriod = habit.recurrencePeriod,
+            date = habit.date,
+            apiUid = habit.uid
         )
     }
 }

@@ -1,7 +1,6 @@
 package com.example.habittracker.data.network
 
-import com.example.habittracker.data.network.models.HabitDoneApiModel
-import com.example.habittracker.data.network.models.HabitItemApiModel
+import com.example.habittracker.data.network.models.HabitApiModel
 import com.example.habittracker.data.network.models.HabitUidApiModel
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -12,7 +11,7 @@ interface HabitApi {
     @GET("api/habit")
     @Headers("content-type: application/json")
     suspend fun getHabitList(
-    ): Response<List<HabitItemApiModel>>
+    ): Response<List<HabitApiModel>>
 
     @PUT("api/habit")
     @Headers("content-type: application/json")

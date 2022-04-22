@@ -71,9 +71,9 @@ class MainActivity : AppCompatActivity() {
     private fun setupViewModel() {
         viewModel.showToastHabitDone.observe(this) {
             it.transferIfNotHandled()?.let { result ->
-                val habitType = result.habitItem.type
-                val habitDone = result.habitItem.done
-                val habitRecurrenceNumber = result.habitItem.recurrenceNumber
+                val habitType = result.habit.type
+                val habitDone = result.habit.done
+                val habitRecurrenceNumber = result.habit.recurrenceNumber
                 val differenceDone = abs(habitDone - habitRecurrenceNumber)
                 val differenceDoneTimes = resources.getQuantityString(
                     R.plurals.plurals_more_times,

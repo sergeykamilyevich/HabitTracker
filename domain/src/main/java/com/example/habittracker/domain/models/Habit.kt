@@ -1,6 +1,6 @@
 package com.example.habittracker.domain.models
 
-data class HabitItem(
+data class Habit(
     var name: String,
     var description: String,
     var priority: HabitPriority,
@@ -9,10 +9,12 @@ data class HabitItem(
     var recurrenceNumber: Int,
     var recurrencePeriod: Int,
     var done: Int = UNDONE,
-    var apiUid: String = EMPTY_UID, //TODO val or var?
+    var uid: String = EMPTY_UID, //TODO val or var?
     var date: Int = UNDEFINED_DATE,
     val id: Int = UNDEFINED_ID
 ) {
+
+    fun clearUid(): Habit = copy(uid = EMPTY_UID)
 
     companion object {
         const val UNDEFINED_ID = 0

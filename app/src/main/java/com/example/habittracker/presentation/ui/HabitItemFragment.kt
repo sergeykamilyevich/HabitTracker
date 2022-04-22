@@ -90,7 +90,7 @@ class HabitItemFragment : Fragment(), HasTitle {
     }
 
     private fun chooseScreenMode() {
-        if (habitItemId == HabitItem.UNDEFINED_ID) launchAddMode() else launchEditMode()
+        if (habitItemId == Habit.UNDEFINED_ID) launchAddMode() else launchEditMode()
     }
 
     private fun setupColorScrollView() {
@@ -184,7 +184,7 @@ class HabitItemFragment : Fragment(), HasTitle {
 
     private fun launchEditMode() {
         viewModel.getHabitItem(habitItemId)
-        viewModel.habitItem.observe(viewLifecycleOwner) {
+        viewModel.habit.observe(viewLifecycleOwner) {
             setupFields(it)
         }
         binding.btnSave.setOnClickListener {
@@ -217,20 +217,20 @@ class HabitItemFragment : Fragment(), HasTitle {
         }
     }
 
-    private fun setupFields(habitItem: HabitItem) {
+    private fun setupFields(habit: Habit) {
         with(binding) {
-            tiedName.setText(habitItem.name)
-            tiedDescription.setText(habitItem.description)
-            val habitPriorityApp = HabitPriorityApp.fromHabitPriority(habitItem.priority)
+            tiedName.setText(habit.name)
+            tiedDescription.setText(habit.description)
+            val habitPriorityApp = HabitPriorityApp.fromHabitPriority(habit.priority)
             val spinnerPosition = spinnerAdapter
                 .getPosition(getString(habitPriorityApp.resourceId))
             spinnerPriority.setSelection(spinnerPosition)
             val checkedRadioButtonId =
-                habitItemMapper.mapHabitTypeToRadioButton(habitItem.type, binding)
+                habitItemMapper.mapHabitTypeToRadioButton(habit.type, binding)
             radioGroup.check(checkedRadioButtonId)
-            tiedRecurrenceNumber.setText(habitItem.recurrenceNumber.toString())
-            tiedRecurrencePeriod.setText(habitItem.recurrencePeriod.toString())
-            setupColorViews(habitItem.color)
+            tiedRecurrenceNumber.setText(habit.recurrenceNumber.toString())
+            tiedRecurrencePeriod.setText(habit.recurrencePeriod.toString())
+            setupColorViews(habit.color)
         }
     }
 

@@ -7,24 +7,26 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.habittracker.domain.models.Either
-import com.example.habittracker.domain.models.HabitItem
+import com.example.habittracker.domain.models.Habit
 import com.example.habittracker.domain.models.Time
 import com.example.habittracker.domain.models.UpsertException
+import com.example.habittracker.domain.usecases.common.SyncUseCase
 import com.example.habittracker.domain.usecases.db.DbUseCase
-import com.example.habittracker.domain.usecases.network.NetworkUseCase
+import com.example.habittracker.domain.usecases.network.CloudUseCase
 import com.example.habittracker.presentation.mappers.HabitItemMapper
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class HabitItemViewModel @Inject constructor(
+    private val syncUseCase: SyncUseCase,
     private val dbUseCase: DbUseCase,
-    private val networkUseCase: NetworkUseCase,
+    private val cloudUseCase: CloudUseCase,
     private val mapper: HabitItemMapper,
     private val time: Time
 ) : ViewModel() {
 
-    private val _habitItem = MutableLiveData<HabitItem>()
-    val habitItem: LiveData<HabitItem>
+    private val _habitItem = MutableLiveData<Habit>()
+    val habit: LiveData<Habit>
         get() = _habitItem
 
     private val _errorInputName = MutableLiveData<Boolean>()
@@ -51,88 +53,66 @@ class HabitItemViewModel @Inject constructor(
     val upsertResult: LiveData<Event<Either<UpsertException, Int>>>
         get() = _upsertResult
 
-    fun addHabitItem(habitItem: HabitItem) {
+    fun addHabitItem(habit: Habit) {
         viewModelScope.launch {
-            val item = HabitItem(
-                name = habitItem.name,
-                description = habitItem.description,
-                priority = habitItem.priority,
-                type = habitItem.type,
-                color = habitItem.color,
-                recurrenceNumber = habitItem.recurrenceNumber,
-                recurrencePeriod = habitItem.recurrencePeriod,
+            val item = Habit(
+                name = habit.name,
+                description = habit.description,
+                priority = habit.priority,
+                type = habit.type,
+                color = habit.color,
+                recurrenceNumber = habit.recurrenceNumber,
+                recurrencePeriod = habit.recurrencePeriod,
                 date = time.getCurrentUtcDateInInt()
             )
             Log.d("OkHttp", "addHabitItem item $item")
-            val resultOfAdding: Either<UpsertException, Int> =
-                dbUseCase.upsertHabitToDbUseCase(item)
-            when (resultOfAdding) {
-                is Either.Success -> {
-                    closeItemFragment()
-                    val newHabitId = resultOfAdding.result
-                    Log.d("OkHttp", "newHabitId $newHabitId")
-                    val apiUid = networkUseCase.putHabitToApiUseCase(item)
-                    Log.d("OkHttp", "apiUid $apiUid")
-                    apiUid?.let {
-                        val newItemWithNewUid = item.copy(
-                            id = newHabitId,
-                            apiUid = apiUid
-                        )
-                        Log.d("OkHttp", "newItemWithNewUid $newItemWithNewUid")
-                        dbUseCase.upsertHabitToDbUseCase(newItemWithNewUid)
-                    }
-                }
-                is Either.Failure -> {
-                    _upsertResult.value = Event(resultOfAdding)
-                }
-            }
-//            showErrorOrCloseHabitItemScreenSuccessfully(resultOfAdding)
-
-
+            upsertHabit(item)
         }
     }
 
-    fun editHabitItem(habitItem: HabitItem) {
+    fun editHabitItem(habit: Habit) {
         _habitItem.value?.let { oldItem ->
-            Log.d("OkHttp", "habitItem $habitItem")
+            Log.d("OkHttp", "habit $habit")
             viewModelScope.launch {
-                val newItem = oldItem.copy(
-                    name = habitItem.name,
-                    description = habitItem.description,
-                    priority = habitItem.priority,
-                    type = habitItem.type,
-                    color = habitItem.color,
-                    recurrenceNumber = habitItem.recurrenceNumber,
-                    recurrencePeriod = habitItem.recurrencePeriod,
+                val item = oldItem.copy(
+                    name = habit.name,
+                    description = habit.description,
+                    priority = habit.priority,
+                    type = habit.type,
+                    color = habit.color,
+                    recurrenceNumber = habit.recurrenceNumber,
+                    recurrencePeriod = habit.recurrencePeriod,
                     date = time.getCurrentUtcDateInInt()
                 )
-                Log.d("OkHttp", "newItem $newItem")
-                when (val resultOfEditing = dbUseCase.upsertHabitToDbUseCase(newItem)) {
-                    is Either.Success -> {
-                        closeItemFragment()
-                        val newHabitId = resultOfEditing.result
-                        Log.d("OkHttp", "resultOfEditing $newHabitId")
-                        val apiUid = networkUseCase.putHabitToApiUseCase(newItem)
-                        Log.d("OkHttp", "editHabitItem apiUid $apiUid")
-                        apiUid?.let {
-                            val newItemWithNewUid = newItem.copy(
-                                apiUid = apiUid
-                            )
-                            Log.d("OkHttp", "newItemWithNewUid $newItemWithNewUid")
-                            dbUseCase.upsertHabitToDbUseCase(newItemWithNewUid)
-                        }
-                    }
-                    is Either.Failure -> {
-                        _upsertResult.value = Event(resultOfEditing)
-                    }
-                }
+                Log.d("OkHttp", "newItem $item")
+                upsertHabit(item)
             }
         }
     }
 
-    private fun showErrorOrCloseHabitItemScreenSuccessfully(result: Either<UpsertException, Int>) {
-        if (result is Either.Failure) {
-        } else {
+    private suspend fun upsertHabit(habit: Habit) {
+        val resultOfUpserting: Either<UpsertException, Int> =
+//            dbUseCase.upsertHabitToDbUseCase(habit)
+            syncUseCase.upsertAndPutHabitUseCase(habit)
+        when (resultOfUpserting) {
+            is Either.Success -> {
+                closeItemFragment()
+//                val newHabitId = resultOfUpserting.result
+//                Log.d("OkHttp", "newHabitId $newHabitId")
+//                val apiUid = cloudUseCase.putHabitToCloudUseCase(habit)
+//                Log.d("OkHttp", "apiUid $apiUid")
+//                apiUid?.let {
+//                    val newItemWithNewUid = habit.copy(
+//                        id = newHabitId,
+//                        apiUid = apiUid
+//                    )
+//                    Log.d("OkHttp", "newItemWithNewUid $newItemWithNewUid")
+//                    dbUseCase.upsertHabitToDbUseCase(newItemWithNewUid)
+//                }
+            }
+            is Either.Failure -> {
+                _upsertResult.value = Event(resultOfUpserting)
+            }
         }
     }
 

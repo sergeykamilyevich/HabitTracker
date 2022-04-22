@@ -8,13 +8,15 @@ interface DbHabitRepository {
     fun getHabitList(
         habitType: HabitType?,
         habitListFilter: HabitListFilter
-    ): Flow<List<HabitItem>>
+    ): Flow<List<Habit>>
 
-    suspend fun getHabitById(habitItemId: Int): HabitItem
+    suspend fun getUnfilteredList(): List<HabitWithDone>?
 
-    suspend fun upsertHabit(habitItem: HabitItem): Either<UpsertException, Int>
+    suspend fun getHabitById(habitItemId: Int): Habit
 
-    suspend fun deleteHabit(habitItem: HabitItem)
+    suspend fun upsertHabit(habit: Habit): Either<UpsertException, Int>
+
+    suspend fun deleteHabit(habit: Habit)
 
     suspend fun deleteAllHabits()
 

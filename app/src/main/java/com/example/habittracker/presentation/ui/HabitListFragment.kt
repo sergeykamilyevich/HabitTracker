@@ -17,7 +17,6 @@ import com.example.habittracker.presentation.models.HabitTypeApp
 import com.example.habittracker.presentation.recycler.HabitListAdapter
 import com.example.habittracker.presentation.view_models.HabitListViewModel
 import javax.inject.Inject
-import kotlin.random.Random
 
 
 class HabitListFragment : Fragment(), HasTitle {
@@ -100,7 +99,7 @@ class HabitListFragment : Fragment(), HasTitle {
                     HabitDone(
                         habitId = it.id,
                         date = time.getCurrentUtcDateInInt(),
-                        apiUid = it.apiUid
+                        habitUid = it.uid
                     )
                 )
             }
@@ -132,24 +131,24 @@ class HabitListFragment : Fragment(), HasTitle {
         itemTouchHelper.attachToRecyclerView(binding.rvHabitList)
     }
 
-    private fun createRandomHabits() {
-        for (i in 1..15) {
-            viewModel.addHabitItem(
-                HabitItem(
-                    "Name $i",
-                    "This habit is very important for my self-development",
-                    HabitPriority.NORMAL,
-                    HabitType.GOOD,
-                    colors[Random.nextInt(16)],
-                    Random.nextInt(10) + 1,
-                    Random.nextInt(30) + 1,
-                    date = time.getCurrentUtcDateInInt(),
-                    done = 0
-                )
-            )
-        }
-        R.string.low_priority
-    }
+//    private fun createRandomHabits() {
+//        for (i in 1..15) {
+//            viewModel.addHabitItem(
+//                Habit(
+//                    "Name $i",
+//                    "This habit is very important for my self-development",
+//                    HabitPriority.NORMAL,
+//                    HabitType.GOOD,
+//                    colors[Random.nextInt(16)],
+//                    Random.nextInt(10) + 1,
+//                    Random.nextInt(30) + 1,
+//                    date = time.getCurrentUtcDateInInt(),
+//                    done = 0
+//                )
+//            )
+//        }
+//        R.string.low_priority
+//    }
 
     private fun launchHabitItemActivityEditMode(habitItemId: Int) {
         val destinationId = R.id.habitItemFragment

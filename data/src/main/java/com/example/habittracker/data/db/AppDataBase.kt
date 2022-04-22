@@ -4,19 +4,19 @@ import android.app.Application
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.habittracker.data.db.models.HabitDbModel
 import com.example.habittracker.data.db.models.HabitDoneDbModel
-import com.example.habittracker.data.db.models.HabitItemDbModel
 
 @Database(
     entities = [
-        HabitItemDbModel::class,
+        HabitDbModel::class,
         HabitDoneDbModel::class
     ],
     version = 1
 )
 abstract class AppDataBase : RoomDatabase() {
 
-    abstract fun habitItemDao(): HabitItemDao
+    abstract fun habitItemDao(): HabitDao
     abstract fun habitDoneDao(): HabitDoneDao
 
     companion object {

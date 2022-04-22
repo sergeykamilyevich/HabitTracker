@@ -1,11 +1,12 @@
-package com.example.habittracker.data.db
+package com.example.habittracker.data.repositories
 
 import android.app.Application
 import android.database.sqlite.SQLiteConstraintException
 import android.util.Log
+import com.example.habittracker.data.db.AppDataBase
+import com.example.habittracker.data.db.models.HabitDbModel
 import com.example.habittracker.data.db.models.HabitDoneDbModel
-import com.example.habittracker.data.db.models.HabitItemDbModel
-import com.example.habittracker.data.db.models.HabitItemWithDoneDbModel
+import com.example.habittracker.data.db.models.HabitWithDoneDbModel
 import com.example.habittracker.domain.models.*
 import com.example.habittracker.domain.repositories.DbHabitRepository
 import kotlinx.coroutines.flow.Flow
@@ -22,7 +23,7 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
     override fun getHabitList(
         habitType: HabitType?,
         habitListFilter: HabitListFilter
-    ): Flow<List<HabitItem>> {
+    ): Flow<List<Habit>> {
         val habitTypeFilter =
             if (habitType == null) allHabitTypesToStringList()
             else listOf(habitType.toString())
@@ -33,20 +34,25 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
         )
             ?: throw RuntimeException("List of habits is empty")
         return listHabitItemWithDoneDbModel.map {
-            HabitItemWithDoneDbModel.mapDbModelListToHabitList(it)
+            HabitWithDoneDbModel.mapDbModelListToHabitList(it)
         }
     }
 
+    override suspend fun getUnfilteredList(): List<HabitWithDone>? =
+        habitItemDao.getUnfilteredList()?.map {
+            it.toHabitWithDone()
+        }
+
     private fun allHabitTypesToStringList() = HabitType.values().map { it.name }
 
-    override suspend fun getHabitById(habitItemId: Int): HabitItem {
+    override suspend fun getHabitById(habitItemId: Int): Habit {
         val habitItemWithDoneDbModel = habitItemDao.getById(habitItemId)
             ?: throw RuntimeException("Habit with id $habitItemId not found")
         return habitItemWithDoneDbModel.toHabitItem()
     }
 
-    override suspend fun upsertHabit(habitItem: HabitItem): Either<UpsertException, Int> {
-        val habitItemDbModel = HabitItemDbModel.fromHabitItem(habitItem)
+    override suspend fun upsertHabit(habit: Habit): Either<UpsertException, Int> {
+        val habitItemDbModel = HabitDbModel.fromHabitItem(habit)
         var result: Either<UpsertException, Int> =
             SqlException(DEFAULT_SQL_ERROR).failure()
         runCatching {
@@ -56,15 +62,15 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
                 return it.success()
             }
             .onFailure {
-                result = handleInsertException(it, habitItem, habitItemDbModel)
+                result = handleInsertException(it, habit, habitItemDbModel)
             }
         return result
     }
 
     private suspend fun handleInsertException(
         insertException: Throwable,
-        habitItem: HabitItem,
-        habitItemDbModel: HabitItemDbModel
+        habit: Habit,
+        habitDbModel: HabitDbModel
     ): Either<UpsertException, Int> {
         val insertExceptionMessage = insertException.message
         var result: Either<UpsertException, Int> =
@@ -72,17 +78,17 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
         if (insertException is SQLiteConstraintException && insertExceptionMessage != null) {
             when {
                 insertExceptionMessage.contains(UNIQUE_CONSTRAINT_MESSAGE) -> {
-                    result = HabitAlreadyExistsException(habitItem.name).failure()
+                    result = HabitAlreadyExistsException(habit.name).failure()
                 }
                 insertExceptionMessage.contains(PRIMARY_KEY_CONSTRAINT_MESSAGE) -> {
                     result = try {
-                        habitItemDao.update(habitItemDbModel)
+                        habitItemDao.update(habitDbModel)
                         ITEM_NOT_ADDED.success()
 //                    }
 //                        .onSuccess {
 //                            result =
                     } catch (updateException: Exception) {
-                        handleUpdateException(updateException, habitItem.name).failure()
+                        handleUpdateException(updateException, habit.name).failure()
                     }
 //                        .onFailure { updateException ->
 //                            result =
@@ -105,8 +111,8 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
         }
     }
 
-    override suspend fun deleteHabit(habitItem: HabitItem) {
-        habitItemDao.delete(habitItem.id)
+    override suspend fun deleteHabit(habit: Habit) {
+        habitItemDao.delete(habit.id)
     }
 
     override suspend fun deleteAllHabits() {

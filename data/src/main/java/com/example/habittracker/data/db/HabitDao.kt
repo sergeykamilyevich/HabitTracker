@@ -1,12 +1,12 @@
 package com.example.habittracker.data.db
 
 import androidx.room.*
-import com.example.habittracker.data.db.models.HabitItemDbModel
-import com.example.habittracker.data.db.models.HabitItemWithDoneDbModel
+import com.example.habittracker.data.db.models.HabitDbModel
+import com.example.habittracker.data.db.models.HabitWithDoneDbModel
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface HabitItemDao {
+interface HabitDao {
 
     @Transaction
     @Query(
@@ -25,21 +25,21 @@ interface HabitItemDao {
         habitTypeFilter: List<String>,
         orderBy: String,
         search: String
-    ): Flow<List<HabitItemWithDoneDbModel>>?
+    ): Flow<List<HabitWithDoneDbModel>>?
 
     @Transaction
     @Query("SELECT * FROM habit_items")
-    suspend fun getUnfilteredList(): List<HabitItemWithDoneDbModel>?
+    suspend fun getUnfilteredList(): List<HabitWithDoneDbModel>?
 
     @Transaction
     @Query("SELECT * FROM habit_items WHERE id = :habitItemId LIMIT 1")
-    suspend fun getById(habitItemId: Int): HabitItemWithDoneDbModel?
+    suspend fun getById(habitItemId: Int): HabitWithDoneDbModel?
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun insert(habitItemDbModel: HabitItemDbModel): Long
+    suspend fun insert(habitDbModel: HabitDbModel): Long
 
     @Update(onConflict = OnConflictStrategy.ABORT)
-    suspend fun update(habitItemDbModel: HabitItemDbModel)
+    suspend fun update(habitDbModel: HabitDbModel)
 
     @Query("DELETE FROM habit_items WHERE id = :habitItemId")
     suspend fun delete(habitItemId: Int)

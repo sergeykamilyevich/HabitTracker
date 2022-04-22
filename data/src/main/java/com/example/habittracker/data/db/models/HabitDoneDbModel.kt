@@ -8,7 +8,7 @@ import com.example.habittracker.domain.models.HabitDone
     indices = [Index("date")],
     foreignKeys = [
         ForeignKey(
-            entity = HabitItemDbModel::class,
+            entity = HabitDbModel::class,
             parentColumns = ["id"],
             childColumns = ["habit_id"],
             onDelete = ForeignKey.CASCADE,
@@ -23,7 +23,18 @@ data class HabitDoneDbModel(
     val habitId: Int,
     val date: Int
 ) {
+
+    fun toHabitDone(habitUid: String = EMPTY_STRING) = HabitDone(
+        habitId = habitId,
+        date = date,
+        habitUid = habitUid,
+        id = id,
+    )
+
     companion object {
+
+        private const val EMPTY_STRING = ""
+
         fun fromHabitDone(habitDone: HabitDone) = HabitDoneDbModel(
             id = habitDone.id,
             habitId = habitDone.habitId,

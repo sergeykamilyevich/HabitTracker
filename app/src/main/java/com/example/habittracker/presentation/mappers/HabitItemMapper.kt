@@ -7,7 +7,7 @@ import android.widget.RadioGroup
 import android.widget.Spinner
 import com.example.habittracker.databinding.FragmentHabitItemBinding
 import com.example.habittracker.di.annotations.MainActivityScope
-import com.example.habittracker.domain.models.HabitItem
+import com.example.habittracker.domain.models.Habit
 import com.example.habittracker.domain.models.HabitPriority
 import com.example.habittracker.domain.models.HabitType
 import com.example.habittracker.presentation.models.HabitPriorityApp
@@ -17,8 +17,8 @@ import javax.inject.Inject
 @MainActivityScope
 class HabitItemMapper @Inject constructor() {
 
-    fun mapViewToHabitItem(binding: FragmentHabitItemBinding): HabitItem = with(binding) {
-        HabitItem(
+    fun mapViewToHabitItem(binding: FragmentHabitItemBinding): Habit = with(binding) {
+        Habit(
             name = parseString(tiedName.text),
             description = parseString(tiedDescription.text),
             priority = mapSpinnerToHabitPriority(binding.spinnerPriority),

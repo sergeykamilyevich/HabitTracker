@@ -1,6 +1,6 @@
 package com.example.habittracker.domain.usecases.db
 
-import com.example.habittracker.domain.models.HabitItem
+import com.example.habittracker.domain.models.Habit
 import com.example.habittracker.domain.models.HabitListFilter
 import com.example.habittracker.domain.models.HabitType
 import com.example.habittracker.domain.repositories.DbHabitRepository
@@ -16,7 +16,5 @@ class GetHabitListFromDbUseCase @Inject constructor(
     operator fun invoke(
         habitTypeFilter: HabitType?,
         habitListFilter: HabitListFilter
-    ): Flow<List<HabitItem>> {
-        return dbHabitRepository.getHabitList(habitTypeFilter, habitListFilter)
-    }
+    ): Flow<List<Habit>> = dbHabitRepository.getHabitList(habitTypeFilter, habitListFilter)
 }

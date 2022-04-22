@@ -1,11 +1,12 @@
-package com.example.habittracker.data.network
+package com.example.habittracker.data.repositories
 
 import android.util.Log
+import com.example.habittracker.data.network.HabitApi
+import com.example.habittracker.data.network.models.HabitApiModel
 import com.example.habittracker.data.network.models.HabitDoneApiModel
-import com.example.habittracker.data.network.models.HabitItemApiModel
 import com.example.habittracker.data.network.models.HabitUidApiModel
+import com.example.habittracker.domain.models.Habit
 import com.example.habittracker.domain.models.HabitDone
-import com.example.habittracker.domain.models.HabitItem
 import com.example.habittracker.domain.repositories.NetworkHabitRepository
 import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -18,9 +19,9 @@ import javax.inject.Singleton
 class NetworkHabitRepositoryImpl @Inject constructor(
     private val apiService: HabitApi
 ) : NetworkHabitRepository {
-    override suspend fun getHabitList(): List<HabitItem>? {
+    override suspend fun getHabitList(): List<Habit>? {
         Log.d("OkHttp", "getHabitList start")
-        val response: Response<List<HabitItemApiModel>>? = try {
+        val response: Response<List<HabitApiModel>>? = try {
             Log.d("OkHttp", "response start")
             apiService.getHabitList()
         } catch (e: Exception) {
@@ -36,7 +37,7 @@ class NetworkHabitRepositoryImpl @Inject constructor(
                 Log.d("OkHttp", "${response.body()}")
                 responseBody?.let {
                     return responseBody.map {
-                        it.toHabitItem()
+                        it.toHabit()
                     }
                 }
             } else {
@@ -48,9 +49,9 @@ class NetworkHabitRepositoryImpl @Inject constructor(
         return null
     }
 
-    override suspend fun putHabit(habitItem: HabitItem): String? {
+    override suspend fun putHabit(habit: Habit): String? {
         Log.d("OkHttp", "putHabit start")
-        val habitItemApiModel = HabitItemApiModel.fromHabitItem(habitItem)
+        val habitItemApiModel = HabitApiModel.fromHabitItem(habit)
         val jsonRequestBody = Gson().toJson(habitItemApiModel)
 //        Log.d("OkHttp", "jsonObject = $jsonRequestBody")
         val requestBody = jsonRequestBody
@@ -78,9 +79,9 @@ class NetworkHabitRepositoryImpl @Inject constructor(
         return null
     }
 
-    override suspend fun deleteHabit(habitItem: HabitItem): String? {
+    override suspend fun deleteHabit(habit: Habit): String? {
         Log.d("OkHttp", "deleteHabit start")
-        val habitUidApiModel = HabitUidApiModel(uid = habitItem.apiUid)
+        val habitUidApiModel = HabitUidApiModel(uid = habit.uid)
         val jsonRequestBody = Gson().toJson(habitUidApiModel)
         val requestBody = jsonRequestBody
             .toRequestBody("application/json".toMediaTypeOrNull())
@@ -106,7 +107,7 @@ class NetworkHabitRepositoryImpl @Inject constructor(
         return null
     }
 
-    override suspend fun postHabitDone(habitDone: HabitDone): String? {
+    override suspend fun postHabitDone(habitDone: HabitDone): String? { //TODO change String to Either
         Log.d("OkHttp", "postHabitDone start")
         val habitDoneApiModel = HabitDoneApiModel.fromHabitDone(habitDone)
         val jsonRequestBody = Gson().toJson(habitDoneApiModel)

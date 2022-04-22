@@ -10,6 +10,7 @@ class DbUseCase @Inject constructor(
     val deleteHabitFromDbUseCase: DeleteHabitFromDbUseCase,
     val getHabitFromDbUseCase: GetHabitFromDbUseCase,
     val getHabitListFromDbUseCase: GetHabitListFromDbUseCase,
+    val getUnfilteredHabitListFromDbUseCase: GetUnfilteredHabitListFromDbUseCase,
     val upsertHabitToDbUseCase: UpsertHabitToDbUseCase,
     val deleteAllHabitsFromDbUseCase: DeleteAllHabitsFromDbUseCase
 )
