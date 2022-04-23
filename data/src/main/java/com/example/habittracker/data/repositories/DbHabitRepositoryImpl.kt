@@ -3,7 +3,7 @@ package com.example.habittracker.data.repositories
 import android.app.Application
 import android.database.sqlite.SQLiteConstraintException
 import android.util.Log
-import com.example.habittracker.data.db.AppDataBase
+import com.example.habittracker.data.db.room.AppDataBase
 import com.example.habittracker.data.db.models.HabitDbModel
 import com.example.habittracker.data.db.models.HabitDoneDbModel
 import com.example.habittracker.data.db.models.HabitWithDoneDbModel

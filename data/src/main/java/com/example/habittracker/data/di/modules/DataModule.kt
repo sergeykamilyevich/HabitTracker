@@ -1,6 +1,7 @@
-package com.example.habittracker.di.modules
+package com.example.habittracker.data.di.modules
 
-import com.example.habittracker.data.network.HabitApi
+import com.example.habittracker.data.network.retrofit.HabitApi
+import com.example.habittracker.data.network.retrofit.ApiInterceptor
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -10,21 +11,17 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module(includes = [DataAbstractModule::class])
-object DataModule {
+object DataModule { //TODO rename Network or Cloud
 
     @[Provides Singleton]
     fun provideOkHttpClient(): OkHttpClient {
-        val interceptor = HttpLoggingInterceptor().apply {
+        val loggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
+        val apiInterceptor = ApiInterceptor()
         return OkHttpClient.Builder()
-            .addInterceptor { chain ->
-                val request = chain.request().newBuilder()
-                    .addHeader("Authorization", API_TOKEN)
-                    .build()
-                return@addInterceptor chain.proceed(request)
-            }
-            .addInterceptor(interceptor)
+            .addInterceptor(apiInterceptor)
+            .addInterceptor(loggingInterceptor)
             .build()
     }
 
@@ -42,5 +39,5 @@ object DataModule {
     fun provideApiService(retrofit: Retrofit): HabitApi = retrofit.create(HabitApi::class.java)
 
     private const val BASE_URL = "https://droid-test-server.doubletapp.ru/"
-    private const val API_TOKEN = "05b550ee-1713-43f1-a842-9815d354460d"
+
 }

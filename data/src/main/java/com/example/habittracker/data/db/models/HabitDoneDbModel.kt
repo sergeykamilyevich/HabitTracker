@@ -24,7 +24,7 @@ data class HabitDoneDbModel(
     val date: Int
 ) {
 
-    fun toHabitDone(habitUid: String = EMPTY_STRING) = HabitDone(
+    fun toHabitDone(habitUid: String) = HabitDone(
         habitId = habitId,
         date = date,
         habitUid = habitUid,
@@ -32,8 +32,6 @@ data class HabitDoneDbModel(
     )
 
     companion object {
-
-        private const val EMPTY_STRING = ""
 
         fun fromHabitDone(habitDone: HabitDone) = HabitDoneDbModel(
             id = habitDone.id,

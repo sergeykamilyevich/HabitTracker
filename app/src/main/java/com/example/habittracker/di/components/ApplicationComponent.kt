@@ -1,7 +1,7 @@
 package com.example.habittracker.di.components
 
 import android.app.Application
-import com.example.habittracker.di.modules.DataModule
+import com.example.habittracker.data.di.modules.DataModule
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton

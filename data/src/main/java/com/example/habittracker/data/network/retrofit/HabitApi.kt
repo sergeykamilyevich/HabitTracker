@@ -1,4 +1,4 @@
-package com.example.habittracker.data.network
+package com.example.habittracker.data.network.retrofit
 
 import com.example.habittracker.data.network.models.HabitApiModel
 import com.example.habittracker.data.network.models.HabitUidApiModel

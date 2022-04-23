@@ -1,4 +1,4 @@
-package com.example.habittracker.di.modules
+package com.example.habittracker.data.di.modules
 
 import com.example.habittracker.data.repositories.DbHabitRepositoryImpl
 import com.example.habittracker.data.repositories.NetworkHabitRepositoryImpl

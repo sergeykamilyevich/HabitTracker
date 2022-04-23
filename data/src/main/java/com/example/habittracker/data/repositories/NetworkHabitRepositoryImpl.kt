@@ -1,7 +1,7 @@
 package com.example.habittracker.data.repositories
 
 import android.util.Log
-import com.example.habittracker.data.network.HabitApi
+import com.example.habittracker.data.network.retrofit.HabitApi
 import com.example.habittracker.data.network.models.HabitApiModel
 import com.example.habittracker.data.network.models.HabitDoneApiModel
 import com.example.habittracker.data.network.models.HabitUidApiModel
@@ -20,17 +20,12 @@ class NetworkHabitRepositoryImpl @Inject constructor(
     private val apiService: HabitApi
 ) : NetworkHabitRepository {
     override suspend fun getHabitList(): List<Habit>? {
-        Log.d("OkHttp", "getHabitList start")
         val response: Response<List<HabitApiModel>>? = try {
-            Log.d("OkHttp", "response start")
             apiService.getHabitList()
         } catch (e: Exception) {
             Log.d("OkHttp", "error $e")
             return null
         }
-        Log.d("OkHttp", "response code ${response?.code()}")
-        Log.d("OkHttp", "response errorBody ${response?.errorBody()}")
-        Log.d("OkHttp", "response body ${response?.body()}")
         response?.let {
             if (response.isSuccessful) {
                 val responseBody = response.body()
@@ -53,7 +48,6 @@ class NetworkHabitRepositoryImpl @Inject constructor(
         Log.d("OkHttp", "putHabit start")
         val habitItemApiModel = HabitApiModel.fromHabitItem(habit)
         val jsonRequestBody = Gson().toJson(habitItemApiModel)
-//        Log.d("OkHttp", "jsonObject = $jsonRequestBody")
         val requestBody = jsonRequestBody
             .toRequestBody("application/json".toMediaTypeOrNull())
         val response: Response<HabitUidApiModel>? = try {
@@ -132,7 +126,6 @@ class NetworkHabitRepositoryImpl @Inject constructor(
                 val rb = response.errorBody()
                 Log.d("OkHttp", "${rb}")
             }
-
         }
         return null
     }

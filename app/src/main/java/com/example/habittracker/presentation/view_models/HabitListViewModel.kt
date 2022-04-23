@@ -23,9 +23,9 @@ class HabitListViewModel @Inject constructor(
     val habitListFilter: LiveData<HabitListFilter>
         get() = _habitListFilter
 
-    private val _showToastHabitDone = MutableLiveData<Event<AddHabitDoneResult>>()
-    val showToastHabitDone: LiveData<Event<AddHabitDoneResult>>
-        get() = _showToastHabitDone
+    private val _showSnackbarHabitDone = MutableLiveData<Event<AddHabitDoneResult>>()
+    val showSnackbarHabitDone: LiveData<Event<AddHabitDoneResult>>
+        get() = _showSnackbarHabitDone
 
     var isHabitDoneButtonsBlocked: Boolean = false
         private set
@@ -76,7 +76,7 @@ class HabitListViewModel @Inject constructor(
             val habitDoneIdAdded = dbUseCase.addHabitDoneToDbUseCase(habitDone)
             val newHabitDone = habitDone.copy(id = habitDoneIdAdded)
             val habitItem = dbUseCase.getHabitFromDbUseCase(habitDone.habitId)
-            _showToastHabitDone.value = Event(
+            _showSnackbarHabitDone.value = Event(
                 AddHabitDoneResult(
                     habit = habitItem,
                     habitDone = newHabitDone

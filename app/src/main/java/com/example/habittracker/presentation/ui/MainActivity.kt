@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        viewModel.showToastHabitDone.observe(this) {
+        viewModel.showSnackbarHabitDone.observe(this) {
             it.transferIfNotHandled()?.let { result ->
                 val habitType = result.habit.type
                 val habitDone = result.habit.done
