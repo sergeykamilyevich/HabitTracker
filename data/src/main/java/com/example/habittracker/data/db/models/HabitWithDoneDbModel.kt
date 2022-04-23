@@ -18,7 +18,7 @@ data class HabitWithDoneDbModel(
     val habitDoneDbModel: List<HabitDoneDbModel>
 ) {
     fun toHabitItem(): Habit {
-        val currentDate = Time().getCurrentUtcDateInInt()
+        val currentDate = Time().currentUtcDateInSeconds()
         val upToDateHabitDoneDates = habitDoneDbModel.filter {
             habitDbModel.recurrencePeriod > (currentDate - it.date) / SECONDS_IN_DAY
         }

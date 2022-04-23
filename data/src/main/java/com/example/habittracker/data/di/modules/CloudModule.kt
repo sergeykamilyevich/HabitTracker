@@ -10,8 +10,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
-@Module(includes = [DataAbstractModule::class])
-object DataModule { //TODO rename Network or Cloud
+@Module
+object CloudModule {
 
     @[Provides Singleton]
     fun provideOkHttpClient(): OkHttpClient {

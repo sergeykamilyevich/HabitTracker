@@ -3,7 +3,7 @@ package com.example.habittracker.data.repositories
 import com.example.habittracker.domain.models.Either
 import com.example.habittracker.domain.models.Habit
 import com.example.habittracker.domain.models.HabitWithDone
-import com.example.habittracker.domain.models.UpsertException
+import com.example.habittracker.domain.models.DbException
 import com.example.habittracker.domain.repositories.DbHabitRepository
 import com.example.habittracker.domain.repositories.NetworkHabitRepository
 import com.example.habittracker.domain.repositories.SyncHabitRepository
@@ -34,7 +34,7 @@ class SyncHabitRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun upsertAndSyncWithCloud(habit: Habit): Either<UpsertException, Int> {
+    override suspend fun upsertAndSyncWithCloud(habit: Habit): Either<DbException, Int> {
         val resultOfUpserting = dbHabitRepository.upsertHabit(habit)
         if (resultOfUpserting is Either.Success) {
             val newHabitId = resultOfUpserting.result

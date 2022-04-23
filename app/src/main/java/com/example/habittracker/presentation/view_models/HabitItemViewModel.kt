@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.habittracker.domain.models.Either
 import com.example.habittracker.domain.models.Habit
 import com.example.habittracker.domain.models.Time
-import com.example.habittracker.domain.models.UpsertException
+import com.example.habittracker.domain.models.DbException
 import com.example.habittracker.domain.usecases.common.SyncUseCase
 import com.example.habittracker.domain.usecases.db.DbUseCase
 import com.example.habittracker.domain.usecases.network.CloudUseCase
@@ -49,8 +49,8 @@ class HabitItemViewModel @Inject constructor(
     val canCloseScreen: LiveData<Unit>
         get() = _canCloseScreen
 
-    private val _upsertResult = MutableLiveData<Event<Either<UpsertException, Int>>>()
-    val upsertResult: LiveData<Event<Either<UpsertException, Int>>>
+    private val _upsertResult = MutableLiveData<Event<Either<DbException, Int>>>()
+    val dbResult: LiveData<Event<Either<DbException, Int>>>
         get() = _upsertResult
 
     fun addHabitItem(habit: Habit) {
@@ -63,7 +63,7 @@ class HabitItemViewModel @Inject constructor(
                 color = habit.color,
                 recurrenceNumber = habit.recurrenceNumber,
                 recurrencePeriod = habit.recurrencePeriod,
-                date = time.getCurrentUtcDateInInt()
+                date = time.currentUtcDateInSeconds()
             )
             Log.d("OkHttp", "addHabitItem item $item")
             upsertHabit(item)
@@ -82,7 +82,7 @@ class HabitItemViewModel @Inject constructor(
                     color = habit.color,
                     recurrenceNumber = habit.recurrenceNumber,
                     recurrencePeriod = habit.recurrencePeriod,
-                    date = time.getCurrentUtcDateInInt()
+                    date = time.currentUtcDateInSeconds()
                 )
                 Log.d("OkHttp", "newItem $item")
                 upsertHabit(item)
@@ -91,7 +91,7 @@ class HabitItemViewModel @Inject constructor(
     }
 
     private suspend fun upsertHabit(habit: Habit) {
-        val resultOfUpserting: Either<UpsertException, Int> =
+        val resultOfUpserting: Either<DbException, Int> =
 //            dbUseCase.upsertHabitToDbUseCase(habit)
             syncUseCase.upsertAndPutHabitUseCase(habit)
         when (resultOfUpserting) {

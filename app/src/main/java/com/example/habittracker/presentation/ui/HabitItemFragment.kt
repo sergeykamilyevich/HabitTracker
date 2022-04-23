@@ -145,7 +145,7 @@ class HabitItemFragment : Fragment(), HasTitle {
         viewModel.errorInputDescription.observe(viewLifecycleOwner) {
             handleInputError(it, binding.tiedDescription)
         }
-        viewModel.upsertResult.observe(viewLifecycleOwner) {
+        viewModel.dbResult.observe(viewLifecycleOwner) {
             it.transferIfNotHandled()?.let { result ->
                 if (result is Either.Failure) {
                     val errorMessageFromRes = when (result.error) {

@@ -21,7 +21,7 @@ class HabitItemViewHolder(
         with(binding) {
             tvDescription.text = habit.description
             tvName.text = habit.name
-            tvDate.text = habitTime.mapUtcDateInIntToString(habit.date)
+            tvDate.text = habitTime.utcDateToString(habit.date)
             val habitTypeApp = HabitTypeApp.fromNonNullableHabitType(habit.type)
             tvType.text = root.resources.getString(habitTypeApp.resourceId)
             val habitPriorityApp = HabitPriorityApp.fromHabitPriority(habit.priority)

@@ -29,7 +29,7 @@ data class HabitApiModel(
     val apiUid: String
 ) {
     fun toHabit(): Habit {
-        val currentDate = Time().getCurrentUtcDateInInt()
+        val currentDate = Time().currentUtcDateInSeconds()
         val upToDateHabitDoneDates = doneDates.filter {
             recurrencePeriod > (currentDate - it)
         }

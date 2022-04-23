@@ -100,7 +100,7 @@ class HabitListFragment : Fragment(), HasTitle {
                 viewModel.addHabitDone(
                     HabitDone(
                         habitId = it.id,
-                        date = time.getCurrentUtcDateInInt(),
+                        date = time.currentUtcDateInSeconds(),
                         habitUid = it.uid
                     )
                 )

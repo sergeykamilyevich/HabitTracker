@@ -102,10 +102,9 @@ class NetworkHabitRepositoryImpl @Inject constructor(
     }
 
     override suspend fun postHabitDone(habitDone: HabitDone): String? { //TODO change String to Either
-        Log.d("OkHttp", "postHabitDone start")
         val habitDoneApiModel = HabitDoneApiModel.fromHabitDone(habitDone)
         val jsonRequestBody = Gson().toJson(habitDoneApiModel)
-        Log.d("OkHttp", "jsonObject = $jsonRequestBody")
+//        Log.d("OkHttp", "jsonObject = $jsonRequestBody")
         val requestBody = jsonRequestBody
             .toRequestBody("application/json".toMediaTypeOrNull())
         val response: Response<Unit>? = try {
