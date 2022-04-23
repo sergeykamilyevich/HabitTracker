@@ -9,14 +9,14 @@ import javax.inject.Singleton
 @Singleton
 class Time @Inject constructor() {
 
-    fun getCurrentUtcDateInInt(): Int {
+    fun currentUtcDateInSeconds(): Int {
         val currentMoment = Calendar.getInstance()
         val timeInMillis = currentMoment.timeInMillis
         val dateWithoutOffset = timeInMillis / MILLIS_IN_SECOND
         return dateWithoutOffset.toInt()
     }
 
-    fun mapUtcDateInIntToString(dateInSecond: Int): String {
+    fun utcDateToString(dateInSecond: Int): String {
         val timeInMillis = dateInSecond.toLong() * MILLIS_IN_SECOND
         val locale = Locale.getDefault()
         val sdf = SimpleDateFormat("dd-MM-yyyy", locale)
@@ -24,6 +24,6 @@ class Time @Inject constructor() {
     }
 
     companion object {
-        const val MILLIS_IN_SECOND = 1000
+        private const val MILLIS_IN_SECOND = 1000
     }
 }
