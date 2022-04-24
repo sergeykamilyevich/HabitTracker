@@ -1,16 +1,18 @@
 package com.example.habittracker.domain.usecases.network
 
+import com.example.habittracker.domain.models.CloudResponseError
+import com.example.habittracker.domain.models.Either
 import com.example.habittracker.domain.models.HabitDone
-import com.example.habittracker.domain.repositories.NetworkHabitRepository
+import com.example.habittracker.domain.repositories.CloudHabitRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class PostHabitDoneToCloudUseCase @Inject constructor(
-    private val networkHabitRepository: NetworkHabitRepository
+    private val cloudHabitRepository: CloudHabitRepository
     ) {
 
-    suspend operator fun invoke(habitDone: HabitDone): String? {
-        return networkHabitRepository.postHabitDone(habitDone)
+    suspend operator fun invoke(habitDone: HabitDone): Either<CloudResponseError, Unit> {
+        return cloudHabitRepository.postHabitDone(habitDone)
     }
 }

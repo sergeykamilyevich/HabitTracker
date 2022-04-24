@@ -145,24 +145,27 @@ class HabitItemFragment : Fragment(), HasTitle {
         viewModel.errorInputDescription.observe(viewLifecycleOwner) {
             handleInputError(it, binding.tiedDescription)
         }
-        viewModel.dbResult.observe(viewLifecycleOwner) {
+        viewModel.upsertError.observe(viewLifecycleOwner) {
             it.transferIfNotHandled()?.let { result ->
                 if (result is Either.Failure) {
-                    val errorMessageFromRes = when (result.error) {
-                        is HabitAlreadyExistsException -> R.string.habit_already_exists
-                        is SqlException -> R.string.sql_exception
-                        else -> throw RuntimeException("Unknown type of SQL upsert exception")
-                    }
-                    Toast.makeText(
-                        context, resources.getString(
-                            errorMessageFromRes,
-                            result.error.message()
-                        ), Toast.LENGTH_LONG
-                    ).show()
+                    showToastError(result)
                 }
-
             }
         }
+    }
+
+    private fun showToastError(result: Either.Failure<DbException, Int>) {
+        val errorMessageFromRes = when (result.error) {
+            is HabitAlreadyExistsException -> R.string.habit_already_exists
+            is SqlException -> R.string.sql_exception
+            else -> throw RuntimeException("Unknown type of SQL upsert exception")
+        }
+        Toast.makeText(
+            context, resources.getString(
+                errorMessageFromRes,
+                result.error.message()
+            ), Toast.LENGTH_LONG
+        ).show()
     }
 
     private fun launchAddMode() {

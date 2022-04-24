@@ -6,10 +6,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.habittracker.domain.models.DbException
 import com.example.habittracker.domain.models.Either
 import com.example.habittracker.domain.models.Habit
 import com.example.habittracker.domain.models.Time
-import com.example.habittracker.domain.models.DbException
 import com.example.habittracker.domain.usecases.common.SyncUseCase
 import com.example.habittracker.domain.usecases.db.DbUseCase
 import com.example.habittracker.domain.usecases.network.CloudUseCase
@@ -49,9 +49,9 @@ class HabitItemViewModel @Inject constructor(
     val canCloseScreen: LiveData<Unit>
         get() = _canCloseScreen
 
-    private val _upsertResult = MutableLiveData<Event<Either<DbException, Int>>>()
-    val dbResult: LiveData<Event<Either<DbException, Int>>>
-        get() = _upsertResult
+    private val _upsertError = MutableLiveData<Event<Either<DbException, Int>>>()
+    val upsertError: LiveData<Event<Either<DbException, Int>>>
+        get() = _upsertError
 
     fun addHabitItem(habit: Habit) {
         viewModelScope.launch {
@@ -92,26 +92,13 @@ class HabitItemViewModel @Inject constructor(
 
     private suspend fun upsertHabit(habit: Habit) {
         val resultOfUpserting: Either<DbException, Int> =
-//            dbUseCase.upsertHabitToDbUseCase(habit)
             syncUseCase.upsertAndPutHabitUseCase(habit)
         when (resultOfUpserting) {
             is Either.Success -> {
                 closeItemFragment()
-//                val newHabitId = resultOfUpserting.result
-//                Log.d("OkHttp", "newHabitId $newHabitId")
-//                val apiUid = cloudUseCase.putHabitToCloudUseCase(habit)
-//                Log.d("OkHttp", "apiUid $apiUid")
-//                apiUid?.let {
-//                    val newItemWithNewUid = habit.copy(
-//                        id = newHabitId,
-//                        apiUid = apiUid
-//                    )
-//                    Log.d("OkHttp", "newItemWithNewUid $newItemWithNewUid")
-//                    dbUseCase.upsertHabitToDbUseCase(newItemWithNewUid)
-//                }
             }
             is Either.Failure -> {
-                _upsertResult.value = Event(resultOfUpserting)
+                _upsertError.value = Event(resultOfUpserting)
             }
         }
     }

@@ -22,5 +22,5 @@ interface DbHabitRepository {
 
     suspend fun addHabitDone(habitDone: HabitDone): Int
 
-    suspend fun deleteHabitDone(habitDoneId: Int) //TODO protect against premature uploading habitdones to a cloud
+    suspend fun deleteHabitDone(habitDoneId: Int)
 }

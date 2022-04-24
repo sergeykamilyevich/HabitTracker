@@ -1,11 +1,8 @@
 package com.example.habittracker.data.repositories
 
-import com.example.habittracker.domain.models.Either
-import com.example.habittracker.domain.models.Habit
-import com.example.habittracker.domain.models.HabitWithDone
-import com.example.habittracker.domain.models.DbException
+import com.example.habittracker.domain.models.*
+import com.example.habittracker.domain.repositories.CloudHabitRepository
 import com.example.habittracker.domain.repositories.DbHabitRepository
-import com.example.habittracker.domain.repositories.NetworkHabitRepository
 import com.example.habittracker.domain.repositories.SyncHabitRepository
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -13,7 +10,7 @@ import javax.inject.Singleton
 @Singleton
 class SyncHabitRepositoryImpl @Inject constructor(
     private val dbHabitRepository: DbHabitRepository,
-    private val networkHabitRepository: NetworkHabitRepository
+    private val cloudHabitRepository: CloudHabitRepository
 ) : SyncHabitRepository {
 
     override suspend fun uploadAllToCloud(habitList: List<HabitWithDone>) {
@@ -24,12 +21,13 @@ class SyncHabitRepositoryImpl @Inject constructor(
                 habit = habitForUpload,
                 newHabitId = habitForUpload.id
             )
-            newUid?.let {
+            if (newUid is Either.Success) {
                 habitWithDone.habitDone.forEach { habitDone ->
                     println("habitItemWithDoneWithoutApiUid.habitDone $habitDone")
-                    val habitDoneWithNewUid = habitDone.copy(habitUid = it)
-                    networkHabitRepository.postHabitDone(habitDoneWithNewUid)
+                    val habitDoneWithNewUid = habitDone.copy(habitUid = newUid.result)
+                    cloudHabitRepository.postHabitDone(habitDoneWithNewUid)
                 }
+
             }
         }
     }
@@ -43,12 +41,15 @@ class SyncHabitRepositoryImpl @Inject constructor(
         return resultOfUpserting
     }
 
-    override suspend fun putAndSyncWithDb(habit: Habit, newHabitId: Int): String? {
-        val apiUid = networkHabitRepository.putHabit(habit)
-        apiUid?.let {
+    override suspend fun putAndSyncWithDb(
+        habit: Habit,
+        newHabitId: Int
+    ): Either<CloudResponseError, String> {
+        val apiUid = cloudHabitRepository.putHabit(habit)
+        if (apiUid is Either.Success) {
             val newItemWithNewUid = habit.copy(
                 id = newHabitId,
-                uid = apiUid
+                uid = apiUid.result
             )
             dbHabitRepository.upsertHabit(newItemWithNewUid)
         }
@@ -60,7 +61,7 @@ class SyncHabitRepositoryImpl @Inject constructor(
     }
 
     override suspend fun syncAllToCloud() {
-        networkHabitRepository.deleteAllHabits()
+        cloudHabitRepository.deleteAllHabits()
         val habitListWithDone = dbHabitRepository.getUnfilteredList()
         habitListWithDone?.let {
             uploadAllToCloud(habitListWithDone)

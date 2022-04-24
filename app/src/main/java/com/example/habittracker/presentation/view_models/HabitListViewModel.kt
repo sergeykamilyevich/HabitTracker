@@ -35,8 +35,6 @@ class HabitListViewModel @Inject constructor(
 
     lateinit var habitList: LiveData<List<Habit>>
 
-    lateinit var habitListFromApi: List<Habit>
-
     fun blockHabitDoneButtons() {
         isHabitDoneButtonsBlocked = true
     }
@@ -55,7 +53,7 @@ class HabitListViewModel @Inject constructor(
     fun deleteHabitItem(habit: Habit) {
         viewModelScope.launch {
             dbUseCase.deleteHabitFromDbUseCase(habit)
-            cloudUseCase.deleteHabitFromCloudUseCase(habit)
+            cloudUseCase.deleteHabitFromCloudUseCase.invoke(habit)
         }
     }
 
@@ -111,14 +109,16 @@ class HabitListViewModel @Inject constructor(
     fun updateFilter(input: Editable?) {
         currentHabitListFilter.search = input?.toString() ?: EMPTY_STRING
         _habitListFilter.value = currentHabitListFilter
-
     }
 
     fun fetchHabits() {
         Log.d("OkHttp", "start fetchHabits")
         viewModelScope.launch {
-            habitListFromApi = cloudUseCase.getHabitListFromCloudUseCase() ?: listOf()
-            Log.d("OkHttp", "habitListFromApi ${habitListFromApi}")
+            val habitList = cloudUseCase.getHabitListFromCloudUseCase.invoke()
+            when (habitList) {
+                is Either.Success -> Log.d("OkHttp", "habitListFromApi ${habitList.result}")
+                is Either.Failure -> Log.d("OkHttp", "habitListFromApi error ${habitList.error}")
+            }
         }
     }
 

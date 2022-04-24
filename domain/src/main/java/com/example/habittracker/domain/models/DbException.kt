@@ -1,6 +1,6 @@
 package com.example.habittracker.domain.models
 
-sealed class DbException(private val message: String) { //TODO rename to DbException
+sealed class DbException(private val message: String) {
     fun message(): String = message
 }
 

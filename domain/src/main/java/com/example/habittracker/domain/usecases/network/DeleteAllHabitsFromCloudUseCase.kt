@@ -1,13 +1,13 @@
 package com.example.habittracker.domain.usecases.network
 
-import com.example.habittracker.domain.repositories.NetworkHabitRepository
+import com.example.habittracker.domain.repositories.CloudHabitRepository
 import javax.inject.Inject
 
-class DeleteAllHabitsFromCloudUseCase @Inject constructor( //TODO rename Api to Cloud
-    private val networkHabitRepository: NetworkHabitRepository
+class DeleteAllHabitsFromCloudUseCase @Inject constructor(
+    private val cloudHabitRepository: CloudHabitRepository
     ) {
 
     suspend operator fun invoke() {
-        return networkHabitRepository.deleteAllHabits()
+        return cloudHabitRepository.deleteAllHabits()
     }
 }

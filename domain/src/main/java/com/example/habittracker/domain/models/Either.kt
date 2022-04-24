@@ -1,10 +1,10 @@
 package com.example.habittracker.domain.models
 
-sealed class Either<out L, out R> {
+sealed class Either<out F, out S> {
 
-    data class Failure<out L, out R>(val error: L) : Either<L, R>()
+    data class Failure<out F, out S>(val error: F) : Either<F, S>()
 
-    data class Success<out L, out R>(val result: R) : Either<L, R>()
+    data class Success<out F, out S>(val result: S) : Either<F, S>()
 
 }
 

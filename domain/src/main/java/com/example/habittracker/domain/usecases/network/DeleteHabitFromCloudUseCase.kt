@@ -1,14 +1,16 @@
 package com.example.habittracker.domain.usecases.network
 
+import com.example.habittracker.domain.models.CloudResponseError
+import com.example.habittracker.domain.models.Either
 import com.example.habittracker.domain.models.Habit
-import com.example.habittracker.domain.repositories.NetworkHabitRepository
+import com.example.habittracker.domain.repositories.CloudHabitRepository
 import javax.inject.Inject
 
-class DeleteHabitFromCloudUseCase @Inject constructor( //TODO rename Api to Cloud
-    private val networkHabitRepository: NetworkHabitRepository
+class DeleteHabitFromCloudUseCase @Inject constructor(
+    private val cloudHabitRepository: CloudHabitRepository
     ) {
 
-    suspend operator fun invoke(habit: Habit): String? {
-        return networkHabitRepository.deleteHabit(habit)
+    suspend operator fun invoke(habit: Habit): Either<CloudResponseError, Unit> {
+        return cloudHabitRepository.deleteHabit(habit)
     }
 }
