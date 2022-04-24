@@ -18,16 +18,9 @@ data class Habit(
 
     fun actualDoneListSize(): Int {
         val currentDate = Time().currentUtcDateInSeconds()
-        println("99999  currentDate ${currentDate}")
-        println("99999  recurrencePeriod ${recurrencePeriod}")
-        println("99999  done ${done}")
-
         val actualDoneList = done.filter {
             recurrencePeriod > (currentDate - it) / SECONDS_IN_DAY
         }
-        println("99999  actualDoneList ${actualDoneList}")
-        println("99999  actualDoneList.size ${actualDoneList.size}")
-
         return actualDoneList.size
 
     }
@@ -36,7 +29,6 @@ data class Habit(
         const val UNDEFINED_ID = 0
         const val UNDEFINED_DATE = 0
         const val SECONDS_IN_DAY = 24 * 60 * 60
-        //        const val UNDONE = 0
         const val EMPTY_UID = ""
     }
 }

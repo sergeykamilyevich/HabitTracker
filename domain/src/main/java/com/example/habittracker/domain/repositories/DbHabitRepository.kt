@@ -10,9 +10,9 @@ interface DbHabitRepository {
         habitListFilter: HabitListFilter
     ): Flow<List<Habit>>
 
-    suspend fun getUnfilteredList(): List<HabitWithDone>?
+    suspend fun getUnfilteredList(): List<Habit>? //TODO refactor to non-null
 
-    suspend fun getHabitById(habitItemId: Int): Habit
+    suspend fun getHabitById(habitItemId: Int): Habit //TODO to Either
 
     suspend fun upsertHabit(habit: Habit): Either<DbException, Int>
 

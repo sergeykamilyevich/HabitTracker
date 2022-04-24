@@ -4,8 +4,6 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import com.example.habittracker.domain.models.Habit
 import com.example.habittracker.domain.models.HabitPriority
-import com.example.habittracker.domain.models.HabitWithDone
-import com.example.habittracker.domain.models.Time
 
 data class HabitWithDoneDbModel(
     @Embedded
@@ -18,10 +16,6 @@ data class HabitWithDoneDbModel(
     val habitDoneDbModel: List<HabitDoneDbModel>
 ) {
     fun toHabit(): Habit {
-//        val currentDate = Time().currentUtcDateInSeconds()
-//        val upToDateHabitDoneDates = habitDoneDbModel.filter {
-//            habitDbModel.recurrencePeriod > (currentDate - it.date) / SECONDS_IN_DAY
-//        }
         return Habit(
             name = habitDbModel.name,
             description = habitDbModel.description,
@@ -37,20 +31,8 @@ data class HabitWithDoneDbModel(
         )
     }
 
-    fun toHabitWithDone(): HabitWithDone {
-        val apiUid = habitDbModel.apiUid
-        return HabitWithDone(
-            habit = habitDbModel.toHabit(),
-            habitDone = habitDoneDbModel.map {
-                it.toHabitDone(habitUid = apiUid)
-            }
-        )
-    }
-
-
     companion object {
 
-        const val SECONDS_IN_DAY = 24 * 60 * 60
         fun toHabitList(list: List<HabitWithDoneDbModel>) = list.map {
             it.toHabit()
         }

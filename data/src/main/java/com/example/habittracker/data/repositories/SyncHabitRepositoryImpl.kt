@@ -13,18 +13,21 @@ class SyncHabitRepositoryImpl @Inject constructor(
     private val cloudHabitRepository: CloudHabitRepository
 ) : SyncHabitRepository {
 
-    override suspend fun uploadAllToCloud(habitList: List<HabitWithDone>) {
-        habitList.forEach { habitWithDone ->
-            val habitForUpload =
-                habitWithDone.habit.clearUid()
+    override suspend fun uploadAllToCloud(habitList: List<Habit>) {
+        habitList.forEach { habit ->
+            val habitForUpload = habit.clearUid()
             val newUid = putAndSyncWithDb(
                 habit = habitForUpload,
                 newHabitId = habitForUpload.id
             )
             if (newUid is Either.Success) {
-                habitWithDone.habitDone.forEach { habitDone ->
-                    println("habitItemWithDoneWithoutApiUid.habitDone $habitDone")
-                    val habitDoneWithNewUid = habitDone.copy(habitUid = newUid.result)
+                habit.done.forEach { date ->
+//                    println("habitItemWithDoneWithoutApiUid.habitDone $habitDone")
+                    val habitDoneWithNewUid = HabitDone(
+                        habitUid = newUid.result,
+                        date = date
+                    )
+//                        habitDone.copy(habitUid = newUid.result)
                     cloudHabitRepository.postHabitDone(habitDoneWithNewUid)
                 }
 
@@ -71,9 +74,9 @@ class SyncHabitRepositoryImpl @Inject constructor(
 
     override suspend fun syncAllToCloud() {
         cloudHabitRepository.deleteAllHabits()
-        val habitListWithDone = dbHabitRepository.getUnfilteredList()
-        habitListWithDone?.let {
-            uploadAllToCloud(habitListWithDone)
+        val habitList = dbHabitRepository.getUnfilteredList()
+        habitList?.let {
+            uploadAllToCloud(habitList)
         }
     }
 }

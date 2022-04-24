@@ -1,10 +1,10 @@
 package com.example.habittracker.data.repositories
 
 import android.util.Log
-import com.example.habittracker.data.network.retrofit.HabitApi
 import com.example.habittracker.data.network.models.HabitApiModel
 import com.example.habittracker.data.network.models.HabitDoneApiModel
 import com.example.habittracker.data.network.models.HabitUidApiModel
+import com.example.habittracker.data.network.retrofit.HabitApi
 import com.example.habittracker.domain.models.*
 import com.example.habittracker.domain.repositories.CloudHabitRepository
 import com.google.gson.Gson
@@ -34,50 +34,18 @@ class CloudHabitRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getHabitWithDoneList(): Either<CloudResponseError, List<HabitWithDone>> {
-        val response: Response<List<HabitApiModel>> = apiService.getHabitList()
-        return if (response.isSuccessful) {
-            val responseBody = response.body()
-                ?: return CloudResponseError(message = "Unknown server error").failure()
-            responseBody.map {
-                it.toHabitWithDone()
-            }.success()
-        } else {
-            val code = response.code()
-            val message = response.message()
-            CloudResponseError(code, message).failure()
-        }
-    }
-
-//        response?.let {
-//            if (response.isSuccessful) {
-//                val responseBody = response.body()
-//                Log.d("OkHttp", "${response.body()}")
-//                responseBody?.let {
-//                    return responseBody.map {
-//                        it.toHabit()
-//                    }
-//                }
-//            } else {
-//                val rb = response.errorBody()
-//                Log.d("OkHttp", "${rb}")
-//            }
-//
-//        }
-//        return null
-//    }
-
     override suspend fun putHabit(habit: Habit): Either<CloudResponseError, String> {
         Log.d("OkHttp", "putHabit start")
         val habitItemApiModel = HabitApiModel.fromHabitItem(habit)
         val jsonRequestBody = Gson().toJson(habitItemApiModel)
         val requestBody = jsonRequestBody
             .toRequestBody("application/json".toMediaTypeOrNull())
-        val response: Response<HabitUidApiModel> = apiService.putHabit(habitItemApiModel = requestBody)
+        val response: Response<HabitUidApiModel> =
+            apiService.putHabit(habitItemApiModel = requestBody)
         return if (response.isSuccessful) {
             val responseBody = response.body()
                 ?: return CloudResponseError(message = "Unknown server error").failure()
-                responseBody.uid.success()
+            responseBody.uid.success()
         } else {
             val code = response.code()
             val message = response.message()
@@ -107,7 +75,7 @@ class CloudHabitRepositoryImpl @Inject constructor(
             .toRequestBody("application/json".toMediaTypeOrNull())
         val response: Response<Unit> = apiService.postHabitDone(habitDoneApiModel = requestBody)
         return if (response.isSuccessful) {
-             Unit.success()
+            Unit.success()
         } else {
             val code = response.code()
             val message = response.message()

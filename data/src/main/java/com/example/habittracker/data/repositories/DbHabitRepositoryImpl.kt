@@ -2,10 +2,10 @@ package com.example.habittracker.data.repositories
 
 import android.app.Application
 import android.database.sqlite.SQLiteConstraintException
-import com.example.habittracker.data.db.room.AppDataBase
 import com.example.habittracker.data.db.models.HabitDbModel
 import com.example.habittracker.data.db.models.HabitDoneDbModel
 import com.example.habittracker.data.db.models.HabitWithDoneDbModel
+import com.example.habittracker.data.db.room.AppDataBase
 import com.example.habittracker.domain.models.*
 import com.example.habittracker.domain.repositories.DbHabitRepository
 import kotlinx.coroutines.flow.Flow
@@ -37,9 +37,9 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
         }
     }
 
-    override suspend fun getUnfilteredList(): List<HabitWithDone>? =
+    override suspend fun getUnfilteredList(): List<Habit>? =
         habitItemDao.getUnfilteredList()?.map {
-            it.toHabitWithDone()
+            it.toHabit()
         }
 
     private fun allHabitTypesToStringList() = HabitType.values().map { it.name }
@@ -85,7 +85,7 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
                     }
                         .onSuccess {
                             result = ITEM_NOT_ADDED.success()
-                    }
+                        }
                         .onFailure { updateException ->
                             result = handleUpdateException(updateException, habit.name).failure()
                         }

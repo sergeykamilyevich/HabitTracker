@@ -4,9 +4,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SyncUseCase  @Inject constructor(
+class SyncUseCase @Inject constructor(
     val syncAllFromCloudUseCase: SyncAllFromCloudUseCase,
     val syncAllToCloudUseCase: SyncAllToCloudUseCase,
-//    val uploadAllToCloudUseCase: UploadAllToCloudUseCase,
     val upsertAndPutHabitUseCase: UpsertAndPutHabitUseCase
 )

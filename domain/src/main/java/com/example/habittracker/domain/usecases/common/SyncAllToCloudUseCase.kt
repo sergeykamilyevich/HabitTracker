@@ -12,11 +12,11 @@ class SyncAllToCloudUseCase @Inject constructor(
 
     suspend operator fun invoke() {
         cloudUseCase.deleteAllHabitsFromCloudUseCase()
-        val habitListWithDone = dbUseCase.getUnfilteredHabitListFromDbUseCase()
-        println("habitListWithDone $habitListWithDone")
-        habitListWithDone?.let {
-            println("habitWithDone $it")
-            uploadAllToCloudUseCase(habitListWithDone)
+        val habitList = dbUseCase.getUnfilteredHabitListFromDbUseCase.invoke()
+        println("habitLis $habitList")
+        habitList?.let {
+            println("habit $it")
+            uploadAllToCloudUseCase(habitList)
         }
     }
 }

@@ -10,7 +10,7 @@ import javax.inject.Singleton
 @Singleton
 class PostHabitDoneToCloudUseCase @Inject constructor(
     private val cloudHabitRepository: CloudHabitRepository
-    ) {
+) {
 
     suspend operator fun invoke(habitDone: HabitDone): Either<CloudResponseError, Unit> {
         return cloudHabitRepository.postHabitDone(habitDone)

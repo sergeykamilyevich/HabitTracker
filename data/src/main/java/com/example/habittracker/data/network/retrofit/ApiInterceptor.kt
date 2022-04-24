@@ -27,7 +27,10 @@ class ApiInterceptor : Interceptor {
                     responseIsSuccess = true
                 }
             } catch (e: Exception) {
-                Log.e("Okhttp", "Response exception: $e for request: $request") //TODO send toast to user
+                Log.e(
+                    "Okhttp",
+                    "Response exception: $e for request: $request"
+                ) //TODO send toast to user
                 delayForRetryRequest.sleep()
             }
         } while (!responseIsSuccess && delayForRetryRequest.retryCount < MAX_COUNT_RETRY)

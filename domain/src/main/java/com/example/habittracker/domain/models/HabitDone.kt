@@ -1,7 +1,7 @@
 package com.example.habittracker.domain.models
 
 data class HabitDone(
-    val habitId: Int,
+    val habitId: Int = UNDEFINED_ID,
     val date: Int,
     val habitUid: String,
     val id: Int = UNDEFINED_ID

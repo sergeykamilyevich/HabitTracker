@@ -1,7 +1,7 @@
 package com.example.habittracker.data.di.modules
 
-import com.example.habittracker.data.network.retrofit.HabitApi
 import com.example.habittracker.data.network.retrofit.ApiInterceptor
+import com.example.habittracker.data.network.retrofit.HabitApi
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient

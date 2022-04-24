@@ -1,9 +1,7 @@
 package com.example.habittracker.domain.usecases.common
 
-import com.example.habittracker.domain.models.HabitWithDone
-import com.example.habittracker.domain.repositories.CloudHabitRepository
+import com.example.habittracker.domain.models.Habit
 import com.example.habittracker.domain.repositories.SyncHabitRepository
-import com.example.habittracker.domain.usecases.network.PostHabitDoneToCloudUseCase
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -12,7 +10,7 @@ class UploadAllToCloudUseCase @Inject constructor(
     private val syncHabitRepository: SyncHabitRepository,
 ) {
 
-    suspend operator fun invoke(habitList: List<HabitWithDone>) {
+    suspend operator fun invoke(habitList: List<Habit>) {
         syncHabitRepository.uploadAllToCloud(habitList)
     }
 }

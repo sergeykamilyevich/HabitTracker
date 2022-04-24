@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class DeleteHabitFromCloudUseCase @Inject constructor(
     private val cloudHabitRepository: CloudHabitRepository
-    ) {
+) {
 
     suspend operator fun invoke(habit: Habit): Either<CloudResponseError, Unit> {
         return cloudHabitRepository.deleteHabit(habit)

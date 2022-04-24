@@ -9,12 +9,12 @@
         android:id="@+id/habitListFragment"
         android:name="com.example.habittracker.presentation.ui.HabitListFragment"
         android:label="fragment_habit_list"
-        tools:layout="@layout/fragment_habit_list"/>
+        tools:layout="@layout/fragment_habit_list" />
     <fragment
         android:id="@+id/habitItemFragment"
         android:name="com.example.habittracker.presentation.ui.HabitItemFragment"
         android:label="fragment_habit_item"
-        tools:layout="@layout/fragment_habit_item"/>
+        tools:layout="@layout/fragment_habit_item" />
     <fragment
         android:id="@+id/aboutFragment"
         android:name="com.example.habittracker.presentation.ui.AboutFragment"

@@ -1,14 +1,14 @@
 package com.example.habittracker.domain.repositories
 
-import com.example.habittracker.domain.models.*
+import com.example.habittracker.domain.models.CloudResponseError
+import com.example.habittracker.domain.models.Either
+import com.example.habittracker.domain.models.Habit
+import com.example.habittracker.domain.models.HabitDone
 
 interface CloudHabitRepository {
 
     suspend fun getHabitList(
     ): Either<CloudResponseError, List<Habit>>
-
-    suspend fun getHabitWithDoneList(
-    ): Either<CloudResponseError, List<HabitWithDone>>
 
     suspend fun putHabit(habit: Habit): Either<CloudResponseError, String>
 

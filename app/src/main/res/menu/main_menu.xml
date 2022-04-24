@@ -5,7 +5,7 @@
         android:id="@+id/menu_upload"
         android:icon="@drawable/ic_baseline_cloud_upload_24"
         android:title="@string/upload_habits_to_server"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
     <item
         android:id="@+id/menu_download"
         android:icon="@drawable/ic_baseline_cloud_download_24"

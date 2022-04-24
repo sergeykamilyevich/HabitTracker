@@ -128,6 +128,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/btn_priority_asc"
         app:layout_constraintTop_toBottomOf="@id/btn_creation_asc" />
+
     <Button
         android:id="@+id/btn_test"
         android:layout_width="0dp"
@@ -141,6 +142,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_priority_asc" />
+
     <Button
         android:id="@+id/btn_test2"
         android:layout_width="0dp"

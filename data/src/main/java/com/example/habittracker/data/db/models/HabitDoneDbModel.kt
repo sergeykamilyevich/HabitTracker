@@ -39,7 +39,7 @@ data class HabitDoneDbModel(
             date = habitDone.date
         )
 
-        fun toDoneList(list: List<HabitDoneDbModel>) = list.map{
+        fun toDoneList(list: List<HabitDoneDbModel>) = list.map {
             it.date
         }
     }
