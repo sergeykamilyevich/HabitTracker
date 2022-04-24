@@ -1,9 +1,7 @@
 package com.example.habittracker.data.network.models
 
-import com.example.habittracker.domain.models.Habit
-import com.example.habittracker.domain.models.HabitPriority
-import com.example.habittracker.domain.models.HabitType
-import com.example.habittracker.domain.models.Time
+import com.example.habittracker.data.db.models.HabitDoneDbModel
+import com.example.habittracker.domain.models.*
 import com.google.gson.annotations.SerializedName
 
 data class HabitApiModel(
@@ -29,10 +27,10 @@ data class HabitApiModel(
     val apiUid: String
 ) {
     fun toHabit(): Habit {
-        val currentDate = Time().currentUtcDateInSeconds()
-        val upToDateHabitDoneDates = doneDates.filter {
-            recurrencePeriod > (currentDate - it)
-        }
+//        val currentDate = Time().currentUtcDateInSeconds()
+//        val upToDateHabitDoneDates = doneDates.filter {
+//            recurrencePeriod > (currentDate - it)
+//        }
         return Habit(
             name = name,
             description = description,
@@ -41,13 +39,38 @@ data class HabitApiModel(
             color = color,
             recurrenceNumber = recurrenceNumber,
             recurrencePeriod = recurrencePeriod,
-            done = upToDateHabitDoneDates.size,
+            done = doneDates,
             uid = apiUid,
             date = date
         )
     }
 
+    fun toHabitWithDone(): HabitWithDone {
+        val habit = Habit(
+            name = name,
+            description = description,
+            priority = HabitPriority.getPriorityById(priority),
+            type = HabitType.getTypeById(type),
+            color = color,
+            recurrenceNumber = recurrenceNumber,
+            recurrencePeriod = recurrencePeriod,
+            uid = apiUid,
+            date = date
+        )
+        val habitDone = doneDates.map {
+            HabitDone(
+                habitId = UNDEFINED_ID,
+                date = it,
+                habitUid = apiUid
+            )
+        }
+        return HabitWithDone(habit = habit, habitDone = habitDone)
+    }
+
     companion object {
+
+        private const val UNDEFINED_ID = 0
+
         fun fromHabitItem(habit: Habit) = HabitApiModel(
             name = habit.name,
             description = habit.description,

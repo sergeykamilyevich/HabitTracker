@@ -17,11 +17,11 @@ data class HabitWithDoneDbModel(
     )
     val habitDoneDbModel: List<HabitDoneDbModel>
 ) {
-    fun toHabitItem(): Habit {
-        val currentDate = Time().currentUtcDateInSeconds()
-        val upToDateHabitDoneDates = habitDoneDbModel.filter {
-            habitDbModel.recurrencePeriod > (currentDate - it.date) / SECONDS_IN_DAY
-        }
+    fun toHabit(): Habit {
+//        val currentDate = Time().currentUtcDateInSeconds()
+//        val upToDateHabitDoneDates = habitDoneDbModel.filter {
+//            habitDbModel.recurrencePeriod > (currentDate - it.date) / SECONDS_IN_DAY
+//        }
         return Habit(
             name = habitDbModel.name,
             description = habitDbModel.description,
@@ -30,7 +30,7 @@ data class HabitWithDoneDbModel(
             color = habitDbModel.color,
             recurrenceNumber = habitDbModel.recurrenceNumber,
             recurrencePeriod = habitDbModel.recurrencePeriod,
-            done = upToDateHabitDoneDates.size,
+            done = HabitDoneDbModel.toDoneList(habitDoneDbModel),
             uid = habitDbModel.apiUid,
             date = habitDbModel.date,
             id = habitDbModel.id
@@ -51,8 +51,8 @@ data class HabitWithDoneDbModel(
     companion object {
 
         const val SECONDS_IN_DAY = 24 * 60 * 60
-        fun mapDbModelListToHabitList(list: List<HabitWithDoneDbModel>) = list.map {
-            it.toHabitItem()
+        fun toHabitList(list: List<HabitWithDoneDbModel>) = list.map {
+            it.toHabit()
         }
     }
 }

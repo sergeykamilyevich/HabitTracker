@@ -1,5 +1,6 @@
 package com.example.habittracker.presentation.recycler
 
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habittracker.R
 import com.example.habittracker.databinding.ItemHabitBinding
@@ -42,9 +43,13 @@ class HabitItemViewHolder(
                 recurrencePeriod,
                 recurrencePeriod
             )
+            Log.d("99999", "habit $habit")
+            Log.d("99999", "habit.actualDoneListSize() ${habit.actualDoneListSize()}")
+
+
             tvRecurrence.text = root.resources.getString(
                 R.string.recurrence,
-                habit.done,
+                habit.actualDoneListSize(),
                 recurrenceTimes,
                 recurrenceDays
             )

@@ -7,6 +7,9 @@ interface CloudHabitRepository {
     suspend fun getHabitList(
     ): Either<CloudResponseError, List<Habit>>
 
+    suspend fun getHabitWithDoneList(
+    ): Either<CloudResponseError, List<HabitWithDone>>
+
     suspend fun putHabit(habit: Habit): Either<CloudResponseError, String>
 
     suspend fun deleteHabit(habit: Habit): Either<CloudResponseError, Unit>

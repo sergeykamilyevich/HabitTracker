@@ -57,7 +57,16 @@ class SyncHabitRepositoryImpl @Inject constructor(
     }
 
     override suspend fun syncAllFromCloud() {
-        TODO("Not yet implemented")
+        val habitList = cloudHabitRepository.getHabitList()
+        when (habitList) {
+            is Either.Success -> {
+                dbHabitRepository.deleteAllHabits()
+
+            }
+            is Either.Failure -> {
+
+            }
+        }
     }
 
     override suspend fun syncAllToCloud() {

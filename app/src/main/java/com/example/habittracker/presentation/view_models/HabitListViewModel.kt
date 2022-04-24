@@ -73,10 +73,10 @@ class HabitListViewModel @Inject constructor(
         viewModelScope.launch {
             val habitDoneIdAdded = dbUseCase.addHabitDoneToDbUseCase(habitDone)
             val newHabitDone = habitDone.copy(id = habitDoneIdAdded)
-            val habitItem = dbUseCase.getHabitFromDbUseCase(habitDone.habitId)
+            val habit = dbUseCase.getHabitFromDbUseCase(habitDone.habitId)
             _showSnackbarHabitDone.value = Event(
                 AddHabitDoneResult(
-                    habit = habitItem,
+                    habit = habit,
                     habitDone = newHabitDone
                 )
             )

@@ -2,7 +2,6 @@ package com.example.habittracker.data.repositories
 
 import android.app.Application
 import android.database.sqlite.SQLiteConstraintException
-import android.util.Log
 import com.example.habittracker.data.db.room.AppDataBase
 import com.example.habittracker.data.db.models.HabitDbModel
 import com.example.habittracker.data.db.models.HabitDoneDbModel
@@ -27,14 +26,14 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
         val habitTypeFilter =
             if (habitType == null) allHabitTypesToStringList()
             else listOf(habitType.toString())
-        val listHabitItemWithDoneDbModel = habitItemDao.getList(
+        val listHabitWithDoneDbModel = habitItemDao.getList(
             habitTypeFilter,
             habitListFilter.orderBy.name,
             habitListFilter.search
         )
             ?: throw RuntimeException("List of habits is empty")
-        return listHabitItemWithDoneDbModel.map {
-            HabitWithDoneDbModel.mapDbModelListToHabitList(it)
+        return listHabitWithDoneDbModel.map {
+            HabitWithDoneDbModel.toHabitList(it)
         }
     }
 
@@ -48,7 +47,7 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
     override suspend fun getHabitById(habitItemId: Int): Habit {
         val habitItemWithDoneDbModel = habitItemDao.getById(habitItemId)
             ?: throw RuntimeException("Habit with id $habitItemId not found")
-        return habitItemWithDoneDbModel.toHabitItem()
+        return habitItemWithDoneDbModel.toHabit()
     }
 
     override suspend fun upsertHabit(habit: Habit): Either<DbException, Int> {
@@ -115,7 +114,7 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
     override suspend fun deleteAllHabits() {
         val habitList = habitItemDao.getUnfilteredList()
         habitList?.forEach {
-            deleteHabit(it.toHabitItem())
+            deleteHabit(it.toHabit())
         }
     }
 

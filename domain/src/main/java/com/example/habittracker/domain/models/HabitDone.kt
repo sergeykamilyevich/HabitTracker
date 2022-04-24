@@ -8,6 +8,6 @@ data class HabitDone(
 ) {
 
     companion object {
-        const val UNDEFINED_ID = 0
+        private const val UNDEFINED_ID = 0
     }
 }

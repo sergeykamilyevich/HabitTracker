@@ -18,6 +18,7 @@ import javax.inject.Singleton
 class CloudHabitRepositoryImpl @Inject constructor(
     private val apiService: HabitApi
 ) : CloudHabitRepository {
+
     override suspend fun getHabitList(): Either<CloudResponseError, List<Habit>> {
         val response: Response<List<HabitApiModel>> = apiService.getHabitList()
         return if (response.isSuccessful) {
@@ -25,6 +26,21 @@ class CloudHabitRepositoryImpl @Inject constructor(
                 ?: return CloudResponseError(message = "Unknown server error").failure()
             responseBody.map {
                 it.toHabit()
+            }.success()
+        } else {
+            val code = response.code()
+            val message = response.message()
+            CloudResponseError(code, message).failure()
+        }
+    }
+
+    override suspend fun getHabitWithDoneList(): Either<CloudResponseError, List<HabitWithDone>> {
+        val response: Response<List<HabitApiModel>> = apiService.getHabitList()
+        return if (response.isSuccessful) {
+            val responseBody = response.body()
+                ?: return CloudResponseError(message = "Unknown server error").failure()
+            responseBody.map {
+                it.toHabitWithDone()
             }.success()
         } else {
             val code = response.code()

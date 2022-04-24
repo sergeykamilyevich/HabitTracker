@@ -15,6 +15,7 @@ import com.example.habittracker.app.applicationComponent
 import com.example.habittracker.databinding.ActivityMainBinding
 import com.example.habittracker.di.components.MainActivityComponent
 import com.example.habittracker.domain.models.HabitType
+import com.example.habittracker.domain.models.Time
 import com.example.habittracker.presentation.models.AddHabitDoneResult
 import com.example.habittracker.presentation.view_models.HabitListViewModel
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -72,9 +73,14 @@ class MainActivity : AppCompatActivity() {
         viewModel.showSnackbarHabitDone.observe(this) {
             it.transferIfNotHandled()?.let { result ->
                 val habitType = result.habit.type
-                val habitDone = result.habit.done
                 val habitRecurrenceNumber = result.habit.recurrenceNumber
-                val differenceDone = abs(habitDone - habitRecurrenceNumber)
+//                val habitRecurrencePeriod = result.habit.recurrencePeriod
+//                val currentDate = Time().currentUtcDateInSeconds()
+//                val actualDoneList = result.habit.done.filter {
+//                    habitRecurrencePeriod > (currentDate - it)
+//                }
+                val actualDoneListSize = result.habit.actualDoneListSize()
+                val differenceDone = abs(actualDoneListSize - habitRecurrenceNumber)
                 val differenceDoneTimes = resources.getQuantityString(
                     R.plurals.plurals_more_times,
                     differenceDone,
@@ -82,12 +88,12 @@ class MainActivity : AppCompatActivity() {
                 )
                 val snackbarText = when (habitType) {
                     HabitType.GOOD -> {
-                        if (habitDone < habitRecurrenceNumber)
+                        if (actualDoneListSize < habitRecurrenceNumber)
                             getString(R.string.worth_doing_more_times, differenceDoneTimes)
                         else getString(R.string.you_are_breathtaking)
                     }
                     HabitType.BAD -> {
-                        if (habitDone < habitRecurrenceNumber)
+                        if (actualDoneListSize < habitRecurrenceNumber)
                             getString(R.string.you_are_allowed_more_times, differenceDoneTimes)
                         else getString(R.string.stop_doing_it)
                     }
