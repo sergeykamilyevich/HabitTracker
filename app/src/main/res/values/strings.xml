@@ -54,6 +54,7 @@
     <string name="undo">Undo</string>
     <string name="upload_habits_to_server">Upload habits to server</string>
     <string name="download_habits_from_server">Download habits from server</string>
+    <string name="avatar">Avatar</string>
 
     <plurals name="plurals_times">
         <item quantity="one">%d time</item>
