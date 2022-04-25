@@ -20,12 +20,12 @@ import javax.inject.Inject
 class HabitItemViewModel @Inject constructor(
     private val syncUseCase: SyncUseCase,
     private val dbUseCase: DbUseCase,
-    private val cloudUseCase: CloudUseCase,
+//    private val cloudUseCase: CloudUseCase,
     private val mapper: HabitItemMapper,
     private val time: Time
 ) : ViewModel() {
 
-    private val _habitItem = MutableLiveData<Habit>()
+    private val _habitItem = MutableLiveData<Habit>() //TODO maybe inject?
     val habit: LiveData<Habit>
         get() = _habitItem
 

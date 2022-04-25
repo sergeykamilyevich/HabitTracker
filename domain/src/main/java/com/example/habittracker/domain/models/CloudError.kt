@@ -1,7 +1,7 @@
 package com.example.habittracker.domain.models
 
 
-data class CloudResponseError(
+data class CloudError(
     val code: Int = UNKNOWN_CODE,
     val message: String
 ) {

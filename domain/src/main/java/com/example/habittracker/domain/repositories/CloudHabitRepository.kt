@@ -1,6 +1,6 @@
 package com.example.habittracker.domain.repositories
 
-import com.example.habittracker.domain.models.CloudResponseError
+import com.example.habittracker.domain.models.CloudError
 import com.example.habittracker.domain.models.Either
 import com.example.habittracker.domain.models.Habit
 import com.example.habittracker.domain.models.HabitDone
@@ -8,13 +8,13 @@ import com.example.habittracker.domain.models.HabitDone
 interface CloudHabitRepository {
 
     suspend fun getHabitList(
-    ): Either<CloudResponseError, List<Habit>>
+    ): Either<CloudError, List<Habit>>
 
-    suspend fun putHabit(habit: Habit): Either<CloudResponseError, String>
+    suspend fun putHabit(habit: Habit): Either<CloudError, String>
 
-    suspend fun deleteHabit(habit: Habit): Either<CloudResponseError, Unit>
+    suspend fun deleteHabit(habit: Habit): Either<CloudError, Unit>
 
-    suspend fun postHabitDone(habitDone: HabitDone): Either<CloudResponseError, Unit>
+    suspend fun postHabitDone(habitDone: HabitDone): Either<CloudError, Unit>
 
     suspend fun deleteAllHabits()
 }

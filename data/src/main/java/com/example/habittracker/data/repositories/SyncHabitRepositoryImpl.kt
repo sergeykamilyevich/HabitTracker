@@ -1,5 +1,6 @@
 package com.example.habittracker.data.repositories
 
+import android.util.Log
 import com.example.habittracker.domain.models.*
 import com.example.habittracker.domain.repositories.CloudHabitRepository
 import com.example.habittracker.domain.repositories.DbHabitRepository
@@ -22,12 +23,10 @@ class SyncHabitRepositoryImpl @Inject constructor(
             )
             if (newUid is Either.Success) {
                 habit.done.forEach { date ->
-//                    println("habitItemWithDoneWithoutApiUid.habitDone $habitDone")
                     val habitDoneWithNewUid = HabitDone(
                         habitUid = newUid.result,
                         date = date
                     )
-//                        habitDone.copy(habitUid = newUid.result)
                     cloudHabitRepository.postHabitDone(habitDoneWithNewUid)
                 }
 
@@ -47,7 +46,7 @@ class SyncHabitRepositoryImpl @Inject constructor(
     override suspend fun putAndSyncWithDb(
         habit: Habit,
         newHabitId: Int
-    ): Either<CloudResponseError, String> {
+    ): Either<CloudError, String> {
         val apiUid = cloudHabitRepository.putHabit(habit)
         if (apiUid is Either.Success) {
             val newItemWithNewUid = habit.copy(
@@ -64,10 +63,24 @@ class SyncHabitRepositoryImpl @Inject constructor(
         when (habitList) {
             is Either.Success -> {
                 dbHabitRepository.deleteAllHabits()
+                habitList.result.forEach { habit ->
+                    val habitId = dbHabitRepository.upsertHabit(habit)
+                    if (habitId is Either.Success) {
+                        habit.done.forEach {
+                            dbHabitRepository.addHabitDone(
+                                HabitDone(
+                                    habitId = habitId.result,
+                                    date = it,
+                                    habitUid = habit.uid
+                                )
+                            )
+                        }
+                    }
+                }
 
             }
             is Either.Failure -> {
-
+                Log.e("Okhttp", "Loading list of habits failed") //TODO toast?
             }
         }
     }

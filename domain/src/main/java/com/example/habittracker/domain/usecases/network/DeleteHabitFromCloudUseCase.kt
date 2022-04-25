@@ -1,6 +1,6 @@
 package com.example.habittracker.domain.usecases.network
 
-import com.example.habittracker.domain.models.CloudResponseError
+import com.example.habittracker.domain.models.CloudError
 import com.example.habittracker.domain.models.Either
 import com.example.habittracker.domain.models.Habit
 import com.example.habittracker.domain.repositories.CloudHabitRepository
@@ -10,7 +10,7 @@ class DeleteHabitFromCloudUseCase @Inject constructor(
     private val cloudHabitRepository: CloudHabitRepository
 ) {
 
-    suspend operator fun invoke(habit: Habit): Either<CloudResponseError, Unit> {
+    suspend operator fun invoke(habit: Habit): Either<CloudError, Unit> {
         return cloudHabitRepository.deleteHabit(habit)
     }
 }
