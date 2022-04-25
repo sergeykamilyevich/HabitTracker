@@ -12,7 +12,6 @@ import com.example.habittracker.domain.models.Habit
 import com.example.habittracker.domain.models.Time
 import com.example.habittracker.domain.usecases.common.SyncUseCase
 import com.example.habittracker.domain.usecases.db.DbUseCase
-import com.example.habittracker.domain.usecases.network.CloudUseCase
 import com.example.habittracker.presentation.mappers.HabitItemMapper
 import kotlinx.coroutines.launch
 import javax.inject.Inject

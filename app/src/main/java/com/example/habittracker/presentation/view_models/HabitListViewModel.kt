@@ -43,13 +43,6 @@ class HabitListViewModel @Inject constructor(
         isHabitDoneButtonsBlocked = false
     }
 
-    fun addHabitItem(habit: Habit) {
-        viewModelScope.launch {
-            dbUseCase.upsertHabitToDbUseCase(habit)
-            cloudUseCase.putHabitToCloudUseCase(habit)
-        }
-    }
-
     fun deleteHabitItem(habit: Habit) {
         viewModelScope.launch {
             dbUseCase.deleteHabitFromDbUseCase(habit)

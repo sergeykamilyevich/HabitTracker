@@ -1,6 +1,5 @@
 package com.example.habittracker.presentation.ui
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -13,9 +12,6 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.MultiTransformation
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.habittracker.R
 import com.example.habittracker.app.applicationComponent
 import com.example.habittracker.databinding.ActivityMainBinding
@@ -23,7 +19,6 @@ import com.example.habittracker.di.components.MainActivityComponent
 import com.example.habittracker.domain.models.HabitType
 import com.example.habittracker.presentation.models.AddHabitDoneResult
 import com.example.habittracker.presentation.view_models.HabitListViewModel
-import com.google.android.material.shape.RoundedCornerTreatment
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
@@ -183,7 +178,8 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
 
-        private const val IMAGE_URL = "https://img.freepik.com/free-photo/no-problem-concept-bearded-man-makes-okay-gesture-has-everything-control-all-fine-gesture-wears-spectacles-jumper-poses-against-pink-wall-says-i-got-this-guarantees-something_273609-42817.jpg"
+        private const val IMAGE_URL =
+            "https://img.freepik.com/free-photo/no-problem-concept-bearded-man-makes-okay-gesture-has-everything-control-all-fine-gesture-wears-spectacles-jumper-poses-against-pink-wall-says-i-got-this-guarantees-something_273609-42817.jpg"
         private const val DEFAULT_HEADER = 0
     }
 }
