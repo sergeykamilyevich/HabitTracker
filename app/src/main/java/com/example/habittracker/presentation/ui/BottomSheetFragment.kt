@@ -70,12 +70,6 @@ class BottomSheetFragment : Fragment() {
                 viewModel.habitListFilter.value?.orderBy ?: HabitListOrderBy.NAME_ASC
             )
         }
-        binding.btnTest.setOnClickListener {
-            viewModel.deleteAllHabitsFromDb()
-        }
-        binding.btnTest2.setOnClickListener {
-            viewModel.deleteAllHabitsFromCloud()
-        }
     }
 
     private fun setCurrentButtonIsSelected(selectedButtonIndex: Int) {
@@ -119,7 +113,11 @@ class BottomSheetFragment : Fragment() {
     }
 
     private fun setupDefaultButtonsState() {
-        setCurrentButtonIsSelected(0)
-        setHabitListOrderByFromSelectedButton(buttons[0])
+        setCurrentButtonIsSelected(DEFAULT_SELECTED_BUTTON_INDEX)
+        setHabitListOrderByFromSelectedButton(buttons[DEFAULT_SELECTED_BUTTON_INDEX])
+    }
+
+    companion object {
+        private const val DEFAULT_SELECTED_BUTTON_INDEX = 0
     }
 }

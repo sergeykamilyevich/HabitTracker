@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
@@ -194,6 +195,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
+        MenuCompat.setGroupDividerEnabled(menu, true)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -201,6 +203,8 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.menu_upload -> viewModel.uploadAllHabitsFromDbToCloud()
             R.id.menu_download -> viewModel.downloadAllHabitsFromCloudToDb()
+            R.id.menu_clear_db -> viewModel.deleteAllHabitsFromDb()
+            R.id.menu_clear_cloud -> viewModel.deleteAllHabitsFromCloud()
         }
         return super.onOptionsItemSelected(item)
     }

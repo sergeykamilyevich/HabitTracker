@@ -49,7 +49,7 @@ class HabitItemMapper @Inject constructor() {
     }
 
     fun parseString(input: Editable?): String =
-        input?.trim()?.toString() ?: EMPTY_STRING //TODO replace in other class
+        input?.trim()?.toString() ?: EMPTY_STRING
 
     fun parseNumber(input: Editable?): Int {
         return try {

@@ -52,10 +52,12 @@
     <string name="you_are_breathtaking">You are breathtaking!</string>
     <string name="stop_doing_it">Stop doing it!</string>
     <string name="undo">Undo</string>
-    <string name="upload_habits_to_server">Upload habits to server</string>
-    <string name="download_habits_from_server">Download habits from server</string>
+    <string name="upload_habits_to_server">Upload habits to the server</string>
+    <string name="download_habits_from_server">Download habits from the server</string>
     <string name="avatar">Avatar</string>
     <string name="sync_is_done">Sync is done</string>
+    <string name="delete_all_habits_from_the_device">Delete all habits from the device</string>
+    <string name="delete_all_habits_from_the_server">Delete all habits from the server</string>
 
     <plurals name="plurals_times">
         <item quantity="one">%d time</item>
