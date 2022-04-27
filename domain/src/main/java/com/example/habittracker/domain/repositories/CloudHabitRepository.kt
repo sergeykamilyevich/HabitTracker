@@ -1,20 +1,19 @@
 package com.example.habittracker.domain.repositories
 
-import com.example.habittracker.domain.models.CloudError
-import com.example.habittracker.domain.models.Either
-import com.example.habittracker.domain.models.Habit
-import com.example.habittracker.domain.models.HabitDone
+import com.example.habittracker.domain.errors.Either
+import com.example.habittracker.domain.errors.IoError
+import com.example.habittracker.domain.models.*
 
 interface CloudHabitRepository {
 
     suspend fun getHabitList(
-    ): Either<CloudError, List<Habit>>
+    ): Either<IoError, List<Habit>>
 
-    suspend fun putHabit(habit: Habit): Either<CloudError, String>
+    suspend fun putHabit(habit: Habit): Either<IoError, String>
 
-    suspend fun deleteHabit(habit: Habit): Either<CloudError, Unit>
+    suspend fun deleteHabit(habit: Habit): Either<IoError, Unit>
 
-    suspend fun postHabitDone(habitDone: HabitDone): Either<CloudError, Unit>
+    suspend fun postHabitDone(habitDone: HabitDone): Either<IoError, Unit>
 
     suspend fun deleteAllHabits()
 }

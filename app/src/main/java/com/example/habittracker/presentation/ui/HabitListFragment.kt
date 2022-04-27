@@ -18,7 +18,7 @@ import com.example.habittracker.domain.models.Time
 import com.example.habittracker.presentation.color.ColorPicker
 import com.example.habittracker.presentation.models.HabitTypeApp
 import com.example.habittracker.presentation.recycler.HabitListAdapter
-import com.example.habittracker.presentation.view_models.HabitListViewModel
+import com.example.habittracker.presentation.view_models.MainViewModel
 import javax.inject.Inject
 
 
@@ -29,7 +29,7 @@ class HabitListFragment : Fragment(), HasTitle {
         get() = _binding ?: throw RuntimeException("FragmentHabitListBinding is null")
 
     @Inject
-    lateinit var viewModel: HabitListViewModel
+    lateinit var viewModel: MainViewModel
 
     @Inject
     lateinit var colorPicker: ColorPicker

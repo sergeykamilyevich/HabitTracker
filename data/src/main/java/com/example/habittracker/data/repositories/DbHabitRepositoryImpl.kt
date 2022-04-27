@@ -6,7 +6,13 @@ import com.example.habittracker.data.db.models.HabitDbModel
 import com.example.habittracker.data.db.models.HabitDoneDbModel
 import com.example.habittracker.data.db.models.HabitWithDoneDbModel
 import com.example.habittracker.data.db.room.AppDataBase
+import com.example.habittracker.domain.errors.Either
+import com.example.habittracker.domain.errors.IoError
 import com.example.habittracker.domain.models.*
+import com.example.habittracker.domain.errors.IoError.HabitAlreadyExistsException
+import com.example.habittracker.domain.errors.IoError.SqlException
+import com.example.habittracker.domain.errors.failure
+import com.example.habittracker.domain.errors.success
 import com.example.habittracker.domain.repositories.DbHabitRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -44,15 +50,19 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
 
     private fun allHabitTypesToStringList() = HabitType.values().map { it.name }
 
-    override suspend fun getHabitById(habitItemId: Int): Habit {
+    override suspend fun getHabitById(habitItemId: Int): Either<IoError, Habit> {
         val habitItemWithDoneDbModel = habitItemDao.getById(habitItemId)
-            ?: throw RuntimeException("Habit with id $habitItemId not found")
-        return habitItemWithDoneDbModel.toHabit()
+        habitItemWithDoneDbModel?.let {
+            return habitItemWithDoneDbModel.toHabit().success()
+        }
+        return SqlException("Habit with id $habitItemId not found").failure()
+
+
     }
 
-    override suspend fun upsertHabit(habit: Habit): Either<DbException, Int> {
+    override suspend fun upsertHabit(habit: Habit): Either<IoError, Int> {
         val habitItemDbModel = HabitDbModel.fromHabitItem(habit)
-        var result: Either<DbException, Int> =
+        var result: Either<IoError, Int> =
             SqlException(DEFAULT_SQL_ERROR).failure()
         runCatching {
             habitItemDao.insert(habitItemDbModel).toInt()
@@ -70,9 +80,9 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
         insertException: Throwable,
         habit: Habit,
         habitDbModel: HabitDbModel
-    ): Either<DbException, Int> {
+    ): Either<IoError, Int> {
         val insertExceptionMessage = insertException.message
-        var result: Either<DbException, Int> =
+        var result: Either<IoError, Int> =
             SqlException(insertExceptionMessage ?: "").failure()
         if (insertException is SQLiteConstraintException && insertExceptionMessage != null) {
             when {
@@ -98,7 +108,7 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
     private fun handleUpdateException(
         updateException: Throwable,
         habitItemName: String
-    ): DbException {
+    ): IoError {
         val updateExceptionMessage = updateException.message
         return if (updateExceptionMessage?.contains(UNIQUE_CONSTRAINT_MESSAGE) == true) {
             HabitAlreadyExistsException(habitItemName)

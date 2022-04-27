@@ -1,7 +1,7 @@
 package com.example.habittracker.domain.usecases.db
 
-import com.example.habittracker.domain.models.DbException
-import com.example.habittracker.domain.models.Either
+import com.example.habittracker.domain.errors.IoError
+import com.example.habittracker.domain.errors.Either
 import com.example.habittracker.domain.models.Habit
 import com.example.habittracker.domain.repositories.DbHabitRepository
 import javax.inject.Inject
@@ -12,6 +12,6 @@ class UpsertHabitToDbUseCase @Inject constructor(
     private val dbHabitRepository: DbHabitRepository,
 ) {
 
-    suspend operator fun invoke(habit: Habit): Either<DbException, Int> =
+    suspend operator fun invoke(habit: Habit): Either<IoError, Int> =
         dbHabitRepository.upsertHabit(habit)
 }

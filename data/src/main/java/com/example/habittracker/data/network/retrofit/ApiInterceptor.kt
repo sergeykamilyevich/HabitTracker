@@ -1,14 +1,14 @@
 package com.example.habittracker.data.network.retrofit
 
 import android.util.Log
-import com.example.habittracker.domain.models.CloudError
-import com.example.habittracker.domain.models.CloudErrorFlow
-import com.example.habittracker.domain.models.failure
+import com.example.habittracker.domain.errors.IoError
+import com.example.habittracker.domain.errors.IoErrorFlow
+import com.example.habittracker.domain.errors.failure
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
 
-class ApiInterceptor @Inject constructor(private val cloudErrorFlow: CloudErrorFlow) : Interceptor {
+class ApiInterceptor @Inject constructor(private val ioErrorFlow: IoErrorFlow) : Interceptor {
 
     private lateinit var response: Response
 
@@ -27,11 +27,11 @@ class ApiInterceptor @Inject constructor(private val cloudErrorFlow: CloudErrorF
                         "Response error with code: ${response.code} for request: $request"
                     )
 
-                    val cloudError = CloudError(
+                    val cloudError = IoError.CloudError(
                         code = response.code,
                         message = response.message
                     )
-                    cloudErrorFlow.setError(cloudError.failure())
+                    ioErrorFlow.setError(cloudError.failure())
                     delayForRetryRequest.sleep()
                 } else {
                     responseIsSuccess = true
@@ -41,8 +41,8 @@ class ApiInterceptor @Inject constructor(private val cloudErrorFlow: CloudErrorF
                     "Okhttp",
                     "Response exception: $e for request: $request"
                 ) //TODO send toast to user
-                val cloudError = CloudError(message = e.message ?: "Unknown network error")
-                cloudErrorFlow.setError(cloudError.failure())
+                val cloudError = IoError.CloudError(message = e.message ?: "Unknown network error")
+                ioErrorFlow.setError(cloudError.failure())
                 delayForRetryRequest.sleep()
             }
         } while (!responseIsSuccess && delayForRetryRequest.retryCount() < MAX_COUNT_RETRY)

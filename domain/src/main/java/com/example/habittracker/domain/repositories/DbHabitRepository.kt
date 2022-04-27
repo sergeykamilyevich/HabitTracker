@@ -1,5 +1,7 @@
 package com.example.habittracker.domain.repositories
 
+import com.example.habittracker.domain.errors.Either
+import com.example.habittracker.domain.errors.IoError
 import com.example.habittracker.domain.models.*
 import kotlinx.coroutines.flow.Flow
 
@@ -12,9 +14,9 @@ interface DbHabitRepository {
 
     suspend fun getUnfilteredList(): List<Habit>? //TODO refactor to non-null
 
-    suspend fun getHabitById(habitItemId: Int): Habit //TODO to Either
+    suspend fun getHabitById(habitItemId: Int): Either<IoError, Habit>
 
-    suspend fun upsertHabit(habit: Habit): Either<DbException, Int>
+    suspend fun upsertHabit(habit: Habit): Either<IoError, Int>
 
     suspend fun deleteHabit(habit: Habit)
 

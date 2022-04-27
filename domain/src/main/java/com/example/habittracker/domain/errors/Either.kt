@@ -1,4 +1,4 @@
-package com.example.habittracker.domain.models
+package com.example.habittracker.domain.errors
 
 sealed class Either<out F, out S> {
 

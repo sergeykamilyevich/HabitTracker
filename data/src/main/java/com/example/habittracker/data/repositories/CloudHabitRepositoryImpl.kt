@@ -5,7 +5,12 @@ import com.example.habittracker.data.network.models.HabitApiModel
 import com.example.habittracker.data.network.models.HabitDoneApiModel
 import com.example.habittracker.data.network.models.HabitUidApiModel
 import com.example.habittracker.data.network.retrofit.HabitApi
+import com.example.habittracker.domain.errors.Either
+import com.example.habittracker.domain.errors.IoError
 import com.example.habittracker.domain.models.*
+import com.example.habittracker.domain.errors.IoError.CloudError
+import com.example.habittracker.domain.errors.failure
+import com.example.habittracker.domain.errors.success
 import com.example.habittracker.domain.repositories.CloudHabitRepository
 import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -19,7 +24,7 @@ class CloudHabitRepositoryImpl @Inject constructor(
     private val apiService: HabitApi
 ) : CloudHabitRepository {
 
-    override suspend fun getHabitList(): Either<CloudError, List<Habit>> {
+    override suspend fun getHabitList(): Either<IoError, List<Habit>> {
         val response: Response<List<HabitApiModel>> = apiService.getHabitList()
         return if (response.isSuccessful) {
             val responseBody = response.body()
@@ -34,7 +39,7 @@ class CloudHabitRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun putHabit(habit: Habit): Either<CloudError, String> {
+    override suspend fun putHabit(habit: Habit): Either<IoError, String> {
         Log.d("OkHttp", "putHabit start")
         val habitItemApiModel = HabitApiModel.fromHabitItem(habit)
         val jsonRequestBody = Gson().toJson(habitItemApiModel)

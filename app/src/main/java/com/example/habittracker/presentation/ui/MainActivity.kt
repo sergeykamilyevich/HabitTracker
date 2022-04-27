@@ -18,11 +18,11 @@ import com.example.habittracker.R
 import com.example.habittracker.app.applicationComponent
 import com.example.habittracker.databinding.ActivityMainBinding
 import com.example.habittracker.di.components.MainActivityComponent
-import com.example.habittracker.domain.models.CloudError
-import com.example.habittracker.domain.models.Either
+import com.example.habittracker.domain.errors.IoError
+import com.example.habittracker.domain.errors.Either
 import com.example.habittracker.domain.models.HabitType
 import com.example.habittracker.presentation.models.AddHabitDoneResult
-import com.example.habittracker.presentation.view_models.HabitListViewModel
+import com.example.habittracker.presentation.view_models.MainViewModel
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var mainActivityComponent: MainActivityComponent
 
     @Inject
-    lateinit var viewModel: HabitListViewModel
+    lateinit var viewModel: MainViewModel
 
     private val fragmentListener =
         object : FragmentManager.FragmentLifecycleCallbacks() {
@@ -92,11 +92,11 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, text, duration).show()
     }
 
-    private fun makeCloudErrorToast(cloudError: CloudError) {
+    private fun makeCloudErrorToast(ioError: IoError) {
         val codeString =
-            if (cloudError.code != 0) ", code: ${cloudError.code}"
+            if (ioError.code != 0) ", code: ${ioError.code}"
             else EMPTY_CODE_STRING
-        makeToast("${cloudError.message}$codeString", Toast.LENGTH_LONG)
+        makeToast("${ioError.message}$codeString", Toast.LENGTH_LONG)
     }
 
     private fun setupViewModel() {

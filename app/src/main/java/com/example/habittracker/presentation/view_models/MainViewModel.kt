@@ -5,6 +5,10 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.example.habittracker.R
 import com.example.habittracker.di.annotations.MainActivityScope
+import com.example.habittracker.domain.errors.Either
+import com.example.habittracker.domain.errors.IoError
+import com.example.habittracker.domain.errors.failure
+import com.example.habittracker.domain.errors.success
 import com.example.habittracker.domain.models.*
 import com.example.habittracker.domain.usecases.common.SyncUseCase
 import com.example.habittracker.domain.usecases.db.DbUseCase
@@ -14,7 +18,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @MainActivityScope
-class HabitListViewModel @Inject constructor(
+class MainViewModel @Inject constructor(
     private val dbUseCase: DbUseCase,
     private val cloudUseCase: CloudUseCase,
     private val syncUseCase: SyncUseCase
@@ -28,8 +32,8 @@ class HabitListViewModel @Inject constructor(
     val showSnackbarHabitDone: LiveData<Event<AddHabitDoneResult>>
         get() = _showSnackbarHabitDone
 
-    private val _showResultToast = MutableLiveData<Event<Either<CloudError, Int>>>()
-    val showResultToast: LiveData<Event<Either<CloudError, Int>>>
+    private val _showResultToast = MutableLiveData<Event<Either<IoError, Int>>>()
+    val showResultToast: LiveData<Event<Either<IoError, Int>>>
         get() = _showResultToast
 
     private var isHabitDoneButtonsBlocked: Boolean = false
@@ -38,7 +42,7 @@ class HabitListViewModel @Inject constructor(
 
     lateinit var habitList: LiveData<List<Habit>>
 
-    var errorCloud: LiveData<Either<CloudError, Unit>> =
+    var errorCloud: LiveData<Either<IoError, Unit>> =
         cloudUseCase.getCloudErrorUseCase.invoke().asLiveData()
 
     fun isHabitDoneButtonsBlocked() = isHabitDoneButtonsBlocked
@@ -74,13 +78,21 @@ class HabitListViewModel @Inject constructor(
         viewModelScope.launch {
             val habitDoneIdAdded = dbUseCase.addHabitDoneToDbUseCase(habitDone)
             val newHabitDone = habitDone.copy(id = habitDoneIdAdded)
-            val habit = dbUseCase.getHabitFromDbUseCase(habitDone.habitId)
-            _showSnackbarHabitDone.value = Event(
-                AddHabitDoneResult(
-                    habit = habit,
-                    habitDone = newHabitDone
-                )
-            )
+            val habit =
+                dbUseCase.getHabitFromDbUseCase.invoke(habitDone.habitId)
+            when (habit) {
+                is Either.Success -> {
+                    _showSnackbarHabitDone.value = Event(
+                        AddHabitDoneResult(
+                            habit = habit.result,
+                            habitDone = newHabitDone
+                        )
+                    )
+                }
+                is Either.Failure -> {
+                    //TODO
+                }
+            }
         }
     }
 
@@ -139,8 +151,16 @@ class HabitListViewModel @Inject constructor(
 
     fun downloadAllHabitsFromCloudToDb() {
         viewModelScope.launch {
-            syncUseCase.syncAllFromCloudUseCase.invoke()
-        }
+            val result = syncUseCase.syncAllFromCloudUseCase.invoke() //TODO merge with uploadallhabits
+            when (result) {
+                is Either.Success -> {
+                    _showResultToast.value = Event(R.string.sync_is_done.success())
+                }
+                is Either.Failure -> {
+                    _showResultToast.value = Event(result.error.failure())
+                }
+            }
+                    }
     }
 
     companion object {

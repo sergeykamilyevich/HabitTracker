@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.habittracker.R
 import com.example.habittracker.databinding.FragmentHabitItemBinding
+import com.example.habittracker.domain.errors.Either
+import com.example.habittracker.domain.errors.IoError
 import com.example.habittracker.domain.models.*
 import com.example.habittracker.presentation.color.ColorPicker
 import com.example.habittracker.presentation.mappers.HabitItemMapper
@@ -162,21 +164,21 @@ class HabitItemFragment : Fragment(), HasTitle {
         }
     }
 
-    private fun showToastDbError(result: Either.Failure<DbException, Int>) {
+    private fun showToastDbError(result: Either.Failure<IoError, Int>) {
         val errorMessageFromRes = when (result.error) {
-            is HabitAlreadyExistsException -> R.string.habit_already_exists
-            is SqlException -> R.string.sql_exception
+            is IoError.HabitAlreadyExistsException -> R.string.habit_already_exists
+            is IoError.SqlException -> R.string.sql_exception
             else -> throw RuntimeException("Unknown type of SQL upsert exception")
         }
         Toast.makeText(
             context, resources.getString(
                 errorMessageFromRes,
-                result.error.message()
+                result.error.message
             ), Toast.LENGTH_LONG
         ).show()
     }
 
-    private fun showToastCloudError(result: Either.Failure<CloudError, String>) {
+    private fun showToastCloudError(result: Either.Failure<IoError, String>) {
         Toast.makeText(context, result.error.message, Toast.LENGTH_LONG).show()
     }
 

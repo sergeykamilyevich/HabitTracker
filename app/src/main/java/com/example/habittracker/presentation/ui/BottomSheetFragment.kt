@@ -10,7 +10,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.example.habittracker.databinding.FragmentBottomSheetBinding
 import com.example.habittracker.domain.models.HabitListOrderBy
-import com.example.habittracker.presentation.view_models.HabitListViewModel
+import com.example.habittracker.presentation.view_models.MainViewModel
 import javax.inject.Inject
 
 
@@ -23,7 +23,7 @@ class BottomSheetFragment : Fragment() {
     private lateinit var buttons: ArrayList<Button>
 
     @Inject
-    lateinit var viewModel: HabitListViewModel
+    lateinit var viewModel: MainViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

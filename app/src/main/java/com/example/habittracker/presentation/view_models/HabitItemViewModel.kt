@@ -6,6 +6,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.habittracker.domain.errors.Either
+import com.example.habittracker.domain.errors.IoError
 import com.example.habittracker.domain.models.*
 import com.example.habittracker.domain.usecases.common.SyncUseCase
 import com.example.habittracker.domain.usecases.db.DbUseCase
@@ -44,12 +46,12 @@ class HabitItemViewModel @Inject constructor(
     val canCloseScreen: LiveData<Unit>
         get() = _canCloseScreen
 
-    private val _dbError = MutableLiveData<Event<Either<DbException, Int>>>()
-    val dbError: LiveData<Event<Either<DbException, Int>>>
+    private val _dbError = MutableLiveData<Event<Either<IoError, Int>>>()
+    val dbError: LiveData<Event<Either<IoError, Int>>>
         get() = _dbError
 
-    private val _cloudError = MutableLiveData<Event<Either<CloudError, String>>>()
-    val cloudError: LiveData<Event<Either<CloudError, String>>>
+    private val _cloudError = MutableLiveData<Event<Either<IoError, String>>>()
+    val cloudError: LiveData<Event<Either<IoError, String>>>
         get() = _cloudError
 
     fun addHabitItem(habit: Habit) {
@@ -90,7 +92,7 @@ class HabitItemViewModel @Inject constructor(
     }
 
     private suspend fun upsertHabit(habit: Habit) {
-        val resultOfUpserting: Either<DbException, Int> =
+        val resultOfUpserting: Either<IoError, Int> =
             dbUseCase.upsertHabitToDbUseCase.invoke(habit)
         when (resultOfUpserting) {
             is Either.Success -> {
@@ -114,8 +116,18 @@ class HabitItemViewModel @Inject constructor(
 
     fun getHabitItem(habitItemId: Int) {
         viewModelScope.launch {
-            val habitItem = dbUseCase.getHabitFromDbUseCase(habitItemId)
-            _habitItem.value = habitItem
+            val habitItem = dbUseCase.getHabitFromDbUseCase.invoke(habitItemId)
+            when (habitItem) {
+                is Either.Success -> {
+                    habitItem.result.let {
+                        _habitItem.value = it
+                    }
+                }
+                is Either.Failure -> {
+                    //TODO
+                }
+            }
+
         }
     }
 
