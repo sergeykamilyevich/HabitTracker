@@ -14,11 +14,10 @@ import javax.inject.Singleton
 object CloudModule {
 
     @[Provides Singleton]
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(apiInterceptor: ApiInterceptor): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
-        val apiInterceptor = ApiInterceptor()
         return OkHttpClient.Builder()
             .addInterceptor(apiInterceptor)
             .addInterceptor(loggingInterceptor)

@@ -145,16 +145,24 @@ class HabitItemFragment : Fragment(), HasTitle {
         viewModel.errorInputDescription.observe(viewLifecycleOwner) {
             handleInputError(it, binding.tiedDescription)
         }
-        viewModel.upsertError.observe(viewLifecycleOwner) {
+        viewModel.dbError.observe(viewLifecycleOwner) {
             it.transferIfNotHandled()?.let { result ->
                 if (result is Either.Failure) {
-                    showToastError(result)
+                    showToastDbError(result)
+                }
+            }
+        }
+
+        viewModel.cloudError.observe(viewLifecycleOwner) {
+            it.transferIfNotHandled()?.let { result ->
+                if (result is Either.Failure) {
+                    showToastCloudError(result)
                 }
             }
         }
     }
 
-    private fun showToastError(result: Either.Failure<DbException, Int>) {
+    private fun showToastDbError(result: Either.Failure<DbException, Int>) {
         val errorMessageFromRes = when (result.error) {
             is HabitAlreadyExistsException -> R.string.habit_already_exists
             is SqlException -> R.string.sql_exception
@@ -166,6 +174,10 @@ class HabitItemFragment : Fragment(), HasTitle {
                 result.error.message()
             ), Toast.LENGTH_LONG
         ).show()
+    }
+
+    private fun showToastCloudError(result: Either.Failure<CloudError, String>) {
+        Toast.makeText(context, result.error.message, Toast.LENGTH_LONG).show()
     }
 
     private fun launchAddMode() {

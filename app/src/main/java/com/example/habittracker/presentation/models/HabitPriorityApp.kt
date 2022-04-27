@@ -12,7 +12,6 @@ enum class HabitPriorityApp(@StringRes val resourceId: Int, val id: Int) {
     fun toHabitPriority() = HabitPriority.valueOf(this.name)
 
     companion object {
-        fun getPriorityByPosition(position: Int) = values()[position] //TODO unused?
         fun fromHabitPriority(habitPriority: HabitPriority) = valueOf(habitPriority.name)
 
     }

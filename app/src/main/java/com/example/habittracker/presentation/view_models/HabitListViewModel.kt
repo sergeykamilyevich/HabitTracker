@@ -3,6 +3,7 @@ package com.example.habittracker.presentation.view_models
 import android.text.Editable
 import android.util.Log
 import androidx.lifecycle.*
+import com.example.habittracker.R
 import com.example.habittracker.di.annotations.MainActivityScope
 import com.example.habittracker.domain.models.*
 import com.example.habittracker.domain.usecases.common.SyncUseCase
@@ -27,13 +28,20 @@ class HabitListViewModel @Inject constructor(
     val showSnackbarHabitDone: LiveData<Event<AddHabitDoneResult>>
         get() = _showSnackbarHabitDone
 
-    var isHabitDoneButtonsBlocked: Boolean = false
-        private set
+    private val _showResultToast = MutableLiveData<Event<Either<CloudError, Int>>>()
+    val showResultToast: LiveData<Event<Either<CloudError, Int>>>
+        get() = _showResultToast
 
+    private var isHabitDoneButtonsBlocked: Boolean = false
 
     private var currentHabitListFilter = HabitListFilter(HabitListOrderBy.NAME_ASC, "")
 
     lateinit var habitList: LiveData<List<Habit>>
+
+    var errorCloud: LiveData<Either<CloudError, Unit>> =
+        cloudUseCase.getCloudErrorUseCase.invoke().asLiveData()
+
+    fun isHabitDoneButtonsBlocked() = isHabitDoneButtonsBlocked
 
     fun blockHabitDoneButtons() {
         isHabitDoneButtonsBlocked = true
@@ -90,7 +98,7 @@ class HabitListViewModel @Inject constructor(
 
     fun getHabitList(habitTypeFilter: HabitType?) {
         habitList = Transformations.switchMap(habitListFilter) {
-            dbUseCase.getHabitListFromDbUseCase(habitTypeFilter, it).asLiveData()
+            dbUseCase.getHabitListFromDbUseCase.invoke(habitTypeFilter, it).asLiveData()
         }
     }
 
@@ -117,13 +125,21 @@ class HabitListViewModel @Inject constructor(
 
     fun uploadAllHabitsFromDbToCloud() {
         viewModelScope.launch {
-            syncUseCase.syncAllToCloudUseCase()
+            val result = syncUseCase.syncAllToCloudUseCase.invoke()
+            when (result) {
+                is Either.Success -> {
+                    _showResultToast.value = Event(R.string.sync_is_done.success())
+                }
+                is Either.Failure -> {
+                    _showResultToast.value = Event(result.error.failure())
+                }
+            }
         }
     }
 
     fun downloadAllHabitsFromCloudToDb() {
         viewModelScope.launch {
-            syncUseCase.syncAllFromCloudUseCase()
+            syncUseCase.syncAllFromCloudUseCase.invoke()
         }
     }
 

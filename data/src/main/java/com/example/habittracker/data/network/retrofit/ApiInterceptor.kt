@@ -1,10 +1,14 @@
 package com.example.habittracker.data.network.retrofit
 
 import android.util.Log
+import com.example.habittracker.domain.models.CloudError
+import com.example.habittracker.domain.models.CloudErrorFlow
+import com.example.habittracker.domain.models.failure
 import okhttp3.Interceptor
 import okhttp3.Response
+import javax.inject.Inject
 
-class ApiInterceptor : Interceptor {
+class ApiInterceptor @Inject constructor(private val cloudErrorFlow: CloudErrorFlow) : Interceptor {
 
     private lateinit var response: Response
 
@@ -22,6 +26,12 @@ class ApiInterceptor : Interceptor {
                         "Okhttp",
                         "Response error with code: ${response.code} for request: $request"
                     )
+
+                    val cloudError = CloudError(
+                        code = response.code,
+                        message = response.message
+                    )
+                    cloudErrorFlow.setError(cloudError.failure())
                     delayForRetryRequest.sleep()
                 } else {
                     responseIsSuccess = true
@@ -31,9 +41,11 @@ class ApiInterceptor : Interceptor {
                     "Okhttp",
                     "Response exception: $e for request: $request"
                 ) //TODO send toast to user
+                val cloudError = CloudError(message = e.message ?: "Unknown network error")
+                cloudErrorFlow.setError(cloudError.failure())
                 delayForRetryRequest.sleep()
             }
-        } while (!responseIsSuccess && delayForRetryRequest.retryCount < MAX_COUNT_RETRY)
+        } while (!responseIsSuccess && delayForRetryRequest.retryCount() < MAX_COUNT_RETRY)
         return response
     }
 

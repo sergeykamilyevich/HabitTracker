@@ -98,7 +98,7 @@ class HabitListFragment : Fragment(), HasTitle {
 
     private fun setupAdapterClickListeners() {
         habitListAdapter.onButtonHabitDoneClickListener = {
-            if (!viewModel.isHabitDoneButtonsBlocked) {
+            if (!viewModel.isHabitDoneButtonsBlocked()) {
                 viewModel.addHabitDone(
                     HabitDone(
                         habitId = it.id,

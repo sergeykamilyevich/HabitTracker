@@ -6,10 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.habittracker.domain.models.DbException
-import com.example.habittracker.domain.models.Either
-import com.example.habittracker.domain.models.Habit
-import com.example.habittracker.domain.models.Time
+import com.example.habittracker.domain.models.*
 import com.example.habittracker.domain.usecases.common.SyncUseCase
 import com.example.habittracker.domain.usecases.db.DbUseCase
 import com.example.habittracker.presentation.mappers.HabitItemMapper
@@ -19,7 +16,6 @@ import javax.inject.Inject
 class HabitItemViewModel @Inject constructor(
     private val syncUseCase: SyncUseCase,
     private val dbUseCase: DbUseCase,
-//    private val cloudUseCase: CloudUseCase,
     private val mapper: HabitItemMapper,
     private val time: Time
 ) : ViewModel() {
@@ -48,9 +44,13 @@ class HabitItemViewModel @Inject constructor(
     val canCloseScreen: LiveData<Unit>
         get() = _canCloseScreen
 
-    private val _upsertError = MutableLiveData<Event<Either<DbException, Int>>>()
-    val upsertError: LiveData<Event<Either<DbException, Int>>>
-        get() = _upsertError
+    private val _dbError = MutableLiveData<Event<Either<DbException, Int>>>()
+    val dbError: LiveData<Event<Either<DbException, Int>>>
+        get() = _dbError
+
+    private val _cloudError = MutableLiveData<Event<Either<CloudError, String>>>()
+    val cloudError: LiveData<Event<Either<CloudError, String>>>
+        get() = _cloudError
 
     fun addHabitItem(habit: Habit) {
         viewModelScope.launch {
@@ -91,13 +91,19 @@ class HabitItemViewModel @Inject constructor(
 
     private suspend fun upsertHabit(habit: Habit) {
         val resultOfUpserting: Either<DbException, Int> =
-            syncUseCase.upsertAndPutHabitUseCase(habit)
+            dbUseCase.upsertHabitToDbUseCase.invoke(habit)
         when (resultOfUpserting) {
             is Either.Success -> {
                 closeItemFragment()
+                val newHabitId = resultOfUpserting.result
+                val putResult =
+                    syncUseCase.putHabitAndSyncWithDbUseCase(habit = habit, newHabitId = newHabitId)
+                if (putResult is Either.Failure) {
+                    _cloudError.value = Event(putResult) //TODO fragment is closed in this moment
+                }
             }
             is Either.Failure -> {
-                _upsertError.value = Event(resultOfUpserting)
+                _dbError.value = Event(resultOfUpserting)
             }
         }
     }

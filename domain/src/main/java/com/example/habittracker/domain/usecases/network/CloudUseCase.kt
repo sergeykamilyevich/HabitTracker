@@ -9,6 +9,5 @@ class CloudUseCase @Inject constructor(
     val deleteHabitFromCloudUseCase: DeleteHabitFromCloudUseCase,
     val getHabitListFromCloudUseCase: GetHabitListFromCloudUseCase,
     val postHabitDoneToCloudUseCase: PostHabitDoneToCloudUseCase,
-    val putHabitToCloudUseCase: PutHabitToCloudUseCase
-) {
-}
+    val getCloudErrorUseCase: GetCloudErrorUseCase
+)

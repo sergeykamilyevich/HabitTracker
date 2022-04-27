@@ -14,24 +14,32 @@ class SyncHabitRepositoryImpl @Inject constructor(
     private val cloudHabitRepository: CloudHabitRepository
 ) : SyncHabitRepository {
 
-    override suspend fun uploadAllToCloud(habitList: List<Habit>) {
+    override suspend fun uploadAllToCloud(habitList: List<Habit>): Either<CloudError, Unit> {
+        var cloudError: Either<CloudError, Unit> = Unit.success()
         habitList.forEach { habit ->
             val habitForUpload = habit.clearUid()
             val newUid = putAndSyncWithDb(
                 habit = habitForUpload,
                 newHabitId = habitForUpload.id
             )
-            if (newUid is Either.Success) {
-                habit.done.forEach { date ->
-                    val habitDoneWithNewUid = HabitDone(
-                        habitUid = newUid.result,
-                        date = date
-                    )
-                    cloudHabitRepository.postHabitDone(habitDoneWithNewUid)
+            when (newUid) {
+                is Either.Success -> {
+                    habit.done.forEach { date ->
+                        val habitDoneWithNewUid = HabitDone(
+                            habitUid = newUid.result,
+                            date = date
+                        )
+                        val postResult: Either<CloudError, Unit> =
+                            cloudHabitRepository.postHabitDone(habitDoneWithNewUid)
+                        if (postResult is Either.Failure) cloudError = postResult
+                    }
                 }
-
+                is Either.Failure -> {
+                    cloudError = newUid.error.failure()
+                }
             }
         }
+        return cloudError
     }
 
     override suspend fun upsertAndSyncWithCloud(habit: Habit): Either<DbException, Int> {
@@ -82,14 +90,6 @@ class SyncHabitRepositoryImpl @Inject constructor(
             is Either.Failure -> {
                 Log.e("Okhttp", "Loading list of habits failed") //TODO toast?
             }
-        }
-    }
-
-    override suspend fun syncAllToCloud() {
-        cloudHabitRepository.deleteAllHabits()
-        val habitList = dbHabitRepository.getUnfilteredList()
-        habitList?.let {
-            uploadAllToCloud(habitList)
         }
     }
 }

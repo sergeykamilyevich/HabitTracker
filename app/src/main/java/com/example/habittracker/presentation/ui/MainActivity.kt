@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -16,6 +17,8 @@ import com.example.habittracker.R
 import com.example.habittracker.app.applicationComponent
 import com.example.habittracker.databinding.ActivityMainBinding
 import com.example.habittracker.di.components.MainActivityComponent
+import com.example.habittracker.domain.models.CloudError
+import com.example.habittracker.domain.models.Either
 import com.example.habittracker.domain.models.HabitType
 import com.example.habittracker.presentation.models.AddHabitDoneResult
 import com.example.habittracker.presentation.view_models.HabitListViewModel
@@ -84,7 +87,33 @@ class MainActivity : AppCompatActivity() {
         mainActivityComponent.inject(this)
     }
 
+    private fun makeToast(text: String, duration: Int) {
+        Toast.makeText(this, text, duration).show()
+    }
+
+    private fun makeCloudErrorToast(cloudError: CloudError) {
+        val codeString =
+            if (cloudError.code != 0) ", code: ${cloudError.code}"
+            else EMPTY_CODE_STRING
+        makeToast("${cloudError.message}$codeString", Toast.LENGTH_LONG)
+    }
+
     private fun setupViewModel() {
+        viewModel.errorCloud.observe(this) {
+            if (it is Either.Failure) {
+                makeCloudErrorToast(it.error)
+            }
+        }
+
+        viewModel.showResultToast.observe(this) {
+            it.transferIfNotHandled()?.let { result ->
+                when (result) {
+                    is Either.Success -> makeToast(getString(result.result), Toast.LENGTH_SHORT)
+                    is Either.Failure -> makeCloudErrorToast(result.error)
+                }
+            }
+        }
+
         viewModel.showSnackbarHabitDone.observe(this) {
             it.transferIfNotHandled()?.let { result ->
                 val habitType = result.habit.type
@@ -163,7 +192,7 @@ class MainActivity : AppCompatActivity() {
         return NavigationUI.navigateUp(navController, binding.drawerLayout)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
@@ -181,5 +210,6 @@ class MainActivity : AppCompatActivity() {
         private const val IMAGE_URL =
             "https://img.freepik.com/free-photo/no-problem-concept-bearded-man-makes-okay-gesture-has-everything-control-all-fine-gesture-wears-spectacles-jumper-poses-against-pink-wall-says-i-got-this-guarantees-something_273609-42817.jpg"
         private const val DEFAULT_HEADER = 0
+        private const val EMPTY_CODE_STRING = ""
     }
 }
