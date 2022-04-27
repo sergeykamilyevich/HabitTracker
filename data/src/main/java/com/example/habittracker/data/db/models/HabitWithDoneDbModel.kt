@@ -19,7 +19,7 @@ data class HabitWithDoneDbModel(
         return Habit(
             name = habitDbModel.name,
             description = habitDbModel.description,
-            priority = HabitPriority.getPriorityByPosition(habitDbModel.priority),
+            priority = HabitPriority.findPriorityById(habitDbModel.priority),
             type = habitDbModel.type,
             color = habitDbModel.color,
             recurrenceNumber = habitDbModel.recurrenceNumber,

@@ -31,8 +31,8 @@ data class HabitApiModel(
         return Habit(
             name = name,
             description = description,
-            priority = HabitPriority.getPriorityById(priority),
-            type = HabitType.getTypeById(type),
+            priority = HabitPriority.findPriorityById(priority),
+            type = HabitType.findTypeById(type),
             color = color,
             recurrenceNumber = recurrenceNumber,
             recurrencePeriod = recurrencePeriod,
@@ -47,8 +47,8 @@ data class HabitApiModel(
         fun fromHabitItem(habit: Habit) = HabitApiModel(
             name = habit.name,
             description = habit.description,
-            priority = habit.priority.int,
-            type = habit.type.int,
+            priority = habit.priority.id,
+            type = habit.type.id,
             color = habit.color,
             recurrenceNumber = habit.recurrenceNumber,
             recurrencePeriod = habit.recurrencePeriod,

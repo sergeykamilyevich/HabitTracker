@@ -1,11 +1,16 @@
 package com.example.habittracker.domain.models
 
-enum class HabitType(val int: Int) {
+enum class HabitType(val id: Int) {
     BAD(0),
     GOOD(1);
 
     companion object {
-        fun getTypeById(position: Int) = values()[position] //TODO fix to id
+        fun findTypeById(id: Int): HabitType {
+            values().forEach {
+                if (it.id == id) return it
+            }
+            throw RuntimeException("Unknown id of HabitType")
+        }
 
     }
 }

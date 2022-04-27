@@ -13,6 +13,5 @@ enum class HabitPriorityApp(@StringRes val resourceId: Int, val id: Int) {
 
     companion object {
         fun fromHabitPriority(habitPriority: HabitPriority) = valueOf(habitPriority.name)
-
     }
 }

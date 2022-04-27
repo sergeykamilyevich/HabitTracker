@@ -9,7 +9,7 @@ data class Habit(
     var recurrenceNumber: Int,
     var recurrencePeriod: Int,
     var done: List<Int> = listOf(),
-    var uid: String = EMPTY_UID, //TODO val or var?
+    val uid: String = EMPTY_UID,
     var date: Int = UNDEFINED_DATE,
     val id: Int = UNDEFINED_ID
 ) {
