@@ -3,9 +3,10 @@ package com.example.habittracker.data.repositories
 import android.util.Log
 import com.example.habittracker.domain.errors.Either
 import com.example.habittracker.domain.errors.IoError
-import com.example.habittracker.domain.models.*
 import com.example.habittracker.domain.errors.failure
 import com.example.habittracker.domain.errors.success
+import com.example.habittracker.domain.models.Habit
+import com.example.habittracker.domain.models.HabitDone
 import com.example.habittracker.domain.repositories.CloudHabitRepository
 import com.example.habittracker.domain.repositories.DbHabitRepository
 import com.example.habittracker.domain.repositories.SyncHabitRepository

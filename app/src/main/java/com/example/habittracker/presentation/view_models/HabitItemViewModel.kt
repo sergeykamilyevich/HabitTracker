@@ -9,7 +9,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.habittracker.domain.errors.Either
 import com.example.habittracker.domain.errors.IoError
 import com.example.habittracker.domain.errors.failure
-import com.example.habittracker.domain.models.*
+import com.example.habittracker.domain.models.Habit
+import com.example.habittracker.domain.models.Time
 import com.example.habittracker.domain.usecases.common.SyncUseCase
 import com.example.habittracker.domain.usecases.db.DbUseCase
 import com.example.habittracker.presentation.mappers.HabitItemMapper
@@ -24,9 +25,9 @@ class HabitItemViewModel @Inject constructor(
     private val mainViewModel: MainViewModel
 ) : ViewModel() {
 
-    private val _habitItem = MutableLiveData<Habit>() //TODO maybe inject?
+    private val _habit = MutableLiveData<Habit>() //TODO maybe inject?
     val habit: LiveData<Habit>
-        get() = _habitItem
+        get() = _habit
 
     private val _errorInputName = MutableLiveData<Boolean>()
     val errorInputName: LiveData<Boolean>
@@ -48,7 +49,7 @@ class HabitItemViewModel @Inject constructor(
     val canCloseScreen: LiveData<Unit>
         get() = _canCloseScreen
 
-    fun addHabitItem(habit: Habit) {
+    fun addHabit(habit: Habit) {
         viewModelScope.launch {
             val item = Habit(
                 name = habit.name,
@@ -66,7 +67,7 @@ class HabitItemViewModel @Inject constructor(
     }
 
     fun editHabitItem(habit: Habit) {
-        _habitItem.value?.let { oldItem ->
+        _habit.value?.let { oldItem ->
             Log.d("OkHttp", "habit $habit")
             viewModelScope.launch {
                 val item = oldItem.copy(
@@ -112,17 +113,17 @@ class HabitItemViewModel @Inject constructor(
         _canCloseScreen.value = Unit
     }
 
-    fun getHabitItem(habitItemId: Int) {
+    fun getHabit(habitItemId: Int) {
         viewModelScope.launch {
             val habitItem = dbUseCase.getHabitUseCase.invoke(habitItemId)
             when (habitItem) {
                 is Either.Success -> {
                     habitItem.result.let {
-                        _habitItem.value = it
+                        _habit.value = it
                     }
                 }
                 is Either.Failure -> {
-                    //TODO
+                    mainViewModel.setIoError(Event(habitItem.error.failure()))
                 }
             }
 

@@ -35,13 +35,17 @@ class AreCloudAndDbEqualUseCase @Inject constructor(
         if (habitListDb.size != habitListCloud.size) return false
         habitListDb.forEach { habitDb ->
             var habitIsFound = false
-            habitListCloud.forEach { habitCloud ->
-                if (habitDb.uid == habitCloud.uid) {
-                    if (!habitDb.equals(habitCloud)) return false //TODO != ?
-                    else {
-                        habitIsFound = true //TODO add break
+            run found@{
+                habitListCloud.forEach { habitCloud ->
+                    if (habitDb.uid == habitCloud.uid) {
+                        if (habitDb != habitCloud) return false
+                        else {
+                            habitIsFound = true
+                            return@found
+                        }
                     }
                 }
+
             }
             if (!habitIsFound) return false
         }

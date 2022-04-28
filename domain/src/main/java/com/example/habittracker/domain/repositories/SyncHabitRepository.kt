@@ -1,8 +1,8 @@
 package com.example.habittracker.domain.repositories
 
 import com.example.habittracker.domain.errors.Either
-import com.example.habittracker.domain.models.Habit
 import com.example.habittracker.domain.errors.IoError
+import com.example.habittracker.domain.models.Habit
 
 interface SyncHabitRepository {
 

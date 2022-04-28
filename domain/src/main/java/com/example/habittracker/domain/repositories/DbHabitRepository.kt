@@ -2,7 +2,10 @@ package com.example.habittracker.domain.repositories
 
 import com.example.habittracker.domain.errors.Either
 import com.example.habittracker.domain.errors.IoError
-import com.example.habittracker.domain.models.*
+import com.example.habittracker.domain.models.Habit
+import com.example.habittracker.domain.models.HabitDone
+import com.example.habittracker.domain.models.HabitListFilter
+import com.example.habittracker.domain.models.HabitType
 import kotlinx.coroutines.flow.Flow
 
 interface DbHabitRepository {

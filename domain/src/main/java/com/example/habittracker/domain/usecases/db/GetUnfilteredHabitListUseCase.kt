@@ -12,5 +12,6 @@ class GetUnfilteredHabitListUseCase @Inject constructor(
     private val dbHabitRepository: DbHabitRepository
 ) {
 
-    suspend operator fun invoke(): Either<IoError, List<Habit>> = dbHabitRepository.getUnfilteredList()
+    suspend operator fun invoke(): Either<IoError, List<Habit>> =
+        dbHabitRepository.getUnfilteredList()
 }

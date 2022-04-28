@@ -12,13 +12,14 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habittracker.R
 import com.example.habittracker.databinding.FragmentHabitListBinding
-import com.example.habittracker.domain.models.*
+import com.example.habittracker.domain.models.HabitDone
+import com.example.habittracker.domain.models.HabitType
+import com.example.habittracker.domain.models.Time
 import com.example.habittracker.presentation.color.ColorPicker
 import com.example.habittracker.presentation.models.HabitTypeApp
 import com.example.habittracker.presentation.recycler.HabitListAdapter
 import com.example.habittracker.presentation.view_models.MainViewModel
 import javax.inject.Inject
-import kotlin.random.Random
 
 
 class HabitListFragment : Fragment(), HasTitle {
@@ -49,7 +50,6 @@ class HabitListFragment : Fragment(), HasTitle {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (activity as MainActivity).mainActivityComponent.inject(this)
-
     }
 
     private fun parseArguments() {
@@ -86,7 +86,6 @@ class HabitListFragment : Fragment(), HasTitle {
             habitListAdapter.submitList(it)
             Log.d("99999", "habitList $it")
         }
-//        viewModel.getHabitListFromCloud()
     }
 
     private fun setupRecyclerView() {

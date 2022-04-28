@@ -17,7 +17,7 @@ import javax.inject.Inject
 @MainActivityScope
 class HabitItemMapper @Inject constructor() {
 
-    fun mapViewToHabitItem(binding: FragmentHabitItemBinding): Habit = with(binding) {
+    fun mapViewToHabit(binding: FragmentHabitItemBinding): Habit = with(binding) {
         Habit(
             name = parseString(tiedName.text),
             description = parseString(tiedDescription.text),

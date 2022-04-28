@@ -36,7 +36,7 @@ class HabitItemFragment : Fragment(), HasTitle {
         get() = _binding ?: throw RuntimeException("FragmentHabitItemBinding is null")
 
     @Inject
-    lateinit var habitItemMapper: HabitItemMapper //TODO split or merge?
+    lateinit var habitItemMapper: HabitItemMapper
 
     @Inject
     lateinit var colorPicker: ColorPicker
@@ -163,7 +163,7 @@ class HabitItemFragment : Fragment(), HasTitle {
         setupColorViews(defaultColor)
         binding.btnSave.setOnClickListener {
             if (isFieldsFilled()) {
-                viewModel.addHabitItem(habitItemMapper.mapViewToHabitItem(binding))
+                viewModel.addHabit(habitItemMapper.mapViewToHabit(binding))
             } else {
                 Toast.makeText(
                     requireActivity(),
@@ -175,18 +175,18 @@ class HabitItemFragment : Fragment(), HasTitle {
     }
 
     private fun launchEditMode() {
-        viewModel.getHabitItem(habitItemId)
+        viewModel.getHabit(habitItemId)
         viewModel.habit.observe(viewLifecycleOwner) {
             setupFields(it)
         }
         binding.btnSave.setOnClickListener {
-            viewModel.editHabitItem(habitItemMapper.mapViewToHabitItem(binding))
+            viewModel.editHabitItem(habitItemMapper.mapViewToHabit(binding))
         }
     }
 
     private fun createRandomTestHabits() {
         for (i in 1..15) {
-            viewModel.addHabitItem(
+            viewModel.addHabit(
                 Habit(
                     "Name $i",
                     "This habit is very important for my self-development",

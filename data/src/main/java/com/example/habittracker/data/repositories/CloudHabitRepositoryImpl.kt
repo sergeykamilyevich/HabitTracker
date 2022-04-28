@@ -8,11 +8,12 @@ import com.example.habittracker.domain.errors.Either
 import com.example.habittracker.domain.errors.Either.Failure
 import com.example.habittracker.domain.errors.Either.Success
 import com.example.habittracker.domain.errors.IoError
-import com.example.habittracker.domain.models.*
 import com.example.habittracker.domain.errors.IoError.CloudError
 import com.example.habittracker.domain.errors.IoError.DeletingAllHabitsError
 import com.example.habittracker.domain.errors.failure
 import com.example.habittracker.domain.errors.success
+import com.example.habittracker.domain.models.Habit
+import com.example.habittracker.domain.models.HabitDone
 import com.example.habittracker.domain.repositories.CloudHabitRepository
 import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -103,7 +104,7 @@ class CloudHabitRepositoryImpl @Inject constructor(
                 if (habitListAfter.result.isEmpty()) Unit.success()
                 else DeletingAllHabitsError().failure()
             }
-            is Failure ->  habitListAfter.error.failure()
+            is Failure -> habitListAfter.error.failure()
         }
 
     }
