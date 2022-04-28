@@ -36,7 +36,6 @@ object CloudModule {
 
     @[Provides Singleton]
     fun provideApiService(retrofit: Retrofit): HabitApi = retrofit.create(HabitApi::class.java)
-
     private const val BASE_URL = "https://droid-test-server.doubletapp.ru/"
 
 }

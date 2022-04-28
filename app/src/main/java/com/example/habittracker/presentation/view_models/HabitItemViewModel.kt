@@ -25,7 +25,7 @@ class HabitItemViewModel @Inject constructor(
     private val mainViewModel: MainViewModel
 ) : ViewModel() {
 
-    private val _habit = MutableLiveData<Habit>() //TODO maybe inject?
+    private val _habit = MutableLiveData<Habit>()
     val habit: LiveData<Habit>
         get() = _habit
 
