@@ -43,10 +43,6 @@ class HabitItemViewHolder(
                 recurrencePeriod,
                 recurrencePeriod
             )
-            Log.d("99999", "habit $habit")
-            Log.d("99999", "habit.actualDoneListSize() ${habit.actualDoneListSize()}")
-
-
             tvRecurrence.text = root.resources.getString(
                 R.string.recurrence,
                 habit.actualDoneListSize(),

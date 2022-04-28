@@ -84,7 +84,6 @@ class HabitListFragment : Fragment(), HasTitle {
 
         viewModel.habitList.observe(viewLifecycleOwner) {
             habitListAdapter.submitList(it)
-            Log.d("99999", "habitList $it")
         }
     }
 

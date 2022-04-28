@@ -12,7 +12,7 @@ class DelayForRetryRequest(
         try {
             Thread.sleep(delay)
         } catch (interruptedException: InterruptedException) {
-            Log.d(
+            Log.e(
                 "Okhttp",
                 "Interrupted exception: $interruptedException"
             )

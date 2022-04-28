@@ -61,14 +61,12 @@ class HabitItemViewModel @Inject constructor(
                 recurrencePeriod = habit.recurrencePeriod,
                 date = time.currentUtcDateInSeconds()
             )
-            Log.d("OkHttp", "addHabitItem item $item")
             upsertHabit(item)
         }
     }
 
     fun editHabitItem(habit: Habit) {
         _habit.value?.let { oldItem ->
-            Log.d("OkHttp", "habit $habit")
             viewModelScope.launch {
                 val item = oldItem.copy(
                     name = habit.name,
@@ -80,7 +78,6 @@ class HabitItemViewModel @Inject constructor(
                     recurrencePeriod = habit.recurrencePeriod,
                     date = time.currentUtcDateInSeconds()
                 )
-                Log.d("OkHttp", "newItem $item")
                 upsertHabit(item)
             }
         }

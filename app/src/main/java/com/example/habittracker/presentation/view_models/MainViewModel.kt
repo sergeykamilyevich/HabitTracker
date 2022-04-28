@@ -148,16 +148,6 @@ class MainViewModel @Inject constructor(
         _habitListFilter.value = currentHabitListFilter
     }
 
-    fun getHabitListFromCloud() {
-        viewModelScope.launch {
-            val habitList = cloudUseCase.getHabitListFromCloudUseCase.invoke()
-            when (habitList) {
-                is Success -> Log.d("OkHttp", "habitListFromCloud ${habitList.result}")
-                is Failure -> Log.d("OkHttp", "habitListFromCloud error ${habitList.error}")
-            }
-        }
-    }
-
     fun uploadAllHabitsFromDbToCloud() {
         viewModelScope.launch {
             handleSyncResult(syncUseCase.syncAllToCloudUseCase.invoke())

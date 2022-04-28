@@ -99,7 +99,6 @@ class SyncHabitRepositoryImpl @Inject constructor(
 
             }
             is Either.Failure -> {
-                Log.e("Okhttp", "Loading list of habits failed")
                 result = habitList.error.failure()
             }
         }
