@@ -3,6 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <group android:id="@+id/group_sync">
         <item
+            android:id="@+id/menu_compare"
+            android:title="@string/compare_device_habits_with_the_server"
+            app:showAsAction="never" />
+        <item
             android:id="@+id/menu_upload"
             android:icon="@drawable/ic_baseline_cloud_upload_24"
             android:title="@string/upload_habits_to_server"

@@ -15,5 +15,5 @@ interface CloudHabitRepository {
 
     suspend fun postHabitDone(habitDone: HabitDone): Either<IoError, Unit>
 
-    suspend fun deleteAllHabits()
+    suspend fun deleteAllHabits(): Either<IoError, Unit>
 }

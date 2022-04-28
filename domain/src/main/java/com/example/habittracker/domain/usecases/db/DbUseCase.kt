@@ -5,12 +5,12 @@ import javax.inject.Singleton
 
 @Singleton
 class DbUseCase @Inject constructor(
-    val addHabitDoneToDbUseCase: AddHabitDoneToDbUseCase,
-    val deleteHabitDoneFromDbUseCase: DeleteHabitDoneFromDbUseCase,
-    val deleteHabitFromDbUseCase: DeleteHabitFromDbUseCase,
-    val getHabitFromDbUseCase: GetHabitFromDbUseCase,
-    val getHabitListFromDbUseCase: GetHabitListFromDbUseCase,
-    val getUnfilteredHabitListFromDbUseCase: GetUnfilteredHabitListFromDbUseCase,
-    val upsertHabitToDbUseCase: UpsertHabitToDbUseCase,
-    val deleteAllHabitsFromDbUseCase: DeleteAllHabitsFromDbUseCase
+    val addHabitDoneUseCase: AddHabitDoneUseCase,
+    val deleteHabitDoneUseCase: DeleteHabitDoneUseCase,
+    val deleteHabitUseCase: DeleteHabitUseCase,
+    val getHabitUseCase: GetHabitUseCase,
+    val getHabitListUseCase: GetHabitListUseCase,
+    val getUnfilteredHabitListUseCase: GetUnfilteredHabitListUseCase,
+    val upsertHabitUseCase: UpsertHabitUseCase,
+    val deleteAllHabitsUseCase: DeleteAllHabitsUseCase
 )

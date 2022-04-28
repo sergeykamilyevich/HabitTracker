@@ -6,6 +6,8 @@ import androidx.lifecycle.*
 import com.example.habittracker.R
 import com.example.habittracker.di.annotations.MainActivityScope
 import com.example.habittracker.domain.errors.Either
+import com.example.habittracker.domain.errors.Either.Failure
+import com.example.habittracker.domain.errors.Either.Success
 import com.example.habittracker.domain.errors.IoError
 import com.example.habittracker.domain.errors.failure
 import com.example.habittracker.domain.errors.success
@@ -36,6 +38,14 @@ class MainViewModel @Inject constructor(
     val showResultToast: LiveData<Event<Either<IoError, Int>>>
         get() = _showResultToast
 
+    private val _showSyncDialogAlert = MutableLiveData<Unit>()
+    val showSyncDialogAlert: LiveData<Unit>
+        get() = _showSyncDialogAlert
+
+    private val _ioError = MutableLiveData<Event<Either<IoError, Unit>>>()
+    val ioError: LiveData<Event<Either<IoError, Unit>>>
+        get() = _ioError
+
     private var isHabitDoneButtonsBlocked: Boolean = false
 
     private var currentHabitListFilter = HabitListFilter(HabitListOrderBy.NAME_ASC, "")
@@ -47,6 +57,10 @@ class MainViewModel @Inject constructor(
 
     fun isHabitDoneButtonsBlocked() = isHabitDoneButtonsBlocked
 
+    fun setIoError(value: Event<Either<IoError, Unit>>) {
+        _ioError.value = value
+    }
+
     fun blockHabitDoneButtons() {
         isHabitDoneButtonsBlocked = true
     }
@@ -57,60 +71,70 @@ class MainViewModel @Inject constructor(
 
     fun deleteHabitItem(habit: Habit) {
         viewModelScope.launch {
-            dbUseCase.deleteHabitFromDbUseCase(habit)
-            cloudUseCase.deleteHabitFromCloudUseCase.invoke(habit)
+            val resultDb = dbUseCase.deleteHabitUseCase.invoke(habit)
+            if (resultDb is Failure) _ioError.value = Event(resultDb.error.failure())
+            val resultCloud = cloudUseCase.deleteHabitFromCloudUseCase.invoke(habit)
+            if (resultCloud is Failure) _ioError.value = Event(resultCloud.error.failure())
         }
     }
 
     fun deleteAllHabitsFromCloud() {
         viewModelScope.launch {
-            cloudUseCase.deleteAllHabitsFromCloudUseCase()
+            val result = cloudUseCase.deleteAllHabitsFromCloudUseCase.invoke()
+            if (result is Failure) _ioError.value = Event(result.error.failure())
         }
     }
 
     fun deleteAllHabitsFromDb() {
         viewModelScope.launch {
-            dbUseCase.deleteAllHabitsFromDbUseCase()
+            val result = dbUseCase.deleteAllHabitsUseCase.invoke()
+            if (result is Failure) _ioError.value = Event(result.error.failure())
         }
     }
 
     fun addHabitDone(habitDone: HabitDone) {
         viewModelScope.launch {
-            val habitDoneIdAdded = dbUseCase.addHabitDoneToDbUseCase(habitDone)
-            val newHabitDone = habitDone.copy(id = habitDoneIdAdded)
-            val habit =
-                dbUseCase.getHabitFromDbUseCase.invoke(habitDone.habitId)
-            when (habit) {
-                is Either.Success -> {
-                    _showSnackbarHabitDone.value = Event(
-                        AddHabitDoneResult(
-                            habit = habit.result,
-                            habitDone = newHabitDone
-                        )
-                    )
+            val habitDoneIdAdded = dbUseCase.addHabitDoneUseCase.invoke(habitDone)
+            when (habitDoneIdAdded) {
+                is Success -> {
+                    val newHabitDone = habitDone.copy(id = habitDoneIdAdded.result)
+                    val habit =
+                        dbUseCase.getHabitUseCase.invoke(habitDone.habitId)
+                    when (habit) {
+                        is Success -> {
+                            _showSnackbarHabitDone.value = Event(
+                                AddHabitDoneResult(
+                                    habit = habit.result,
+                                    habitDone = newHabitDone
+                                )
+                            )
+                        }
+                        is Failure -> _ioError.value = Event(habit.error.failure())
+                    }
                 }
-                is Either.Failure -> {
-                    //TODO
-                }
+                is Failure -> _ioError.value = Event(habitDoneIdAdded.error.failure())
             }
         }
     }
 
     fun addHabitDoneToCloud(habitDone: HabitDone) {
         viewModelScope.launch {
-            cloudUseCase.postHabitDoneToCloudUseCase(habitDone)
+            val result = cloudUseCase.postHabitDoneToCloudUseCase.invoke(habitDone)
+            if (result is Failure) {
+                _ioError.value = Event(result.error.failure())
+            }
         }
     }
 
     fun deleteHabitDone(habitDoneId: Int) {
         viewModelScope.launch {
-            dbUseCase.deleteHabitDoneFromDbUseCase(habitDoneId)
+            dbUseCase.deleteHabitDoneUseCase.invoke(habitDoneId)
         }
     }
 
     fun getHabitList(habitTypeFilter: HabitType?) {
         habitList = Transformations.switchMap(habitListFilter) {
-            dbUseCase.getHabitListFromDbUseCase.invoke(habitTypeFilter, it).asLiveData()
+            dbUseCase.getHabitListUseCase.invoke(habitTypeFilter, it).asLiveData()
         }
     }
 
@@ -124,44 +148,57 @@ class MainViewModel @Inject constructor(
         _habitListFilter.value = currentHabitListFilter
     }
 
-    fun fetchHabits() {
-        Log.d("OkHttp", "start fetchHabits")
+    fun getHabitListFromCloud() {
         viewModelScope.launch {
             val habitList = cloudUseCase.getHabitListFromCloudUseCase.invoke()
             when (habitList) {
-                is Either.Success -> Log.d("OkHttp", "habitListFromApi ${habitList.result}")
-                is Either.Failure -> Log.d("OkHttp", "habitListFromApi error ${habitList.error}")
+                is Success -> Log.d("OkHttp", "habitListFromCloud ${habitList.result}")
+                is Failure -> Log.d("OkHttp", "habitListFromCloud error ${habitList.error}")
             }
         }
     }
 
     fun uploadAllHabitsFromDbToCloud() {
         viewModelScope.launch {
-            val result = syncUseCase.syncAllToCloudUseCase.invoke()
+            handleSyncResult(syncUseCase.syncAllToCloudUseCase.invoke())
+        }
+    }
+
+    fun downloadAllHabitsFromCloudToDb() {
+        viewModelScope.launch {
+            handleSyncResult(syncUseCase.syncAllFromCloudUseCase.invoke())
+        }
+    }
+
+    private fun handleSyncResult(result: Either<IoError, Unit>) {
+        when (result) {
+            is Success -> {
+                _showResultToast.value = Event(R.string.sync_is_done.success())
+            }
+            is Failure -> {
+                _showResultToast.value = Event(result.error.failure())
+            }
+        }
+    }
+
+    fun compareCloudAndDb() {
+        viewModelScope.launch {
+            val result = syncUseCase.areCloudAndDbEqualUseCase.invoke()
             when (result) {
-                is Either.Success -> {
-                    _showResultToast.value = Event(R.string.sync_is_done.success())
+                is Success -> {
+                    if (result.result)
+                        _showResultToast.value = Event(R.string.cloud_and_db_are_equals.success())
+                    else {
+                        _showSyncDialogAlert.value = Unit
+                    }
                 }
-                is Either.Failure -> {
+                is Failure -> {
                     _showResultToast.value = Event(result.error.failure())
                 }
             }
         }
     }
 
-    fun downloadAllHabitsFromCloudToDb() {
-        viewModelScope.launch {
-            val result = syncUseCase.syncAllFromCloudUseCase.invoke() //TODO merge with uploadallhabits
-            when (result) {
-                is Either.Success -> {
-                    _showResultToast.value = Event(R.string.sync_is_done.success())
-                }
-                is Either.Failure -> {
-                    _showResultToast.value = Event(result.error.failure())
-                }
-            }
-                    }
-    }
 
     companion object {
         private const val EMPTY_STRING = ""

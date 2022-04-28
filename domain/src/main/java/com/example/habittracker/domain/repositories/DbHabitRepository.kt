@@ -12,17 +12,17 @@ interface DbHabitRepository {
         habitListFilter: HabitListFilter
     ): Flow<List<Habit>>
 
-    suspend fun getUnfilteredList(): List<Habit>? //TODO refactor to non-null
+    suspend fun getUnfilteredList(): Either<IoError, List<Habit>>
 
-    suspend fun getHabitById(habitItemId: Int): Either<IoError, Habit>
+    suspend fun getHabitById(habitId: Int): Either<IoError, Habit>
 
     suspend fun upsertHabit(habit: Habit): Either<IoError, Int>
 
-    suspend fun deleteHabit(habit: Habit)
+    suspend fun deleteHabit(habit: Habit): Either<IoError, Unit>
 
-    suspend fun deleteAllHabits()
+    suspend fun deleteAllHabits(): Either<IoError, Unit>
 
-    suspend fun addHabitDone(habitDone: HabitDone): Int
+    suspend fun addHabitDone(habitDone: HabitDone): Either<IoError, Int>
 
     suspend fun deleteHabitDone(habitDoneId: Int)
 }

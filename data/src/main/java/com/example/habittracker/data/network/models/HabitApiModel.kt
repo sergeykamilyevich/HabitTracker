@@ -19,7 +19,7 @@ data class HabitApiModel(
     @SerializedName("frequency")
     val recurrencePeriod: Int,
     @SerializedName("priority")
-    val priority: Int, //TODO Enum?
+    val priority: Int,
     @SerializedName("title")
     val name: String,
     @SerializedName("type")

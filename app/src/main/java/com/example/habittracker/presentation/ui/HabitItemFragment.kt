@@ -14,16 +14,20 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.habittracker.R
 import com.example.habittracker.databinding.FragmentHabitItemBinding
-import com.example.habittracker.domain.errors.Either
-import com.example.habittracker.domain.errors.IoError
-import com.example.habittracker.domain.models.*
+import com.example.habittracker.domain.models.Habit
+import com.example.habittracker.domain.models.Habit.Companion.UNDEFINED_ID
+import com.example.habittracker.domain.models.HabitPriority
+import com.example.habittracker.domain.models.HabitType
+import com.example.habittracker.domain.models.Time
 import com.example.habittracker.presentation.color.ColorPicker
 import com.example.habittracker.presentation.mappers.HabitItemMapper
 import com.example.habittracker.presentation.models.ColorRgbHsv
 import com.example.habittracker.presentation.models.HabitPriorityApp
 import com.example.habittracker.presentation.view_models.HabitItemViewModel
+import com.example.habittracker.presentation.view_models.MainViewModel
 import com.google.android.material.textfield.TextInputEditText
 import javax.inject.Inject
+import kotlin.random.Random
 
 class HabitItemFragment : Fragment(), HasTitle {
 
@@ -42,7 +46,10 @@ class HabitItemFragment : Fragment(), HasTitle {
     @Inject
     lateinit var viewModel: HabitItemViewModel
 
-    private var habitItemId: Int = 0
+    @Inject
+    lateinit var mainViewModel: MainViewModel
+
+    private var habitItemId: Int = UNDEFINED_ID
     private val spinnerAdapter by lazy {
         ArrayAdapter(
             requireActivity(),
@@ -60,7 +67,7 @@ class HabitItemFragment : Fragment(), HasTitle {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        habitItemId = arguments?.getInt(HABIT_ITEM_ID, 0)
+        habitItemId = arguments?.getInt(HABIT_ITEM_ID, UNDEFINED_ID)
             ?: throw RuntimeException("Unknown habitItemId")
     }
 
@@ -79,6 +86,7 @@ class HabitItemFragment : Fragment(), HasTitle {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+//        createRandomHabits()
         chooseScreenMode()
         setupSpinnerAdapter()
         setupViewModelObservers()
@@ -92,7 +100,7 @@ class HabitItemFragment : Fragment(), HasTitle {
     }
 
     private fun chooseScreenMode() {
-        if (habitItemId == Habit.UNDEFINED_ID) launchAddMode() else launchEditMode()
+        if (habitItemId == UNDEFINED_ID) launchAddMode() else launchEditMode()
     }
 
     private fun setupColorScrollView() {
@@ -147,39 +155,6 @@ class HabitItemFragment : Fragment(), HasTitle {
         viewModel.errorInputDescription.observe(viewLifecycleOwner) {
             handleInputError(it, binding.tiedDescription)
         }
-        viewModel.dbError.observe(viewLifecycleOwner) {
-            it.transferIfNotHandled()?.let { result ->
-                if (result is Either.Failure) {
-                    showToastDbError(result)
-                }
-            }
-        }
-
-        viewModel.cloudError.observe(viewLifecycleOwner) {
-            it.transferIfNotHandled()?.let { result ->
-                if (result is Either.Failure) {
-                    showToastCloudError(result)
-                }
-            }
-        }
-    }
-
-    private fun showToastDbError(result: Either.Failure<IoError, Int>) {
-        val errorMessageFromRes = when (result.error) {
-            is IoError.HabitAlreadyExistsException -> R.string.habit_already_exists
-            is IoError.SqlException -> R.string.sql_exception
-            else -> throw RuntimeException("Unknown type of SQL upsert exception")
-        }
-        Toast.makeText(
-            context, resources.getString(
-                errorMessageFromRes,
-                result.error.message
-            ), Toast.LENGTH_LONG
-        ).show()
-    }
-
-    private fun showToastCloudError(result: Either.Failure<IoError, String>) {
-        Toast.makeText(context, result.error.message, Toast.LENGTH_LONG).show()
     }
 
     private fun launchAddMode() {
@@ -207,6 +182,25 @@ class HabitItemFragment : Fragment(), HasTitle {
         binding.btnSave.setOnClickListener {
             viewModel.editHabitItem(habitItemMapper.mapViewToHabitItem(binding))
         }
+    }
+
+    private fun createRandomTestHabits() {
+        for (i in 1..15) {
+            viewModel.addHabitItem(
+                Habit(
+                    "Name $i",
+                    "This habit is very important for my self-development",
+                    HabitPriority.NORMAL,
+                    HabitType.GOOD,
+                    colors[Random.nextInt(16)],
+                    Random.nextInt(10) + 1,
+                    Random.nextInt(30) + 1,
+                    date = Time().currentUtcDateInSeconds(),
+                    done = listOf()
+                )
+            )
+        }
+        R.string.low_priority
     }
 
     private fun handleInputError(error: Boolean, textInputEditText: TextInputEditText) {
@@ -272,6 +266,7 @@ class HabitItemFragment : Fragment(), HasTitle {
     companion object {
 
         private const val HABIT_ITEM_ID = "habit item id"
+
         fun createArgs(habitItemId: Int) =
             Bundle().apply {
                 putInt(HABIT_ITEM_ID, habitItemId)

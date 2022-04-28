@@ -1,14 +1,16 @@
 package com.example.habittracker.data.repositories
 
-import android.util.Log
 import com.example.habittracker.data.network.models.HabitApiModel
 import com.example.habittracker.data.network.models.HabitDoneApiModel
 import com.example.habittracker.data.network.models.HabitUidApiModel
 import com.example.habittracker.data.network.retrofit.HabitApi
 import com.example.habittracker.domain.errors.Either
+import com.example.habittracker.domain.errors.Either.Failure
+import com.example.habittracker.domain.errors.Either.Success
 import com.example.habittracker.domain.errors.IoError
 import com.example.habittracker.domain.models.*
 import com.example.habittracker.domain.errors.IoError.CloudError
+import com.example.habittracker.domain.errors.IoError.DeletingAllHabitsError
 import com.example.habittracker.domain.errors.failure
 import com.example.habittracker.domain.errors.success
 import com.example.habittracker.domain.repositories.CloudHabitRepository
@@ -40,7 +42,6 @@ class CloudHabitRepositoryImpl @Inject constructor(
     }
 
     override suspend fun putHabit(habit: Habit): Either<IoError, String> {
-        Log.d("OkHttp", "putHabit start")
         val habitItemApiModel = HabitApiModel.fromHabitItem(habit)
         val jsonRequestBody = Gson().toJson(habitItemApiModel)
         val requestBody = jsonRequestBody
@@ -49,7 +50,7 @@ class CloudHabitRepositoryImpl @Inject constructor(
             apiService.putHabit(habitItemApiModel = requestBody)
         return if (response.isSuccessful) {
             val responseBody = response.body()
-                ?: return CloudError(message = "Unknown server error").failure()
+                ?: return CloudError(message = UNKNOWN_SERVER_ERROR).failure()
             responseBody.uid.success()
         } else {
             val code = response.code()
@@ -73,7 +74,7 @@ class CloudHabitRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun postHabitDone(habitDone: HabitDone): Either<CloudError, Unit> { //TODO change String to Either
+    override suspend fun postHabitDone(habitDone: HabitDone): Either<CloudError, Unit> {
         val habitDoneApiModel = HabitDoneApiModel.fromHabitDone(habitDone)
         val jsonRequestBody = Gson().toJson(habitDoneApiModel)
         val requestBody = jsonRequestBody
@@ -88,12 +89,26 @@ class CloudHabitRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteAllHabits() {
-        val habitList = getHabitList()
-        if (habitList is Either.Success) {
-            habitList.result.forEach {
-                deleteHabit(it)
+    override suspend fun deleteAllHabits(): Either<IoError, Unit> {
+        when (val habitListBefore = getHabitList()) {
+            is Success -> {
+                habitListBefore.result.forEach {
+                    deleteHabit(it)
+                }
             }
+            is Failure -> return habitListBefore.error.failure()
         }
+        return when (val habitListAfter = getHabitList()) {
+            is Success -> {
+                if (habitListAfter.result.isEmpty()) Unit.success()
+                else DeletingAllHabitsError().failure()
+            }
+            is Failure ->  habitListAfter.error.failure()
+        }
+
+    }
+
+    companion object {
+        private const val UNKNOWN_SERVER_ERROR = "Unknown server error"
     }
 }

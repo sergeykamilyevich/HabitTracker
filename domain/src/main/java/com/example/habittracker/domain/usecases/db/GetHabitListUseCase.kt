@@ -9,7 +9,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GetHabitListFromDbUseCase @Inject constructor(
+class GetHabitListUseCase @Inject constructor(
     private val dbHabitRepository: DbHabitRepository
 ) {
 

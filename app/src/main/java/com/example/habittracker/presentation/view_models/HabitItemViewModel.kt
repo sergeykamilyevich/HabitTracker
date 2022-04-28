@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.habittracker.domain.errors.Either
 import com.example.habittracker.domain.errors.IoError
+import com.example.habittracker.domain.errors.failure
 import com.example.habittracker.domain.models.*
 import com.example.habittracker.domain.usecases.common.SyncUseCase
 import com.example.habittracker.domain.usecases.db.DbUseCase
@@ -19,7 +20,8 @@ class HabitItemViewModel @Inject constructor(
     private val syncUseCase: SyncUseCase,
     private val dbUseCase: DbUseCase,
     private val mapper: HabitItemMapper,
-    private val time: Time
+    private val time: Time,
+    private val mainViewModel: MainViewModel
 ) : ViewModel() {
 
     private val _habitItem = MutableLiveData<Habit>() //TODO maybe inject?
@@ -45,14 +47,6 @@ class HabitItemViewModel @Inject constructor(
     private val _canCloseScreen = MutableLiveData<Unit>()
     val canCloseScreen: LiveData<Unit>
         get() = _canCloseScreen
-
-    private val _dbError = MutableLiveData<Event<Either<IoError, Int>>>()
-    val dbError: LiveData<Event<Either<IoError, Int>>>
-        get() = _dbError
-
-    private val _cloudError = MutableLiveData<Event<Either<IoError, String>>>()
-    val cloudError: LiveData<Event<Either<IoError, String>>>
-        get() = _cloudError
 
     fun addHabitItem(habit: Habit) {
         viewModelScope.launch {
@@ -93,19 +87,23 @@ class HabitItemViewModel @Inject constructor(
 
     private suspend fun upsertHabit(habit: Habit) {
         val resultOfUpserting: Either<IoError, Int> =
-            dbUseCase.upsertHabitToDbUseCase.invoke(habit)
+            dbUseCase.upsertHabitUseCase.invoke(habit)
         when (resultOfUpserting) {
             is Either.Success -> {
                 closeItemFragment()
                 val newHabitId = resultOfUpserting.result
                 val putResult =
-                    syncUseCase.putHabitAndSyncWithDbUseCase(habit = habit, newHabitId = newHabitId)
+                    syncUseCase
+                        .putHabitAndSyncWithDbUseCase
+                        .invoke(habit = habit, newHabitId = newHabitId)
                 if (putResult is Either.Failure) {
-                    _cloudError.value = Event(putResult) //TODO fragment is closed in this moment
+                    mainViewModel.setIoError(
+                        Event(putResult.error.failure())
+                    )
                 }
             }
             is Either.Failure -> {
-                _dbError.value = Event(resultOfUpserting)
+                mainViewModel.setIoError(Event(resultOfUpserting.error.failure()))
             }
         }
     }
@@ -116,7 +114,7 @@ class HabitItemViewModel @Inject constructor(
 
     fun getHabitItem(habitItemId: Int) {
         viewModelScope.launch {
-            val habitItem = dbUseCase.getHabitFromDbUseCase.invoke(habitItemId)
+            val habitItem = dbUseCase.getHabitUseCase.invoke(habitItemId)
             when (habitItem) {
                 is Either.Success -> {
                     habitItem.result.let {

@@ -49,11 +49,11 @@ class HabitListPagerFragment : Fragment(), HasTitle {
 
     private fun setupAddButton() {
         binding.btnAddHabit.setOnClickListener {
-            launchHabitItemActivityAddMode()
+            launchHabitItemFragmentAddMode()
         }
     }
 
-    private fun launchHabitItemActivityAddMode() {
+    private fun launchHabitItemFragmentAddMode() {
         val destinationId = R.id.habitItemFragment
         val args = HabitItemFragment.createArgs(Habit.UNDEFINED_ID)
         findNavController().navigate(destinationId, args)

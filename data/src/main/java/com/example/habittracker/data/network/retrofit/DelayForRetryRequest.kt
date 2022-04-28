@@ -10,7 +10,7 @@ class DelayForRetryRequest(
         delay = (delay * FACTOR).toLong().coerceAtMost(MAX_DELAY)
         retryCount++
         try {
-            Thread.sleep(delay) //TODO delay?
+            Thread.sleep(delay)
         } catch (interruptedException: InterruptedException) {
             Log.d(
                 "Okhttp",

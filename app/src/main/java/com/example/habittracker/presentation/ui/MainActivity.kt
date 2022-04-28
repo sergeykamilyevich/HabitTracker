@@ -6,6 +6,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuCompat
 import androidx.fragment.app.Fragment
@@ -18,8 +19,9 @@ import com.example.habittracker.R
 import com.example.habittracker.app.applicationComponent
 import com.example.habittracker.databinding.ActivityMainBinding
 import com.example.habittracker.di.components.MainActivityComponent
-import com.example.habittracker.domain.errors.IoError
 import com.example.habittracker.domain.errors.Either
+import com.example.habittracker.domain.errors.IoError
+import com.example.habittracker.domain.errors.failure
 import com.example.habittracker.domain.models.HabitType
 import com.example.habittracker.presentation.models.AddHabitDoneResult
 import com.example.habittracker.presentation.view_models.MainViewModel
@@ -66,7 +68,7 @@ class MainActivity : AppCompatActivity() {
         setupNavigation()
         setupViewModel()
         setupHeaderImage()
-
+        viewModel.compareCloudAndDb()
     }
 
     private fun setupHeaderImage() {
@@ -88,20 +90,10 @@ class MainActivity : AppCompatActivity() {
         mainActivityComponent.inject(this)
     }
 
-    private fun makeToast(text: String, duration: Int) {
-        Toast.makeText(this, text, duration).show()
-    }
-
-    private fun makeCloudErrorToast(ioError: IoError) {
-        val codeString =
-            if (ioError.code != 0) ", code: ${ioError.code}"
-            else EMPTY_CODE_STRING
-        makeToast("${ioError.message}$codeString", Toast.LENGTH_LONG)
-    }
-
     private fun setupViewModel() {
         viewModel.errorCloud.observe(this) {
             if (it is Either.Failure) {
+                showToastIoError(it)
                 makeCloudErrorToast(it.error)
             }
         }
@@ -146,7 +138,63 @@ class MainActivity : AppCompatActivity() {
                     .show()
             }
         }
+
+        viewModel.ioError.observe(this) {
+            it.transferIfNotHandled()?.let { result ->
+                if (result is Either.Failure) {
+                    showToastIoError(result.error.failure())
+                }
+            }
+        }
+
+        viewModel.showSyncDialogAlert.observe(this) {
+            val builder = AlertDialog.Builder(this)
+            builder.apply {
+                setMessage(getString(R.string.cloud_and_db_are_not_equals))
+                setCancelable(true)
+                setPositiveButton(getString(R.string.download_from_the_server)) { _, _ ->
+                    viewModel.downloadAllHabitsFromCloudToDb()
+                }
+                setNegativeButton(getString(R.string.upload_to_the_server)) { _, _ ->
+                    viewModel.uploadAllHabitsFromDbToCloud()
+                }
+                setNeutralButton(getString(R.string.cancel)) { dialog, _ ->
+                    dialog.cancel()
+                }
+            }
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.show()
+        }
     }
+
+    private fun showToastIoError(result: Either.Failure<IoError, Unit>) {
+        val errorMessageFromRes = when (result.error) {
+            is IoError.HabitAlreadyExistsError -> R.string.habit_already_exists
+            is IoError.SqlError -> R.string.sql_error
+            is IoError.CloudError -> R.string.cloud_error
+            is IoError.DeletingAllHabitsError -> R.string.deleting_habits_error
+            is IoError.DeletingHabitError -> R.string.deleting_habits_error
+        }
+        makeToast(
+            resources.getString(
+                errorMessageFromRes,
+                result.error.message,
+                errorCodeText(result.error)
+            ), Toast.LENGTH_LONG
+        )
+    }
+
+    private fun makeToast(text: String, duration: Int) {
+        Toast.makeText(this, text, duration).show()
+    }
+
+    private fun makeCloudErrorToast(ioError: IoError) {
+        makeToast("${ioError.message}${errorCodeText(ioError)}", Toast.LENGTH_LONG)
+    }
+
+    private fun errorCodeText(ioError: IoError): String =
+        if (ioError.code != UNKNOWN_CODE) ", code: ${ioError.code}"
+        else EMPTY_CODE_STRING
 
     private fun snackbarCallback(result: AddHabitDoneResult) =
         object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
@@ -205,6 +253,7 @@ class MainActivity : AppCompatActivity() {
             R.id.menu_download -> viewModel.downloadAllHabitsFromCloudToDb()
             R.id.menu_clear_db -> viewModel.deleteAllHabitsFromDb()
             R.id.menu_clear_cloud -> viewModel.deleteAllHabitsFromCloud()
+            R.id.menu_compare -> viewModel.compareCloudAndDb()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -215,5 +264,7 @@ class MainActivity : AppCompatActivity() {
             "https://img.freepik.com/free-photo/no-problem-concept-bearded-man-makes-okay-gesture-has-everything-control-all-fine-gesture-wears-spectacles-jumper-poses-against-pink-wall-says-i-got-this-guarantees-something_273609-42817.jpg"
         private const val DEFAULT_HEADER = 0
         private const val EMPTY_CODE_STRING = ""
+        private const val UNKNOWN_CODE = 0
+
     }
 }

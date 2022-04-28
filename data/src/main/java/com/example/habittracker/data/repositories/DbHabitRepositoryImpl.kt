@@ -8,11 +8,13 @@ import com.example.habittracker.data.db.models.HabitWithDoneDbModel
 import com.example.habittracker.data.db.room.AppDataBase
 import com.example.habittracker.domain.errors.Either
 import com.example.habittracker.domain.errors.IoError
-import com.example.habittracker.domain.models.*
-import com.example.habittracker.domain.errors.IoError.HabitAlreadyExistsException
-import com.example.habittracker.domain.errors.IoError.SqlException
+import com.example.habittracker.domain.errors.IoError.*
 import com.example.habittracker.domain.errors.failure
 import com.example.habittracker.domain.errors.success
+import com.example.habittracker.domain.models.Habit
+import com.example.habittracker.domain.models.HabitDone
+import com.example.habittracker.domain.models.HabitListFilter
+import com.example.habittracker.domain.models.HabitType
 import com.example.habittracker.domain.repositories.DbHabitRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -43,19 +45,24 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
         }
     }
 
-    override suspend fun getUnfilteredList(): List<Habit>? =
-        habitItemDao.getUnfilteredList()?.map {
-            it.toHabit()
+    override suspend fun getUnfilteredList(): Either<IoError, List<Habit>> {
+        val list = habitItemDao.getUnfilteredList()
+        list?.let {
+            return it.map { habitWithDoneDbModel ->
+                habitWithDoneDbModel.toHabit()
+            }.success()
         }
+        return SqlError("Habit list wasn't received").failure()
+    }
 
     private fun allHabitTypesToStringList() = HabitType.values().map { it.name }
 
-    override suspend fun getHabitById(habitItemId: Int): Either<IoError, Habit> {
-        val habitItemWithDoneDbModel = habitItemDao.getById(habitItemId)
+    override suspend fun getHabitById(habitId: Int): Either<IoError, Habit> {
+        val habitItemWithDoneDbModel = habitItemDao.getById(habitId)
         habitItemWithDoneDbModel?.let {
             return habitItemWithDoneDbModel.toHabit().success()
         }
-        return SqlException("Habit with id $habitItemId not found").failure()
+        return SqlError("Habit with id $habitId not found").failure()
 
 
     }
@@ -63,7 +70,7 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
     override suspend fun upsertHabit(habit: Habit): Either<IoError, Int> {
         val habitItemDbModel = HabitDbModel.fromHabitItem(habit)
         var result: Either<IoError, Int> =
-            SqlException(DEFAULT_SQL_ERROR).failure()
+            SqlError().failure()
         runCatching {
             habitItemDao.insert(habitItemDbModel).toInt()
         }
@@ -83,11 +90,11 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
     ): Either<IoError, Int> {
         val insertExceptionMessage = insertException.message
         var result: Either<IoError, Int> =
-            SqlException(insertExceptionMessage ?: "").failure()
+            SqlError(insertExceptionMessage ?: DEFAULT_SQL_ERROR).failure()
         if (insertException is SQLiteConstraintException && insertExceptionMessage != null) {
             when {
                 insertExceptionMessage.contains(UNIQUE_CONSTRAINT_MESSAGE) -> {
-                    result = HabitAlreadyExistsException(habit.name).failure()
+                    result = HabitAlreadyExistsError(habit.name).failure()
                 }
                 insertExceptionMessage.contains(PRIMARY_KEY_CONSTRAINT_MESSAGE) -> {
                     runCatching {
@@ -111,26 +118,48 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
     ): IoError {
         val updateExceptionMessage = updateException.message
         return if (updateExceptionMessage?.contains(UNIQUE_CONSTRAINT_MESSAGE) == true) {
-            HabitAlreadyExistsException(habitItemName)
+            HabitAlreadyExistsError(habitItemName)
         } else {
-            SqlException(updateException.toString())
+            SqlError(updateException.message ?: DEFAULT_SQL_ERROR)
         }
     }
 
-    override suspend fun deleteHabit(habit: Habit) {
+    override suspend fun deleteHabit(habit: Habit): Either<IoError, Unit> {
+        val habitId = habit.id
         habitItemDao.delete(habit.id)
+        val result = getHabitById(habitId)
+        return when (result) {
+            is Either.Success -> DeletingHabitError().failure()
+            is Either.Failure -> Unit.success()
+        }
     }
 
-    override suspend fun deleteAllHabits() {
-        val habitList = habitItemDao.getUnfilteredList()
-        habitList?.forEach {
+    override suspend fun deleteAllHabits(): Either<IoError, Unit> {
+        val habitListBefore = habitItemDao.getUnfilteredList()
+        habitListBefore?.forEach {
             deleteHabit(it.toHabit())
         }
+        val habitListAfter = habitItemDao.getUnfilteredList()
+        habitListAfter?.let {
+            if (habitListAfter.isEmpty()) return Unit.success()
+        }
+        return DeletingAllHabitsError().failure()
     }
 
-    override suspend fun addHabitDone(habitDone: HabitDone): Int {
+    override suspend fun addHabitDone(habitDone: HabitDone): Either<IoError, Int> {
         val habitDoneDbModel = HabitDoneDbModel.fromHabitDone(habitDone)
-        return habitDoneDao.add(habitDoneDbModel).toInt()
+        var result: Either<IoError, Int> =
+            SqlError().failure()
+        runCatching {
+            habitDoneDao.add(habitDoneDbModel).toInt()
+        }
+            .onSuccess {
+                result = it.success()
+            }
+            .onFailure {
+                result = SqlError(it.message ?: DEFAULT_SQL_ERROR).failure()
+            }
+        return result
     }
 
     override suspend fun deleteHabitDone(habitDoneId: Int) {
@@ -140,7 +169,7 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
     companion object {
         const val UNIQUE_CONSTRAINT_MESSAGE = "SQLITE_CONSTRAINT_UNIQUE"
         const val PRIMARY_KEY_CONSTRAINT_MESSAGE = "SQLITE_CONSTRAINT_PRIMARYKEY"
-        const val DEFAULT_SQL_ERROR = "Unknown SQL error"
+        const val DEFAULT_SQL_ERROR = ""
         const val ITEM_NOT_ADDED = 0
     }
 

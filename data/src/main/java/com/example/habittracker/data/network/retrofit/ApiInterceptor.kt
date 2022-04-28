@@ -2,6 +2,7 @@ package com.example.habittracker.data.network.retrofit
 
 import android.util.Log
 import com.example.habittracker.domain.errors.IoError
+import com.example.habittracker.domain.errors.IoError.CloudError
 import com.example.habittracker.domain.errors.IoErrorFlow
 import com.example.habittracker.domain.errors.failure
 import okhttp3.Interceptor
@@ -27,7 +28,7 @@ class ApiInterceptor @Inject constructor(private val ioErrorFlow: IoErrorFlow) :
                         "Response error with code: ${response.code} for request: $request"
                     )
 
-                    val cloudError = IoError.CloudError(
+                    val cloudError = CloudError(
                         code = response.code,
                         message = response.message
                     )
@@ -40,8 +41,8 @@ class ApiInterceptor @Inject constructor(private val ioErrorFlow: IoErrorFlow) :
                 Log.e(
                     "Okhttp",
                     "Response exception: $e for request: $request"
-                ) //TODO send toast to user
-                val cloudError = IoError.CloudError(message = e.message ?: "Unknown network error")
+                )
+                val cloudError = CloudError(message = e.message ?: UNKNOWN_NETWORK_ERROR_MESSAGE)
                 ioErrorFlow.setError(cloudError.failure())
                 delayForRetryRequest.sleep()
             }
@@ -50,7 +51,8 @@ class ApiInterceptor @Inject constructor(private val ioErrorFlow: IoErrorFlow) :
     }
 
     companion object {
-        private const val API_TOKEN = "05b550ee-1713-43f1-a842-9815d354460d"
+        private const val API_TOKEN = "05b550ee-1713-43f1-a842-9815d354460d-"
         private const val MAX_COUNT_RETRY = Long.MAX_VALUE
+        private const val UNKNOWN_NETWORK_ERROR_MESSAGE = "Unknown network error"
     }
 }

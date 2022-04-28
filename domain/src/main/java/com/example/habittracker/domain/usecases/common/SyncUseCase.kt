@@ -7,5 +7,6 @@ import javax.inject.Singleton
 class SyncUseCase @Inject constructor(
     val syncAllFromCloudUseCase: SyncAllFromCloudUseCase,
     val syncAllToCloudUseCase: SyncAllToCloudUseCase,
-    val putHabitAndSyncWithDbUseCase: PutHabitAndSyncWithDbUseCase
+    val putHabitAndSyncWithDbUseCase: PutHabitAndSyncWithDbUseCase,
+    val areCloudAndDbEqualUseCase: AreCloudAndDbEqualUseCase
 )

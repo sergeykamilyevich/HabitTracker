@@ -8,10 +8,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GetHabitFromDbUseCase @Inject constructor(
-    private val dbHabitRepository: DbHabitRepository
+class UpsertHabitUseCase @Inject constructor(
+    private val dbHabitRepository: DbHabitRepository,
 ) {
 
-    suspend operator fun invoke(habitItemId: Int): Either<IoError, Habit> =
-        dbHabitRepository.getHabitById(habitItemId)
+    suspend operator fun invoke(habit: Habit): Either<IoError, Int> =
+        dbHabitRepository.upsertHabit(habit)
 }

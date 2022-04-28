@@ -46,7 +46,10 @@
     <string name="order_by_priority">priority</string>
     <string name="done">Done</string>
     <string name="habit_already_exists">A habit with name %1$s already exists</string>
-    <string name="sql_exception">SQL error: %1$s</string>
+    <string name="sql_error">SQL error: %1$s</string>
+    <string name="cloud_error">Network error: %1$s%2$s</string>
+    <string name="deleting_habits_error">Deleting habits failed%1$s</string>
+    <string name="deleting_habit_error">Deleting habit failed%1$s</string>
     <string name="worth_doing_more_times">It\'s worth doing %1$s</string>
     <string name="you_are_allowed_more_times">You\'re allowed to do it %1$s</string>
     <string name="you_are_breathtaking">You are breathtaking!</string>
@@ -56,8 +59,14 @@
     <string name="download_habits_from_server">Download habits from the server</string>
     <string name="avatar">Avatar</string>
     <string name="sync_is_done">Sync is done</string>
+    <string name="cloud_and_db_are_equals">All habits are synchronized with the server</string>
+    <string name="cloud_and_db_are_not_equals">Not all of your habits are in sync with the server.\nPlease perform a sync.\n\nAll data will be overwritten!</string>
     <string name="delete_all_habits_from_the_device">Delete all habits from the device</string>
     <string name="delete_all_habits_from_the_server">Delete all habits from the server</string>
+    <string name="download_from_the_server">Download from the server</string>
+    <string name="upload_to_the_server">Upload to the server</string>
+    <string name="cancel">Cancel</string>
+    <string name="compare_device_habits_with_the_server">Compare device habits with the server</string>
 
     <plurals name="plurals_times">
         <item quantity="one">%d time</item>

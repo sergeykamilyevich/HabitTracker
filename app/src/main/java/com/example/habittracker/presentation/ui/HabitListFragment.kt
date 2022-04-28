@@ -12,14 +12,13 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habittracker.R
 import com.example.habittracker.databinding.FragmentHabitListBinding
-import com.example.habittracker.domain.models.HabitDone
-import com.example.habittracker.domain.models.HabitType
-import com.example.habittracker.domain.models.Time
+import com.example.habittracker.domain.models.*
 import com.example.habittracker.presentation.color.ColorPicker
 import com.example.habittracker.presentation.models.HabitTypeApp
 import com.example.habittracker.presentation.recycler.HabitListAdapter
 import com.example.habittracker.presentation.view_models.MainViewModel
 import javax.inject.Inject
+import kotlin.random.Random
 
 
 class HabitListFragment : Fragment(), HasTitle {
@@ -69,7 +68,6 @@ class HabitListFragment : Fragment(), HasTitle {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        createRandomHabits()
         setupViewModel()
         setupRecyclerView()
         setupAdapterClickListeners()
@@ -88,7 +86,7 @@ class HabitListFragment : Fragment(), HasTitle {
             habitListAdapter.submitList(it)
             Log.d("99999", "habitList $it")
         }
-        viewModel.fetchHabits()
+//        viewModel.getHabitListFromCloud()
     }
 
     private fun setupRecyclerView() {
@@ -109,7 +107,7 @@ class HabitListFragment : Fragment(), HasTitle {
             }
         }
         habitListAdapter.onHabitListClickListener = {
-            launchHabitItemActivityEditMode(it.id)
+            launchHabitItemFragmentEditMode(it.id)
         }
     }
 
@@ -135,26 +133,7 @@ class HabitListFragment : Fragment(), HasTitle {
         itemTouchHelper.attachToRecyclerView(binding.rvHabitList)
     }
 
-//    private fun createRandomHabits() {
-//        for (i in 1..15) {
-//            viewModel.addHabitItem(
-//                Habit(
-//                    "Name $i",
-//                    "This habit is very important for my self-development",
-//                    HabitPriority.NORMAL,
-//                    HabitType.GOOD,
-//                    colors[Random.nextInt(16)],
-//                    Random.nextInt(10) + 1,
-//                    Random.nextInt(30) + 1,
-//                    date = time.getCurrentUtcDateInInt(),
-//                    done = 0
-//                )
-//            )
-//        }
-//        R.string.low_priority
-//    }
-
-    private fun launchHabitItemActivityEditMode(habitItemId: Int) {
+    private fun launchHabitItemFragmentEditMode(habitItemId: Int) {
         val destinationId = R.id.habitItemFragment
         val args = HabitItemFragment.createArgs(habitItemId)
         findNavController().navigate(destinationId, args)
