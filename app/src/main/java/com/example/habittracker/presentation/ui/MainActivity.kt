@@ -1,6 +1,7 @@
 package com.example.habittracker.presentation.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -21,14 +22,9 @@ import com.example.habittracker.databinding.ActivityMainBinding
 import com.example.habittracker.di.components.MainActivityComponent
 import com.example.habittracker.domain.errors.Either
 import com.example.habittracker.domain.errors.IoError
-import com.example.habittracker.domain.errors.failure
-import com.example.habittracker.domain.models.HabitType
-import com.example.habittracker.presentation.models.AddHabitDoneResult
 import com.example.habittracker.presentation.view_models.MainViewModel
-import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
-import kotlin.math.abs
 
 
 class MainActivity : AppCompatActivity() {
@@ -68,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         setupNavigation()
         setupViewModel()
         setupHeaderImage()
-        viewModel.compareCloudAndDb()
+
     }
 
     private fun setupHeaderImage() {
@@ -91,59 +87,34 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        viewModel.errorCloud.observe(this) {
-            if (it is Either.Failure) {
-                showToastIoError(it)
-                makeCloudErrorToast(it.error)
+        viewModel.cloudError.observe(this) {
+            Log.d("ErrorApp", "cloudError.observe $it ${it.hasBeenHandled}")
+            it.transferIfNotHandled()?.let { error ->
+                makeToast(error, Toast.LENGTH_LONG)
             }
         }
 
-        viewModel.showResultToast.observe(this) {
-            it.transferIfNotHandled()?.let { result ->
-                when (result) {
-                    is Either.Success -> makeToast(getString(result.result), Toast.LENGTH_SHORT)
-                    is Either.Failure -> makeCloudErrorToast(result.error)
-                }
-            }
+        viewModel.showResultToast.observe(this) { it ->
+            Log.d("ErrorApp", "showResultToast.observe $it ${it.hasBeenHandled}")
+            it.transferIfNotHandled()?.let { text ->
+                makeToast(text, Toast.LENGTH_LONG)
+             }
         }
 
         viewModel.showSnackbarHabitDone.observe(this) {
-            it.transferIfNotHandled()?.let { result ->
-                val habitType = result.habit.type
-                val habitRecurrenceNumber = result.habit.recurrenceNumber
-                val actualDoneListSize = result.habit.actualDoneListSize()
-                val differenceDone = abs(actualDoneListSize - habitRecurrenceNumber)
-                val differenceDoneTimes = resources.getQuantityString(
-                    R.plurals.plurals_more_times,
-                    differenceDone,
-                    differenceDone
-                )
-                val snackbarText = when (habitType) {
-                    HabitType.GOOD -> {
-                        if (actualDoneListSize < habitRecurrenceNumber)
-                            getString(R.string.worth_doing_more_times, differenceDoneTimes)
-                        else getString(R.string.you_are_breathtaking)
-                    }
-                    HabitType.BAD -> {
-                        if (actualDoneListSize < habitRecurrenceNumber)
-                            getString(R.string.you_are_allowed_more_times, differenceDoneTimes)
-                        else getString(R.string.stop_doing_it)
-                    }
-                }
-                Snackbar.make(binding.drawerLayout, snackbarText, Snackbar.LENGTH_LONG)
+            it.transferIfNotHandled()?.let { data ->
+                Snackbar.make(binding.drawerLayout, data.snackbarText, Snackbar.LENGTH_LONG)
                     .setAction(getString(R.string.undo)) {
-                        viewModel.deleteHabitDone(result.habitDone.id)
+                        viewModel.deleteHabitDone(data.habitDone.id)
                     }
-                    .addCallback(snackbarCallback(result))
+                    .addCallback(viewModel.snackbarCallback(data.habitDone))
                     .show()
             }
         }
 
         viewModel.ioError.observe(this) {
-            it.transferIfNotHandled()?.let { result ->
-                if (result is Either.Failure) {
-                    showToastIoError(result.error.failure())
-                }
+            it.transferIfNotHandled()?.let { error ->
+                makeToast(error, Toast.LENGTH_LONG)
             }
         }
 
@@ -167,51 +138,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showToastIoError(result: Either.Failure<IoError, Unit>) {
-        val errorMessageFromRes = when (result.error) {
-            is IoError.HabitAlreadyExistsError -> R.string.habit_already_exists
-            is IoError.SqlError -> R.string.sql_error
-            is IoError.CloudError -> R.string.cloud_error
-            is IoError.DeletingAllHabitsError -> R.string.deleting_habits_error
-            is IoError.DeletingHabitError -> R.string.deleting_habits_error
-        }
-        makeToast(
-            resources.getString(
-                errorMessageFromRes,
-                result.error.message,
-                errorCodeText(result.error)
-            ), Toast.LENGTH_LONG
-        )
-    }
-
     private fun makeToast(text: String, duration: Int) {
         Toast.makeText(this, text, duration).show()
     }
-
-    private fun makeCloudErrorToast(ioError: IoError) {
-        makeToast("${ioError.message}${errorCodeText(ioError)}", Toast.LENGTH_LONG)
-    }
-
-    private fun errorCodeText(ioError: IoError): String =
-        if (ioError.code != UNKNOWN_CODE) ", code: ${ioError.code}"
-        else EMPTY_CODE_STRING
-
-    private fun snackbarCallback(result: AddHabitDoneResult) =
-        object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
-
-            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                super.onDismissed(transientBottomBar, event)
-                if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
-                    viewModel.addHabitDoneToCloud(result.habitDone)
-                }
-                viewModel.unblockHabitDoneButtons()
-            }
-
-            override fun onShown(sb: Snackbar?) {
-                super.onShown(sb)
-                viewModel.blockHabitDoneButtons()
-            }
-        }
 
     private fun setupToolbar() {
         setSupportActionBar(binding.toolbar)
@@ -263,8 +192,6 @@ class MainActivity : AppCompatActivity() {
         private const val IMAGE_URL =
             "https://img.freepik.com/free-photo/no-problem-concept-bearded-man-makes-okay-gesture-has-everything-control-all-fine-gesture-wears-spectacles-jumper-poses-against-pink-wall-says-i-got-this-guarantees-something_273609-42817.jpg"
         private const val DEFAULT_HEADER = 0
-        private const val EMPTY_CODE_STRING = ""
-        private const val UNKNOWN_CODE = 0
 
     }
 }

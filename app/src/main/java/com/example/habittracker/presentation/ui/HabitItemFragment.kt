@@ -40,11 +40,11 @@ class HabitItemFragment : Fragment(), HasTitle {
 
     @Inject
     lateinit var colorPicker: ColorPicker
-    private val colors by lazy { colorPicker.getColors() }
-    private val gradientColors by lazy { colorPicker.getGradientColors() }
+    private val colors by lazy { colorPicker.colors() }
+
 
     @Inject
-    lateinit var viewModel: HabitItemViewModel
+    lateinit var habitItemViewModel: HabitItemViewModel
 
     @Inject
     lateinit var mainViewModel: MainViewModel
@@ -117,42 +117,42 @@ class HabitItemFragment : Fragment(), HasTitle {
             binding.llColor.addView(view)
         }
         val gradientDrawable =
-            GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, gradientColors)
+            GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colorPicker.gradientColors())
         binding.llColor.background = gradientDrawable
     }
 
     private fun setupTextChangeListeners() {
         binding.tiedName.addTextChangedListener {
-            viewModel.validateName(it)
+            habitItemViewModel.validateName(it)
         }
 
         binding.tiedDescription.addTextChangedListener {
-            viewModel.validateDescription(it)
+            habitItemViewModel.validateDescription(it)
         }
 
         binding.tiedRecurrenceNumber.addTextChangedListener {
-            viewModel.validateRecurrenceNumber(it)
+            habitItemViewModel.validateRecurrenceNumber(it)
         }
 
         binding.tiedRecurrencePeriod.addTextChangedListener {
-            viewModel.validateRecurrencePeriod(it)
+            habitItemViewModel.validateRecurrencePeriod(it)
         }
     }
 
     private fun setupViewModelObservers() {
-        viewModel.canCloseScreen.observe(viewLifecycleOwner) {
-            findNavController().popBackStack()
+        mainViewModel.canCloseItemFragment.observe(viewLifecycleOwner) {
+            if (it) findNavController().popBackStack()
         }
-        viewModel.errorInputRecurrenceNumber.observe(viewLifecycleOwner) {
+        habitItemViewModel.errorInputRecurrenceNumber.observe(viewLifecycleOwner) {
             handleInputError(it, binding.tiedRecurrenceNumber)
         }
-        viewModel.errorInputRecurrencePeriod.observe(viewLifecycleOwner) {
+        habitItemViewModel.errorInputRecurrencePeriod.observe(viewLifecycleOwner) {
             handleInputError(it, binding.tiedRecurrencePeriod)
         }
-        viewModel.errorInputName.observe(viewLifecycleOwner) {
+        habitItemViewModel.errorInputName.observe(viewLifecycleOwner) {
             handleInputError(it, binding.tiedName)
         }
-        viewModel.errorInputDescription.observe(viewLifecycleOwner) {
+        habitItemViewModel.errorInputDescription.observe(viewLifecycleOwner) {
             handleInputError(it, binding.tiedDescription)
         }
     }
@@ -163,7 +163,7 @@ class HabitItemFragment : Fragment(), HasTitle {
         setupColorViews(defaultColor)
         binding.btnSave.setOnClickListener {
             if (isFieldsFilled()) {
-                viewModel.addHabit(habitItemMapper.mapViewToHabit(binding))
+                mainViewModel.addHabit(habitItemMapper.mapViewToHabit(binding))
             } else {
                 Toast.makeText(
                     requireActivity(),
@@ -175,18 +175,18 @@ class HabitItemFragment : Fragment(), HasTitle {
     }
 
     private fun launchEditMode() {
-        viewModel.getHabit(habitItemId)
-        viewModel.habit.observe(viewLifecycleOwner) {
+        mainViewModel.getHabit(habitItemId)
+        mainViewModel.currentFragmentHabit.observe(viewLifecycleOwner) {
             setupFields(it)
         }
         binding.btnSave.setOnClickListener {
-            viewModel.editHabitItem(habitItemMapper.mapViewToHabit(binding))
+            mainViewModel.editHabitItem(habitItemMapper.mapViewToHabit(binding))
         }
     }
 
     private fun createRandomTestHabits() {
         for (i in 1..15) {
-            viewModel.addHabit(
+            mainViewModel.addHabit(
                 Habit(
                     "Name $i",
                     "This habit is very important for my self-development",
@@ -209,10 +209,10 @@ class HabitItemFragment : Fragment(), HasTitle {
     }
 
     private fun setStatusBtnSave() {
-        binding.btnSave.isEnabled = !(viewModel.errorInputRecurrenceNumber.value == true
-                || viewModel.errorInputRecurrencePeriod.value == true
-                || viewModel.errorInputName.value == true
-                || viewModel.errorInputDescription.value == true)
+        binding.btnSave.isEnabled = !(habitItemViewModel.errorInputRecurrenceNumber.value == true
+                || habitItemViewModel.errorInputRecurrencePeriod.value == true
+                || habitItemViewModel.errorInputName.value == true
+                || habitItemViewModel.errorInputDescription.value == true)
     }
 
     private fun setupSpinnerAdapter() {

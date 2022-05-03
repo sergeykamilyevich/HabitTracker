@@ -32,10 +32,6 @@ class HabitListFragment : Fragment(), HasTitle {
     lateinit var viewModel: MainViewModel
 
     @Inject
-    lateinit var colorPicker: ColorPicker
-    private val colors by lazy { colorPicker.getColors() }
-
-    @Inject
     lateinit var time: Time
 
     private lateinit var habitListAdapter: HabitListAdapter

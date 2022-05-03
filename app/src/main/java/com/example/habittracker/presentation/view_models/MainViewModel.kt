@@ -9,42 +9,57 @@ import com.example.habittracker.domain.errors.Either
 import com.example.habittracker.domain.errors.Either.Failure
 import com.example.habittracker.domain.errors.Either.Success
 import com.example.habittracker.domain.errors.IoError
-import com.example.habittracker.domain.errors.failure
-import com.example.habittracker.domain.errors.success
 import com.example.habittracker.domain.models.*
 import com.example.habittracker.domain.usecases.common.SyncUseCase
 import com.example.habittracker.domain.usecases.db.DbUseCase
 import com.example.habittracker.domain.usecases.network.CloudUseCase
-import com.example.habittracker.presentation.models.AddHabitDoneResult
+import com.example.habittracker.presentation.models.AddHabitSnackBarData
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.abs
 
 @MainActivityScope
 class MainViewModel @Inject constructor(
     private val dbUseCase: DbUseCase,
     private val cloudUseCase: CloudUseCase,
-    private val syncUseCase: SyncUseCase
-) : ViewModel() {
+    private val syncUseCase: SyncUseCase,
+    private val resources: Resources,
+    private val time: Time
+    ) : ViewModel() {
+
+    init {
+//        compareCloudAndDb() //TODO where should it be?
+    }
+
+    private val _currentFragmentHabit = MutableLiveData<Habit>()
+    val currentFragmentHabit: LiveData<Habit>
+        get() = _currentFragmentHabit
 
     private val _habitListFilter = MutableLiveData<HabitListFilter>()
     val habitListFilter: LiveData<HabitListFilter>
         get() = _habitListFilter
 
-    private val _showSnackbarHabitDone = MutableLiveData<Event<AddHabitDoneResult>>()
-    val showSnackbarHabitDone: LiveData<Event<AddHabitDoneResult>>
+    private val _showSnackbarHabitDone = MutableLiveData<Event<AddHabitSnackBarData>>()
+    val showSnackbarHabitDone: LiveData<Event<AddHabitSnackBarData>>
         get() = _showSnackbarHabitDone
 
-    private val _showResultToast = MutableLiveData<Event<Either<IoError, Int>>>()
-    val showResultToast: LiveData<Event<Either<IoError, Int>>>
+    private val _showResultToast = MutableLiveData<Event<String>>()
+    val showResultToast: LiveData<Event<String>>
         get() = _showResultToast
 
     private val _showSyncDialogAlert = MutableLiveData<Unit>()
     val showSyncDialogAlert: LiveData<Unit>
         get() = _showSyncDialogAlert
 
-    private val _ioError = MutableLiveData<Event<Either<IoError, Unit>>>()
-    val ioError: LiveData<Event<Either<IoError, Unit>>>
+    private val _ioError = MutableLiveData<Event<String>>()
+    val ioError: LiveData<Event<String>>
         get() = _ioError
+
+    private val _canCloseItemFragment = MutableLiveData<Boolean>()
+    val canCloseItemFragment: LiveData<Boolean>
+        get() = _canCloseItemFragment
 
     private var isHabitDoneButtonsBlocked: Boolean = false
 
@@ -52,14 +67,99 @@ class MainViewModel @Inject constructor(
 
     lateinit var habitList: LiveData<List<Habit>>
 
-    var errorCloud: LiveData<Either<IoError, Unit>> =
-        cloudUseCase.getCloudErrorUseCase.invoke().asLiveData()
+    private val errorFlow = cloudUseCase.getCloudErrorUseCase.invoke()
+    val cloudError: LiveData<Event<String>> = MediatorLiveData<Event<String>>().apply {
+        addSource(errorFlow.asLiveData()) {
+            Log.d("ErrorApp", "Flow $it")
+            if (it is Failure) value = eventErrorText(it.error)
+        }
+    }
+
+    fun addHabit(habit: Habit) {
+        viewModelScope.launch {
+            val item = Habit(
+                name = habit.name,
+                description = habit.description,
+                priority = habit.priority,
+                type = habit.type,
+                color = habit.color,
+                recurrenceNumber = habit.recurrenceNumber,
+                recurrencePeriod = habit.recurrencePeriod,
+                date = time.currentUtcDateInSeconds()
+            )
+            upsertHabit(item)
+        }
+    }
+
+    fun editHabitItem(habit: Habit) { //TODO save state of screen after turn
+        _currentFragmentHabit.value?.let { oldItem ->
+            viewModelScope.launch {
+                val item = oldItem.copy(
+                    name = habit.name,
+                    description = habit.description,
+                    priority = habit.priority,
+                    type = habit.type,
+                    color = habit.color,
+                    recurrenceNumber = habit.recurrenceNumber,
+                    recurrencePeriod = habit.recurrencePeriod,
+                    date = time.currentUtcDateInSeconds()
+                )
+                upsertHabit(item)
+            }
+        }
+    }
+
+    private suspend fun upsertHabit(habit: Habit) {
+        val resultOfUpserting: Either<IoError, Int> =
+            dbUseCase.upsertHabitUseCase.invoke(habit)
+        Log.d("ErrorApp", "resultOfUpserting $resultOfUpserting")
+        when (resultOfUpserting) {
+            is Success -> {
+                closeItemFragment()
+                val newHabitId = resultOfUpserting.result
+                val putResult =
+                    syncUseCase
+                        .putHabitAndSyncWithDbUseCase
+                        .invoke(habit = habit, newHabitId = newHabitId)
+                Log.d("ErrorApp", "putResult $putResult")
+                if (putResult is Failure) {
+                    _ioError.value = eventErrorText(putResult.error)
+
+                }
+            }
+            is Failure -> {
+                _ioError.value = eventErrorText(resultOfUpserting.error)
+
+            }
+        }
+    }
+
+    private fun closeItemFragment() {
+        _canCloseItemFragment.value = true
+        resetCanCloseItemFragment()
+    }
+
+    fun resetCanCloseItemFragment() {
+        _canCloseItemFragment.value = false
+    }
+
+    fun getHabit(habitItemId: Int) {
+        viewModelScope.launch {
+            val habitItem = dbUseCase.getHabitUseCase.invoke(habitItemId)
+            when (habitItem) {
+                is Success -> {
+                    habitItem.result.let {
+                        _currentFragmentHabit.value = it
+                    }
+                }
+                is Failure -> {
+                    _ioError.value = eventErrorText(habitItem.error)
+                }
+            }
+        }
+    }
 
     fun isHabitDoneButtonsBlocked() = isHabitDoneButtonsBlocked
-
-    fun setIoError(value: Event<Either<IoError, Unit>>) {
-        _ioError.value = value
-    }
 
     fun blockHabitDoneButtons() {
         isHabitDoneButtonsBlocked = true
@@ -72,25 +172,76 @@ class MainViewModel @Inject constructor(
     fun deleteHabitItem(habit: Habit) {
         viewModelScope.launch {
             val resultDb = dbUseCase.deleteHabitUseCase.invoke(habit)
-            if (resultDb is Failure) _ioError.value = Event(resultDb.error.failure())
+            if (resultDb is Failure) _ioError.value = eventErrorText(resultDb.error)
             val resultCloud = cloudUseCase.deleteHabitFromCloudUseCase.invoke(habit)
-            if (resultCloud is Failure) _ioError.value = Event(resultCloud.error.failure())
+            if (resultCloud is Failure) _ioError.value = eventErrorText(resultCloud.error)
         }
     }
 
     fun deleteAllHabitsFromCloud() {
         viewModelScope.launch {
             val result = cloudUseCase.deleteAllHabitsFromCloudUseCase.invoke()
-            if (result is Failure) _ioError.value = Event(result.error.failure())
+            if (result is Failure) {
+                _ioError.value = eventErrorText(result.error)
+                Log.d("ErrorApp", result.toString())
+            }
         }
     }
 
     fun deleteAllHabitsFromDb() {
         viewModelScope.launch {
             val result = dbUseCase.deleteAllHabitsUseCase.invoke()
-            if (result is Failure) _ioError.value = Event(result.error.failure())
+            if (result is Failure) _ioError.value = eventErrorText(result.error)
+            Log.d("ErrorApp", result.toString())
         }
     }
+
+    private fun snackbarText(habit: Habit): String {
+        val habitType = habit.type
+        val habitRecurrenceNumber = habit.recurrenceNumber
+        val actualDoneListSize = habit.actualDoneListSize()
+        val differenceDone = abs(actualDoneListSize - habitRecurrenceNumber)
+        val differenceDoneTimes = resources.getQuantityString(
+            R.plurals.plurals_more_times,
+            differenceDone,
+            differenceDone
+        )
+        return when (habitType) {
+            HabitType.GOOD -> {
+                if (actualDoneListSize < habitRecurrenceNumber)
+                    resources.getString(R.string.worth_doing_more_times, differenceDoneTimes)
+                else resources.getString(R.string.you_are_breathtaking)
+            }
+            HabitType.BAD -> {
+                if (actualDoneListSize < habitRecurrenceNumber)
+                    resources.getString(R.string.you_are_allowed_more_times, differenceDoneTimes)
+                else resources.getString(R.string.stop_doing_it)
+            }
+        }
+    }
+
+    private fun eventErrorText(error: IoError): Event<String> {
+        Log.e("ErrorApp eventErrorText", error.toString())
+        val errorTextFromRes = when (error) {
+            is IoError.HabitAlreadyExistsError -> R.string.habit_already_exists
+            is IoError.SqlError -> R.string.sql_error
+            is IoError.CloudError -> R.string.cloud_error
+            is IoError.DeletingAllHabitsError -> R.string.deleting_habits_error
+            is IoError.DeletingHabitError -> R.string.deleting_habits_error
+        }
+        val errorText = resources.getString(
+            errorTextFromRes,
+            error.message,
+            errorCodeText(error.code)
+        )
+        Log.e("ErrorApp", errorText)
+        return Event(errorText)
+    }
+
+    private fun errorCodeText(code: Int): String =
+        if (code != UNKNOWN_CODE) ", code: $code"
+        else EMPTY_CODE_STRING
+
 
     fun addHabitDone(habitDone: HabitDone) {
         viewModelScope.launch {
@@ -101,18 +252,13 @@ class MainViewModel @Inject constructor(
                     val habit =
                         dbUseCase.getHabitUseCase.invoke(habitDone.habitId)
                     when (habit) {
-                        is Success -> {
-                            _showSnackbarHabitDone.value = Event(
-                                AddHabitDoneResult(
-                                    habit = habit.result,
-                                    habitDone = newHabitDone
-                                )
-                            )
-                        }
-                        is Failure -> _ioError.value = Event(habit.error.failure())
+                        is Success -> _showSnackbarHabitDone.value = Event(
+                            AddHabitSnackBarData(snackbarText(habit.result), newHabitDone)
+                        )
+                        is Failure -> _ioError.value = eventErrorText(habit.error)
                     }
                 }
-                is Failure -> _ioError.value = Event(habitDoneIdAdded.error.failure())
+                is Failure -> _ioError.value = eventErrorText(habitDoneIdAdded.error)
             }
         }
     }
@@ -121,7 +267,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             val result = cloudUseCase.postHabitDoneToCloudUseCase.invoke(habitDone)
             if (result is Failure) {
-                _ioError.value = Event(result.error.failure())
+                _ioError.value = eventErrorText(result.error)
             }
         }
     }
@@ -160,13 +306,31 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun snackbarCallback(habitDone: HabitDone) =
+        object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+
+            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                super.onDismissed(transientBottomBar, event)
+                if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+                    addHabitDoneToCloud(habitDone)
+                }
+                unblockHabitDoneButtons()
+            }
+
+            override fun onShown(sb: Snackbar?) {
+                super.onShown(sb)
+                blockHabitDoneButtons()
+            }
+        }
+
+
     private fun handleSyncResult(result: Either<IoError, Unit>) {
-        when (result) {
+        _showResultToast.value = when (result) {
             is Success -> {
-                _showResultToast.value = Event(R.string.sync_is_done.success())
+                Event(resources.getString(R.string.sync_is_done))
             }
             is Failure -> {
-                _showResultToast.value = Event(result.error.failure())
+                eventErrorText(result.error)
             }
         }
     }
@@ -177,13 +341,14 @@ class MainViewModel @Inject constructor(
             when (result) {
                 is Success -> {
                     if (result.result)
-                        _showResultToast.value = Event(R.string.cloud_and_db_are_equals.success())
+                        _showResultToast.value =
+                            Event(resources.getString(R.string.cloud_and_db_are_equals))
                     else {
                         _showSyncDialogAlert.value = Unit
                     }
                 }
                 is Failure -> {
-                    _showResultToast.value = Event(result.error.failure())
+                    _showResultToast.value = eventErrorText(result.error)
                 }
             }
         }
@@ -192,5 +357,7 @@ class MainViewModel @Inject constructor(
 
     companion object {
         private const val EMPTY_STRING = ""
+        private const val EMPTY_CODE_STRING = ""
+        private const val UNKNOWN_CODE = 0
     }
 }

@@ -12,7 +12,7 @@ class ColorPicker @Inject constructor() {
     private val freeSpaceSizeInHue =
         squareSizeInHue * FREE_SPACE_SIZE_IN_PERCENTS / SQUARE_SIZE_IN_PERCENTS
 
-    fun getColors(): IntArray {
+    fun colors(): IntArray {
         val colors = IntArray(NUMBER_OF_COLORS)
         val positionOfFirstSquare = ((freeSpaceSizeInHue + squareSizeInHue) / 2)
         for (i in colors.indices) {
@@ -22,7 +22,7 @@ class ColorPicker @Inject constructor() {
         return colors
     }
 
-    fun getGradientColors(): IntArray {
+    fun gradientColors(): IntArray {
         val colors = IntArray(NUMBER_OF_COLORS + 1)
         for (i in colors.indices) {
             val hue = (i * (freeSpaceSizeInHue + squareSizeInHue))
