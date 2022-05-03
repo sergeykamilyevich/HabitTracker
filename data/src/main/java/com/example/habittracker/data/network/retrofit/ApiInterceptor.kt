@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.habittracker.domain.errors.IoError.CloudError
 import com.example.habittracker.domain.errors.IoErrorFlow
 import com.example.habittracker.domain.errors.failure
+import com.example.habittracker.domain.errors.success
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
@@ -18,6 +19,7 @@ class ApiInterceptor @Inject constructor(private val ioErrorFlow: IoErrorFlow) :
             .build()
         val delayForRetryRequest = DelayForRetryRequest()
         var responseIsSuccess = false
+        resetErrorFlow()
         do {
             try {
                 response = chain.proceed(request)
@@ -47,6 +49,10 @@ class ApiInterceptor @Inject constructor(private val ioErrorFlow: IoErrorFlow) :
             }
         } while (!responseIsSuccess && delayForRetryRequest.retryCount() < MAX_COUNT_RETRY)
         return response
+    }
+
+    private fun resetErrorFlow() {
+        ioErrorFlow.setError(Unit.success())
     }
 
     companion object {
