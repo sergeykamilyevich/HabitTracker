@@ -6,7 +6,6 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Spinner
 import com.example.habittracker.databinding.FragmentHabitItemBinding
-import com.example.habittracker.di.annotations.MainActivityScope
 import com.example.habittracker.domain.models.Habit
 import com.example.habittracker.domain.models.HabitPriority
 import com.example.habittracker.domain.models.HabitType
@@ -14,7 +13,6 @@ import com.example.habittracker.presentation.models.HabitPriorityApp
 import com.example.habittracker.presentation.models.HabitTypeApp
 import javax.inject.Inject
 
-@MainActivityScope
 class HabitItemMapper @Inject constructor() {
 
     fun mapViewToHabit(binding: FragmentHabitItemBinding): Habit = with(binding) {

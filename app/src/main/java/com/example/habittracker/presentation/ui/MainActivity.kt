@@ -20,8 +20,7 @@ import com.example.habittracker.R
 import com.example.habittracker.app.applicationComponent
 import com.example.habittracker.databinding.ActivityMainBinding
 import com.example.habittracker.di.components.MainActivityComponent
-import com.example.habittracker.domain.errors.Either
-import com.example.habittracker.domain.errors.IoError
+import com.example.habittracker.di.components.getComponent
 import com.example.habittracker.presentation.view_models.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
@@ -80,24 +79,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupMainActivityComponent() {
-        mainActivityComponent = applicationComponent
-            .mainActivityComponentFactory()
-            .create(this)
+        mainActivityComponent = getComponent {
+            applicationComponent
+                .mainActivityComponentFactory()
+                .create(this)
+        }
         mainActivityComponent.inject(this)
     }
 
     private fun setupViewModel() {
         viewModel.cloudError.observe(this) {
-            Log.d("ErrorApp", "cloudError.observe $it ${it.hasBeenHandled}")
             it.transferIfNotHandled()?.let { error ->
-                makeToast(error, Toast.LENGTH_LONG)
+                makeLongToast(error)
             }
         }
 
         viewModel.showResultToast.observe(this) { it ->
-            Log.d("ErrorApp", "showResultToast.observe $it ${it.hasBeenHandled}")
-            it.transferIfNotHandled()?.let { text ->
-                makeToast(text, Toast.LENGTH_LONG)
+            it.transferIfNotHandled()?.let { error ->
+                makeLongToast(error)
              }
         }
 
@@ -114,7 +113,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.ioError.observe(this) {
             it.transferIfNotHandled()?.let { error ->
-                makeToast(error, Toast.LENGTH_LONG)
+                makeLongToast(error)
             }
         }
 
@@ -138,8 +137,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun makeToast(text: String, duration: Int) {
-        Toast.makeText(this, text, duration).show()
+    private fun makeLongToast(text: String) {
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show()
     }
 
     private fun setupToolbar() {

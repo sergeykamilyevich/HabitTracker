@@ -4,7 +4,7 @@ import android.text.Editable
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.habittracker.R
-import com.example.habittracker.di.annotations.MainActivityScope
+import com.example.habittracker.di.annotations.MainViewModelScope
 import com.example.habittracker.domain.errors.Either
 import com.example.habittracker.domain.errors.Either.Failure
 import com.example.habittracker.domain.errors.Either.Success
@@ -20,22 +20,17 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.abs
 
-@MainActivityScope
+@MainViewModelScope
 class MainViewModel @Inject constructor(
     private val dbUseCase: DbUseCase,
     private val cloudUseCase: CloudUseCase,
     private val syncUseCase: SyncUseCase,
     private val resources: Resources,
-    private val time: Time
-    ) : ViewModel() {
+) : ViewModel() {
 
     init {
 //        compareCloudAndDb() //TODO where should it be?
     }
-
-    private val _currentFragmentHabit = MutableLiveData<Habit>()
-    val currentFragmentHabit: LiveData<Habit>
-        get() = _currentFragmentHabit
 
     private val _habitListFilter = MutableLiveData<HabitListFilter>()
     val habitListFilter: LiveData<HabitListFilter>
@@ -57,10 +52,6 @@ class MainViewModel @Inject constructor(
     val ioError: LiveData<Event<String>>
         get() = _ioError
 
-    private val _canCloseItemFragment = MutableLiveData<Boolean>()
-    val canCloseItemFragment: LiveData<Boolean>
-        get() = _canCloseItemFragment
-
     private var isHabitDoneButtonsBlocked: Boolean = false
 
     private var currentHabitListFilter = HabitListFilter(HabitListOrderBy.NAME_ASC, "")
@@ -75,88 +66,8 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun addHabit(habit: Habit) {
-        viewModelScope.launch {
-            val item = Habit(
-                name = habit.name,
-                description = habit.description,
-                priority = habit.priority,
-                type = habit.type,
-                color = habit.color,
-                recurrenceNumber = habit.recurrenceNumber,
-                recurrencePeriod = habit.recurrencePeriod,
-                date = time.currentUtcDateInSeconds()
-            )
-            upsertHabit(item)
-        }
-    }
-
-    fun editHabitItem(habit: Habit) { //TODO save state of screen after turn
-        _currentFragmentHabit.value?.let { oldItem ->
-            viewModelScope.launch {
-                val item = oldItem.copy(
-                    name = habit.name,
-                    description = habit.description,
-                    priority = habit.priority,
-                    type = habit.type,
-                    color = habit.color,
-                    recurrenceNumber = habit.recurrenceNumber,
-                    recurrencePeriod = habit.recurrencePeriod,
-                    date = time.currentUtcDateInSeconds()
-                )
-                upsertHabit(item)
-            }
-        }
-    }
-
-    private suspend fun upsertHabit(habit: Habit) {
-        val resultOfUpserting: Either<IoError, Int> =
-            dbUseCase.upsertHabitUseCase.invoke(habit)
-        Log.d("ErrorApp", "resultOfUpserting $resultOfUpserting")
-        when (resultOfUpserting) {
-            is Success -> {
-                closeItemFragment()
-                val newHabitId = resultOfUpserting.result
-                val putResult =
-                    syncUseCase
-                        .putHabitAndSyncWithDbUseCase
-                        .invoke(habit = habit, newHabitId = newHabitId)
-                Log.d("ErrorApp", "putResult $putResult")
-                if (putResult is Failure) {
-                    _ioError.value = eventErrorText(putResult.error)
-
-                }
-            }
-            is Failure -> {
-                _ioError.value = eventErrorText(resultOfUpserting.error)
-
-            }
-        }
-    }
-
-    private fun closeItemFragment() {
-        _canCloseItemFragment.value = true
-        resetCanCloseItemFragment()
-    }
-
-    fun resetCanCloseItemFragment() {
-        _canCloseItemFragment.value = false
-    }
-
-    fun getHabit(habitItemId: Int) {
-        viewModelScope.launch {
-            val habitItem = dbUseCase.getHabitUseCase.invoke(habitItemId)
-            when (habitItem) {
-                is Success -> {
-                    habitItem.result.let {
-                        _currentFragmentHabit.value = it
-                    }
-                }
-                is Failure -> {
-                    _ioError.value = eventErrorText(habitItem.error)
-                }
-            }
-        }
+    fun showErrorToast(error: IoError) {
+        _ioError.value = eventErrorText(error)
     }
 
     fun isHabitDoneButtonsBlocked() = isHabitDoneButtonsBlocked
@@ -353,7 +264,6 @@ class MainViewModel @Inject constructor(
             }
         }
     }
-
 
     companion object {
         private const val EMPTY_STRING = ""

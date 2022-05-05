@@ -1,14 +1,13 @@
 package com.example.habittracker.di.components
 
-import com.example.habittracker.di.annotations.MainActivityScope
+import com.example.habittracker.di.annotations.MainViewModelScope
 import com.example.habittracker.presentation.ui.BottomSheetFragment
-import com.example.habittracker.presentation.ui.HabitItemFragment
 import com.example.habittracker.presentation.ui.HabitListFragment
 import com.example.habittracker.presentation.ui.MainActivity
 import dagger.BindsInstance
 import dagger.Subcomponent
 
-@MainActivityScope
+@MainViewModelScope
 @Subcomponent
 interface MainActivityComponent {
 
@@ -21,8 +20,10 @@ interface MainActivityComponent {
 
     fun inject(habitListFragment: HabitListFragment)
 
-    fun inject(habitItemFragment: HabitItemFragment)
-
     fun inject(mainActivity: MainActivity)
 
+    fun habitItemFragmentComponentFactory(): HabitItemFragmentComponent.Factory
+
 }
+
+

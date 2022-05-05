@@ -1,6 +1,7 @@
 package com.example.habittracker.presentation.color
 
 import android.graphics.Color
+import androidx.annotation.ColorInt
 import javax.inject.Inject
 
 class ColorPicker @Inject constructor() {
@@ -12,6 +13,7 @@ class ColorPicker @Inject constructor() {
     private val freeSpaceSizeInHue =
         squareSizeInHue * FREE_SPACE_SIZE_IN_PERCENTS / SQUARE_SIZE_IN_PERCENTS
 
+    @ColorInt
     fun colors(): IntArray {
         val colors = IntArray(NUMBER_OF_COLORS)
         val positionOfFirstSquare = ((freeSpaceSizeInHue + squareSizeInHue) / 2)
@@ -22,6 +24,7 @@ class ColorPicker @Inject constructor() {
         return colors
     }
 
+    @ColorInt
     fun gradientColors(): IntArray {
         val colors = IntArray(NUMBER_OF_COLORS + 1)
         for (i in colors.indices) {

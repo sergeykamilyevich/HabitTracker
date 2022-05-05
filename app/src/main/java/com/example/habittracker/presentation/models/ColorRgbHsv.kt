@@ -1,6 +1,7 @@
 package com.example.habittracker.presentation.models
 
 import android.graphics.Color
+import androidx.annotation.ColorInt
 
 data class ColorRgbHsv(
     val red: Int,
@@ -12,7 +13,7 @@ data class ColorRgbHsv(
 ) {
 
     companion object {
-        fun fromColor(color: Int): ColorRgbHsv {
+        fun fromColor(@ColorInt color: Int): ColorRgbHsv {
             val hsv = FloatArray(3)
             Color.colorToHSV(color, hsv)
             return ColorRgbHsv(

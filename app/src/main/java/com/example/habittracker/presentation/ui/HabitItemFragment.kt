@@ -9,11 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.annotation.ColorInt
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.habittracker.R
 import com.example.habittracker.databinding.FragmentHabitItemBinding
+import com.example.habittracker.di.components.getComponent
 import com.example.habittracker.domain.models.Habit
 import com.example.habittracker.domain.models.Habit.Companion.UNDEFINED_ID
 import com.example.habittracker.domain.models.HabitPriority
@@ -42,14 +44,17 @@ class HabitItemFragment : Fragment(), HasTitle {
     lateinit var colorPicker: ColorPicker
     private val colors by lazy { colorPicker.colors() }
 
-
     @Inject
     lateinit var habitItemViewModel: HabitItemViewModel
 
     @Inject
     lateinit var mainViewModel: MainViewModel
 
-    private var habitItemId: Int = UNDEFINED_ID
+    private val habitId by lazy {
+        arguments?.getInt(HABIT_ITEM_ID, UNDEFINED_ID)
+            ?: throw RuntimeException("Unknown habitItemId")
+    }
+
     private val spinnerAdapter by lazy {
         ArrayAdapter(
             requireActivity(),
@@ -65,15 +70,15 @@ class HabitItemFragment : Fragment(), HasTitle {
         )
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        habitItemId = arguments?.getInt(HABIT_ITEM_ID, UNDEFINED_ID)
-            ?: throw RuntimeException("Unknown habitItemId")
-    }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        (activity as MainActivity).mainActivityComponent.inject(this)
+        val habitItemFragmentComponent = getComponent {
+            (activity as MainActivity)
+                .mainActivityComponent
+                .habitItemFragmentComponentFactory()
+                .create()
+        }
+        habitItemFragmentComponent.inject(this)
     }
 
     override fun onCreateView(
@@ -87,20 +92,17 @@ class HabitItemFragment : Fragment(), HasTitle {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 //        createRandomHabits()
-        chooseScreenMode()
+        if (savedInstanceState == null) habitItemViewModel.chooseScreenMode(habitId)
         setupSpinnerAdapter()
-        setupViewModelObservers()
+        setupViewModelObservers(savedInstanceState)
         setupTextChangeListeners()
         setupColorScrollView()
+        setButtonSaveClickListener()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun chooseScreenMode() {
-        if (habitItemId == UNDEFINED_ID) launchAddMode() else launchEditMode()
     }
 
     private fun setupColorScrollView() {
@@ -139,9 +141,9 @@ class HabitItemFragment : Fragment(), HasTitle {
         }
     }
 
-    private fun setupViewModelObservers() {
-        mainViewModel.canCloseItemFragment.observe(viewLifecycleOwner) {
-            if (it) findNavController().popBackStack()
+    private fun setupViewModelObservers(savedInstanceState: Bundle?) {
+        habitItemViewModel.canCloseItemFragment.observe(viewLifecycleOwner) {
+            findNavController().popBackStack()
         }
         habitItemViewModel.errorInputRecurrenceNumber.observe(viewLifecycleOwner) {
             handleInputError(it, binding.tiedRecurrenceNumber)
@@ -155,15 +157,16 @@ class HabitItemFragment : Fragment(), HasTitle {
         habitItemViewModel.errorInputDescription.observe(viewLifecycleOwner) {
             handleInputError(it, binding.tiedDescription)
         }
+        habitItemViewModel.currentFragmentHabit.observe(viewLifecycleOwner) {
+            if (savedInstanceState == null) setupFields(it)
+            else setupColorViews(habitItemViewModel.currentColor())
+        }
     }
 
-    private fun launchAddMode() {
-        val defaultColor = colors[0]
-        binding.currentColor.setBackgroundColor(defaultColor)
-        setupColorViews(defaultColor)
+    private fun setButtonSaveClickListener() {
         binding.btnSave.setOnClickListener {
             if (isFieldsFilled()) {
-                mainViewModel.addHabit(habitItemMapper.mapViewToHabit(binding))
+                habitItemViewModel.upsertHabitItem(habitItemMapper.mapViewToHabit(binding))
             } else {
                 Toast.makeText(
                     requireActivity(),
@@ -174,19 +177,9 @@ class HabitItemFragment : Fragment(), HasTitle {
         }
     }
 
-    private fun launchEditMode() {
-        mainViewModel.getHabit(habitItemId)
-        mainViewModel.currentFragmentHabit.observe(viewLifecycleOwner) {
-            setupFields(it)
-        }
-        binding.btnSave.setOnClickListener {
-            mainViewModel.editHabitItem(habitItemMapper.mapViewToHabit(binding))
-        }
-    }
-
     private fun createRandomTestHabits() {
         for (i in 1..15) {
-            mainViewModel.addHabit(
+            habitItemViewModel.addHabit(
                 Habit(
                     "Name $i",
                     "This habit is very important for my self-development",
@@ -200,7 +193,6 @@ class HabitItemFragment : Fragment(), HasTitle {
                 )
             )
         }
-        R.string.low_priority
     }
 
     private fun handleInputError(error: Boolean, textInputEditText: TextInputEditText) {
@@ -230,8 +222,12 @@ class HabitItemFragment : Fragment(), HasTitle {
 
     private fun setupFields(habit: Habit) {
         with(binding) {
-            tiedName.setText(habit.name)
-            tiedDescription.setText(habit.description)
+            if (habit.name != EMPTY_STRING) {
+                tiedName.setText(habit.name)
+                tiedDescription.setText(habit.description)
+                tiedRecurrenceNumber.setText(habit.recurrenceNumber.toString())
+                tiedRecurrencePeriod.setText(habit.recurrencePeriod.toString())
+            }
             val habitPriorityApp = HabitPriorityApp.fromHabitPriority(habit.priority)
             val spinnerPosition = spinnerAdapter
                 .getPosition(getString(habitPriorityApp.resourceId))
@@ -239,16 +235,15 @@ class HabitItemFragment : Fragment(), HasTitle {
             val checkedRadioButtonId =
                 habitItemMapper.mapHabitTypeToRadioButton(habit.type, binding)
             radioGroup.check(checkedRadioButtonId)
-            tiedRecurrenceNumber.setText(habit.recurrenceNumber.toString())
-            tiedRecurrencePeriod.setText(habit.recurrencePeriod.toString())
             setupColorViews(habit.color)
         }
     }
 
-    private fun setupColorViews(colorInt: Int) {
+    private fun setupColorViews(@ColorInt color: Int) {
         with(binding) {
-            val colorRgbHsv = ColorRgbHsv.fromColor(colorInt)
-            currentColor.setBackgroundColor(colorInt)
+            val colorRgbHsv = ColorRgbHsv.fromColor(color)
+            currentColor.setBackgroundColor(color)
+            habitItemViewModel.saveCurrentColor(color)
             tvCurrentColorRgb.text =
                 getString(R.string.rgb_color, colorRgbHsv.red, colorRgbHsv.green, colorRgbHsv.blue)
             tvCurrentColorHsv.text =
@@ -266,6 +261,7 @@ class HabitItemFragment : Fragment(), HasTitle {
     companion object {
 
         private const val HABIT_ITEM_ID = "habit item id"
+        private const val EMPTY_STRING = ""
 
         fun createArgs(habitItemId: Int) =
             Bundle().apply {

@@ -8,7 +8,7 @@
     <string name="high_priority">High</string>
     <string name="input_habit_name">Input habit name</string>
     <string name="input_habit_description">Input habit description</string>
-    <string name="recurrence">You did %1$d out of %2$s in %3$s</string>
+    <string name="recurrence">%1$d out of %2$s in %3$s</string>
     <string name="save">Save</string>
     <string name="ok">OK</string>
     <string name="good">Good</string>

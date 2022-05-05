@@ -1,14 +1,34 @@
 package com.example.habittracker.presentation.view_models
 
 import android.text.Editable
+import android.util.Log
+import androidx.annotation.ColorInt
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.habittracker.di.annotations.HabitItemViewModelScope
+import com.example.habittracker.domain.errors.Either
+import com.example.habittracker.domain.errors.IoError
+import com.example.habittracker.domain.models.Habit
+import com.example.habittracker.domain.models.HabitPriority
+import com.example.habittracker.domain.models.HabitType
+import com.example.habittracker.domain.models.Time
+import com.example.habittracker.domain.usecases.common.SyncUseCase
+import com.example.habittracker.domain.usecases.db.DbUseCase
+import com.example.habittracker.presentation.color.ColorPicker
 import com.example.habittracker.presentation.mappers.HabitItemMapper
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HabitItemViewModelScope
 class HabitItemViewModel @Inject constructor(
     private val mapper: HabitItemMapper,
+    private val mainViewModel: MainViewModel,
+    private val time: Time,
+    private val colorPicker: ColorPicker,
+    private val dbUseCase: DbUseCase,
+    private val syncUseCase: SyncUseCase
 ) : ViewModel() {
 
     private val _errorInputName = MutableLiveData<Boolean>()
@@ -26,6 +46,22 @@ class HabitItemViewModel @Inject constructor(
     private val _errorInputRecurrencePeriod = MutableLiveData<Boolean>()
     val errorInputRecurrencePeriod: LiveData<Boolean>
         get() = _errorInputRecurrencePeriod
+
+    private val _currentFragmentHabit = MutableLiveData<Habit>()
+    val currentFragmentHabit: LiveData<Habit>
+        get() = _currentFragmentHabit
+
+
+    private val _canCloseItemFragment = MutableLiveData<Unit>()
+    val canCloseItemFragment: LiveData<Unit>
+        get() = _canCloseItemFragment
+
+    private var currentColor = colorPicker.colors()[0]
+    fun currentColor(): Int = currentColor
+
+    fun saveCurrentColor(@ColorInt color: Int) {
+        currentColor = color
+    }
 
     fun validateName(input: Editable?) {
         val name = mapper.parseString(input)
@@ -50,4 +86,102 @@ class HabitItemViewModel @Inject constructor(
     private fun validateString(input: String): Boolean = input.isNotBlank()
 
     private fun validateNumber(input: Int): Boolean = input > 0
+
+    fun chooseScreenMode(habitId: Int) {
+            if (habitId == Habit.UNDEFINED_ID) setEmptyCurrentHabit()
+            else setCurrentHabitFromDb(habitId)
+    }
+
+    private fun setEmptyCurrentHabit() {
+        _currentFragmentHabit.value = Habit(
+            name = EMPTY_STRING,
+            description = EMPTY_STRING,
+            priority = HabitPriority.NORMAL,
+            type = HabitType.GOOD,
+            color = colorPicker.colors()[0],
+            recurrenceNumber = 0,
+            recurrencePeriod = 0
+        )
+    }
+
+    private fun setCurrentHabitFromDb(habitId: Int) {
+        viewModelScope.launch {
+            val habit = dbUseCase.getHabitUseCase.invoke(habitId)
+            when (habit) {
+                is Either.Success -> {
+                    habit.result.let {
+                        _currentFragmentHabit.value = it
+                    }
+                }
+                is Either.Failure -> {
+                    mainViewModel.showErrorToast(habit.error)
+                }
+            }
+        }
+    }
+
+    fun addHabit(habit: Habit) {
+        viewModelScope.launch {
+            val item = Habit(
+                name = habit.name,
+                description = habit.description,
+                priority = habit.priority,
+                type = habit.type,
+                color = habit.color,
+                recurrenceNumber = habit.recurrenceNumber,
+                recurrencePeriod = habit.recurrencePeriod,
+                date = time.currentUtcDateInSeconds()
+            )
+            upsertHabit(item)
+        }
+    }
+
+    fun upsertHabitItem(habit: Habit) {
+        _currentFragmentHabit.value?.let { oldItem ->
+            viewModelScope.launch {
+                val item = oldItem.copy(
+                    name = habit.name,
+                    description = habit.description,
+                    priority = habit.priority,
+                    type = habit.type,
+                    color = habit.color,
+                    recurrenceNumber = habit.recurrenceNumber,
+                    recurrencePeriod = habit.recurrencePeriod,
+                    date = time.currentUtcDateInSeconds()
+                )
+                upsertHabit(item)
+            }
+        }
+    }
+
+    private suspend fun upsertHabit(habit: Habit) {
+        val resultOfUpserting: Either<IoError, Int> =
+            dbUseCase.upsertHabitUseCase.invoke(habit)
+        when (resultOfUpserting) {
+            is Either.Success -> {
+                closeItemFragment()
+                val newHabitId = resultOfUpserting.result
+                val putResult =
+                    syncUseCase
+                        .putHabitAndSyncWithDbUseCase
+                        .invoke(habit = habit, newHabitId = newHabitId)
+                Log.d("ErrorApp", "putResult $putResult")
+                if (putResult is Either.Failure) {
+                    mainViewModel.showErrorToast(putResult.error)
+                }
+            }
+            is Either.Failure -> {
+                mainViewModel.showErrorToast(resultOfUpserting.error)
+            }
+        }
+    }
+
+    private fun closeItemFragment() {
+        _canCloseItemFragment.value = Unit
+    }
+
+    companion object {
+        private const val EMPTY_STRING = ""
+    }
+
 }
