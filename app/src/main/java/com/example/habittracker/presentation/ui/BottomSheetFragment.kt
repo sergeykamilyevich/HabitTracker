@@ -40,15 +40,15 @@ class BottomSheetFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupBottomSheet()
+        setUpBottomSheet()
     }
 
-    private fun setupBottomSheet() {
-        setupBottomSheetButtons()
-        setupBottomSheetTied()
+    private fun setUpBottomSheet() {
+        setUpBottomSheetButtons()
+        setUpBottomSheetTied()
     }
 
-    private fun setupBottomSheetButtons() {
+    private fun setUpBottomSheetButtons() {
         buttons = arrayListOf(
             binding.btnNameAsc,
             binding.btnNameDesc,
@@ -64,9 +64,9 @@ class BottomSheetFragment : Fragment() {
             }
         }
         if (viewModel.habitListFilter.value == null) {
-            setupDefaultButtonsState()
+            setUpDefaultButtonsState()
         } else {
-            setupSelectedButtonFromHabitListOrderBy(
+            setUpSelectedButtonFromHabitListOrderBy(
                 viewModel.habitListFilter.value?.orderBy ?: HabitListOrderBy.NAME_ASC
             )
         }
@@ -78,7 +78,7 @@ class BottomSheetFragment : Fragment() {
         }
     }
 
-    private fun setupBottomSheetTied() {
+    private fun setUpBottomSheetTied() {
         binding.tiedSearch.addTextChangedListener {
             viewModel.updateFilter(it)
         }
@@ -99,7 +99,7 @@ class BottomSheetFragment : Fragment() {
         viewModel.updateHabitListOrderBy(habitListOrderBy)
     }
 
-    private fun setupSelectedButtonFromHabitListOrderBy(habitListOrderBy: HabitListOrderBy) {
+    private fun setUpSelectedButtonFromHabitListOrderBy(habitListOrderBy: HabitListOrderBy) {
         with(binding) {
             when (habitListOrderBy) {
                 HabitListOrderBy.NAME_ASC -> btnNameAsc.isSelected = true
@@ -112,7 +112,7 @@ class BottomSheetFragment : Fragment() {
         }
     }
 
-    private fun setupDefaultButtonsState() {
+    private fun setUpDefaultButtonsState() {
         setCurrentButtonIsSelected(DEFAULT_SELECTED_BUTTON_INDEX)
         setHabitListOrderByFromSelectedButton(buttons[DEFAULT_SELECTED_BUTTON_INDEX])
     }

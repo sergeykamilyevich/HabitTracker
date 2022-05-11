@@ -24,12 +24,12 @@ data class HabitDoneDbModel(
     val date: Int
 ) {
 
-    fun toHabitDone(habitUid: String) = HabitDone(
-        habitId = habitId,
-        date = date,
-        habitUid = habitUid,
-        id = id,
-    )
+//    fun toHabitDone(habitUid: String) = HabitDone(
+//        habitId = habitId,
+//        date = date,
+//        habitUid = habitUid,
+//        id = id,
+//    )
 
     companion object {
 

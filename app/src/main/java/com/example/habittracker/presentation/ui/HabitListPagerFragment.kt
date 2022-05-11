@@ -30,11 +30,11 @@ class HabitListPagerFragment : Fragment(), HasTitle {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupViewPager()
-        setupAddButton()
+        setUpViewPager()
+        setUpAddButton()
     }
 
-    private fun setupViewPager() {
+    private fun setUpViewPager() {
         val tabNames: Array<String> = arrayOf(
             getString(R.string.all_habits),
             getString(R.string.good_habits),
@@ -47,7 +47,7 @@ class HabitListPagerFragment : Fragment(), HasTitle {
         }.attach()
     }
 
-    private fun setupAddButton() {
+    private fun setUpAddButton() {
         binding.btnAddHabit.setOnClickListener {
             launchHabitItemFragmentAddMode()
         }

@@ -93,10 +93,10 @@ class HabitItemFragment : Fragment(), HasTitle {
         super.onViewCreated(view, savedInstanceState)
 //        createRandomHabits()
         if (savedInstanceState == null) habitItemViewModel.chooseScreenMode(habitId)
-        setupSpinnerAdapter()
-        setupViewModelObservers(savedInstanceState)
-        setupTextChangeListeners()
-        setupColorScrollView()
+        setUpSpinnerAdapter()
+        setUpViewModelObservers(savedInstanceState)
+        setUpTextChangeListeners()
+        setUpColorScrollView()
         setButtonSaveClickListener()
     }
 
@@ -105,7 +105,7 @@ class HabitItemFragment : Fragment(), HasTitle {
         _binding = null
     }
 
-    private fun setupColorScrollView() {
+    private fun setUpColorScrollView() {
         for (color in colors) {
             val view = LayoutInflater.from(requireActivity()).inflate(
                 R.layout.item_color,
@@ -114,7 +114,7 @@ class HabitItemFragment : Fragment(), HasTitle {
             )
             view.setBackgroundColor(color)
             view.setOnClickListener {
-                setupColorViews((it.background as ColorDrawable).color)
+                setUpColorViews((it.background as ColorDrawable).color)
             }
             binding.llColor.addView(view)
         }
@@ -123,7 +123,7 @@ class HabitItemFragment : Fragment(), HasTitle {
         binding.llColor.background = gradientDrawable
     }
 
-    private fun setupTextChangeListeners() {
+    private fun setUpTextChangeListeners() {
         binding.tiedName.addTextChangedListener {
             habitItemViewModel.validateName(it)
         }
@@ -141,7 +141,7 @@ class HabitItemFragment : Fragment(), HasTitle {
         }
     }
 
-    private fun setupViewModelObservers(savedInstanceState: Bundle?) {
+    private fun setUpViewModelObservers(savedInstanceState: Bundle?) {
         habitItemViewModel.canCloseItemFragment.observe(viewLifecycleOwner) {
             findNavController().popBackStack()
         }
@@ -158,8 +158,8 @@ class HabitItemFragment : Fragment(), HasTitle {
             handleInputError(it, binding.tiedDescription)
         }
         habitItemViewModel.currentFragmentHabit.observe(viewLifecycleOwner) {
-            if (savedInstanceState == null) setupFields(it)
-            else setupColorViews(habitItemViewModel.currentColor())
+            if (savedInstanceState == null) setUpFields(it)
+            else setUpColorViews(habitItemViewModel.currentColor())
         }
     }
 
@@ -207,7 +207,7 @@ class HabitItemFragment : Fragment(), HasTitle {
                 || habitItemViewModel.errorInputDescription.value == true)
     }
 
-    private fun setupSpinnerAdapter() {
+    private fun setUpSpinnerAdapter() {
         binding.spinnerPriority.adapter = spinnerAdapter
     }
 
@@ -220,7 +220,7 @@ class HabitItemFragment : Fragment(), HasTitle {
         }
     }
 
-    private fun setupFields(habit: Habit) {
+    private fun setUpFields(habit: Habit) {
         with(binding) {
             if (habit.name != EMPTY_STRING) {
                 tiedName.setText(habit.name)
@@ -235,11 +235,11 @@ class HabitItemFragment : Fragment(), HasTitle {
             val checkedRadioButtonId =
                 habitItemMapper.mapHabitTypeToRadioButton(habit.type, binding)
             radioGroup.check(checkedRadioButtonId)
-            setupColorViews(habit.color)
+            setUpColorViews(habit.color)
         }
     }
 
-    private fun setupColorViews(@ColorInt color: Int) {
+    private fun setUpColorViews(@ColorInt color: Int) {
         with(binding) {
             val colorRgbHsv = ColorRgbHsv.fromColor(color)
             currentColor.setBackgroundColor(color)

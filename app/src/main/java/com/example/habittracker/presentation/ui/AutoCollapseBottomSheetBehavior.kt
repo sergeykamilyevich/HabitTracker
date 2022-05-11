@@ -14,10 +14,10 @@ class AutoCollapseBottomSheetBehavior<V : View>(private val context: Context, at
 
     override fun onAttachedToLayoutParams(layoutParams: CoordinatorLayout.LayoutParams) {
         super.onAttachedToLayoutParams(layoutParams)
-        setupCollapseParameters()
+        setUpCollapseParameters()
     }
 
-    private fun setupCollapseParameters() {
+    private fun setUpCollapseParameters() {
         val density = context.resources.displayMetrics.density
         state = STATE_COLLAPSED
         peekHeight = PEEK_HEIGHT * density.toInt()

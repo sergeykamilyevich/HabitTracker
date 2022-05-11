@@ -1,7 +1,6 @@
 package com.example.habittracker.presentation.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -55,18 +54,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentListener, true)
-        setupMainActivityComponent()
+        setUpMainActivityComponent()
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setupToolbar()
-        setupNavigation()
-        setupViewModel()
-        setupHeaderImage()
+        setUpToolbar()
+        setUpNavigation()
+        setUpViewModel()
+        setUpHeaderImage()
 
     }
 
-    private fun setupHeaderImage() {
+    private fun setUpHeaderImage() {
         val header = binding.navigationView.getHeaderView(DEFAULT_HEADER)
         val avatar = header.findViewById<ImageView>(R.id.avatar)
             ?: throw RuntimeException("Header image view is null")
@@ -78,7 +77,7 @@ class MainActivity : AppCompatActivity() {
             .into(avatar)
     }
 
-    private fun setupMainActivityComponent() {
+    private fun setUpMainActivityComponent() {
         mainActivityComponent = getComponent {
             applicationComponent
                 .mainActivityComponentFactory()
@@ -87,7 +86,7 @@ class MainActivity : AppCompatActivity() {
         mainActivityComponent.inject(this)
     }
 
-    private fun setupViewModel() {
+    private fun setUpViewModel() {
         viewModel.cloudError.observe(this) {
             it.transferIfNotHandled()?.let { error ->
                 makeLongToast(error)
@@ -141,11 +140,11 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, text, Toast.LENGTH_LONG).show()
     }
 
-    private fun setupToolbar() {
+    private fun setUpToolbar() {
         setSupportActionBar(binding.toolbar)
     }
 
-    private fun setupNavigation() {
+    private fun setUpNavigation() {
         navHostFragment =
             supportFragmentManager.findFragmentById(R.id.main_container) as NavHostFragment
         navController = navHostFragment.navController

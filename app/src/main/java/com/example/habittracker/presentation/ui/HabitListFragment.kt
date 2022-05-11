@@ -62,10 +62,10 @@ class HabitListFragment : Fragment(), HasTitle {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupViewModel()
-        setupRecyclerView()
-        setupAdapterClickListeners()
-        setupSwipeListener()
+        setUpViewModel()
+        setUpRecyclerView()
+        setUpAdapterClickListeners()
+        setUpSwipeListener()
     }
 
     override fun onDestroyView() {
@@ -73,7 +73,7 @@ class HabitListFragment : Fragment(), HasTitle {
         _binding = null
     }
 
-    private fun setupViewModel() {
+    private fun setUpViewModel() {
         viewModel.getHabitList(HabitTypeApp.toHabitType(listMode))
 
         viewModel.habitList.observe(viewLifecycleOwner) {
@@ -81,12 +81,12 @@ class HabitListFragment : Fragment(), HasTitle {
         }
     }
 
-    private fun setupRecyclerView() {
+    private fun setUpRecyclerView() {
         habitListAdapter = HabitListAdapter()
         binding.rvHabitList.adapter = habitListAdapter
     }
 
-    private fun setupAdapterClickListeners() {
+    private fun setUpAdapterClickListeners() {
         habitListAdapter.onButtonHabitDoneClickListener = {
             if (!viewModel.isHabitDoneButtonsBlocked()) {
                 viewModel.addHabitDone(
@@ -103,7 +103,7 @@ class HabitListFragment : Fragment(), HasTitle {
         }
     }
 
-    private fun setupSwipeListener() {
+    private fun setUpSwipeListener() {
         val callback = object : ItemTouchHelper.SimpleCallback(
             0,
             ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
