@@ -1,6 +1,5 @@
 package com.example.habittracker.presentation.recycler
 
-import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habittracker.R
 import com.example.habittracker.databinding.ItemHabitBinding

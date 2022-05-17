@@ -39,6 +39,13 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+        }
+    }
+    namespace 'com.example.habittracker'
 }
 
 dependencies {
@@ -53,7 +60,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
@@ -74,9 +81,16 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit2_version"
 
-    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+    testImplementation "org.mockito:mockito-core:4.5.1"
+    testImplementation "org.mockito:mockito-inline:4.5.1"
+    testImplementation "org.mockito.kotlin:mockito-kotlin:4.0.0"
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
+    testImplementation "com.google.truth:truth:1.1.3"
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+//    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation "com.kaspersky.android-components:kaspresso:1.3.0"
+
 
 
 }
