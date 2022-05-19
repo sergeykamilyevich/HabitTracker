@@ -1,6 +1,6 @@
 package com.example.habittracker.domain.usecases.db
 
-import com.example.habittracker.data.repositories.FakeDbHabitRepository
+import com.example.habittracker.data.repositories.DbHabitRepositoryFake
 import com.example.habittracker.domain.errors.Either
 import com.example.habittracker.domain.models.HabitDone
 import com.google.common.truth.Truth.assertThat
@@ -11,27 +11,27 @@ import org.junit.jupiter.api.Test
 internal class DeleteHabitDoneUseCaseTest {
 
     private lateinit var deleteHabitDoneUseCase: DeleteHabitDoneUseCase
-    private lateinit var fakeDbHabitRepository: FakeDbHabitRepository
-    private lateinit var successHabitDone: HabitDone
+    private lateinit var dbHabitRepositoryFake: DbHabitRepositoryFake
+    private lateinit var habitDoneToInsert: HabitDone
 
     @BeforeEach
     fun setUp() {
-        fakeDbHabitRepository = FakeDbHabitRepository()
-        deleteHabitDoneUseCase = DeleteHabitDoneUseCase(fakeDbHabitRepository)
-        successHabitDone = fakeDbHabitRepository.successWhileAddHabitDone
+        dbHabitRepositoryFake = DbHabitRepositoryFake()
+        deleteHabitDoneUseCase = DeleteHabitDoneUseCase(dbHabitRepositoryFake)
+        habitDoneToInsert = dbHabitRepositoryFake.habitDoneToInsert
     }
 
     @Test
     fun `transfer habitDone to the repository`() = runBlocking {
-        val preFind = fakeDbHabitRepository.findHabitDone(successHabitDone)
+        val preFind = dbHabitRepositoryFake.findHabitDone(habitDoneToInsert)
         assertThat(preFind).isNull()
-        val habitDoneId = fakeDbHabitRepository.addHabitDone(successHabitDone)
-        val findAfterAdd = fakeDbHabitRepository.findHabitDone(successHabitDone)
+        val habitDoneId = dbHabitRepositoryFake.addHabitDone(habitDoneToInsert)
+        val findAfterAdd = dbHabitRepositoryFake.findHabitDone(habitDoneToInsert)
         assertThat(findAfterAdd).isNotNull()
         if (habitDoneId is Either.Success) {
             deleteHabitDoneUseCase.invoke(habitDoneId.result)
         }
-        val findAfterDelete = fakeDbHabitRepository.findHabitDone(successHabitDone)
+        val findAfterDelete = dbHabitRepositoryFake.findHabitDone(habitDoneToInsert)
         assertThat(findAfterDelete).isNull()
     }
 }

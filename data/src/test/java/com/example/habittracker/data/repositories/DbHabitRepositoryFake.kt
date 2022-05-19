@@ -8,17 +8,18 @@ import com.example.habittracker.domain.models.*
 import com.example.habittracker.domain.repositories.DbHabitRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.runBlocking
 
-class FakeDbHabitRepository(
-    val successWhileAddHabitDone: HabitDone = HabitDone(
-        date = 0,
-        habitUid = "testUid"
-    ),
-    val errorWhileAddHabitDone: HabitDone = HabitDone(
-        date = 0,
-        habitUid = "errorUid"
-    ),
-    val successWhileUpsertHabit: Habit = Habit(
+class DbHabitRepositoryFake : DbHabitRepository {
+
+    private val habits = mutableListOf<Habit>()
+    private val habitDones = mutableListOf<HabitDone>()
+    private var indexHabits = 0
+    private var indexHabitDones = 0
+
+    val habitDoneToInsert: HabitDone = HabitDone(date = 0, habitUid = "testUid")
+
+    val habitToInsert: Habit = Habit(
         name = "success name",
         description = "returns Success while upserting habit",
         priority = HabitPriority.NORMAL,
@@ -26,31 +27,33 @@ class FakeDbHabitRepository(
         color = 1,
         recurrenceNumber = 1,
         recurrencePeriod = 1
-    ),
-    val errorWhileUpsertHabit: Habit = Habit(
-        name = "error name",
-        description = "returns Failure while upserting habit",
-        priority = HabitPriority.NORMAL,
-        type = HabitType.GOOD,
-        color = 1,
-        recurrenceNumber = 1,
-        recurrencePeriod = 1
-    ),
-    val errorGetListHabit: Habit = Habit(
-        name = "error get list",
-        description = "returns Failure while getting list",
-        priority = HabitPriority.NORMAL,
-        type = HabitType.GOOD,
-        color = 1,
-        recurrenceNumber = 1,
-        recurrencePeriod = 1
     )
-) : DbHabitRepository {
 
-    private val habits = mutableListOf<Habit>()
-    private val habitDones = mutableListOf<HabitDone>()
-    private var indexHabits = 0
-    private var indexHabitDones = 0
+    private var errorReturn: Boolean = false
+
+    fun setErrorReturn() {
+        errorReturn = true
+    }
+
+    fun initFilling() = runBlocking {
+        val habitsToInsert = mutableListOf<Habit>()
+        ('a'..'z').forEachIndexed { index, c ->
+            habitsToInsert.add(
+                Habit(
+                    name = c.toString(),
+                    description = c.toString(),
+                    priority = HabitPriority.findPriorityById((index % 3)),
+                    type = HabitType.findTypeById(index % 2),
+                    color = index,
+                    recurrenceNumber = index,
+                    recurrencePeriod = index * 2,
+                    date = index
+                )
+            )
+        }
+        habitsToInsert.shuffle()
+        habitsToInsert.forEach { upsertHabit(it) }
+    }
 
     override fun getHabitList(
         habitType: HabitType?,
@@ -74,20 +77,15 @@ class FakeDbHabitRepository(
         }
     }
 
-    override suspend fun getUnfilteredList(): Either<IoError, List<Habit>> {
-        return if (habits.contains(errorGetListHabit)) IoError.SqlError().failure() else habits.success()
-    }
+    override suspend fun getUnfilteredList(): Either<IoError, List<Habit>> =
+        if (errorReturn) IoError.SqlError().failure() else habits.success()
 
-    override suspend fun getHabitById(habitId: Int): Either<IoError, Habit> {
-        return (habits.find { it.id == habitId })?.success()
+    override suspend fun getHabitById(habitId: Int): Either<IoError, Habit> =
+        (habits.find { it.id == habitId })?.success()
             ?: IoError.SqlError("Habit with id $habitId not found").failure()
-    }
 
     override suspend fun upsertHabit(habit: Habit): Either<IoError, Int> {
-        if (habit == errorWhileUpsertHabit) {
-            habits.add(habit)
-            return IoError.SqlError().failure()
-        }
+        if (errorReturn) return IoError.SqlError().failure()
         if (habit.id == 0) {
             indexHabits++
             habits.add(habit.copy(id = indexHabits))
@@ -111,7 +109,7 @@ class FakeDbHabitRepository(
     }
 
     override suspend fun addHabitDone(habitDone: HabitDone): Either<IoError, Int> {
-        if (habitDone == errorWhileAddHabitDone) return IoError.SqlError().failure()
+        if (errorReturn) return IoError.SqlError().failure()
         if (habitDone.id == 0) {
             indexHabitDones++
             habitDones.add(habitDone.copy(id = indexHabitDones))
@@ -130,16 +128,14 @@ class FakeDbHabitRepository(
         }
     }
 
-    fun findHabit(habit: Habit) =
-        habits.find { it == habit }
+    fun findHabit(habit: Habit) = habits.find { it == habit }
 
-
-    fun findHabitDone(habitDoneToInsert: HabitDone) =
-        habitDones.find {
+    fun findHabitDone(habitDoneToInsert: HabitDone) = habitDones.find {
             it.date == habitDoneToInsert.date && it.habitUid == habitDoneToInsert.habitUid
         }
 
     companion object {
         private const val ITEM_NOT_ADDED = 0
+        const val ERROR_HABIT_ID = -1
     }
 }

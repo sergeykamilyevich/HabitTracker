@@ -1,6 +1,6 @@
 package com.example.habittracker.domain.usecases.db
 
-import com.example.habittracker.data.repositories.FakeDbHabitRepository
+import com.example.habittracker.data.repositories.DbHabitRepositoryFake
 import com.example.habittracker.domain.errors.Either.Failure
 import com.example.habittracker.domain.errors.Either.Success
 import com.example.habittracker.domain.models.Habit
@@ -12,30 +12,28 @@ import org.junit.jupiter.api.Test
 internal class UpsertHabitUseCaseTest {
 
     private lateinit var upsertHabitUseCase: UpsertHabitUseCase
-    private lateinit var fakeDbHabitRepository: FakeDbHabitRepository
-    private lateinit var successHabit: Habit
-    private lateinit var errorHabit: Habit
+    private lateinit var dbHabitRepositoryFake: DbHabitRepositoryFake
+    private lateinit var habitToInsert: Habit
 
     @BeforeEach
     fun setUp() {
-        fakeDbHabitRepository = FakeDbHabitRepository()
-        upsertHabitUseCase = UpsertHabitUseCase(fakeDbHabitRepository)
-        successHabit = fakeDbHabitRepository.successWhileUpsertHabit
-        errorHabit = fakeDbHabitRepository.errorWhileUpsertHabit
+        dbHabitRepositoryFake = DbHabitRepositoryFake()
+        upsertHabitUseCase = UpsertHabitUseCase(dbHabitRepositoryFake)
+        habitToInsert = dbHabitRepositoryFake.habitToInsert
     }
 
     @Test
     fun `add habit and return habit id`() = runBlocking {
-        val habitId = upsertHabitUseCase.invoke(successHabit)
+        val habitId = upsertHabitUseCase.invoke(habitToInsert)
         assertThat(habitId is Success).isTrue()
     }
 
     @Test
     fun `update habit and return id = 0`() = runBlocking {
-        val habitId = upsertHabitUseCase.invoke(successHabit)
+        val habitId = upsertHabitUseCase.invoke(habitToInsert)
         assertThat(habitId is Success).isTrue()
         if (habitId is Success) {
-            val habitToUpdate = successHabit.copy(id = habitId.result)
+            val habitToUpdate = habitToInsert.copy(id = habitId.result)
             val resultOfUpserting = upsertHabitUseCase.invoke(habitToUpdate)
             assertThat(resultOfUpserting is Success && resultOfUpserting.result == 0).isTrue()
         }
@@ -43,16 +41,17 @@ internal class UpsertHabitUseCaseTest {
 
     @Test
     fun `return error`() = runBlocking {
-        val result = upsertHabitUseCase.invoke(errorHabit)
+        dbHabitRepositoryFake.setErrorReturn()
+        val result = upsertHabitUseCase.invoke(habitToInsert)
         assertThat(result is Failure).isTrue()
     }
 
     @Test
     fun `transfer habit to the repository`() = runBlocking {
-        val preFind = fakeDbHabitRepository.findHabit(successHabit)
+        val preFind = dbHabitRepositoryFake.findHabit(habitToInsert)
         assertThat(preFind).isNull()
-        upsertHabitUseCase.invoke(successHabit)
-        val postFind = fakeDbHabitRepository.findHabit(successHabit)
+        upsertHabitUseCase.invoke(habitToInsert)
+        val postFind = dbHabitRepositoryFake.findHabit(habitToInsert)
         assertThat(postFind).isNotNull()
     }
 }

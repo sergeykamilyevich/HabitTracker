@@ -1,6 +1,6 @@
 package com.example.habittracker.domain.usecases.db
 
-import com.example.habittracker.data.repositories.FakeDbHabitRepository
+import com.example.habittracker.data.repositories.DbHabitRepositoryFake
 import com.example.habittracker.domain.errors.Either.Success
 import com.example.habittracker.domain.models.*
 import com.example.habittracker.domain.models.HabitListOrderBy.*
@@ -16,35 +16,16 @@ import org.junit.jupiter.params.provider.NullSource
 internal class GetHabitListUseCaseTest {
 
     private lateinit var getHabitListUseCase: GetHabitListUseCase
-    private lateinit var fakeDbHabitRepository: FakeDbHabitRepository
+    private lateinit var dbHabitRepositoryFake: DbHabitRepositoryFake
     private lateinit var successHabit: Habit
-    private lateinit var errorHabit: Habit
 
     @BeforeEach
     fun setUp() = runBlocking {
-        fakeDbHabitRepository = FakeDbHabitRepository()
-        getHabitListUseCase = GetHabitListUseCase(fakeDbHabitRepository)
-        successHabit = fakeDbHabitRepository.successWhileUpsertHabit
-        errorHabit = fakeDbHabitRepository.errorWhileUpsertHabit
-
-        fakeDbHabitRepository.upsertHabit(successHabit)
-        val habitsToInsert = mutableListOf<Habit>()
-        ('a'..'z').forEachIndexed { index, c ->
-            habitsToInsert.add(
-                Habit(
-                    name = c.toString(),
-                    description = c.toString(),
-                    priority = HabitPriority.findPriorityById((index % 3)),
-                    type = HabitType.findTypeById(index % 2),
-                    color = index,
-                    recurrenceNumber = index,
-                    recurrencePeriod = index * 2,
-                    date = index
-                )
-            )
-        }
-        habitsToInsert.shuffle()
-        habitsToInsert.forEach { fakeDbHabitRepository.upsertHabit(it) }
+        dbHabitRepositoryFake = DbHabitRepositoryFake()
+        getHabitListUseCase = GetHabitListUseCase(dbHabitRepositoryFake)
+        successHabit = dbHabitRepositoryFake.habitToInsert
+        dbHabitRepositoryFake.upsertHabit(successHabit)
+        dbHabitRepositoryFake.initFilling()
     }
 
     @ParameterizedTest
@@ -90,7 +71,7 @@ internal class GetHabitListUseCaseTest {
         val searchFilter =
             HabitListFilter(orderBy = NAME_ASC, search = searchString)
         val listFromUseCase = getHabitListUseCase.invoke(habitTypeFilter, searchFilter).last()
-        val unfilteredList = fakeDbHabitRepository.getUnfilteredList()
+        val unfilteredList = dbHabitRepositoryFake.getUnfilteredList()
         assertThat(unfilteredList is Success).isTrue()
         if (unfilteredList is Success) {
             val filteredList = unfilteredList.result.filter { it.name.contains(searchString) }
@@ -102,12 +83,13 @@ internal class GetHabitListUseCaseTest {
     fun `return empty search result`() = runBlocking {
         val habitTypeFilter = null
         val searchFilter =
-            HabitListFilter(orderBy = NAME_ASC, search = errorHabit.name)
+            HabitListFilter(orderBy = NAME_ASC, search = WRONG_SEARCH)
         val list = getHabitListUseCase.invoke(habitTypeFilter, searchFilter).last()
         assertThat(list.isEmpty()).isTrue()
     }
 
     companion object {
-        const val EMPTY_SEARCH = ""
+        private const val EMPTY_SEARCH = ""
+        private const val WRONG_SEARCH = "wrong search"
     }
 }

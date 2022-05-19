@@ -60,7 +60,7 @@ data class Habit(
         const val UNDEFINED_ID = 0
         private const val UNDEFINED_DATE = 0
         private const val SECONDS_IN_DAY = 24 * 60 * 60
-        private const val EMPTY_UID = ""
+        const val EMPTY_UID = ""
         private const val EMPTY_STRING = ""
         private const val UNDEFINED_HASH = 0
     }

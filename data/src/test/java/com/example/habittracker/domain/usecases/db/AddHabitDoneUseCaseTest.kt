@@ -1,6 +1,6 @@
 package com.example.habittracker.domain.usecases.db
 
-import com.example.habittracker.data.repositories.FakeDbHabitRepository
+import com.example.habittracker.data.repositories.DbHabitRepositoryFake
 import com.example.habittracker.domain.errors.Either.Failure
 import com.example.habittracker.domain.errors.Either.Success
 import com.example.habittracker.domain.models.HabitDone
@@ -12,36 +12,35 @@ import org.junit.jupiter.api.Test
 internal class AddHabitDoneUseCaseTest {
 
     private lateinit var addHabitDoneUseCase: AddHabitDoneUseCase
-    private lateinit var fakeDbHabitRepository: FakeDbHabitRepository
-    private lateinit var successHabitDone: HabitDone
-    private lateinit var errorHabitDone: HabitDone
+    private lateinit var dbHabitRepositoryFake: DbHabitRepositoryFake
+    private lateinit var habitDoneToInsert: HabitDone
 
     @BeforeEach
     fun setUp() {
-        fakeDbHabitRepository = FakeDbHabitRepository()
-        addHabitDoneUseCase = AddHabitDoneUseCase(fakeDbHabitRepository)
-        successHabitDone = fakeDbHabitRepository.successWhileAddHabitDone
-        errorHabitDone = fakeDbHabitRepository.errorWhileAddHabitDone
+        dbHabitRepositoryFake = DbHabitRepositoryFake()
+        addHabitDoneUseCase = AddHabitDoneUseCase(dbHabitRepositoryFake)
+        habitDoneToInsert = dbHabitRepositoryFake.habitDoneToInsert
     }
 
     @Test
     fun `return habitDone id`() = runBlocking {
-        val habitDoneId = addHabitDoneUseCase.invoke(successHabitDone)
+        val habitDoneId = addHabitDoneUseCase.invoke(habitDoneToInsert)
         assertThat(habitDoneId is Success).isTrue()
     }
 
     @Test
     fun `return error`() = runBlocking {
-        val result = addHabitDoneUseCase.invoke(errorHabitDone)
+        dbHabitRepositoryFake.setErrorReturn()
+        val result = addHabitDoneUseCase.invoke(habitDoneToInsert)
         assertThat(result is Failure).isTrue()
     }
 
     @Test
     fun `transfer habitDone to the repository`() = runBlocking {
-        val preFind = fakeDbHabitRepository.findHabitDone(successHabitDone)
+        val preFind = dbHabitRepositoryFake.findHabitDone(habitDoneToInsert)
         assertThat(preFind).isNull()
-        addHabitDoneUseCase.invoke(successHabitDone)
-        val postFind = fakeDbHabitRepository.findHabitDone(successHabitDone)
+        addHabitDoneUseCase.invoke(habitDoneToInsert)
+        val postFind = dbHabitRepositoryFake.findHabitDone(habitDoneToInsert)
         assertThat(postFind).isNotNull()
     }
 }

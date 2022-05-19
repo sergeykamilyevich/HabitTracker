@@ -9,6 +9,7 @@ import javax.inject.Singleton
 @Singleton
 class App : Application() {
     lateinit var applicationComponent: ApplicationComponent
+//        private set
 
     override fun onCreate() {
         applicationComponent = DaggerApplicationComponent
