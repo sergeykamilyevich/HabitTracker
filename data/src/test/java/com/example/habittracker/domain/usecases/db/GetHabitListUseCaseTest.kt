@@ -9,6 +9,9 @@ import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
+import org.junit.jupiter.params.provider.NullSource
 
 internal class GetHabitListUseCaseTest {
 
@@ -44,82 +47,41 @@ internal class GetHabitListUseCaseTest {
         habitsToInsert.forEach { fakeDbHabitRepository.upsertHabit(it) }
     }
 
-    @Test
-    fun `return list of good habits`() {
-        val habitTypeFilter = HabitType.GOOD
-        checkFilteredListByType(habitTypeFilter = habitTypeFilter)
-    }
-
-    @Test
-    fun `return list of bad habits`() {
-        val habitTypeFilter = HabitType.BAD
-        checkFilteredListByType(habitTypeFilter = habitTypeFilter)
-    }
-
-    @Test
-    fun `return list of good and bad habits`() {
-        val habitTypeFilter = null
-        checkFilteredListByType(habitTypeFilter = habitTypeFilter)
-    }
-
-    private fun checkFilteredListByType(habitTypeFilter: HabitType?) = runBlocking {
-        val emptyFilter =
-            HabitListFilter(orderBy = NAME_ASC, search = EMPTY_SEARCH)
-        val list = getHabitListUseCase.invoke(habitTypeFilter, emptyFilter).last()
-        val actualHabitGood = list.find { it.type == HabitType.GOOD }
-        val actualHabitBad = list.find { it.type == HabitType.BAD }
-        when (habitTypeFilter) {
-            HabitType.GOOD -> assertThat(actualHabitBad == null && actualHabitGood != null).isTrue()
-            HabitType.BAD -> assertThat(actualHabitBad != null && actualHabitGood == null).isTrue()
-            null -> assertThat(actualHabitBad != null && actualHabitGood != null).isTrue()
+    @ParameterizedTest
+    @EnumSource(HabitType::class)
+    @NullSource
+    fun `return lists of bad, good and both types habits`(habitTypeFilter: HabitType?) =
+        runBlocking {
+            val emptyFilter =
+                HabitListFilter(orderBy = NAME_ASC, search = EMPTY_SEARCH)
+            val list = getHabitListUseCase.invoke(habitTypeFilter, emptyFilter).last()
+            val actualHabitGood = list.find { it.type == HabitType.GOOD }
+            val actualHabitBad = list.find { it.type == HabitType.BAD }
+            when (habitTypeFilter) {
+                HabitType.GOOD -> assertThat(actualHabitBad == null && actualHabitGood != null).isTrue()
+                HabitType.BAD -> assertThat(actualHabitBad != null && actualHabitGood == null).isTrue()
+                null -> assertThat(actualHabitBad != null && actualHabitGood != null).isTrue()
+            }
         }
-    }
 
-    @Test
-    fun `return list of habits sorted by name ascending`() = runBlocking {
-        checkListSort(NAME_ASC)
-    }
-
-    @Test
-    fun `return list of habits sorted by name descending`() = runBlocking {
-        checkListSort(NAME_DESC)
-    }
-
-    @Test
-    fun `return list of habits sorted by creation ascending`() = runBlocking {
-        checkListSort(TIME_CREATION_ASC)
-    }
-
-    @Test
-    fun `return list of habits sorted by creation descending`() = runBlocking {
-        checkListSort(TIME_CREATION_DESC)
-    }
-
-    @Test
-    fun `return list of habits sorted by priority ascending`() = runBlocking {
-        checkListSort(PRIORITY_ASC)
-    }
-
-    @Test
-    fun `return list of habits sorted by priority descending`() = runBlocking {
-        checkListSort(PRIORITY_DESC)
-    }
-
-    private fun checkListSort(habitListOrderBy: HabitListOrderBy) = runBlocking {
-        val habitTypeFilter = null
-        val emptyFilter =
-            HabitListFilter(orderBy = habitListOrderBy, search = EMPTY_SEARCH)
-        val list = getHabitListUseCase.invoke(habitTypeFilter, emptyFilter).last()
-        val assertRequirement: (Int) -> Unit = when (habitListOrderBy) {
-            NAME_ASC -> { i -> assertThat(list[i].name <= list[i + 1].name).isTrue() }
-            NAME_DESC -> { i -> assertThat(list[i].name >= list[i + 1].name).isTrue() }
-            TIME_CREATION_ASC -> { i -> assertThat(list[i].date <= list[i + 1].date).isTrue() }
-            TIME_CREATION_DESC -> { i -> assertThat(list[i].date >= list[i + 1].date).isTrue() }
-            PRIORITY_ASC -> { i -> assertThat(list[i].priority.id <= list[i + 1].priority.id).isTrue() }
-            PRIORITY_DESC -> { i -> assertThat(list[i].priority.id >= list[i + 1].priority.id).isTrue() }
+    @ParameterizedTest
+    @EnumSource(HabitListOrderBy::class)
+    fun `return habit lists sorted by order from HabitListOrderBy`(habitListOrderBy: HabitListOrderBy) =
+        runBlocking {
+            val habitTypeFilter = null
+            val emptyFilter =
+                HabitListFilter(orderBy = habitListOrderBy, search = EMPTY_SEARCH)
+            val list = getHabitListUseCase.invoke(habitTypeFilter, emptyFilter).last()
+            val assertRequirement: (Int) -> Unit = when (habitListOrderBy) {
+                NAME_ASC -> { i -> assertThat(list[i].name <= list[i + 1].name).isTrue() }
+                NAME_DESC -> { i -> assertThat(list[i].name >= list[i + 1].name).isTrue() }
+                TIME_CREATION_ASC -> { i -> assertThat(list[i].date <= list[i + 1].date).isTrue() }
+                TIME_CREATION_DESC -> { i -> assertThat(list[i].date >= list[i + 1].date).isTrue() }
+                PRIORITY_ASC -> { i -> assertThat(list[i].priority.id <= list[i + 1].priority.id).isTrue() }
+                PRIORITY_DESC -> { i -> assertThat(list[i].priority.id >= list[i + 1].priority.id).isTrue() }
+            }
+            for (i in 0 until list.size - 1) assertRequirement(i)
         }
-        for (i in 0 until list.size - 1) assertRequirement(i)
-    }
 
     @Test
     fun `return habit search result`() = runBlocking {
