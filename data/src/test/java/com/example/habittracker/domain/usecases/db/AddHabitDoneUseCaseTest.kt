@@ -8,6 +8,8 @@ import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 internal class AddHabitDoneUseCaseTest {
 
@@ -23,19 +25,6 @@ internal class AddHabitDoneUseCaseTest {
     }
 
     @Test
-    fun `return habitDone id`() = runBlocking {
-        val habitDoneId = addHabitDoneUseCase.invoke(habitDoneToInsert)
-        assertThat(habitDoneId is Success).isTrue()
-    }
-
-    @Test
-    fun `return error`() = runBlocking {
-        dbHabitRepositoryFake.setErrorReturn()
-        val result = addHabitDoneUseCase.invoke(habitDoneToInsert)
-        assertThat(result is Failure).isTrue()
-    }
-
-    @Test
     fun `transfer habitDone to the repository`() = runBlocking {
         val preFind = dbHabitRepositoryFake.findHabitDone(habitDoneToInsert)
         assertThat(preFind).isNull()
@@ -43,4 +32,16 @@ internal class AddHabitDoneUseCaseTest {
         val postFind = dbHabitRepositoryFake.findHabitDone(habitDoneToInsert)
         assertThat(postFind).isNotNull()
     }
+
+    @ParameterizedTest
+    @ValueSource(booleans = [true, false])
+    fun `return success(true) or failure(false)`(isSuccess: Boolean) = runBlocking {
+        if (!isSuccess) dbHabitRepositoryFake.setErrorReturn()
+        val result = addHabitDoneUseCase.invoke(habitDoneToInsert)
+        when (isSuccess) {
+            true -> assertThat(result is Success).isTrue()
+            false -> assertThat(result is Failure).isTrue()
+        }
+    }
+
 }

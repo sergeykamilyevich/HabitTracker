@@ -7,6 +7,8 @@ import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 internal class DeleteHabitDoneUseCaseTest {
 
@@ -22,7 +24,7 @@ internal class DeleteHabitDoneUseCaseTest {
     }
 
     @Test
-    fun `transfer habitDone to the repository`() = runBlocking {
+    fun `deleted habitDone from repository`() = runBlocking {
         val preFind = dbHabitRepositoryFake.findHabitDone(habitDoneToInsert)
         assertThat(preFind).isNull()
         val habitDoneId = dbHabitRepositoryFake.addHabitDone(habitDoneToInsert)

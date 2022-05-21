@@ -8,6 +8,8 @@ import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 internal class UpsertHabitUseCaseTest {
 
@@ -23,12 +25,6 @@ internal class UpsertHabitUseCaseTest {
     }
 
     @Test
-    fun `add habit and return habit id`() = runBlocking {
-        val habitId = upsertHabitUseCase.invoke(habitToInsert)
-        assertThat(habitId is Success).isTrue()
-    }
-
-    @Test
     fun `update habit and return id = 0`() = runBlocking {
         val habitId = upsertHabitUseCase.invoke(habitToInsert)
         assertThat(habitId is Success).isTrue()
@@ -39,11 +35,15 @@ internal class UpsertHabitUseCaseTest {
         }
     }
 
-    @Test
-    fun `return error`() = runBlocking {
-        dbHabitRepositoryFake.setErrorReturn()
+    @ParameterizedTest
+    @ValueSource(booleans = [true, false])
+    fun `return success(true) or failure(false)`(isSuccess: Boolean) = runBlocking {
+        if (!isSuccess) dbHabitRepositoryFake.setErrorReturn()
         val result = upsertHabitUseCase.invoke(habitToInsert)
-        assertThat(result is Failure).isTrue()
+        when (isSuccess) {
+            true -> assertThat(result is Success).isTrue()
+            false -> assertThat(result is Failure).isTrue()
+        }
     }
 
     @Test

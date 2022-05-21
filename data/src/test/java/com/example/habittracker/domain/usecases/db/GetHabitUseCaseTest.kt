@@ -37,7 +37,7 @@ internal class GetHabitUseCaseTest {
     }
 
     @Test
-    fun `get error from repository`() = runBlocking {
+    fun `return error`() = runBlocking {
         dbHabitRepositoryFake.upsertHabit(habitToInsert)
         val habit = getHabitUseCase(DbHabitRepositoryFake.ERROR_HABIT_ID)
         assertThat(habit is Failure).isTrue()

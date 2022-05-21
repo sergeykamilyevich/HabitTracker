@@ -20,8 +20,8 @@ class DbHabitRepositoryFake : DbHabitRepository {
     val habitDoneToInsert: HabitDone = HabitDone(date = 0, habitUid = "testUid")
 
     val habitToInsert: Habit = Habit(
-        name = "success name",
-        description = "returns Success while upserting habit",
+        name = "habit name",
+        description = "habit to insert",
         priority = HabitPriority.NORMAL,
         type = HabitType.GOOD,
         color = 1,
@@ -99,14 +99,17 @@ class DbHabitRepositoryFake : DbHabitRepository {
     }
 
     override suspend fun deleteHabit(habit: Habit): Either<IoError, Unit> {
-        return if (habits.remove(habit)) Unit.success()
-        else IoError.SqlError("Error while deleting habit").failure()
+        val resultOfDeleting = habits.remove(habit)
+        return if (resultOfDeleting) Unit.success() else IoError.SqlError("Habit $habit not found")
+            .failure()
     }
 
-    override suspend fun deleteAllHabits(): Either<IoError, Unit> {
-        habits.clear()
-        return Unit.success()
-    }
+    override suspend fun deleteAllHabits(): Either<IoError, Unit> =
+        if (errorReturn) IoError.SqlError("Error while deleting habit").failure()
+        else {
+            habits.clear()
+            Unit.success()
+        }
 
     override suspend fun addHabitDone(habitDone: HabitDone): Either<IoError, Int> {
         if (errorReturn) return IoError.SqlError().failure()
@@ -131,8 +134,8 @@ class DbHabitRepositoryFake : DbHabitRepository {
     fun findHabit(habit: Habit) = habits.find { it == habit }
 
     fun findHabitDone(habitDoneToInsert: HabitDone) = habitDones.find {
-            it.date == habitDoneToInsert.date && it.habitUid == habitDoneToInsert.habitUid
-        }
+        it.date == habitDoneToInsert.date && it.habitUid == habitDoneToInsert.habitUid
+    }
 
     companion object {
         private const val ITEM_NOT_ADDED = 0

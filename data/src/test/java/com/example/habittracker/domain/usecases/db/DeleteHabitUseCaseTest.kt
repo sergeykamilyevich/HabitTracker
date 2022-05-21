@@ -1,33 +1,49 @@
 package com.example.habittracker.domain.usecases.db
 
 import com.example.habittracker.data.repositories.DbHabitRepositoryFake
+import com.example.habittracker.domain.errors.Either
+import com.example.habittracker.domain.errors.Either.Failure
+import com.example.habittracker.domain.errors.Either.Success
 import com.example.habittracker.domain.models.Habit
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 internal class DeleteHabitUseCaseTest {
 
     private lateinit var deleteHabitUseCase: DeleteHabitUseCase
     private lateinit var dbHabitRepositoryFake: DbHabitRepositoryFake
-    private lateinit var successHabit: Habit
+    private lateinit var habitToInsert: Habit
 
     @BeforeEach
-    fun setUp() {
+    fun setUp() = runBlocking {
         dbHabitRepositoryFake = DbHabitRepositoryFake()
         deleteHabitUseCase = DeleteHabitUseCase(dbHabitRepositoryFake)
-        successHabit = dbHabitRepositoryFake.habitToInsert
+        habitToInsert = dbHabitRepositoryFake.habitToInsert
     }
 
     @Test
-    fun `return null when searching habit after deleting this habit`() = runBlocking {
-        dbHabitRepositoryFake.upsertHabit(successHabit)
-        val preFind = dbHabitRepositoryFake.findHabit(successHabit)
+    fun `habit deleted from repository`() = runBlocking {
+        dbHabitRepositoryFake.upsertHabit(habitToInsert)
+        val preFind = dbHabitRepositoryFake.findHabit(habitToInsert)
         assertThat(preFind).isNotNull()
-        deleteHabitUseCase.invoke(successHabit)
-        val postFind = dbHabitRepositoryFake.findHabit(successHabit)
+        deleteHabitUseCase.invoke(habitToInsert)
+        val postFind = dbHabitRepositoryFake.findHabit(habitToInsert)
         assertThat(postFind).isNull()
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = [true, false])
+    fun `return success(true) or failure(false)`(isSuccess: Boolean) = runBlocking {
+        if (isSuccess) dbHabitRepositoryFake.upsertHabit(habitToInsert)
+        val result = deleteHabitUseCase.invoke(habitToInsert)
+        when (isSuccess) {
+            true -> assertThat(result is Success).isTrue()
+            false -> assertThat(result is Failure).isTrue()
+        }
     }
 
 }

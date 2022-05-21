@@ -24,10 +24,10 @@ internal class GetUnfilteredHabitListUseCaseTest {
     fun `return whole list of habits`() = runBlocking {
         val listFromUseCase = getUnfilteredHabitListUseCase.invoke()
         val listFromRepository = dbHabitRepositoryFake.getUnfilteredList()
-        assertThat(listFromUseCase is Success && listFromRepository is Success).isTrue()
-        if (listFromUseCase is Success && listFromRepository is Success) {
-            assertThat(listFromUseCase.result).isEqualTo(listFromRepository.result)
-        }
+        assertThat(
+            listFromUseCase is Success && listFromRepository is Success
+                    && listFromUseCase.result == listFromRepository.result
+        ).isTrue()
     }
 
     @Test
