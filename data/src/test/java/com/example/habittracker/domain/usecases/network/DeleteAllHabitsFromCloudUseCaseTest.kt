@@ -1,16 +1,10 @@
 package com.example.habittracker.domain.usecases.network
 
 import com.example.habittracker.data.repositories.CloudHabitRepositoryFake
-import com.example.habittracker.data.repositories.DbHabitRepositoryFake
-import com.example.habittracker.domain.errors.Either
-import com.example.habittracker.domain.errors.Either.*
-import com.example.habittracker.domain.models.Habit
-import com.example.habittracker.domain.usecases.db.DeleteAllHabitsUseCase
-import com.google.common.truth.Truth
+import com.example.habittracker.domain.errors.Either.Failure
+import com.example.habittracker.domain.errors.Either.Success
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.Assertions.*
-
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -44,9 +38,7 @@ internal class DeleteAllHabitsFromCloudUseCaseTest {
     fun `return success(true) or failure(false)`(isSuccess: Boolean) = runBlocking {
         if (!isSuccess) cloudHabitRepositoryFake.setErrorReturn()
         val result = deleteAllHabitsFromCloudUseCase.invoke()
-        when (isSuccess) {
-            true -> assertThat(result is Success).isTrue()
-            false -> assertThat(result is Failure).isTrue()
-        }
+        if (isSuccess) assertThat(result is Success).isTrue()
+        else assertThat(result is Failure).isTrue()
     }
 }

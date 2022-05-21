@@ -1,8 +1,8 @@
 package com.example.habittracker.domain.usecases.network
 
 import com.example.habittracker.data.repositories.CloudHabitRepositoryFake
-import com.example.habittracker.domain.errors.Either
-import com.example.habittracker.domain.errors.Either.*
+import com.example.habittracker.domain.errors.Either.Failure
+import com.example.habittracker.domain.errors.Either.Success
 import com.example.habittracker.domain.models.Habit
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
@@ -41,10 +41,8 @@ internal class DeleteHabitFromCloudUseCaseTest {
     fun `return success(true) or failure(false)`(isSuccess: Boolean) = runBlocking {
         if (isSuccess) cloudHabitRepositoryFake.preInsertHabit()
         val result = deleteHabitFromCloudUseCase.invoke(preInsertedHabit)
-        when (isSuccess) {
-            true -> assertThat(result is Success).isTrue()
-            false -> assertThat(result is Failure).isTrue()
-        }
+        if (isSuccess) assertThat(result is Success).isTrue()
+        else assertThat(result is Failure).isTrue()
     }
 
 }

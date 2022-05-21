@@ -1,7 +1,6 @@
 package com.example.habittracker.domain.usecases.db
 
 import com.example.habittracker.data.repositories.DbHabitRepositoryFake
-import com.example.habittracker.domain.errors.Either
 import com.example.habittracker.domain.errors.Either.Failure
 import com.example.habittracker.domain.errors.Either.Success
 import com.example.habittracker.domain.models.Habit
@@ -40,10 +39,8 @@ internal class DeleteHabitUseCaseTest {
     fun `return success(true) or failure(false)`(isSuccess: Boolean) = runBlocking {
         if (isSuccess) dbHabitRepositoryFake.upsertHabit(habitToInsert)
         val result = deleteHabitUseCase.invoke(habitToInsert)
-        when (isSuccess) {
-            true -> assertThat(result is Success).isTrue()
-            false -> assertThat(result is Failure).isTrue()
-        }
+        if (isSuccess) assertThat(result is Success).isTrue()
+        else assertThat(result is Failure).isTrue()
     }
 
 }

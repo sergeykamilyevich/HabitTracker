@@ -32,10 +32,8 @@ internal class PostHabitDoneToCloudUseCaseTest {
     fun `return success(true) or failure(false)`(isSuccess: Boolean) = runBlocking {
         if (!isSuccess) cloudHabitRepositoryFake.setErrorReturn()
         val result = postHabitDoneToCloudUseCase.invoke(habitDoneToInsert)
-        when (isSuccess) {
-            true -> assertThat(result is Success).isTrue()
-            false -> assertThat(result is Failure).isTrue()
-        }
+        if (isSuccess) assertThat(result is Success).isTrue()
+        else assertThat(result is Failure).isTrue()
     }
 
     @Test

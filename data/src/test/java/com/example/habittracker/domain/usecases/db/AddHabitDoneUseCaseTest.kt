@@ -38,10 +38,8 @@ internal class AddHabitDoneUseCaseTest {
     fun `return success(true) or failure(false)`(isSuccess: Boolean) = runBlocking {
         if (!isSuccess) dbHabitRepositoryFake.setErrorReturn()
         val result = addHabitDoneUseCase.invoke(habitDoneToInsert)
-        when (isSuccess) {
-            true -> assertThat(result is Success).isTrue()
-            false -> assertThat(result is Failure).isTrue()
-        }
+        if (isSuccess) assertThat(result is Success).isTrue()
+        else assertThat(result is Failure).isTrue()
     }
 
 }
