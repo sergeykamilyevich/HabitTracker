@@ -2,6 +2,7 @@ package com.example.habittracker.data.repositories
 
 import android.util.Log
 import com.example.habittracker.domain.errors.Either
+import com.example.habittracker.domain.errors.Either.*
 import com.example.habittracker.domain.errors.IoError
 import com.example.habittracker.domain.errors.failure
 import com.example.habittracker.domain.errors.success
@@ -28,7 +29,7 @@ class SyncHabitRepositoryImpl @Inject constructor(
                 newHabitId = habitForUpload.id
             )
             when (newUid) {
-                is Either.Success -> {
+                is Success -> {
                     habit.done.forEach { date ->
                         val habitDoneWithNewUid = HabitDone(
                             habitUid = newUid.result,
@@ -36,10 +37,10 @@ class SyncHabitRepositoryImpl @Inject constructor(
                         )
                         val postResult: Either<IoError, Unit> =
                             cloudHabitRepository.postHabitDone(habitDoneWithNewUid)
-                        if (postResult is Either.Failure) cloudError = postResult
+                        if (postResult is Failure) cloudError = postResult
                     }
                 }
-                is Either.Failure -> {
+                is Failure -> {
                     cloudError = newUid.error.failure()
                 }
             }
@@ -49,7 +50,7 @@ class SyncHabitRepositoryImpl @Inject constructor(
 
     override suspend fun upsertAndSyncWithCloud(habit: Habit): Either<IoError, Int> {
         val resultOfUpserting = dbHabitRepository.upsertHabit(habit)
-        if (resultOfUpserting is Either.Success) {
+        if (resultOfUpserting is Success) {
             val newHabitId = resultOfUpserting.result
             putAndSyncWithDb(habit = habit, newHabitId = newHabitId)
         }
@@ -61,7 +62,7 @@ class SyncHabitRepositoryImpl @Inject constructor(
         newHabitId: Int
     ): Either<IoError, String> {
         val apiUid = cloudHabitRepository.putHabit(habit)
-        if (apiUid is Either.Success) {
+        if (apiUid is Success) {
             val newItemWithNewUid = habit.copy(
                 id = newHabitId,
                 uid = apiUid.result
@@ -75,12 +76,12 @@ class SyncHabitRepositoryImpl @Inject constructor(
         val habitList = cloudHabitRepository.getHabitList()
         var result: Either<IoError, Unit> = Unit.success()
         when (habitList) {
-            is Either.Success -> {
+            is Success -> {
                 dbHabitRepository.deleteAllHabits()
                 habitList.result.forEach { habit ->
                     val habitId = dbHabitRepository.upsertHabit(habit)
                     when (habitId) {
-                        is Either.Success -> {
+                        is Success -> {
                             habit.done.forEach {
                                 dbHabitRepository.addHabitDone(
                                     HabitDone(
@@ -91,14 +92,14 @@ class SyncHabitRepositoryImpl @Inject constructor(
                                 )
                             }
                         }
-                        is Either.Failure -> {
+                        is Failure -> {
                             result = habitId.error.failure()
                         }
                     }
                 }
 
             }
-            is Either.Failure -> {
+            is Failure -> {
                 result = habitList.error.failure()
             }
         }
