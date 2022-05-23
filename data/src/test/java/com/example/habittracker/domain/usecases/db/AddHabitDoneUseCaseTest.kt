@@ -25,7 +25,7 @@ internal class AddHabitDoneUseCaseTest {
     }
 
     @Test
-    fun `transfer habitDone to the repository`() = runBlocking {
+    fun `habitDone transferred  to the repository`() = runBlocking {
         val preFind = dbHabitRepositoryFake.findHabitDone(habitDoneToInsert)
         assertThat(preFind).isNull()
         addHabitDoneUseCase.invoke(habitDoneToInsert)
