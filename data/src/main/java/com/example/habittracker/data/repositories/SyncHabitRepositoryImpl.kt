@@ -57,9 +57,7 @@ class SyncHabitRepositoryImpl @Inject constructor(
     override suspend fun putAndSyncWithDb(habit: Habit): Either<IoError, String> {
         val apiUid = cloudHabitRepository.putHabit(habit)
         if (apiUid is Success) {
-            val newItemWithNewUid = habit.copy(
-                uid = apiUid.result
-            )
+            val newItemWithNewUid = habit.copy(uid = apiUid.result)
             dbHabitRepository.upsertHabit(newItemWithNewUid)
         }
         return apiUid
