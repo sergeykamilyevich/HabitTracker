@@ -88,8 +88,8 @@ class HabitItemViewModel @Inject constructor(
     private fun validateNumber(input: Int): Boolean = input > 0
 
     fun chooseScreenMode(habitId: Int) {
-            if (habitId == Habit.UNDEFINED_ID) setEmptyCurrentHabit()
-            else setCurrentHabitFromDb(habitId)
+        if (habitId == Habit.UNDEFINED_ID) setEmptyCurrentHabit()
+        else setCurrentHabitFromDb(habitId)
     }
 
     private fun setEmptyCurrentHabit() {
@@ -163,8 +163,7 @@ class HabitItemViewModel @Inject constructor(
                 val newHabitId = resultOfUpserting.result
                 val putResult =
                     syncUseCase
-                        .putHabitAndSyncWithDbUseCase
-                        .invoke(habit = habit, newHabitId = newHabitId)
+                        .putHabitAndSyncWithDbUseCase.invoke(habit = habit, newHabitId = newHabitId)
                 Log.d("ErrorApp", "putResult $putResult")
                 if (putResult is Either.Failure) {
                     mainViewModel.showErrorToast(putResult.error)
