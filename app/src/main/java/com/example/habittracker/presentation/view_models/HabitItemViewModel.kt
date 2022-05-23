@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.habittracker.di.annotations.HabitItemViewModelScope
 import com.example.habittracker.domain.errors.Either
+import com.example.habittracker.domain.errors.Either.*
 import com.example.habittracker.domain.errors.IoError
 import com.example.habittracker.domain.models.Habit
 import com.example.habittracker.domain.models.HabitPriority
@@ -108,12 +109,12 @@ class HabitItemViewModel @Inject constructor(
         viewModelScope.launch {
             val habit = dbUseCase.getHabitUseCase.invoke(habitId)
             when (habit) {
-                is Either.Success -> {
+                is Success -> {
                     habit.result.let {
                         _currentFragmentHabit.value = it
                     }
                 }
-                is Either.Failure -> {
+                is Failure -> {
                     mainViewModel.showErrorToast(habit.error)
                 }
             }
@@ -158,18 +159,18 @@ class HabitItemViewModel @Inject constructor(
         val resultOfUpserting: Either<IoError, Int> =
             dbUseCase.upsertHabitUseCase.invoke(habit)
         when (resultOfUpserting) {
-            is Either.Success -> {
+            is Success -> {
                 closeItemFragment()
                 val newHabitId = resultOfUpserting.result
                 val putResult =
                     syncUseCase
                         .putHabitAndSyncWithDbUseCase.invoke(habit = habit, newHabitId = newHabitId)
                 Log.d("ErrorApp", "putResult $putResult")
-                if (putResult is Either.Failure) {
+                if (putResult is Failure) {
                     mainViewModel.showErrorToast(putResult.error)
                 }
             }
-            is Either.Failure -> {
+            is Failure -> {
                 mainViewModel.showErrorToast(resultOfUpserting.error)
             }
         }
