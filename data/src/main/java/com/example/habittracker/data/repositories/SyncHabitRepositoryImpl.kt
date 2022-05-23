@@ -24,10 +24,7 @@ class SyncHabitRepositoryImpl @Inject constructor(
         var cloudError: Either<IoError, Unit> = Unit.success()
         habitList.forEach { habit ->
             val habitForUpload = habit.clearUid()
-            val newUid = putAndSyncWithDb(
-                habit = habitForUpload,
-                newHabitId = habitForUpload.id
-            )
+            val newUid = putAndSyncWithDb(habitForUpload)
             when (newUid) {
                 is Success -> {
                     habit.done.forEach { date ->
@@ -51,20 +48,16 @@ class SyncHabitRepositoryImpl @Inject constructor(
     override suspend fun upsertAndSyncWithCloud(habit: Habit): Either<IoError, Int> {
         val resultOfUpserting = dbHabitRepository.upsertHabit(habit)
         if (resultOfUpserting is Success) {
-            val newHabitId = resultOfUpserting.result
-            putAndSyncWithDb(habit = habit, newHabitId = newHabitId)
+            val habitToPut = habit.copy(id = resultOfUpserting.result)
+            putAndSyncWithDb(habitToPut)
         }
         return resultOfUpserting
     }
 
-    override suspend fun putAndSyncWithDb(
-        habit: Habit,
-        newHabitId: Int
-    ): Either<IoError, String> {
+    override suspend fun putAndSyncWithDb(habit: Habit): Either<IoError, String> {
         val apiUid = cloudHabitRepository.putHabit(habit)
         if (apiUid is Success) {
             val newItemWithNewUid = habit.copy(
-                id = newHabitId,
                 uid = apiUid.result
             )
             dbHabitRepository.upsertHabit(newItemWithNewUid)

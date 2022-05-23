@@ -156,23 +156,19 @@ class HabitItemViewModel @Inject constructor(
     }
 
     private suspend fun upsertHabit(habit: Habit) {
-        val resultOfUpserting: Either<IoError, Int> =
-            dbUseCase.upsertHabitUseCase.invoke(habit)
+        val resultOfUpserting: Either<IoError, Int> = dbUseCase.upsertHabitUseCase.invoke(habit)
         when (resultOfUpserting) {
             is Success -> {
                 closeItemFragment()
-                val newHabitId = resultOfUpserting.result
+                val habitToPut = habit.copy(id = resultOfUpserting.result)
                 val putResult =
-                    syncUseCase
-                        .putHabitAndSyncWithDbUseCase.invoke(habit = habit, newHabitId = newHabitId)
+                    syncUseCase.putHabitAndSyncWithDbUseCase.invoke(habitToPut)
                 Log.d("ErrorApp", "putResult $putResult")
                 if (putResult is Failure) {
                     mainViewModel.showErrorToast(putResult.error)
                 }
             }
-            is Failure -> {
-                mainViewModel.showErrorToast(resultOfUpserting.error)
-            }
+            is Failure -> mainViewModel.showErrorToast(resultOfUpserting.error)
         }
     }
 

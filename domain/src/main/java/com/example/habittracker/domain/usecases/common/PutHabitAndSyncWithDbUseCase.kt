@@ -12,7 +12,7 @@ class PutHabitAndSyncWithDbUseCase @Inject constructor(
     private val syncHabitRepository: SyncHabitRepository,
 ) {
 
-    suspend operator fun invoke(habit: Habit, newHabitId: Int): Either<IoError, String> =
-        syncHabitRepository.putAndSyncWithDb(habit, newHabitId)
+    suspend operator fun invoke(habit: Habit): Either<IoError, String> =
+        syncHabitRepository.putAndSyncWithDb(habit)
 
 }
