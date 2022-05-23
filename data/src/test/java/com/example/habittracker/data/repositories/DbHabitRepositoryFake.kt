@@ -35,6 +35,14 @@ class DbHabitRepositoryFake : DbHabitRepository {
         errorReturn = true
     }
 
+
+    fun importHabits(habitList: List<Habit>) {
+        habits.clear()
+        habitList.forEach {
+            habits.add(it)
+        }
+    }
+
     fun initFilling() = runBlocking {
         val habitsToInsert = mutableListOf<Habit>()
         ('a'..'z').forEachIndexed { index, c ->
@@ -47,7 +55,8 @@ class DbHabitRepositoryFake : DbHabitRepository {
                     color = index,
                     recurrenceNumber = index,
                     recurrencePeriod = index * 2,
-                    date = index
+                    date = index,
+                    uid = "uid $index"
                 )
             )
         }
