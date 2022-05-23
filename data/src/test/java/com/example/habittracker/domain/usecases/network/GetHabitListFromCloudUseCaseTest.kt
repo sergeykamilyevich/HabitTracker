@@ -22,27 +22,11 @@ internal class GetHabitListFromCloudUseCaseTest {
     fun setUp() = runBlocking {
         cloudHabitRepositoryFake = CloudHabitRepositoryFake()
         getHabitListFromCloudUseCase = GetHabitListFromCloudUseCase(cloudHabitRepositoryFake)
-        val habitsToInsert = mutableListOf<Habit>()
-        ('a'..'z').forEachIndexed { index, c ->
-            habitsToInsert.add(
-                Habit(
-                    name = c.toString(),
-                    description = c.toString(),
-                    priority = HabitPriority.findPriorityById((index % 3)),
-                    type = HabitType.findTypeById(index % 2),
-                    color = index,
-                    recurrenceNumber = index,
-                    recurrencePeriod = index * 2,
-                    date = index
-                )
-            )
-        }
-        habitsToInsert.shuffle()
-        habitsToInsert.forEach { cloudHabitRepositoryFake.putHabit(it) }
     }
 
     @Test
-    fun `return list of habits`() = runBlocking {
+    fun `return correct list of habits`() = runBlocking {
+        cloudHabitRepositoryFake.initFilling()
         val listFromUseCase = getHabitListFromCloudUseCase.invoke()
         val listFromRepository = cloudHabitRepositoryFake.getHabitList()
         assertThat(

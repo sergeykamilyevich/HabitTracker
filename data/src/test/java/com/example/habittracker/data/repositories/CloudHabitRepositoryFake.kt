@@ -9,6 +9,7 @@ import com.example.habittracker.domain.models.HabitDone
 import com.example.habittracker.domain.models.HabitPriority
 import com.example.habittracker.domain.models.HabitType
 import com.example.habittracker.domain.repositories.CloudHabitRepository
+import kotlinx.coroutines.runBlocking
 
 class CloudHabitRepositoryFake : CloudHabitRepository {
 
@@ -47,6 +48,34 @@ class CloudHabitRepositoryFake : CloudHabitRepository {
 
     fun setErrorReturn() {
         errorReturn = true
+    }
+
+    fun importHabits(habitList: List<Habit>) {
+        habits.clear()
+        habitList.forEach {
+            habits.add(it)
+        }
+    }
+
+    fun initFilling() = runBlocking {
+        val habitsToInsert = mutableListOf<Habit>()
+        ('A'..'Z').forEachIndexed { index, c ->
+            habitsToInsert.add(
+                Habit(
+                    name = c.toString(),
+                    description = c.toString(),
+                    priority = HabitPriority.findPriorityById((index % 3)),
+                    type = HabitType.findTypeById(index % 2),
+                    color = index,
+                    recurrenceNumber = index,
+                    recurrencePeriod = index * 2,
+                    date = index,
+                    uid = "uid $index"
+                )
+            )
+        }
+        habitsToInsert.shuffle()
+        habitsToInsert.forEach { putHabit(it) }
     }
 
     override suspend fun getHabitList(): Either<IoError, List<Habit>> =
