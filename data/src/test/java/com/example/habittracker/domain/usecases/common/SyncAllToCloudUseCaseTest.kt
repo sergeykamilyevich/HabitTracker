@@ -4,13 +4,11 @@ import com.example.habittracker.data.network.retrofit.IoErrorFlowFake
 import com.example.habittracker.data.repositories.CloudHabitRepositoryFake
 import com.example.habittracker.data.repositories.DbHabitRepositoryFake
 import com.example.habittracker.data.repositories.SyncHabitRepositoryFake
-import com.example.habittracker.domain.errors.Either
 import com.example.habittracker.domain.errors.Either.Failure
 import com.example.habittracker.domain.errors.Either.Success
 import com.example.habittracker.domain.usecases.db.DbUseCase
 import com.example.habittracker.domain.usecases.network.CloudUseCase
 import com.example.habittracker.domain.usecases.network.GetCloudErrorUseCase
-import com.google.common.truth.Truth
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.BeforeEach
@@ -60,7 +58,7 @@ internal class SyncAllToCloudUseCaseTest {
         val listFromDb = dbHabitRepositoryFake.getUnfilteredList()
         assertThat(listFromDb is Success && listFromCloud is Success).isTrue()
         if (listFromDb is Success && listFromCloud is Success) {
-                assertThat(listFromDb.result).isEqualTo(listFromCloud.result)
+            assertThat(listFromDb.result).isEqualTo(listFromCloud.result)
         }
     }
 }

@@ -3,13 +3,10 @@ package com.example.habittracker.domain.usecases.common
 import com.example.habittracker.data.repositories.CloudHabitRepositoryFake
 import com.example.habittracker.data.repositories.DbHabitRepositoryFake
 import com.example.habittracker.data.repositories.SyncHabitRepositoryFake
-import com.example.habittracker.domain.errors.Either
-import com.example.habittracker.domain.errors.Either.*
-import com.google.common.truth.Truth
-import com.google.common.truth.Truth.*
+import com.example.habittracker.domain.errors.Either.Failure
+import com.example.habittracker.domain.errors.Either.Success
+import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.Assertions.*
-
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest

@@ -1,15 +1,10 @@
 package com.example.habittracker.domain.usecases.network
 
 import com.example.habittracker.data.repositories.CloudHabitRepositoryFake
-import com.example.habittracker.domain.errors.Either
 import com.example.habittracker.domain.errors.Either.Failure
 import com.example.habittracker.domain.errors.Either.Success
-import com.example.habittracker.domain.models.Habit
-import com.example.habittracker.domain.models.HabitPriority
-import com.example.habittracker.domain.models.HabitType
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
-
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 

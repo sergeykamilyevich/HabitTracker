@@ -3,13 +3,13 @@ package com.example.habittracker.domain.usecases.common
 import com.example.habittracker.data.network.retrofit.IoErrorFlowFake
 import com.example.habittracker.data.repositories.CloudHabitRepositoryFake
 import com.example.habittracker.data.repositories.DbHabitRepositoryFake
-import com.example.habittracker.domain.errors.Either.*
+import com.example.habittracker.domain.errors.Either.Failure
+import com.example.habittracker.domain.errors.Either.Success
 import com.example.habittracker.domain.usecases.db.DbUseCase
 import com.example.habittracker.domain.usecases.network.CloudUseCase
 import com.example.habittracker.domain.usecases.network.GetCloudErrorUseCase
-import com.google.common.truth.Truth.*
+import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
-
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
