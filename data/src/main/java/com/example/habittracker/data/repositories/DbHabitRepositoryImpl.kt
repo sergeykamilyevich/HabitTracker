@@ -1,11 +1,10 @@
 package com.example.habittracker.data.repositories
 
-import android.app.Application
 import android.database.sqlite.SQLiteConstraintException
 import com.example.habittracker.data.db.models.HabitDbModel
 import com.example.habittracker.data.db.models.HabitDoneDbModel
 import com.example.habittracker.data.db.models.HabitWithDoneDbModel
-import com.example.habittracker.data.db.room.AppDataBase
+import com.example.habittracker.data.db.room.HabitDao
 import com.example.habittracker.domain.errors.Either
 import com.example.habittracker.domain.errors.IoError
 import com.example.habittracker.domain.errors.IoError.*
@@ -22,10 +21,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHabitRepository {
-
-    private val habitItemDao = AppDataBase.getInstance(application).habitItemDao()
-    private val habitDoneDao = AppDataBase.getInstance(application).habitDoneDao()
+class DbHabitRepositoryImpl @Inject constructor(private val habitDao: HabitDao) : DbHabitRepository {
 
     override fun getHabitList(
         habitType: HabitType?,
@@ -34,19 +30,16 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
         val habitTypeFilter =
             if (habitType == null) allHabitTypesToStringList()
             else listOf(habitType.toString())
-        val listHabitWithDoneDbModel = habitItemDao.getList(
+        val listHabitWithDoneDbModel = habitDao.getList(
             habitTypeFilter,
             habitListFilter.orderBy.name,
             habitListFilter.search
-        )
-            ?: throw RuntimeException("List of habits is empty")
-        return listHabitWithDoneDbModel.map {
-            HabitWithDoneDbModel.toHabitList(it)
-        }
+        ) ?: throw RuntimeException("List of habits is empty")
+        return listHabitWithDoneDbModel.map { HabitWithDoneDbModel.toHabitList(it) }
     }
 
     override suspend fun getUnfilteredList(): Either<IoError, List<Habit>> {
-        val list = habitItemDao.getUnfilteredList()
+        val list = habitDao.getUnfilteredList()
         list?.let {
             return it.map { habitWithDoneDbModel ->
                 habitWithDoneDbModel.toHabit()
@@ -58,7 +51,7 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
     private fun allHabitTypesToStringList() = HabitType.values().map { it.name }
 
     override suspend fun getHabitById(habitId: Int): Either<IoError, Habit> {
-        val habitItemWithDoneDbModel = habitItemDao.getById(habitId)
+        val habitItemWithDoneDbModel = habitDao.getHabitById(habitId)
         habitItemWithDoneDbModel?.let {
             return habitItemWithDoneDbModel.toHabit().success()
         }
@@ -72,7 +65,7 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
         var result: Either<IoError, Int> =
             SqlError().failure()
         runCatching {
-            habitItemDao.insert(habitItemDbModel).toInt()
+            habitDao.insertHabit(habitItemDbModel).toInt()
         }
             .onSuccess {
                 return it.success()
@@ -98,7 +91,7 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
                 }
                 insertExceptionMessage.contains(PRIMARY_KEY_CONSTRAINT_MESSAGE) -> {
                     runCatching {
-                        habitItemDao.update(habitDbModel)
+                        habitDao.updateHabit(habitDbModel)
                     }
                         .onSuccess {
                             result = ITEM_NOT_ADDED.success()
@@ -126,7 +119,7 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
 
     override suspend fun deleteHabit(habit: Habit): Either<IoError, Unit> {
         val habitId = habit.id
-        habitItemDao.delete(habit.id)
+        habitDao.deleteHabit(habit.id)
         val result = getHabitById(habitId)
         return when (result) {
             is Either.Success -> DeletingHabitError().failure()
@@ -135,11 +128,11 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
     }
 
     override suspend fun deleteAllHabits(): Either<IoError, Unit> {
-        val habitListBefore = habitItemDao.getUnfilteredList()
+        val habitListBefore = habitDao.getUnfilteredList()
         habitListBefore?.forEach {
             deleteHabit(it.toHabit())
         }
-        val habitListAfter = habitItemDao.getUnfilteredList()
+        val habitListAfter = habitDao.getUnfilteredList()
         habitListAfter?.let {
             if (habitListAfter.isEmpty()) return Unit.success()
         }
@@ -148,22 +141,17 @@ class DbHabitRepositoryImpl @Inject constructor(application: Application) : DbHa
 
     override suspend fun addHabitDone(habitDone: HabitDone): Either<IoError, Int> {
         val habitDoneDbModel = HabitDoneDbModel.fromHabitDone(habitDone)
-        var result: Either<IoError, Int> =
-            SqlError().failure()
+        var result: Either<IoError, Int> = SqlError().failure()
         runCatching {
-            habitDoneDao.add(habitDoneDbModel).toInt()
+            habitDao.insertHabitDone(habitDoneDbModel).toInt()
         }
-            .onSuccess {
-                result = it.success()
-            }
-            .onFailure {
-                result = SqlError(it.message ?: DEFAULT_SQL_ERROR).failure()
-            }
+            .onSuccess { result = it.success() }
+            .onFailure { result = SqlError(it.message ?: DEFAULT_SQL_ERROR).failure() }
         return result
     }
 
     override suspend fun deleteHabitDone(habitDoneId: Int) {
-        habitDoneDao.delete(habitDoneId)
+        habitDao.deleteHabitDone(habitDoneId)
     }
 
     companion object {

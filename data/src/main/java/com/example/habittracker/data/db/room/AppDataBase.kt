@@ -16,8 +16,7 @@ import com.example.habittracker.data.db.models.HabitDoneDbModel
 )
 abstract class AppDataBase : RoomDatabase() {
 
-    abstract fun habitItemDao(): HabitDao
-    abstract fun habitDoneDao(): HabitDoneDao
+    abstract fun habitDao(): HabitDao
 
     companion object {
 
@@ -43,5 +42,4 @@ abstract class AppDataBase : RoomDatabase() {
             }
         }
     }
-
 }

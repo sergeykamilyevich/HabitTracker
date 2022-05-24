@@ -2,6 +2,7 @@ package com.example.habittracker.data.db.room
 
 import androidx.room.*
 import com.example.habittracker.data.db.models.HabitDbModel
+import com.example.habittracker.data.db.models.HabitDoneDbModel
 import com.example.habittracker.data.db.models.HabitWithDoneDbModel
 import kotlinx.coroutines.flow.Flow
 
@@ -33,16 +34,22 @@ interface HabitDao {
 
     @Transaction
     @Query("SELECT * FROM habit_items WHERE id = :habitItemId LIMIT 1")
-    suspend fun getById(habitItemId: Int): HabitWithDoneDbModel?
+    suspend fun getHabitById(habitItemId: Int): HabitWithDoneDbModel?
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun insert(habitDbModel: HabitDbModel): Long
+    suspend fun insertHabit(habitDbModel: HabitDbModel): Long
 
     @Update(onConflict = OnConflictStrategy.ABORT)
-    suspend fun update(habitDbModel: HabitDbModel)
+    suspend fun updateHabit(habitDbModel: HabitDbModel)
 
     @Query("DELETE FROM habit_items WHERE id = :habitItemId")
-    suspend fun delete(habitItemId: Int)
+    suspend fun deleteHabit(habitItemId: Int)
+
+    @Insert()
+    suspend fun insertHabitDone(habitDoneDbModel: HabitDoneDbModel): Long
+
+    @Query("DELETE FROM habit_done WHERE id = :habitDoneId")
+    suspend fun deleteHabitDone(habitDoneId: Int)
 
 
 }
