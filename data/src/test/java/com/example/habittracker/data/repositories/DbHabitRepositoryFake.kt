@@ -142,8 +142,8 @@ class DbHabitRepositoryFake : DbHabitRepository {
 
     fun findHabit(habit: Habit) = habits.find { it == habit }
 
-    fun findHabitDone(habitDoneToInsert: HabitDone) = habitDones.find {
-        it.date == habitDoneToInsert.date && it.habitUid == habitDoneToInsert.habitUid
+    fun findHabitDone(habitDone: HabitDone) = habitDones.find {
+        it.date == habitDone.date && it.habitUid == habitDone.habitUid
     }
 
     companion object {
