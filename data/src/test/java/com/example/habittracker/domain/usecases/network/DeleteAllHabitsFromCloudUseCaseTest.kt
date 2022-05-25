@@ -28,7 +28,6 @@ internal class DeleteAllHabitsFromCloudUseCaseTest {
         assertThat(habitList is Success && habitList.result.isNotEmpty()).isTrue()
         deleteAllHabitsFromCloudUseCase.invoke()
         val habitListAfterDelete = cloudHabitRepositoryFake.getHabitList()
-        println(habitListAfterDelete)
         assertThat(habitListAfterDelete is Success && habitListAfterDelete.result.isEmpty())
             .isTrue()
     }
