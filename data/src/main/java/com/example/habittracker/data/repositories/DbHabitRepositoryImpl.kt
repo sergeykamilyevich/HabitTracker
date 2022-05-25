@@ -1,11 +1,12 @@
 package com.example.habittracker.data.repositories
 
-import android.database.sqlite.SQLiteConstraintException
 import com.example.habittracker.data.db.models.HabitDbModel
 import com.example.habittracker.data.db.models.HabitDoneDbModel
 import com.example.habittracker.data.db.models.HabitWithDoneDbModel
 import com.example.habittracker.data.db.room.HabitDao
 import com.example.habittracker.domain.errors.Either
+import com.example.habittracker.domain.errors.Either.Failure
+import com.example.habittracker.domain.errors.Either.Success
 import com.example.habittracker.domain.errors.IoError
 import com.example.habittracker.domain.errors.IoError.*
 import com.example.habittracker.domain.errors.failure
@@ -84,7 +85,7 @@ class DbHabitRepositoryImpl @Inject constructor(private val habitDao: HabitDao) 
         val insertExceptionMessage = insertException.message
         var result: Either<IoError, Int> =
             SqlError(insertExceptionMessage ?: DEFAULT_SQL_ERROR).failure()
-        if (insertException is SQLiteConstraintException && insertExceptionMessage != null) {
+        if (insertExceptionMessage != null) {
             when {
                 insertExceptionMessage.contains(UNIQUE_CONSTRAINT_MESSAGE) -> {
                     result = HabitAlreadyExistsError(habit.name).failure()
@@ -122,8 +123,8 @@ class DbHabitRepositoryImpl @Inject constructor(private val habitDao: HabitDao) 
         habitDao.deleteHabit(habit.id)
         val result = getHabitById(habitId)
         return when (result) {
-            is Either.Success -> DeletingHabitError().failure()
-            is Either.Failure -> Unit.success()
+            is Success -> DeletingHabitError().failure()
+            is Failure -> Unit.success()
         }
     }
 
