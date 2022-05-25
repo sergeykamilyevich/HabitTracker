@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.habittracker.domain.models.Habit
+import com.example.habittracker.domain.models.HabitPriority
 import com.example.habittracker.domain.models.HabitType
 
 @Entity(
@@ -28,18 +29,18 @@ data class HabitDbModel(
     var apiUid: String
 ) {
 
-//    fun toHabit(): Habit = Habit(
-//        name = name,
-//        description = description,
-//        priority = HabitPriority.getPriorityByPosition(priority),
-//        type = type,
-//        color = color,
-//        recurrenceNumber = recurrenceNumber,
-//        recurrencePeriod = recurrencePeriod,
-//        uid = apiUid,
-//        date = date,
-//        id = id
-//    )
+    fun toHabit(): Habit = Habit(
+        name = name,
+        description = description,
+        priority = HabitPriority.findPriorityById(priority),
+        type = type,
+        color = color,
+        recurrenceNumber = recurrenceNumber,
+        recurrencePeriod = recurrencePeriod,
+        uid = apiUid,
+        date = date,
+        id = id
+    )
 
     companion object {
         fun fromHabitItem(habit: Habit) = HabitDbModel(
