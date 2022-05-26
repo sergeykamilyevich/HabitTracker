@@ -74,6 +74,7 @@ internal class GetHabitListUseCaseTest {
         val searchFilter =
             HabitListFilter(orderBy = NAME_ASC, search = searchString)
         val listFromUseCase = getHabitListUseCase.invoke(habitTypeFilter, searchFilter).last()
+        assertThat(listFromUseCase).isNotEmpty()
         val unfilteredList = dbHabitRepositoryFake.getUnfilteredList()
         assertThat(unfilteredList is Success).isTrue()
         if (unfilteredList is Success) {
