@@ -9,6 +9,7 @@ import com.example.habittracker.domain.errors.Either
 import com.example.habittracker.domain.errors.Either.Failure
 import com.example.habittracker.domain.errors.Either.Success
 import com.example.habittracker.domain.errors.IoError
+import com.example.habittracker.domain.errors.IoError.*
 import com.example.habittracker.domain.models.*
 import com.example.habittracker.domain.usecases.common.SyncUseCase
 import com.example.habittracker.domain.usecases.db.DbUseCase
@@ -58,11 +59,15 @@ class MainViewModel @Inject constructor(
 
     lateinit var habitList: LiveData<List<Habit>>
 
-    private val errorFlow = cloudUseCase.getCloudErrorUseCase.invoke()
-    val cloudError: LiveData<Event<String>> = MediatorLiveData<Event<String>>().apply {
-        addSource(errorFlow.asLiveData()) {
-            Log.d("ErrorApp", "Flow $it")
-            if (it is Failure) value = eventErrorText(it.error)
+    private val errorFlow by lazy {
+        cloudUseCase.getCloudErrorUseCase.invoke()
+    }
+    val cloudError: LiveData<Event<String>> by lazy {
+        MediatorLiveData<Event<String>>().apply {
+            addSource(errorFlow.asLiveData()) {
+                Log.e("ErrorApp", "Flow $it")
+                if (it is Failure) value = eventErrorText(it.error)
+            }
         }
     }
 
@@ -94,7 +99,7 @@ class MainViewModel @Inject constructor(
             val result = cloudUseCase.deleteAllHabitsFromCloudUseCase.invoke()
             if (result is Failure) {
                 _ioError.value = eventErrorText(result.error)
-                Log.d("ErrorApp", result.toString())
+                Log.e("ErrorApp", result.toString())
             }
         }
     }
@@ -102,12 +107,14 @@ class MainViewModel @Inject constructor(
     fun deleteAllHabitsFromDb() {
         viewModelScope.launch {
             val result = dbUseCase.deleteAllHabitsUseCase.invoke()
-            if (result is Failure) _ioError.value = eventErrorText(result.error)
-            Log.d("ErrorApp", result.toString())
+            if (result is Failure) {
+                _ioError.value = eventErrorText(result.error)
+                Log.e("ErrorApp", result.toString())
+            }
         }
     }
 
-    private fun snackbarText(habit: Habit): String {
+    fun snackbarText(habit: Habit): String {
         val habitType = habit.type
         val habitRecurrenceNumber = habit.recurrenceNumber
         val actualDoneListSize = habit.actualDoneListSize()
@@ -131,14 +138,14 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun eventErrorText(error: IoError): Event<String> {
+    fun eventErrorText(error: IoError): Event<String> {
         Log.e("ErrorApp eventErrorText", error.toString())
         val errorTextFromRes = when (error) {
-            is IoError.HabitAlreadyExistsError -> R.string.habit_already_exists
-            is IoError.SqlError -> R.string.sql_error
-            is IoError.CloudError -> R.string.cloud_error
-            is IoError.DeletingAllHabitsError -> R.string.deleting_habits_error
-            is IoError.DeletingHabitError -> R.string.deleting_habits_error
+            is HabitAlreadyExistsError -> R.string.habit_already_exists
+            is SqlError -> R.string.sql_error
+            is CloudError -> R.string.cloud_error
+            is DeletingAllHabitsError -> R.string.deleting_habits_error
+            is DeletingHabitError -> R.string.deleting_habits_error
         }
         val errorText = resources.getString(
             errorTextFromRes,
@@ -271,3 +278,4 @@ class MainViewModel @Inject constructor(
         private const val UNKNOWN_CODE = 0
     }
 }
+
