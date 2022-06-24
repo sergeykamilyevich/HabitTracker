@@ -207,7 +207,7 @@ class MainViewModel @Inject constructor(
         _habitListFilter.value = currentHabitListFilter
     }
 
-    fun updateFilter(input: Editable?) {
+    fun updateSearch(input: Editable?) {
         currentHabitListFilter.search = input?.toString() ?: EMPTY_STRING
         _habitListFilter.value = currentHabitListFilter
     }
