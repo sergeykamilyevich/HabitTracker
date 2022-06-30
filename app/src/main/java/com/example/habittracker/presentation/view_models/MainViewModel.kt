@@ -45,9 +45,9 @@ class MainViewModel @Inject constructor(
     val showResultToast: LiveData<Event<String>>
         get() = _showResultToast
 
-    private val _showSyncDialogAlert = MutableLiveData<Unit>()
-    val showSyncDialogAlert: LiveData<Unit>
-        get() = _showSyncDialogAlert
+    private val _showHabitsAreNotSyncDialogAlert = MutableLiveData<Unit>()
+    val showHabitsAreNotSyncDialogAlert: LiveData<Unit>
+        get() = _showHabitsAreNotSyncDialogAlert
 
     private val _ioError = MutableLiveData<Event<String>>()
     val ioError: LiveData<Event<String>>
@@ -262,7 +262,7 @@ class MainViewModel @Inject constructor(
                         _showResultToast.value =
                             Event(resources.getString(R.string.cloud_and_db_are_equals))
                     else {
-                        _showSyncDialogAlert.value = Unit
+                        _showHabitsAreNotSyncDialogAlert.value = Unit
                     }
                 }
                 is Failure -> {
