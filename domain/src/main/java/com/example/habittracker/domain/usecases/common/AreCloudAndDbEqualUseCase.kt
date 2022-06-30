@@ -1,6 +1,7 @@
 package com.example.habittracker.domain.usecases.common
 
 import com.example.habittracker.domain.errors.Either
+import com.example.habittracker.domain.errors.Either.*
 import com.example.habittracker.domain.errors.IoError
 import com.example.habittracker.domain.errors.failure
 import com.example.habittracker.domain.errors.success
@@ -17,17 +18,17 @@ class AreCloudAndDbEqualUseCase @Inject constructor(
     suspend operator fun invoke(): Either<IoError, Boolean> {
         val habitListCloud = cloudUseCase.getHabitListFromCloudUseCase.invoke()
         return when (habitListCloud) {
-            is Either.Success -> {
+            is Success -> {
                 val habitListDb = dbUseCase.getUnfilteredHabitListUseCase.invoke()
                 when (habitListDb) {
-                    is Either.Success -> compareLists(
+                    is Success -> compareLists(
                         habitListCloud.result,
                         habitListDb.result
                     ).success()
-                    is Either.Failure -> habitListDb.error.failure()
+                    is Failure -> habitListDb.error.failure()
                 }
             }
-            is Either.Failure -> habitListCloud.error.failure()
+            is Failure -> habitListCloud.error.failure()
         }
     }
 
