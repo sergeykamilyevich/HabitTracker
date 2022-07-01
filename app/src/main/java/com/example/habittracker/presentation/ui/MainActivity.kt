@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.showSyncDialogAlert.observe(this) {
+        viewModel.showHabitsAreNotSyncDialogAlert.observe(this) {
             val builder = AlertDialog.Builder(this)
             builder.apply {
                 setMessage(getString(R.string.cloud_and_db_are_not_equals))
