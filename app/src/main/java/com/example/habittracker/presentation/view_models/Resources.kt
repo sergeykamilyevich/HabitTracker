@@ -1,15 +1,20 @@
 package com.example.habittracker.presentation.view_models
 
 import android.app.Application
-import android.content.res.Resources.NotFoundException
 import javax.inject.Inject
 
-class Resources @Inject constructor(private val application: Application) {
+interface Resources {
 
-    fun getString(resId: Int, vararg formatArgs: Any?): String =
-        application.resources.getString(resId, *formatArgs)
+    fun getString(resId: Int, vararg formatArgs: Any?): String
 
-    fun getQuantityString(id: Int, quantity: Int, vararg formatArgs: Any?): String =
-        application.resources.getQuantityString(id, quantity, *formatArgs)
+    fun getQuantityString(id: Int, quantity: Int, vararg formatArgs: Any?): String
 
+    class Base @Inject constructor(private val application: Application) : Resources {
+        override fun getString(resId: Int, vararg formatArgs: Any?): String =
+            application.resources.getString(resId, *formatArgs)
+
+        override fun getQuantityString(id: Int, quantity: Int, vararg formatArgs: Any?): String =
+            application.resources.getQuantityString(id, quantity, *formatArgs)
+
+    }
 }
