@@ -10,12 +10,14 @@ import com.example.habittracker.domain.usecases.db.DbUseCase
 import com.example.habittracker.domain.usecases.network.CloudUseCase
 import com.example.habittracker.domain.usecases.network.GetCloudErrorUseCase
 import com.google.common.truth.Truth.assertThat
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
+@ExperimentalCoroutinesApi
 internal class SyncAllToCloudUseCaseTest {
 
     private lateinit var syncAllToCloudUseCase: SyncAllToCloudUseCase
@@ -44,7 +46,7 @@ internal class SyncAllToCloudUseCaseTest {
 
     @ParameterizedTest
     @ValueSource(booleans = [true, false])
-    fun `return success(true) or failure(false)`(isSuccess: Boolean) = runBlocking {
+    fun `return success(true) or failure(false)`(isSuccess: Boolean) = runTest {
         if (!isSuccess) syncHabitRepositoryFake.setErrorReturn()
         val result = syncAllToCloudUseCase.invoke()
         if (isSuccess) assertThat(result is Success).isTrue()
@@ -52,7 +54,7 @@ internal class SyncAllToCloudUseCaseTest {
     }
 
     @Test
-    fun `habit lists in db and cloud repositories are equal`() = runBlocking {
+    fun `habit lists in db and cloud repositories are equal`() = runTest {
         syncAllToCloudUseCase.invoke()
         val listFromCloud = cloudHabitRepositoryFake.getHabitList()
         val listFromDb = dbHabitRepositoryFake.getUnfilteredList()

@@ -4,12 +4,14 @@ import com.example.habittracker.data.repositories.CloudHabitRepositoryFake
 import com.example.habittracker.domain.errors.Either.Failure
 import com.example.habittracker.domain.errors.Either.Success
 import com.google.common.truth.Truth.assertThat
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
+@ExperimentalCoroutinesApi
 internal class DeleteAllHabitsFromCloudUseCaseTest {
 
     private lateinit var deleteAllHabitsFromCloudUseCase: DeleteAllHabitsFromCloudUseCase
@@ -22,7 +24,7 @@ internal class DeleteAllHabitsFromCloudUseCaseTest {
     }
 
     @Test
-    fun `empty list in repository after delete habits`() = runBlocking {
+    fun `empty list in repository after delete habits`() = runTest {
         cloudHabitRepositoryFake.preInsertHabit()
         val habitList = cloudHabitRepositoryFake.getHabitList()
         assertThat(habitList is Success && habitList.result.isNotEmpty()).isTrue()
@@ -34,7 +36,7 @@ internal class DeleteAllHabitsFromCloudUseCaseTest {
 
     @ParameterizedTest
     @ValueSource(booleans = [true, false])
-    fun `return success(true) or failure(false)`(isSuccess: Boolean) = runBlocking {
+    fun `return success(true) or failure(false)`(isSuccess: Boolean) = runTest {
         if (!isSuccess) cloudHabitRepositoryFake.setErrorReturn()
         val result = deleteAllHabitsFromCloudUseCase.invoke()
         if (isSuccess) assertThat(result is Success).isTrue()

@@ -5,12 +5,14 @@ import com.example.habittracker.domain.errors.Either.Failure
 import com.example.habittracker.domain.errors.Either.Success
 import com.example.habittracker.domain.models.HabitDone
 import com.google.common.truth.Truth.assertThat
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
+@ExperimentalCoroutinesApi
 internal class AddHabitDoneUseCaseTest {
 
     private lateinit var addHabitDoneUseCase: AddHabitDoneUseCase
@@ -25,7 +27,7 @@ internal class AddHabitDoneUseCaseTest {
     }
 
     @Test
-    fun `habitDone transferred  to the repository`() = runBlocking {
+    fun `habitDone transferred  to the repository`() = runTest {
         val preFind = dbHabitRepositoryFake.findHabitDone(habitDoneToInsert)
         assertThat(preFind).isNull()
         addHabitDoneUseCase.invoke(habitDoneToInsert)
@@ -35,7 +37,7 @@ internal class AddHabitDoneUseCaseTest {
 
     @ParameterizedTest
     @ValueSource(booleans = [true, false])
-    fun `return success(true) or failure(false)`(isSuccess: Boolean) = runBlocking {
+    fun `return success(true) or failure(false)`(isSuccess: Boolean) = runTest {
         if (!isSuccess) dbHabitRepositoryFake.setErrorReturn()
         val result = addHabitDoneUseCase.invoke(habitDoneToInsert)
         if (isSuccess) assertThat(result is Success).isTrue()

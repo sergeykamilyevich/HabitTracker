@@ -8,14 +8,17 @@ import com.example.habittracker.domain.models.HabitListOrderBy
 import com.example.habittracker.domain.models.HabitListOrderBy.*
 import com.example.habittracker.domain.models.HabitType
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.NullSource
 
+@ExperimentalCoroutinesApi
 internal class GetHabitListUseCaseTest {
 
     private lateinit var getHabitListUseCase: GetHabitListUseCase
@@ -35,7 +38,7 @@ internal class GetHabitListUseCaseTest {
     @EnumSource(HabitType::class)
     @NullSource
     fun `return lists of bad, good and both types habits`(habitTypeFilter: HabitType?) =
-        runBlocking {
+        runTest {
             val emptyFilter =
                 HabitListFilter(orderBy = NAME_ASC, search = EMPTY_SEARCH)
             val list = getHabitListUseCase.invoke(habitTypeFilter, emptyFilter).last()
@@ -51,7 +54,7 @@ internal class GetHabitListUseCaseTest {
     @ParameterizedTest
     @EnumSource(HabitListOrderBy::class)
     fun `return habit lists sorted by order from HabitListOrderBy`(habitListOrderBy: HabitListOrderBy) =
-        runBlocking {
+        runTest {
             val habitTypeFilter = null
             val emptyFilter =
                 HabitListFilter(orderBy = habitListOrderBy, search = EMPTY_SEARCH)
@@ -68,7 +71,7 @@ internal class GetHabitListUseCaseTest {
         }
 
     @Test
-    fun `return habit search result`() = runBlocking {
+    fun `return habit search result`() = runTest {
         val habitTypeFilter = null
         val searchString = successHabit.name
         val searchFilter =
@@ -84,7 +87,7 @@ internal class GetHabitListUseCaseTest {
     }
 
     @Test
-    fun `return empty search result`() = runBlocking {
+    fun `return empty search result`() = runTest {
         val habitTypeFilter = null
         val searchFilter =
             HabitListFilter(orderBy = NAME_ASC, search = WRONG_SEARCH)

@@ -5,12 +5,14 @@ import com.example.habittracker.domain.errors.Either.Failure
 import com.example.habittracker.domain.errors.Either.Success
 import com.example.habittracker.domain.models.Habit
 import com.google.common.truth.Truth.assertThat
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
+@ExperimentalCoroutinesApi
 internal class UpsertHabitUseCaseTest {
 
     private lateinit var upsertHabitUseCase: UpsertHabitUseCase
@@ -25,7 +27,7 @@ internal class UpsertHabitUseCaseTest {
     }
 
     @Test
-    fun `update habit and return id = 0`() = runBlocking {
+    fun `update habit and return id = 0`() = runTest {
         val habitId = upsertHabitUseCase.invoke(habitToInsert)
         assertThat(habitId is Success).isTrue()
         if (habitId is Success) {
@@ -37,7 +39,7 @@ internal class UpsertHabitUseCaseTest {
 
     @ParameterizedTest
     @ValueSource(booleans = [true, false])
-    fun `return success(true) or failure(false)`(isSuccess: Boolean) = runBlocking {
+    fun `return success(true) or failure(false)`(isSuccess: Boolean) = runTest {
         if (!isSuccess) dbHabitRepositoryFake.setErrorReturn()
         val result = upsertHabitUseCase.invoke(habitToInsert)
         if (isSuccess) assertThat(result is Success).isTrue()
@@ -45,7 +47,7 @@ internal class UpsertHabitUseCaseTest {
     }
 
     @Test
-    fun `transfer habit to the repository`() = runBlocking {
+    fun `transfer habit to the repository`() = runTest {
         val preFind = dbHabitRepositoryFake.findHabit(habitToInsert)
         assertThat(preFind).isNull()
         upsertHabitUseCase.invoke(habitToInsert)

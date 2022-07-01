@@ -6,12 +6,14 @@ import com.example.habittracker.data.repositories.SyncHabitRepositoryFake
 import com.example.habittracker.domain.errors.Either.Failure
 import com.example.habittracker.domain.errors.Either.Success
 import com.google.common.truth.Truth.assertThat
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
+@ExperimentalCoroutinesApi
 internal class PutHabitAndSyncWithDbUseCaseTest {
 
     private lateinit var putHabitAndSyncWithDbUseCase: PutHabitAndSyncWithDbUseCase
@@ -32,7 +34,7 @@ internal class PutHabitAndSyncWithDbUseCaseTest {
 
     @ParameterizedTest
     @ValueSource(booleans = [true, false])
-    fun `return success(true) or failure(false)`(isSuccess: Boolean) = runBlocking {
+    fun `return success(true) or failure(false)`(isSuccess: Boolean) = runTest {
         val habitToInsert = cloudHabitRepositoryFake.habitToInsert
         if (!isSuccess) cloudHabitRepositoryFake.setErrorReturn()
         val result = putHabitAndSyncWithDbUseCase.invoke(habitToInsert)
@@ -41,7 +43,7 @@ internal class PutHabitAndSyncWithDbUseCaseTest {
     }
 
     @Test
-    fun `habit transferred to repository`() = runBlocking {
+    fun `habit transferred to repository`() = runTest {
         val habitToInsert = cloudHabitRepositoryFake.habitToInsert
         val uid = putHabitAndSyncWithDbUseCase.invoke(habitToInsert)
         assertThat(uid is Success).isTrue()

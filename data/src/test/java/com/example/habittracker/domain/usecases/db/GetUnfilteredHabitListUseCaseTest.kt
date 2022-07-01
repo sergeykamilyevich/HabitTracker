@@ -4,24 +4,26 @@ import com.example.habittracker.data.repositories.DbHabitRepositoryFake
 import com.example.habittracker.domain.errors.Either.Failure
 import com.example.habittracker.domain.errors.Either.Success
 import com.google.common.truth.Truth.assertThat
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
+@ExperimentalCoroutinesApi
 internal class GetUnfilteredHabitListUseCaseTest {
 
     private lateinit var getUnfilteredHabitListUseCase: GetUnfilteredHabitListUseCase
     private lateinit var dbHabitRepositoryFake: DbHabitRepositoryFake
 
     @BeforeEach
-    fun setUp() = runBlocking {
+    fun setUp() = runTest {
         dbHabitRepositoryFake = DbHabitRepositoryFake()
         getUnfilteredHabitListUseCase = GetUnfilteredHabitListUseCase(dbHabitRepositoryFake)
         dbHabitRepositoryFake.initFilling()
     }
 
     @Test
-    fun `return whole list of habits`() = runBlocking {
+    fun `return whole list of habits`() = runTest {
         val listFromUseCase = getUnfilteredHabitListUseCase.invoke()
         val listFromRepository = dbHabitRepositoryFake.getUnfilteredList()
         assertThat(
@@ -31,7 +33,7 @@ internal class GetUnfilteredHabitListUseCaseTest {
     }
 
     @Test
-    fun `return error`() = runBlocking {
+    fun `return error`() = runTest {
         dbHabitRepositoryFake.setErrorReturn()
         val list = getUnfilteredHabitListUseCase.invoke()
         assertThat(list is Failure).isTrue()
