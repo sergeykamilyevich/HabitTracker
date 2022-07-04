@@ -80,7 +80,7 @@ class BottomSheetFragment : Fragment() {
 
     private fun setUpBottomSheetTied() {
         binding.tiedSearch.addTextChangedListener {
-            viewModel.updateFilter(it)
+            viewModel.updateSearch(it)
         }
     }
 
