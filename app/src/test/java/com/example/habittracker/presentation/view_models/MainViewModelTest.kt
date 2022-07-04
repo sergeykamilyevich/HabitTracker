@@ -571,48 +571,52 @@ internal class MainViewModelTest {
     }
 
     @Test
-    fun `uploadAllHabitsFromDbToCloud invoke syncAllToCloudUseCase with success in showResultToast`() = runTest {
-        Mockito.`when`(syncAllToCloudUseCase.invoke()).thenReturn(Unit.success())
-        mainViewModel.uploadAllHabitsFromDbToCloud()
-        val actual = mainViewModel.showResultToast.getOrAwaitValue().transferIfNotHandled()
-        val expected = resources.getString(R.string.sync_is_done)
-        assertThat(actual).isNotNull()
-        assertThat(actual).isEqualTo(expected)
-    }
+    fun `uploadAllHabitsFromDbToCloud invoke syncAllToCloudUseCase with success in showResultToast`() =
+        runTest {
+            Mockito.`when`(syncAllToCloudUseCase.invoke()).thenReturn(Unit.success())
+            mainViewModel.uploadAllHabitsFromDbToCloud()
+            val actual = mainViewModel.showResultToast.getOrAwaitValue().transferIfNotHandled()
+            val expected = resources.getString(R.string.sync_is_done)
+            assertThat(actual).isNotNull()
+            assertThat(actual).isEqualTo(expected)
+        }
 
     @Test
-    fun `uploadAllHabitsFromDbToCloud invoke syncAllToCloudUseCase with failure in showResultToast`() = runTest {
-        val error = CloudError().failure()
-        Mockito.`when`(syncAllToCloudUseCase.invoke()).thenReturn(error)
-        mainViewModel.uploadAllHabitsFromDbToCloud()
-        val actual = mainViewModel.showResultToast.getOrAwaitValue().transferIfNotHandled()
-        val expected = mainViewModel.eventErrorText(error.error).transferIfNotHandled()
-        assertThat(actual).isNotNull()
-        assertThat(expected).isNotNull()
-        assertThat(actual).isEqualTo(expected)
-    }
+    fun `uploadAllHabitsFromDbToCloud invoke syncAllToCloudUseCase with failure in showResultToast`() =
+        runTest {
+            val error = CloudError().failure()
+            Mockito.`when`(syncAllToCloudUseCase.invoke()).thenReturn(error)
+            mainViewModel.uploadAllHabitsFromDbToCloud()
+            val actual = mainViewModel.showResultToast.getOrAwaitValue().transferIfNotHandled()
+            val expected = mainViewModel.eventErrorText(error.error).transferIfNotHandled()
+            assertThat(actual).isNotNull()
+            assertThat(expected).isNotNull()
+            assertThat(actual).isEqualTo(expected)
+        }
 
     @Test
-    fun `downloadAllHabitsFromCloudToDb invoke syncAllFromCloudUseCase with success in showResultToast`() = runTest {
-        Mockito.`when`(syncAllFromCloudUseCase.invoke()).thenReturn(Unit.success())
-        mainViewModel.downloadAllHabitsFromCloudToDb()
-        val actual = mainViewModel.showResultToast.getOrAwaitValue().transferIfNotHandled()
-        val expected = resources.getString(R.string.sync_is_done)
-        assertThat(actual).isNotNull()
-        assertThat(actual).isEqualTo(expected)
-    }
+    fun `downloadAllHabitsFromCloudToDb invoke syncAllFromCloudUseCase with success in showResultToast`() =
+        runTest {
+            Mockito.`when`(syncAllFromCloudUseCase.invoke()).thenReturn(Unit.success())
+            mainViewModel.downloadAllHabitsFromCloudToDb()
+            val actual = mainViewModel.showResultToast.getOrAwaitValue().transferIfNotHandled()
+            val expected = resources.getString(R.string.sync_is_done)
+            assertThat(actual).isNotNull()
+            assertThat(actual).isEqualTo(expected)
+        }
 
     @Test
-    fun `downloadAllHabitsFromCloudToDb invoke syncAllFromCloudUseCase with failure in showResultToast`() = runTest {
-        val error = CloudError().failure()
-        Mockito.`when`(syncAllFromCloudUseCase.invoke()).thenReturn(error)
-        mainViewModel.downloadAllHabitsFromCloudToDb()
-        val actual = mainViewModel.showResultToast.getOrAwaitValue().transferIfNotHandled()
-        val expected = mainViewModel.eventErrorText(error.error).transferIfNotHandled()
-        assertThat(actual).isNotNull()
-        assertThat(expected).isNotNull()
-        assertThat(actual).isEqualTo(expected)
-    }
+    fun `downloadAllHabitsFromCloudToDb invoke syncAllFromCloudUseCase with failure in showResultToast`() =
+        runTest {
+            val error = CloudError().failure()
+            Mockito.`when`(syncAllFromCloudUseCase.invoke()).thenReturn(error)
+            mainViewModel.downloadAllHabitsFromCloudToDb()
+            val actual = mainViewModel.showResultToast.getOrAwaitValue().transferIfNotHandled()
+            val expected = mainViewModel.eventErrorText(error.error).transferIfNotHandled()
+            assertThat(actual).isNotNull()
+            assertThat(expected).isNotNull()
+            assertThat(actual).isEqualTo(expected)
+        }
 
     @Test
     fun `compareCloudAndDb show success toast`() = runTest {
@@ -644,7 +648,6 @@ internal class MainViewModelTest {
         val expected = Unit
         assertThat(actual).isNotNull()
         assertThat(actual).isEqualTo(expected)
-
     }
 
     companion object {
