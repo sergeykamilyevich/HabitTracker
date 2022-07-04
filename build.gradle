@@ -2,8 +2,8 @@
 
 buildscript {
     ext.room_version = '2.4.2'
-    ext.lifecycle_version = '2.4.1'
-    ext.navigation_version = '2.4.2'
+    ext.lifecycle_version = '2.5.0'
+    ext.navigation_version = '2.5.0'
     ext.dagger_version = '2.41'
     ext.retrofit2_version = '2.9.0'
     ext.okhttp3_version = '4.9.3'
