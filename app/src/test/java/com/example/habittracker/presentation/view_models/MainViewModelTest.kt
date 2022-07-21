@@ -22,6 +22,8 @@ import getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
@@ -159,14 +161,14 @@ internal class MainViewModelTest {
     }
 
     @Test
-    fun `deleteHabitItem set DeletingHabitError`() = runTest {
+    fun `deleteHabitItem set DeletingHabitError`()  {
         val dbReturn = DeletingHabitError().failure()
         val cloudReturn = Unit.success()
         deleteHabitItemTest(dbReturn, cloudReturn, "Deleting habits failed")
     }
 
     @Test
-    fun `deleteHabitItem set CloudError`() = runTest {
+    fun `deleteHabitItem set CloudError`()  {
         val dbReturn = Unit.success()
         val cloudReturn = CloudError().failure()
         deleteHabitItemTest(dbReturn, cloudReturn, "Network error: ")
@@ -205,13 +207,13 @@ internal class MainViewModelTest {
     }
 
     @Test
-    fun `deleteAllHabitsFromCloud set CloudError`() = runTest {
+    fun `deleteAllHabitsFromCloud set CloudError`()  {
         val cloudReturn = CloudError().failure()
         deleteAllHabitsFromCloudTest(cloudReturn, "Network error: ")
     }
 
     @Test
-    fun `deleteAllHabitsFromCloud set DeletingAllHabitsError`() = runTest {
+    fun `deleteAllHabitsFromCloud set DeletingAllHabitsError`()  {
         val cloudReturn = DeletingAllHabitsError().failure()
         deleteAllHabitsFromCloudTest(cloudReturn, "Deleting habits failed")
     }
@@ -246,7 +248,7 @@ internal class MainViewModelTest {
     }
 
     @Test
-    fun `deleteAllHabitsFromDb set DeletingAllHabitsError`() = runTest {
+    fun `deleteAllHabitsFromDb set DeletingAllHabitsError`()  {
         val dbReturn = DeletingAllHabitsError().failure()
         deleteAllHabitsFromDbTest(dbReturn, "Deleting habits failed")
     }
@@ -385,7 +387,7 @@ internal class MainViewModelTest {
     }
 
     @Test
-    fun `getHabitList success get bad list`() = runTest {
+    fun `getHabitList success get bad list`()  {
         val habitTypeFilter = HabitType.BAD
         setupDefaultViewModelFilters()
         setUpMockGetHabitListUseCase(habitTypeFilter)
@@ -397,7 +399,7 @@ internal class MainViewModelTest {
     }
 
     @Test
-    fun `getHabitList success get good list`() = runTest {
+    fun `getHabitList success get good list`() {
         val habitTypeFilter = HabitType.GOOD
         setupDefaultViewModelFilters()
         setUpMockGetHabitListUseCase(habitTypeFilter)
@@ -409,7 +411,7 @@ internal class MainViewModelTest {
     }
 
     @Test
-    fun `getHabitList success get unfiltered list`() = runTest {
+    fun `getHabitList success get unfiltered list`()  {
         val habitTypeFilter = null
         setupDefaultViewModelFilters()
         setUpMockGetHabitListUseCase(habitTypeFilter)
@@ -434,7 +436,7 @@ internal class MainViewModelTest {
     }
 
     @Test
-    fun `getHabitList success get list with search filter`() = runTest {
+    fun `getHabitList success get list with search filter`()  {
         val search = SUCCESSFUL_SEARCH
         val isSuccessfulSearch = true
         getHabitListSearchTest(search, isSuccessfulSearch)
@@ -442,7 +444,7 @@ internal class MainViewModelTest {
     }
 
     @Test
-    fun `getHabitList get empty list with search filter`() = runTest {
+    fun `getHabitList get empty list with search filter`()  {
         val search = UNSUCCESSFUL_SEARCH
         val isSuccessfulSearch = false
         getHabitListSearchTest(search, isSuccessfulSearch)
@@ -474,32 +476,32 @@ internal class MainViewModelTest {
     }
 
     @Test
-    fun `getHabitList success get list sorted by NAME_ASC order`() = runTest {
+    fun `getHabitList success get list sorted by NAME_ASC order`()  {
         getHabitListByOrderTest(NAME_ASC)
     }
 
     @Test
-    fun `getHabitList success get list sorted by NAME_DESC order`() = runTest {
+    fun `getHabitList success get list sorted by NAME_DESC order`()  {
         getHabitListByOrderTest(NAME_DESC)
     }
 
     @Test
-    fun `getHabitList success get list sorted by TIME_CREATION_ASC order`() = runTest {
+    fun `getHabitList success get list sorted by TIME_CREATION_ASC order`()  {
         getHabitListByOrderTest(TIME_CREATION_ASC)
     }
 
     @Test
-    fun `getHabitList success get list sorted by TIME_CREATION_DESC order`() = runTest {
+    fun `getHabitList success get list sorted by TIME_CREATION_DESC order`() {
         getHabitListByOrderTest(TIME_CREATION_DESC)
     }
 
     @Test
-    fun `getHabitList success get list sorted by PRIORITY_ASC order`() = runTest {
+    fun `getHabitList success get list sorted by PRIORITY_ASC order`()  {
         getHabitListByOrderTest(PRIORITY_ASC)
     }
 
     @Test
-    fun `getHabitList success get list sorted by PRIORITY_DESC order`() = runTest {
+    fun `getHabitList success get list sorted by PRIORITY_DESC order`() {
         getHabitListByOrderTest(PRIORITY_DESC)
     }
 
