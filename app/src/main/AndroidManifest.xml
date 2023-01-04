@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HabitTracker">
         <activity
-            android:name=".presentation.ui.MainActivity"
+            android:name=".feature_habits.presentation.ui.MainActivity"
             android:exported="true"
             android:screenOrientation="fullSensor">
             <intent-filter>

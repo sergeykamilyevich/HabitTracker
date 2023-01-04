@@ -20,9 +20,8 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Response
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
+//@Singleton
 class CloudHabitRepositoryImpl @Inject constructor(
     private val apiService: HabitApi
 ) : CloudHabitRepository {

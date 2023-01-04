@@ -5,9 +5,8 @@ import com.example.habittracker.domain.errors.IoError
 import com.example.habittracker.domain.models.Habit
 import com.example.habittracker.domain.repositories.SyncHabitRepository
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
+//@Singleton
 class PutHabitAndSyncWithDbUseCase @Inject constructor(
     private val syncHabitRepository: SyncHabitRepository,
 ) {

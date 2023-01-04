@@ -4,12 +4,15 @@ import android.app.Application
 import android.content.Context
 import com.example.habittracker.di.components.ApplicationComponent
 import com.example.habittracker.di.components.DaggerApplicationComponent
+import com.example.habittracker.feature_habits.di.components.DaggerFeatureHabitsComponent
+import com.example.habittracker.feature_habits.di.components.FeatureHabitsComponent
+import com.example.habittracker.feature_habits.di.components.FeatureHabitsComponentProvider
 import javax.inject.Singleton
 
 @Singleton
-class App : Application() {
+class App : Application(), FeatureHabitsComponentProvider {
     lateinit var applicationComponent: ApplicationComponent
-//        private set
+        private set
 
     override fun onCreate() {
         applicationComponent = DaggerApplicationComponent
@@ -17,6 +20,10 @@ class App : Application() {
             .create(application = this)
         super.onCreate()
 
+    }
+
+    override fun provideFeatureHabitsComponent(): FeatureHabitsComponent {
+        return DaggerFeatureHabitsComponent.factory().create(application = this)
     }
 }
 

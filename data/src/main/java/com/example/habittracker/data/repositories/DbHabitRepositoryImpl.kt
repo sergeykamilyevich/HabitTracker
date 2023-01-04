@@ -19,10 +19,10 @@ import com.example.habittracker.domain.repositories.DbHabitRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class DbHabitRepositoryImpl @Inject constructor(private val habitDao: HabitDao) : DbHabitRepository {
+//@Singleton
+class DbHabitRepositoryImpl @Inject constructor(private val habitDao: HabitDao) :
+    DbHabitRepository {
 
     override fun getHabitList(
         habitType: HabitType?,

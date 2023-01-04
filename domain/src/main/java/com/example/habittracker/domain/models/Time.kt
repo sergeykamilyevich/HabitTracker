@@ -3,7 +3,6 @@ package com.example.habittracker.domain.models
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
-import javax.inject.Singleton
 
 class Time @Inject constructor() {
 

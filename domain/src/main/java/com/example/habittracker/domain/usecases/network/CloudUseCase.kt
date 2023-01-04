@@ -2,7 +2,6 @@ package com.example.habittracker.domain.usecases.network
 
 import com.example.habittracker.domain.repositories.CloudHabitRepository
 import javax.inject.Inject
-import javax.inject.Singleton
 
 class CloudUseCase @Inject constructor(
     private val cloudHabitRepository: CloudHabitRepository,

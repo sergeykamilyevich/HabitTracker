@@ -1,7 +1,8 @@
 package com.example.habittracker.domain.usecases.common
 
 import com.example.habittracker.domain.errors.Either
-import com.example.habittracker.domain.errors.Either.*
+import com.example.habittracker.domain.errors.Either.Failure
+import com.example.habittracker.domain.errors.Either.Success
 import com.example.habittracker.domain.errors.IoError
 import com.example.habittracker.domain.errors.failure
 import com.example.habittracker.domain.errors.success

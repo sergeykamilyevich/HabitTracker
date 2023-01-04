@@ -16,3 +16,6 @@ rootProject.name = "Habit Tracker"
 include ':app'
 include ':data'
 include ':domain'
+include ':feature_habits'
+include ':ui_kit'
+include ':core_api'

@@ -8,12 +8,11 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Singleton
 
 @Module
 object CloudModule {
 
-    @[Provides Singleton]
+    @[Provides]
     fun provideOkHttpClient(apiInterceptor: ApiInterceptor): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
@@ -24,7 +23,7 @@ object CloudModule {
             .build()
     }
 
-    @[Provides Singleton]
+    @[Provides]
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         val converterFactory = GsonConverterFactory.create()
         return Retrofit.Builder()
@@ -34,7 +33,7 @@ object CloudModule {
             .build()
     }
 
-    @[Provides Singleton]
+    @[Provides]
     fun provideApiService(retrofit: Retrofit): HabitApi = retrofit.create(HabitApi::class.java)
     private const val BASE_URL = "https://droid-test-server.doubletapp.ru/"
 

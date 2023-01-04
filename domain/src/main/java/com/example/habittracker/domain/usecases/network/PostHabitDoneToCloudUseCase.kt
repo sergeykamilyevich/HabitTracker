@@ -5,9 +5,8 @@ import com.example.habittracker.domain.errors.IoError
 import com.example.habittracker.domain.models.HabitDone
 import com.example.habittracker.domain.repositories.CloudHabitRepository
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
+//@Singleton
 class PostHabitDoneToCloudUseCase @Inject constructor(
     private val cloudHabitRepository: CloudHabitRepository
 ) {

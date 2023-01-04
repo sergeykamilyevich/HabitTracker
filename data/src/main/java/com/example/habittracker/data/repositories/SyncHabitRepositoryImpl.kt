@@ -1,8 +1,8 @@
 package com.example.habittracker.data.repositories
 
-import android.util.Log
 import com.example.habittracker.domain.errors.Either
-import com.example.habittracker.domain.errors.Either.*
+import com.example.habittracker.domain.errors.Either.Failure
+import com.example.habittracker.domain.errors.Either.Success
 import com.example.habittracker.domain.errors.IoError
 import com.example.habittracker.domain.errors.failure
 import com.example.habittracker.domain.errors.success
@@ -12,9 +12,8 @@ import com.example.habittracker.domain.repositories.CloudHabitRepository
 import com.example.habittracker.domain.repositories.DbHabitRepository
 import com.example.habittracker.domain.repositories.SyncHabitRepository
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
+//@Singleton
 class SyncHabitRepositoryImpl @Inject constructor(
     private val dbHabitRepository: DbHabitRepository,
     private val cloudHabitRepository: CloudHabitRepository
