@@ -61,6 +61,7 @@ dependencies {
     implementation project(path: ':data')
     implementation project(path: ':feature_habits')
     implementation project(path: ':ui_kit')
+    implementation project(path: ':network')
 
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'

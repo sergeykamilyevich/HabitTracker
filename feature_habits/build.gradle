@@ -58,6 +58,7 @@ dependencies {
     implementation project(path: ':domain')
     implementation project(path: ':data')
     implementation project(path: ':core_api')
+    implementation project(path: ':network_api')
 
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'
