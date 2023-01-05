@@ -1,6 +1,5 @@
 package com.example.habittracker.feature_habits.presentation.ui
 
-//import com.example.habittracker.app.applicationComponent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem

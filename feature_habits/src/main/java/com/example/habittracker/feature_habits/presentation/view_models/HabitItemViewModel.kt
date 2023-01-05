@@ -19,12 +19,13 @@ import com.example.habittracker.domain.usecases.common.SyncUseCase
 import com.example.habittracker.domain.usecases.db.DbUseCase
 import com.example.habittracker.feature_habits.di.annotations.HabitItemViewModelScope
 import com.example.habittracker.feature_habits.presentation.color.ColorPicker
+import com.example.habittracker.feature_habits.presentation.mappers.HabitItemMapper
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HabitItemViewModelScope
 class HabitItemViewModel @Inject constructor(
-    private val mapper: com.example.habittracker.feature_habits.presentation.mappers.HabitItemMapper,
+    private val mapper: HabitItemMapper,
     private val mainViewModel: MainViewModel,
     private val time: Time,
     private val colorPicker: ColorPicker,
