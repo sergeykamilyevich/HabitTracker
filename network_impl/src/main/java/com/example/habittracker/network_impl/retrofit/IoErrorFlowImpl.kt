@@ -8,8 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
-class IoErrorFlowImpl @Inject constructor() :
-    IoErrorFlow {
+class IoErrorFlowImpl @Inject constructor() : IoErrorFlow {
 
     private val cloudError: MutableStateFlow<Either<IoError, Unit>> =
         MutableStateFlow(Unit.success())

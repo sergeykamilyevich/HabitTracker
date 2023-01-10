@@ -45,6 +45,7 @@ android {
     namespace 'com.example.habittracker.data'
 }
 
+apply from: "$project.rootDir/scripts/deps_versions.gradle"
 dependencies {
 
     implementation project(path: ':core')
@@ -53,18 +54,13 @@ dependencies {
 
 
     //Room
-    implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
-    implementation "androidx.room:room-ktx:$room_version"
+    implementation room_impl.values()
+    kapt room_kapt
 
-    implementation "com.google.dagger:dagger:$dagger_version"
-    kapt "com.google.dagger:dagger-compiler:$dagger_version"
-    implementation 'javax.inject:javax.inject:1'
+    implementation dagger_impl.values()
+    kapt dagger_kapt
 
-    implementation "com.squareup.retrofit2:retrofit:$retrofit2_version"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit2_version"
-    implementation "com.squareup.okhttp3:okhttp:$okhttp3_version"
-    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp3_version"
+    implementation retrofit.values()
 
 //    testImplementation "com.squareup.okhttp3:mockwebserver:4.9.3"
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'

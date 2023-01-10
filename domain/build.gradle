@@ -13,7 +13,9 @@ test {
     useJUnitPlatform()
 }
 
+apply from: "$project.rootDir/scripts/deps_versions.gradle"
 dependencies {
+
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.3'
     implementation 'javax.inject:javax.inject:1'
 

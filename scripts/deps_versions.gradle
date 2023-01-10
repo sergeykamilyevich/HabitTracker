@@ -1,0 +1,70 @@
+ext {
+    room_version = '2.4.2'
+    lifecycle_version = '2.5.0'
+    navigation_version = '2.5.0'
+    dagger_version = '2.41'
+    retrofit2_version = '2.9.0'
+    okhttp3_version = '4.9.3'
+    glide_version = '4.13.0'
+    coroutines_version = '1.6.3'
+
+    android_core = "androidx.core:core-ktx:1.9.0"
+    appcompat = "androidx.appcompat:appcompat:1.5.1"
+    fragment = "androidx.fragment:fragment-ktx:1.5.5"
+    material = "com.google.android.material:material:1.7.0"
+    constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.4"
+    viewpager2 = "androidx.viewpager2:viewpager2:1.0.0"
+
+    room_impl = [
+            'runtime': "androidx.room:room-runtime:$room_version",
+            'ktx'    : "androidx.room:room-ktx:$room_version"
+    ]
+    room_kapt = "androidx.room:room-compiler:$room_version"
+
+    lifecycle = [
+            'viewmodel': "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version",
+            'runtime'  : "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version",
+            'livedata' : "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    ]
+
+    navigation = [
+            'fragment-ktx': "androidx.navigation:navigation-fragment-ktx:$navigation_version",
+            'ui-ktx'      : "androidx.navigation:navigation-ui-ktx:$navigation_version"
+    ]
+
+    dagger_impl = [
+            'dagger': "com.google.dagger:dagger:$dagger_version",
+            'inject': "javax.inject:javax.inject:1"
+    ]
+    dagger_kapt = "com.google.dagger:dagger-compiler:$dagger_version"
+
+    retrofit = [
+            'okhttp'             : "com.squareup.okhttp3:okhttp:$okhttp3_version",
+            'logging-interceptor': "com.squareup.okhttp3:logging-interceptor:$okhttp3_version",
+            'retrofit'           : "com.squareup.retrofit2:retrofit:$retrofit2_version",
+            'converter-gson'     : "com.squareup.retrofit2:converter-gson:$retrofit2_version"
+    ]
+
+    kotlin_coroutines = [
+            'core'   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version",
+            'android': "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+    ]
+
+    tests = [
+            'junit'             : 'junit:junit:4.13.2',
+            'jupiter'           : 'org.junit.jupiter:junit-jupiter:5.8.2',
+            'mockito-core'      : "org.mockito:mockito-core:4.5.1",
+            'mockito-inline'    : "org.mockito:mockito-inline:4.5.1",
+            'mockito-kotlin'    : "org.mockito.kotlin:mockito-kotlin:4.0.0",
+            'core-testing'      : "androidx.arch.core:core-testing:2.1.0",
+            'truth'             : "com.google.truth:truth:1.1.3",
+            'coroutines-test'   : "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.3",
+            'test_ext_junit'    : "androidx.test.ext:junit:1.1.3",
+            'test_ext_junit-ktx': "androidx.test.ext:junit-ktx:1.1.3",
+            'test_ext_truth'    : 'androidx.test.ext:truth:1.4.0',
+            'core'              : "androidx.test:core:1.4.0",
+            'core-ktx'          : "androidx.test:core-ktx:1.4.0",
+            'runner'            : "androidx.test:runner:1.4.0",
+            'robolectric'       : "org.robolectric:robolectric:4.8.1"
+    ]
+}

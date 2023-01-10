@@ -5,11 +5,11 @@ plugins {
 
 android {
     namespace 'com.example.habittracker.ui_kit'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         minSdk 26
-        targetSdk 32
+        targetSdk 33
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -30,6 +30,7 @@ android {
     }
 }
 
+apply from: "$project.rootDir/scripts/deps_versions.gradle"
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'
