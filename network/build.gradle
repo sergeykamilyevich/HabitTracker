@@ -35,7 +35,7 @@ dependencies {
 
     implementation project(path: ':network_impl')
     api project(path: ':network_api')
-    implementation project(path: ':domain')
+    implementation project(path: ':core')
 
 
     //DI

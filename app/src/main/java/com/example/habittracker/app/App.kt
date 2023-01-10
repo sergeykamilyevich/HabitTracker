@@ -8,40 +8,40 @@ import com.example.habittracker.feature_habits.di.components.DaggerFeatureHabits
 import com.example.habittracker.feature_habits.di.components.FeatureHabitsComponent
 import com.example.habittracker.feature_habits.di.components.FeatureHabitsComponentProvider
 import com.example.habittracker.network_api.di.mediators.AppWithNetworkFacade
-import com.example.habittracker.network_api.di.mediators.NetworkFacadeProviders
-import javax.inject.Singleton
+import com.example.habittracker.network_api.di.mediators.NetworkFacadeComponentProviders
 
-@Singleton
 class App : Application(), FeatureHabitsComponentProvider, AppWithNetworkFacade {
-    lateinit var applicationComponent: ApplicationComponent
-        private set
 
-    override fun onCreate() {
-        applicationComponent = DaggerApplicationComponent
+    val applicationComponent: ApplicationComponent by lazy { //TODO delete?
+        DaggerApplicationComponent
             .factory()
             .create(application = this)
-        getNetworkFacade()
-        super.onCreate()
-
     }
+
+    private val networkFacadeComponent: NetworkFacadeComponent by lazy {
+        NetworkFacadeComponent.init()
+    }
+
+//    override fun onCreate() {
+//        networkFacadeComponent()
+//        super.onCreate()
+//    }
 
     override fun provideFeatureHabitsComponent(): FeatureHabitsComponent {
         return DaggerFeatureHabitsComponent
             .builder()
             .application(application = this)
-            .networkFacadeProviders(networkFacadeProviders = getNetworkFacade())
+            .networkComponentFacadeProviders(networkFacadeComponentProviders = networkFacadeComponent())
             .build()
     }
 
-    override fun getNetworkFacade(): NetworkFacadeProviders {
-        return networkFacadeComponent ?: NetworkFacadeComponent.init().also {
-            networkFacadeComponent = it
-        }
+    override fun networkFacadeComponent(): NetworkFacadeComponentProviders {
+        return networkFacadeComponent
     }
 
     companion object {
 
-        private var networkFacadeComponent: NetworkFacadeComponent? = null
+//        private var networkFacadeComponent: NetworkFacadeComponent? = null
     }
 }
 

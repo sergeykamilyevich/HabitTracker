@@ -1,12 +1,13 @@
 package com.example.habittracker.feature_habits.presentation.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.habittracker.domain.models.Habit
+import com.example.habittracker.core.domain.models.Habit
 import com.example.habittracker.feature_habits.R
 import com.example.habittracker.feature_habits.databinding.FragmentHabitListPagerBinding
 import com.example.habittracker.feature_habits.presentation.view_pager.ViewPagerAdapter
@@ -25,6 +26,7 @@ class HabitListPagerFragment : Fragment(), HasTitle {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.d("99999", "HabitListPagerFragment $this")
         _binding = FragmentHabitListPagerBinding.inflate(inflater, container, false)
         return binding.root
     }

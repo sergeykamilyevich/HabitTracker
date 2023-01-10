@@ -2,7 +2,7 @@ package com.example.habittracker.feature_habits.presentation.models
 
 import android.os.Parcelable
 import androidx.annotation.StringRes
-import com.example.habittracker.domain.models.HabitType
+import com.example.habittracker.core.domain.models.HabitType
 import com.example.habittracker.ui_kit.R
 import kotlinx.parcelize.Parcelize
 

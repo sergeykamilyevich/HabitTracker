@@ -1,6 +1,6 @@
 package com.example.habittracker.feature_habits.presentation.models
 
-import com.example.habittracker.domain.models.HabitDone
+import com.example.habittracker.core.domain.models.HabitDone
 
 data class AddHabitSnackBarData(
     val snackbarText: String,

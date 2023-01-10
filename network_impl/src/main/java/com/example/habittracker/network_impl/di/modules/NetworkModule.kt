@@ -1,9 +1,14 @@
 package com.example.habittracker.network_impl.di.modules
 
-import com.example.habittracker.domain.errors.IoErrorFlow
-import com.example.habittracker.network_api.di.providers.HabitApi2
-import com.example.habittracker.network_impl.retrofit.ApiInterceptor2
-import com.example.habittracker.network_impl.retrofit.IoErrorFlowImpl2
+import android.util.Log
+import com.example.habittracker.core.di.annotations.ApplicationScope
+import com.example.habittracker.core.domain.errors.IoErrorFlow
+import com.example.habittracker.core.domain.repositories.CloudHabitRepository
+import com.example.habittracker.network_api.di.providers.HabitApi
+import com.example.habittracker.network_impl.repositories.CloudHabitRepositoryImpl
+import com.example.habittracker.network_impl.retrofit.ApiInterceptor
+import com.example.habittracker.network_impl.retrofit.IoErrorFlowImpl
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -12,35 +17,41 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 @Module
-object NetworkModule {
+interface NetworkModule {
 
-    @[Provides]
-    fun provideIoErrorFlow(impl: IoErrorFlowImpl2): IoErrorFlow { //TODO binds
-        return impl
-    }
+    @[ApplicationScope Binds]
+    fun bindNetworkHabitRepository(impl: CloudHabitRepositoryImpl): CloudHabitRepository
 
-    @[Provides]
-    fun provideOkHttpClient(apiInterceptor: ApiInterceptor2): OkHttpClient {
-        val loggingInterceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
+    @Binds
+    fun bindIoErrorFlow(impl: IoErrorFlowImpl): IoErrorFlow
+
+    companion object {
+
+        @[ApplicationScope Provides]
+        fun provideOkHttpClient(apiInterceptor: ApiInterceptor): OkHttpClient {
+            Log.d("99999", "create OkHttpClient")
+            val loggingInterceptor = HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            }
+            return OkHttpClient.Builder()
+                .addInterceptor(apiInterceptor)
+                .addInterceptor(loggingInterceptor)
+                .build()
         }
-        return OkHttpClient.Builder()
-            .addInterceptor(apiInterceptor)
-            .addInterceptor(loggingInterceptor)
-            .build()
-    }
 
-    @[Provides]
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        val converterFactory = GsonConverterFactory.create()
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(converterFactory)
-            .client(okHttpClient)
-            .build()
-    }
+        @[ApplicationScope Provides]
+        fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+            Log.d("99999", "create Retrofit")
+            val converterFactory = GsonConverterFactory.create()
+            return Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(converterFactory)
+                .client(okHttpClient)
+                .build()
+        }
 
-    @[Provides]
-    fun provideApiService(retrofit: Retrofit): HabitApi2 = retrofit.create(HabitApi2::class.java)
-    private const val BASE_URL = "https://droid-test-server.doubletapp.ru/"
+        @[ApplicationScope Provides]
+        fun provideApiService(retrofit: Retrofit): HabitApi = retrofit.create(HabitApi::class.java)
+        private const val BASE_URL = "https://droid-test-server.doubletapp.ru/"
+    }
 }

@@ -34,7 +34,7 @@ android {
 dependencies {
 
     api project(path: ':network_api')
-    implementation project(path: ':domain')
+    implementation project(path: ':core')
 
     //DI
     implementation "com.google.dagger:dagger:$dagger_version"

@@ -1,6 +1,7 @@
 package com.example.habittracker.feature_habits.presentation.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -21,8 +22,8 @@ import com.example.habittracker.feature_habits.di.components.FeatureHabitsCompon
 import com.example.habittracker.feature_habits.di.components.FeatureHabitsComponentProvider
 import com.example.habittracker.feature_habits.di.components.getComponent
 import com.example.habittracker.feature_habits.presentation.view_models.MainViewModel
-import com.example.habittracker.navigation.R.id
-import com.example.habittracker.navigation.R.menu
+import com.example.habittracker.core.R.id
+import com.example.habittracker.core.R.menu
 import com.example.habittracker.ui_kit.R.drawable
 import com.example.habittracker.ui_kit.R.string
 import com.google.android.material.snackbar.Snackbar
@@ -57,6 +58,7 @@ class MainActivity : AppCompatActivity() {
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("99999", "MainActivity $this")
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentListener, true)
         setUpMainActivityComponent()
         super.onCreate(savedInstanceState)
@@ -66,7 +68,6 @@ class MainActivity : AppCompatActivity() {
         setUpNavigation()
         setUpViewModel()
         setUpHeaderImage()
-
     }
 
     private fun setUpHeaderImage() {

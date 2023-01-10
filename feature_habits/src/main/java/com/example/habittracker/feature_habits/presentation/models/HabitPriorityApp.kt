@@ -1,7 +1,7 @@
 package com.example.habittracker.feature_habits.presentation.models
 
 import androidx.annotation.StringRes
-import com.example.habittracker.domain.models.HabitPriority
+import com.example.habittracker.core.domain.models.HabitPriority
 import com.example.habittracker.ui_kit.R
 
 enum class HabitPriorityApp(@StringRes val resourceId: Int, val id: Int) {

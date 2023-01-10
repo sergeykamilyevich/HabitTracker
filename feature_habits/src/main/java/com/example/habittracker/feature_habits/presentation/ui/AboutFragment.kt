@@ -1,6 +1,7 @@
 package com.example.habittracker.feature_habits.presentation.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ class AboutFragment : Fragment(), HasTitle {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.d("99999", "AboutFragment $this")
         _binding = FragmentAboutBinding.inflate(inflater, container, false)
         return binding.root
     }

@@ -47,11 +47,12 @@ android {
 
 dependencies {
 
-    implementation project(path: ':domain')
-    testImplementation project(path: ':domain')
-    androidTestImplementation project(path: ':domain')
+    implementation project(path: ':core')
+    testImplementation project(path: ':core')
+    androidTestImplementation project(path: ':core')
 
 
+    //Room
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"

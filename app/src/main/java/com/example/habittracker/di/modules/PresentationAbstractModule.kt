@@ -6,7 +6,7 @@ import dagger.Module
 import javax.inject.Singleton
 
 @Module
-interface PresentationAbstractModule {
+interface PresentationAbstractModule { //TODO delete?
 
     @[Binds Singleton]
     fun bindResources(impl: Resources.Base): Resources

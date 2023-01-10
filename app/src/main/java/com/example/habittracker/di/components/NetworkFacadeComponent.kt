@@ -1,21 +1,23 @@
 package com.example.habittracker.di.components
 
+import com.example.habittracker.core.di.annotations.ApplicationScope
 import com.example.habittracker.network.di.NetworkProvidersFactory
-import com.example.habittracker.network_api.di.mediators.NetworkFacadeProviders
-import com.example.habittracker.network_api.di.providers.NetworkProvider
+import com.example.habittracker.network_api.di.mediators.NetworkFacadeComponentProviders
+import com.example.habittracker.network_api.di.providers.NetworkComponentProvider
 import dagger.Component
 
+@ApplicationScope
 @Component(
-    dependencies = [NetworkProvider::class]
+    dependencies = [NetworkComponentProvider::class]
 )
-interface NetworkFacadeComponent : NetworkFacadeProviders {
+interface NetworkFacadeComponent : NetworkFacadeComponentProviders {
 
     companion object {
 
         fun init(): NetworkFacadeComponent =
             DaggerNetworkFacadeComponent
                 .builder()
-                .networkProvider(NetworkProvidersFactory.createNetworkComponent())
+                .networkComponentProvider(NetworkProvidersFactory.networkComponent)
                 .build()
     }
 }

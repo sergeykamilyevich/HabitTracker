@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,15 +14,16 @@ import androidx.annotation.ColorInt
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.habittracker.domain.models.Habit
-import com.example.habittracker.domain.models.Habit.Companion.UNDEFINED_ID
-import com.example.habittracker.domain.models.HabitPriority
-import com.example.habittracker.domain.models.HabitType
-import com.example.habittracker.domain.models.Time
+import com.example.habittracker.core.domain.models.Habit
+import com.example.habittracker.core.domain.models.Habit.Companion.UNDEFINED_ID
+import com.example.habittracker.core.domain.models.HabitPriority
+import com.example.habittracker.core.domain.models.HabitType
+import com.example.habittracker.core.domain.models.Time
 import com.example.habittracker.feature_habits.R.layout
 import com.example.habittracker.feature_habits.databinding.FragmentHabitItemBinding
 import com.example.habittracker.feature_habits.di.components.getComponent
 import com.example.habittracker.feature_habits.presentation.color.ColorPicker
+import com.example.habittracker.feature_habits.presentation.mappers.HabitItemMapper
 import com.example.habittracker.feature_habits.presentation.models.ColorRgbHsv
 import com.example.habittracker.feature_habits.presentation.models.HabitPriorityApp
 import com.example.habittracker.feature_habits.presentation.view_models.HabitItemViewModel
@@ -38,7 +40,7 @@ class HabitItemFragment : Fragment(), HasTitle {
         get() = _binding ?: throw RuntimeException("FragmentHabitItemBinding is null")
 
     @Inject
-    lateinit var habitItemMapper: com.example.habittracker.feature_habits.presentation.mappers.HabitItemMapper
+    lateinit var habitItemMapper: HabitItemMapper
 
     @Inject
     lateinit var colorPicker: ColorPicker
@@ -72,19 +74,19 @@ class HabitItemFragment : Fragment(), HasTitle {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        val habitItemFragmentComponent = getComponent {
+        getComponent {
             (activity as MainActivity)
                 .featureHabitsComponent
                 .habitItemFragmentComponentFactory()
                 .create()
-        }
-        habitItemFragmentComponent.inject(this)
+        }.inject(this)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.d("99999", "HabitItemFragment $this")
         _binding = FragmentHabitItemBinding.inflate(inflater, container, false)
         return binding.root
     }

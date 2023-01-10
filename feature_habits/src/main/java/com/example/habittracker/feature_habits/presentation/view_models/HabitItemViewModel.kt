@@ -7,17 +7,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.habittracker.domain.errors.Either
-import com.example.habittracker.domain.errors.Either.Failure
-import com.example.habittracker.domain.errors.Either.Success
-import com.example.habittracker.domain.errors.IoError
-import com.example.habittracker.domain.models.Habit
-import com.example.habittracker.domain.models.HabitPriority
-import com.example.habittracker.domain.models.HabitType
-import com.example.habittracker.domain.models.Time
-import com.example.habittracker.domain.usecases.common.SyncUseCase
-import com.example.habittracker.domain.usecases.db.DbUseCase
+import com.example.habittracker.core.domain.errors.Either
+import com.example.habittracker.core.domain.errors.Either.Failure
+import com.example.habittracker.core.domain.errors.Either.Success
+import com.example.habittracker.core.domain.errors.IoError
+import com.example.habittracker.core.domain.models.Habit
+import com.example.habittracker.core.domain.models.HabitPriority
+import com.example.habittracker.core.domain.models.HabitType
+import com.example.habittracker.core.domain.models.Time
 import com.example.habittracker.feature_habits.di.annotations.HabitItemViewModelScope
+import com.example.habittracker.feature_habits.domain.usecases.common.SyncUseCase
+import com.example.habittracker.feature_habits.domain.usecases.db.DbUseCase
 import com.example.habittracker.feature_habits.presentation.color.ColorPicker
 import com.example.habittracker.feature_habits.presentation.mappers.HabitItemMapper
 import kotlinx.coroutines.launch
@@ -32,6 +32,10 @@ class HabitItemViewModel @Inject constructor(
     private val dbUseCase: DbUseCase,
     private val syncUseCase: SyncUseCase
 ) : ViewModel() {
+
+    init {
+        Log.d("99999", "HabitItemViewModel $this")
+    }
 
     private val _errorInputName = MutableLiveData<Boolean>()
     val errorInputName: LiveData<Boolean>

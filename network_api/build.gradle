@@ -33,7 +33,7 @@ android {
 
 dependencies {
 
-    implementation project(path: ':domain')
+    implementation project(path: ':core')
 
     //DI
     implementation "com.google.dagger:dagger:$dagger_version"

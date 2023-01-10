@@ -3,15 +3,15 @@ package com.example.habittracker.feature_habits.presentation.view_models
 import android.text.Editable
 import android.util.Log
 import androidx.lifecycle.*
-import com.example.habittracker.domain.errors.Either
-import com.example.habittracker.domain.errors.Either.Failure
-import com.example.habittracker.domain.errors.Either.Success
-import com.example.habittracker.domain.errors.IoError
-import com.example.habittracker.domain.errors.IoError.*
-import com.example.habittracker.domain.models.*
-import com.example.habittracker.domain.usecases.common.SyncUseCase
-import com.example.habittracker.domain.usecases.db.DbUseCase
-import com.example.habittracker.domain.usecases.network.CloudUseCase
+import com.example.habittracker.core.domain.errors.Either
+import com.example.habittracker.core.domain.errors.Either.Failure
+import com.example.habittracker.core.domain.errors.Either.Success
+import com.example.habittracker.core.domain.errors.IoError
+import com.example.habittracker.core.domain.errors.IoError.*
+import com.example.habittracker.core.domain.models.*
+import com.example.habittracker.feature_habits.domain.usecases.common.SyncUseCase
+import com.example.habittracker.feature_habits.domain.usecases.db.DbUseCase
+import com.example.habittracker.feature_habits.domain.usecases.network.CloudUseCase
 import com.example.habittracker.feature_habits.presentation.models.AddHabitSnackBarData
 import com.example.habittracker.ui_kit.R
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -31,6 +31,7 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     init {
+        Log.d("99999", "MainViewModel $this")
 //        compareCloudAndDb() //TODO where should it be?
     }
 

@@ -2,6 +2,7 @@ package com.example.habittracker.feature_habits.presentation.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.habittracker.domain.models.HabitDone
-import com.example.habittracker.domain.models.HabitType
-import com.example.habittracker.domain.models.Time
+import com.example.habittracker.core.domain.models.HabitDone
+import com.example.habittracker.core.domain.models.HabitType
+import com.example.habittracker.core.domain.models.Time
 import com.example.habittracker.feature_habits.R
 import com.example.habittracker.feature_habits.databinding.FragmentHabitListBinding
 import com.example.habittracker.feature_habits.presentation.models.HabitTypeApp
@@ -38,6 +39,7 @@ class HabitListFragment : Fragment(), HasTitle {
     private var listMode: HabitTypeApp? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("99999", "HabitListFragment $this")
         super.onCreate(savedInstanceState)
         parseArguments()
     }
