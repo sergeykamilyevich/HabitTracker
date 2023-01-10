@@ -75,21 +75,28 @@ dependencies {
 
     //Kotlin coroutines
     implementation kotlin_coroutines.values()
+
     //Lifecycle
     implementation lifecycle.values()
+
     //Navigation
     implementation navigation.values()
+
     //DI
     implementation dagger_impl.values()
     kapt dagger_kapt
+
     //Glide
     implementation "com.github.bumptech.glide:glide:$glide_version"
     kapt "com.github.bumptech.glide:compiler:$glide_version"
+
     //Retrofit
     implementation retrofit.values()
+
     //Room
     implementation room_impl.values()
     kapt room_kapt
+
     //Tests
     testImplementation tests.values()
 
