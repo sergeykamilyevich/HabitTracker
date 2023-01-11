@@ -1,6 +1,7 @@
 package com.example.habittracker.feature_habits.di.components
 
 import android.app.Application
+import com.example.habittracker.db_api.di.mediators.DbFacadeComponentProviders
 import com.example.habittracker.feature_habits.data.di.modules.DataModule
 import com.example.habittracker.feature_habits.di.modules.FeatureHabitsModule
 import com.example.habittracker.feature_habits.presentation.ui.BottomSheetFragment
@@ -13,7 +14,7 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(
-    dependencies = [NetworkFacadeComponentProviders::class],
+    dependencies = [NetworkFacadeComponentProviders::class, DbFacadeComponentProviders::class],
     modules = [
         DataModule::class,
         FeatureHabitsModule::class
@@ -26,7 +27,9 @@ interface FeatureHabitsComponent {
 
         fun application(@BindsInstance application: Application): Builder
 
-        fun networkComponentFacadeProviders(networkFacadeComponentProviders: NetworkFacadeComponentProviders): Builder
+        fun networkFacadeComponentProviders(networkFacadeComponentProviders: NetworkFacadeComponentProviders): Builder
+
+        fun dbFacadeComponentProviders(dbFacadeComponentProviders: DbFacadeComponentProviders): Builder
 
         fun build(): FeatureHabitsComponent
 

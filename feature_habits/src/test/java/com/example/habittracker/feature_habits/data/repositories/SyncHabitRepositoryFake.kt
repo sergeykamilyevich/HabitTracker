@@ -1,14 +1,14 @@
 package com.example.habittracker.feature_habits.data.repositories
 
-import com.example.habittracker.core.domain.errors.Either
-import com.example.habittracker.core.domain.errors.Either.Success
-import com.example.habittracker.core.domain.errors.IoError
-import com.example.habittracker.core.domain.errors.failure
-import com.example.habittracker.core.domain.errors.success
-import com.example.habittracker.core.domain.models.Habit
-import com.example.habittracker.core.domain.repositories.CloudHabitRepository
-import com.example.habittracker.core.domain.repositories.DbHabitRepository
-import com.example.habittracker.core.domain.repositories.SyncHabitRepository
+import com.example.habittracker.core_api.domain.errors.Either
+import com.example.habittracker.core_api.domain.errors.Either.Success
+import com.example.habittracker.core_api.domain.errors.IoError
+import com.example.habittracker.core_api.domain.errors.failure
+import com.example.habittracker.core_api.domain.errors.success
+import com.example.habittracker.core_api.domain.models.Habit
+import com.example.habittracker.core_api.domain.repositories.CloudHabitRepository
+import com.example.habittracker.core_api.domain.repositories.DbHabitRepository
+import com.example.habittracker.core_api.domain.repositories.SyncHabitRepository
 
 class SyncHabitRepositoryFake(
     private val dbHabitRepository: DbHabitRepository,

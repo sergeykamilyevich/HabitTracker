@@ -1,7 +1,7 @@
 package com.example.habittracker.feature_habits.presentation.recycler
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.habittracker.core.domain.models.Habit
+import com.example.habittracker.core_api.domain.models.Habit
 
 class HabitItemDiffCallback : DiffUtil.ItemCallback<Habit>() {
 

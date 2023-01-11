@@ -1,6 +1,6 @@
 package com.example.habittracker.network_api.di.models
 
-import com.example.habittracker.core.domain.models.HabitDone
+import com.example.habittracker.core_api.domain.models.HabitDone
 import com.google.gson.annotations.SerializedName
 
 data class HabitDoneApiModel(

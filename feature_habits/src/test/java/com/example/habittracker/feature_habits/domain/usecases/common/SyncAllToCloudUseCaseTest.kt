@@ -1,14 +1,16 @@
 package com.example.habittracker.feature_habits.domain.usecases.common
 
-import com.example.habittracker.core.domain.errors.Either.Failure
-import com.example.habittracker.core.domain.errors.Either.Success
-import com.example.habittracker.feature_habits.data.network.retrofit.IoErrorFlowFake
-import com.example.habittracker.feature_habits.data.repositories.CloudHabitRepositoryFake
-import com.example.habittracker.feature_habits.data.repositories.DbHabitRepositoryFake
+import com.example.habittracker.core_api.domain.errors.Either.Failure
+import com.example.habittracker.core_api.domain.errors.Either.Success
+import com.example.habittracker.core_api.domain.usecases.common.SyncAllToCloudUseCase
+import com.example.habittracker.core_api.domain.usecases.common.UploadAllToCloudUseCase
+import com.example.habittracker.network_impl.retrofit.IoErrorFlowFake
+import com.example.habittracker.network_impl.repositories.CloudHabitRepositoryFake
+import com.example.habittracker.db_impl.data.repositories.DbHabitRepositoryFake
 import com.example.habittracker.feature_habits.data.repositories.SyncHabitRepositoryFake
-import com.example.habittracker.feature_habits.domain.usecases.db.DbUseCase
-import com.example.habittracker.feature_habits.domain.usecases.network.CloudUseCase
-import com.example.habittracker.feature_habits.domain.usecases.network.GetCloudErrorUseCase
+import com.example.habittracker.core_api.domain.usecases.db.DbUseCase
+import com.example.habittracker.core_api.domain.usecases.network.CloudUseCase
+import com.example.habittracker.core_api.domain.usecases.network.GetCloudErrorUseCase
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest

@@ -36,7 +36,7 @@ dependencies {
     //Modules
     implementation project(path: ':db_impl')
     api project(path: ':db_api')
-    implementation project(path: ':core')
+    implementation project(path: ':core_api')
 
     //Core
     implementation android_core

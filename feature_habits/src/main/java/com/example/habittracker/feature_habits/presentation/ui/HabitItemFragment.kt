@@ -14,11 +14,11 @@ import androidx.annotation.ColorInt
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.habittracker.core.domain.models.Habit
-import com.example.habittracker.core.domain.models.Habit.Companion.UNDEFINED_ID
-import com.example.habittracker.core.domain.models.HabitPriority
-import com.example.habittracker.core.domain.models.HabitType
-import com.example.habittracker.core.domain.models.Time
+import com.example.habittracker.core_api.domain.models.Habit
+import com.example.habittracker.core_api.domain.models.Habit.Companion.UNDEFINED_ID
+import com.example.habittracker.core_api.domain.models.HabitPriority
+import com.example.habittracker.core_api.domain.models.HabitType
+import com.example.habittracker.core_api.domain.models.Time
 import com.example.habittracker.feature_habits.R.layout
 import com.example.habittracker.feature_habits.databinding.FragmentHabitItemBinding
 import com.example.habittracker.feature_habits.di.components.getComponent

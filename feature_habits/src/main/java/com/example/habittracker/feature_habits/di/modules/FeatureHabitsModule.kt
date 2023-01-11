@@ -1,6 +1,6 @@
 package com.example.habittracker.feature_habits.di.modules
 
-import com.example.habittracker.core.domain.repositories.SyncHabitRepository
+import com.example.habittracker.core_api.domain.repositories.SyncHabitRepository
 import com.example.habittracker.feature_habits.presentation.view_models.Resources
 import com.example.habittracker.feature_habits.data.repositories.SyncHabitRepositoryImpl
 import dagger.Binds

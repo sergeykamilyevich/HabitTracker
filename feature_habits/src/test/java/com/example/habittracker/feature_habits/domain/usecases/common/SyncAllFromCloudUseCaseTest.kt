@@ -1,9 +1,10 @@
 package com.example.habittracker.feature_habits.domain.usecases.common
 
-import com.example.habittracker.core.domain.errors.Either.Failure
-import com.example.habittracker.core.domain.errors.Either.Success
-import com.example.habittracker.feature_habits.data.repositories.CloudHabitRepositoryFake
-import com.example.habittracker.feature_habits.data.repositories.DbHabitRepositoryFake
+import com.example.habittracker.core_api.domain.errors.Either.Failure
+import com.example.habittracker.core_api.domain.errors.Either.Success
+import com.example.habittracker.core_api.domain.usecases.common.SyncAllFromCloudUseCase
+import com.example.habittracker.network_impl.repositories.CloudHabitRepositoryFake
+import com.example.habittracker.db_impl.data.repositories.DbHabitRepositoryFake
 import com.example.habittracker.feature_habits.data.repositories.SyncHabitRepositoryFake
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,14 +18,16 @@ import org.junit.jupiter.params.provider.ValueSource
 internal class SyncAllFromCloudUseCaseTest {
 
     private lateinit var syncAllFromCloudUseCase: SyncAllFromCloudUseCase
-    private lateinit var dbHabitRepositoryFake: DbHabitRepositoryFake
-    private lateinit var cloudHabitRepositoryFake: CloudHabitRepositoryFake
+    private lateinit var dbHabitRepositoryFake: com.example.habittracker.db_impl.data.repositories.DbHabitRepositoryFake
+    private lateinit var cloudHabitRepositoryFake: com.example.habittracker.network_impl.repositories.CloudHabitRepositoryFake
     private lateinit var syncHabitRepositoryFake: SyncHabitRepositoryFake
 
     @BeforeEach
     fun setUp() {
-        dbHabitRepositoryFake = DbHabitRepositoryFake()
-        cloudHabitRepositoryFake = CloudHabitRepositoryFake()
+        dbHabitRepositoryFake =
+            com.example.habittracker.db_impl.data.repositories.DbHabitRepositoryFake()
+        cloudHabitRepositoryFake =
+            com.example.habittracker.network_impl.repositories.CloudHabitRepositoryFake()
         syncHabitRepositoryFake = SyncHabitRepositoryFake(
             dbHabitRepository = dbHabitRepositoryFake,
             cloudHabitRepository = cloudHabitRepositoryFake

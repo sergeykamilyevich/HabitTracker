@@ -36,7 +36,7 @@ dependencies {
 
     //Modules
     api project(path: ':db_api')
-    implementation project(path: ':core')
+    implementation project(path: ':core_api')
 
     //Core
     implementation android_core
@@ -49,4 +49,7 @@ dependencies {
     //Room
     implementation room_impl.values()
     kapt room_kapt
+
+    //Tests
+    testImplementation tests.values()
 }

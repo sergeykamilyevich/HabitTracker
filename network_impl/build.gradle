@@ -36,7 +36,7 @@ dependencies {
 
     //Modules
     api project(path: ':network_api')
-    implementation project(path: ':core')
+    implementation project(path: ':core_api')
 
     //Core
     implementation android_core
@@ -48,4 +48,7 @@ dependencies {
 
     //Retrofit
     implementation retrofit.values()
+
+    //Tests
+    testImplementation tests.values()
 }

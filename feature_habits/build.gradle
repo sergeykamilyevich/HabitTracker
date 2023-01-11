@@ -60,8 +60,9 @@ dependencies {
     //Modules
     implementation project(path: ':ui_kit')
     implementation project(path: ':data')
-    implementation project(path: ':core')
+    implementation project(path: ':core_api')
     implementation project(path: ':network_api')
+    implementation project(path: ':db_api')
 
     //Core
     implementation android_core
@@ -85,6 +86,8 @@ dependencies {
     //DI
     implementation dagger_impl.values()
     kapt dagger_kapt
+    testImplementation dagger_impl.values()
+//    testKapt dagger_kapt
 
     //Glide
     implementation "com.github.bumptech.glide:glide:$glide_version"

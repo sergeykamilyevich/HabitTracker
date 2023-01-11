@@ -1,9 +1,10 @@
 package com.example.habittracker.feature_habits.domain.usecases.common
 
-import com.example.habittracker.core.domain.errors.Either.Failure
-import com.example.habittracker.core.domain.errors.Either.Success
-import com.example.habittracker.feature_habits.data.repositories.CloudHabitRepositoryFake
-import com.example.habittracker.feature_habits.data.repositories.DbHabitRepositoryFake
+import com.example.habittracker.core_api.domain.errors.Either.Failure
+import com.example.habittracker.core_api.domain.errors.Either.Success
+import com.example.habittracker.core_api.domain.usecases.common.PutHabitAndSyncWithDbUseCase
+import com.example.habittracker.network_impl.repositories.CloudHabitRepositoryFake
+import com.example.habittracker.db_impl.data.repositories.DbHabitRepositoryFake
 import com.example.habittracker.feature_habits.data.repositories.SyncHabitRepositoryFake
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -23,8 +24,10 @@ internal class PutHabitAndSyncWithDbUseCaseTest {
 
     @BeforeEach
     fun setUp() {
-        dbHabitRepositoryFake = DbHabitRepositoryFake()
-        cloudHabitRepositoryFake = CloudHabitRepositoryFake()
+        dbHabitRepositoryFake =
+            DbHabitRepositoryFake()
+        cloudHabitRepositoryFake =
+            CloudHabitRepositoryFake()
         syncHabitRepositoryFake = SyncHabitRepositoryFake(
             dbHabitRepository = dbHabitRepositoryFake,
             cloudHabitRepository = cloudHabitRepositoryFake

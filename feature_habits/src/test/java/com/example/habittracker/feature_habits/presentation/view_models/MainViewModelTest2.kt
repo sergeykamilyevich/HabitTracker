@@ -10,7 +10,7 @@
 //import com.example.habittracker.core.domain.models.Habit
 //import com.example.habittracker.core.domain.models.HabitPriority
 //import com.example.habittracker.core.domain.models.HabitType
-//import com.example.habittracker.feature_habits.data.repositories.DbHabitRepositoryImpl
+//import com.example.habittracker.db_impl.di.repositories.DbHabitRepositoryImpl
 //import com.example.habittracker.feature_habits.domain.usecases.common.*
 //import com.example.habittracker.feature_habits.domain.usecases.db.*
 //import com.example.habittracker.feature_habits.domain.usecases.network.*

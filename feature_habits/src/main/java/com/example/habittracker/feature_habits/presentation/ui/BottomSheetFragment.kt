@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import com.example.habittracker.core.domain.models.HabitListOrderBy
+import com.example.habittracker.core_api.domain.models.HabitListOrderBy
 import com.example.habittracker.feature_habits.databinding.FragmentBottomSheetBinding
 import com.example.habittracker.feature_habits.presentation.view_models.MainViewModel
 import javax.inject.Inject

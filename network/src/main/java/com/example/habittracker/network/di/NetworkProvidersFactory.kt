@@ -7,7 +7,4 @@ object NetworkProvidersFactory {
 
     val networkComponent: NetworkComponentProvider = DaggerNetworkComponent.builder().build()
 
-//    fun createNetworkComponent(): NetworkComponentProvider {
-//        return DaggerNetworkComponent.builder().build()
-//    }
 }

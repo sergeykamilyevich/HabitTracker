@@ -1,6 +1,6 @@
 package com.example.habittracker.network_api.di.models
 
-import com.example.habittracker.core.domain.models.Habit
+import com.example.habittracker.core_api.domain.models.Habit
 import com.google.gson.annotations.SerializedName
 
 data class HabitApiModel(
@@ -28,10 +28,10 @@ data class HabitApiModel(
     fun toHabit() = Habit(
         name = name,
         description = description,
-        priority = com.example.habittracker.core.domain.models.HabitPriority.findPriorityById(
+        priority = com.example.habittracker.core_api.domain.models.HabitPriority.findPriorityById(
             priority
         ),
-        type = com.example.habittracker.core.domain.models.HabitType.findTypeById(type),
+        type = com.example.habittracker.core_api.domain.models.HabitType.findTypeById(type),
         color = color,
         recurrenceNumber = recurrenceNumber,
         recurrencePeriod = recurrencePeriod,

@@ -16,14 +16,13 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.bumptech.glide.Glide
+import com.example.habittracker.core_api.R.*
 import com.example.habittracker.feature_habits.R
 import com.example.habittracker.feature_habits.databinding.ActivityMainBinding
 import com.example.habittracker.feature_habits.di.components.FeatureHabitsComponent
 import com.example.habittracker.feature_habits.di.components.FeatureHabitsComponentProvider
 import com.example.habittracker.feature_habits.di.components.getComponent
 import com.example.habittracker.feature_habits.presentation.view_models.MainViewModel
-import com.example.habittracker.core.R.id
-import com.example.habittracker.core.R.menu
 import com.example.habittracker.ui_kit.R.drawable
 import com.example.habittracker.ui_kit.R.string
 import com.google.android.material.snackbar.Snackbar
@@ -37,7 +36,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private var currentFragment: Fragment? = null
 
-    lateinit var featureHabitsComponent: FeatureHabitsComponent
+    val featureHabitsComponent: FeatureHabitsComponent by lazy {
+        getComponent {
+            (application as FeatureHabitsComponentProvider).featureHabitsComponent()
+        }
+    }
 
     @Inject
     lateinit var viewModel: MainViewModel
@@ -60,7 +63,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d("99999", "MainActivity $this")
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentListener, true)
-        setUpMainActivityComponent()
+        setUpFeatureHabitsComponent()
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -83,10 +86,7 @@ class MainActivity : AppCompatActivity() {
             .into(avatar)
     }
 
-    private fun setUpMainActivityComponent() {
-        featureHabitsComponent = getComponent {
-            (application as FeatureHabitsComponentProvider).provideFeatureHabitsComponent()
-        }
+    private fun setUpFeatureHabitsComponent() {
         featureHabitsComponent.inject(this)
     }
 

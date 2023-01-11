@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.habittracker.core.domain.models.Habit
+import com.example.habittracker.core_api.domain.models.Habit
 import com.example.habittracker.feature_habits.R
 import com.example.habittracker.feature_habits.databinding.FragmentHabitListPagerBinding
 import com.example.habittracker.feature_habits.presentation.view_pager.ViewPagerAdapter

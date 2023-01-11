@@ -1,13 +1,13 @@
 package com.example.habittracker.network_impl.di.modules
 
 import android.util.Log
-import com.example.habittracker.core.di.annotations.ApplicationScope
-import com.example.habittracker.core.domain.errors.IoErrorFlow
-import com.example.habittracker.core.domain.repositories.CloudHabitRepository
+import com.example.habittracker.core_api.di.annotations.ApplicationScope
+import com.example.habittracker.core_api.domain.errors.IoErrorFlow
+import com.example.habittracker.core_api.domain.repositories.CloudHabitRepository
 import com.example.habittracker.network_api.di.providers.HabitApi
-import com.example.habittracker.network_impl.repositories.CloudHabitRepositoryImpl
-import com.example.habittracker.network_impl.retrofit.ApiInterceptor
-import com.example.habittracker.network_impl.retrofit.IoErrorFlowImpl
+import com.example.habittracker.network_impl.data.repositories.CloudHabitRepositoryImpl
+import com.example.habittracker.network_impl.data.retrofit.ApiInterceptor
+import com.example.habittracker.network_impl.data.retrofit.IoErrorFlowImpl
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

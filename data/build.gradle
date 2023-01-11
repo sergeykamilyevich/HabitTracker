@@ -48,10 +48,9 @@ android {
 apply from: "$project.rootDir/scripts/deps_versions.gradle"
 dependencies {
 
-    implementation project(path: ':core')
-    testImplementation project(path: ':core')
-    androidTestImplementation project(path: ':core')
-
+    implementation project(path: ':core_api')
+    testImplementation project(path: ':core_api')
+    androidTestImplementation project(path: ':core_api')
 
     //Room
     implementation room_impl.values()
