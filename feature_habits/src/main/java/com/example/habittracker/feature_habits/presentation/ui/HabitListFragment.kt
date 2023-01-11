@@ -1,6 +1,7 @@
 package com.example.habittracker.feature_habits.presentation.ui
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -51,7 +52,11 @@ class HabitListFragment : Fragment(), HasTitle {
 
     private fun parseArguments() {
         arguments?.let {
-            listMode = it.getParcelable(LIST_MODE)
+            listMode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                it.getParcelable(LIST_MODE, HabitTypeApp::class.java)
+            } else {
+                it.getParcelable(LIST_MODE)
+            }
         }
     }
 
