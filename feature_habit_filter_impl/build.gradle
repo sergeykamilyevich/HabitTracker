@@ -1,23 +1,19 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-android'
     id 'kotlin-kapt'
-    id 'androidx.navigation.safeargs.kotlin'
-    id 'kotlin-parcelize'
 }
 
 android {
+    namespace 'com.example.habittracker.feature_habit_filter_impl'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.habittracker"
         minSdk 26
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
@@ -26,44 +22,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
-    buildFeatures {
-        viewBinding true
-    }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
     kotlinOptions {
         jvmTarget = '1.8'
-        freeCompilerArgs += '-opt-in=kotlin.RequiresOptIn'
     }
-
-    testOptions {
-        unitTests.all {
-            useJUnitPlatform()
-            useJUnit()
-        }
-        unitTests {
-            returnDefaultValues = true
-            includeAndroidResources = true
-        }
-    }
-
-    namespace 'com.example.habittracker'
 }
 
 apply from: "$project.rootDir/scripts/deps_versions.gradle"
 dependencies {
 
     //Modules
-    implementation project(path: ':feature_habits')
-    implementation project(path: ':ui_kit')
-    implementation project(path: ':core')
-    implementation project(path: ':network')
-    implementation project(path: ':db')
+    implementation project(path: ':feature_habit_filter_api')
 
     //Core
     implementation android_core
