@@ -10,6 +10,7 @@ import com.example.habittracker.core_api.domain.errors.failure
 import com.example.habittracker.core_api.domain.errors.success
 import com.example.habittracker.core_api.domain.models.Habit
 import com.example.habittracker.core_api.domain.models.HabitDone
+import com.example.habittracker.core_api.domain.repositories.CloudHabitRepository
 import com.example.habittracker.network_api.di.models.HabitApiModel
 import com.example.habittracker.network_api.di.models.HabitDoneApiModel
 import com.example.habittracker.network_api.di.models.HabitUidApiModel
@@ -20,10 +21,9 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Response
 import javax.inject.Inject
 
-//@Singleton
 class CloudHabitRepositoryImpl @Inject constructor(
     private val apiService: HabitApi
-) : com.example.habittracker.core_api.domain.repositories.CloudHabitRepository {
+) : CloudHabitRepository {
 
     override suspend fun getHabitList(): Either<IoError, List<Habit>> {
         val response: Response<List<HabitApiModel>> = apiService.getHabitList()

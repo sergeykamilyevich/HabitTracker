@@ -1,9 +1,8 @@
-package com.example.habittracker.db_impl.domain.usecases.db
+package com.example.habittracker.core_api.domain.usecases.db
 
+import com.example.habittracker.core_api.data.repositories.DbHabitRepositoryFake
 import com.example.habittracker.core_api.domain.errors.Either
 import com.example.habittracker.core_api.domain.models.HabitDone
-import com.example.habittracker.core_api.domain.usecases.db.DeleteHabitDoneUseCase
-import com.example.habittracker.db_impl.data.repositories.DbHabitRepositoryFake
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest

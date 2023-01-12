@@ -8,7 +8,6 @@ import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
-
 class AutoCollapseBottomSheetBehavior<V : View>(private val context: Context, attrs: AttributeSet) :
     BottomSheetBehavior<V>(context, attrs) {
 

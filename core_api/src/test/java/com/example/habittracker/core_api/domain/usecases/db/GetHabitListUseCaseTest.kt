@@ -1,13 +1,12 @@
-package com.example.habittracker.db_impl.domain.usecases.db
+package com.example.habittracker.core_api.domain.usecases.db
 
+import com.example.habittracker.core_api.data.repositories.DbHabitRepositoryFake
 import com.example.habittracker.core_api.domain.errors.Either.Success
 import com.example.habittracker.core_api.domain.models.Habit
 import com.example.habittracker.core_api.domain.models.HabitListFilter
 import com.example.habittracker.core_api.domain.models.HabitListOrderBy
 import com.example.habittracker.core_api.domain.models.HabitListOrderBy.*
 import com.example.habittracker.core_api.domain.models.HabitType
-import com.example.habittracker.core_api.domain.usecases.db.GetHabitListUseCase
-import com.example.habittracker.db_impl.data.repositories.DbHabitRepositoryFake
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.last

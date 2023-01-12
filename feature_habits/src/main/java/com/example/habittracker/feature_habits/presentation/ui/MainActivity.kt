@@ -28,7 +28,6 @@ import com.example.habittracker.ui_kit.R.string
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding

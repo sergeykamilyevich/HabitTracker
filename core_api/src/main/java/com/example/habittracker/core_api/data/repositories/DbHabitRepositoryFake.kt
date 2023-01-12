@@ -1,4 +1,4 @@
-package com.example.habittracker.db_impl.data.repositories
+package com.example.habittracker.core_api.data.repositories
 
 import com.example.habittracker.core_api.domain.errors.Either
 import com.example.habittracker.core_api.domain.errors.IoError
@@ -13,8 +13,9 @@ import com.example.habittracker.core_api.domain.repositories.DbHabitRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
+import javax.inject.Inject
 
-class DbHabitRepositoryFake : DbHabitRepository {
+class DbHabitRepositoryFake @Inject constructor()  : DbHabitRepository {
 
     private val habitList = mutableListOf<Habit>()
     private val habitDoneList = mutableListOf<HabitDone>()

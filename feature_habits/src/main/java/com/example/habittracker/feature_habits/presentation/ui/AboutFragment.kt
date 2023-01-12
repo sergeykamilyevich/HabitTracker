@@ -10,7 +10,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.habittracker.feature_habits.databinding.FragmentAboutBinding
 import com.example.habittracker.ui_kit.R.string
 
-
 class AboutFragment : Fragment(), HasTitle {
 
     private var _binding: FragmentAboutBinding? = null

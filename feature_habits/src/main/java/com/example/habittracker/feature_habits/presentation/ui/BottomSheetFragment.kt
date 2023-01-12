@@ -14,7 +14,6 @@ import com.example.habittracker.feature_habits.databinding.FragmentBottomSheetBi
 import com.example.habittracker.feature_habits.presentation.view_models.MainViewModel
 import javax.inject.Inject
 
-
 class BottomSheetFragment : Fragment() {
 
     private var _binding: FragmentBottomSheetBinding? = null

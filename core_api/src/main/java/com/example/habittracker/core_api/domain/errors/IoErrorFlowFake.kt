@@ -1,9 +1,5 @@
-package com.example.habittracker.network_impl.retrofit
+package com.example.habittracker.core_api.domain.errors
 
-import com.example.habittracker.core_api.domain.errors.Either
-import com.example.habittracker.core_api.domain.errors.IoError
-import com.example.habittracker.core_api.domain.errors.IoErrorFlow
-import com.example.habittracker.core_api.domain.errors.success
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

@@ -22,7 +22,6 @@ import com.example.habittracker.feature_habits.presentation.view_models.MainView
 import com.example.habittracker.ui_kit.R.string
 import javax.inject.Inject
 
-
 class HabitListFragment : Fragment(), HasTitle {
 
     private var _binding: FragmentHabitListBinding? = null

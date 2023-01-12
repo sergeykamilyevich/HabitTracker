@@ -1,4 +1,4 @@
-package com.example.habittracker.network_impl.repositories
+package com.example.habittracker.core_api.data.repositories
 
 import com.example.habittracker.core_api.domain.errors.Either
 import com.example.habittracker.core_api.domain.errors.IoError

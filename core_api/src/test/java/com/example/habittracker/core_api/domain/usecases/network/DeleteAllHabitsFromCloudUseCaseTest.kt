@@ -1,9 +1,8 @@
-package com.example.habittracker.network_impl.domain.usecases.network
+package com.example.habittracker.core_api.domain.usecases.network
 
+import com.example.habittracker.core_api.data.repositories.CloudHabitRepositoryFake
 import com.example.habittracker.core_api.domain.errors.Either.Failure
 import com.example.habittracker.core_api.domain.errors.Either.Success
-import com.example.habittracker.core_api.domain.usecases.network.DeleteAllHabitsFromCloudUseCase
-import com.example.habittracker.network_impl.repositories.CloudHabitRepositoryFake
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -20,8 +19,7 @@ internal class DeleteAllHabitsFromCloudUseCaseTest {
 
     @BeforeEach
     fun setUp() {
-        cloudHabitRepositoryFake =
-            CloudHabitRepositoryFake()
+        cloudHabitRepositoryFake = CloudHabitRepositoryFake()
         deleteAllHabitsFromCloudUseCase = DeleteAllHabitsFromCloudUseCase(cloudHabitRepositoryFake)
     }
 
