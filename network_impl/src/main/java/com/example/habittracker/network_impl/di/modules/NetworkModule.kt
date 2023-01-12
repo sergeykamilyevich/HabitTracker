@@ -19,7 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 @Module
 interface NetworkModule {
 
-    @[ApplicationScope Binds]
+    @[Binds]
     fun bindNetworkHabitRepository(impl: CloudHabitRepositoryImpl): CloudHabitRepository
 
     @Binds
