@@ -60,7 +60,6 @@ dependencies {
 
     //Modules
     implementation project(path: ':core_api')
-    implementation project(path: ':data')
     implementation project(path: ':feature_habits')
     implementation project(path: ':ui_kit')
     implementation project(path: ':core')

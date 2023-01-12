@@ -34,7 +34,6 @@ android {
 apply from: "$project.rootDir/scripts/deps_versions.gradle"
 dependencies {
 
-    implementation project(path: ":data")
     implementation project(path: ":network_api")
     implementation project(path: ':core_api')
 
