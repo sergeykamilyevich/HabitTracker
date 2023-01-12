@@ -2,6 +2,7 @@ package com.example.habittracker.feature_habits.di.components
 
 import android.app.Application
 import com.example.habittracker.core_api.di.annotations.FeatureScope
+import com.example.habittracker.core_api.di.mediators.CoreFacadeComponentProviders
 import com.example.habittracker.db_api.di.mediators.DbFacadeComponentProviders
 import com.example.habittracker.feature_habits.data.di.modules.DataModule
 import com.example.habittracker.feature_habits.di.modules.FeatureHabitsModule
@@ -14,7 +15,11 @@ import dagger.Component
 
 @FeatureScope
 @Component(
-    dependencies = [NetworkFacadeComponentProviders::class, DbFacadeComponentProviders::class],
+    dependencies = [
+        CoreFacadeComponentProviders::class,
+        NetworkFacadeComponentProviders::class,
+        DbFacadeComponentProviders::class
+    ],
     modules = [
         DataModule::class,
         FeatureHabitsModule::class
@@ -22,17 +27,15 @@ import dagger.Component
 )
 interface FeatureHabitsComponent {
 
-    @Component.Builder
-    interface Builder {
+    @Component.Factory
+    interface Factory {
 
-        fun application(@BindsInstance application: Application): Builder
-
-        fun networkFacadeComponentProviders(networkFacadeComponentProviders: NetworkFacadeComponentProviders): Builder
-
-        fun dbFacadeComponentProviders(dbFacadeComponentProviders: DbFacadeComponentProviders): Builder
-
-        fun build(): FeatureHabitsComponent
-
+        fun create(
+            @BindsInstance application: Application,
+            coreFacadeComponentProviders: CoreFacadeComponentProviders,
+            networkFacadeComponentProviders: NetworkFacadeComponentProviders,
+            dbFacadeComponentProviders: DbFacadeComponentProviders
+        ): FeatureHabitsComponent
     }
 
     fun inject(bottomSheetFragment: BottomSheetFragment)

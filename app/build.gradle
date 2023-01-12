@@ -63,6 +63,7 @@ dependencies {
     implementation project(path: ':data')
     implementation project(path: ':feature_habits')
     implementation project(path: ':ui_kit')
+    implementation project(path: ':core')
     implementation project(path: ':network')
     implementation project(path: ':db')
 
