@@ -3,7 +3,6 @@ package com.example.habittracker.app
 import android.app.Application
 import com.example.habittracker.core_api.di.mediators.CoreFacadeComponentProviders
 import com.example.habittracker.db_api.di.mediators.DbFacadeComponentProviders
-import com.example.habittracker.di.components.AppWithFacade
 import com.example.habittracker.di.components.CoreFacadeComponent
 import com.example.habittracker.di.components.DbFacadeComponent
 import com.example.habittracker.di.components.NetworkFacadeComponent
