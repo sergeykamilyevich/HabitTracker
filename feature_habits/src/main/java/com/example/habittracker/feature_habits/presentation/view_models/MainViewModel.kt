@@ -3,6 +3,7 @@ package com.example.habittracker.feature_habits.presentation.view_models
 import android.text.Editable
 import android.util.Log
 import androidx.lifecycle.*
+import com.example.habittracker.core_api.di.annotations.FeatureScope
 import com.example.habittracker.core_api.domain.errors.Either
 import com.example.habittracker.core_api.domain.errors.Either.Failure
 import com.example.habittracker.core_api.domain.errors.Either.Success
@@ -18,11 +19,9 @@ import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.inject.Singleton
 import kotlin.math.abs
 
-//@MainViewModelScope
-@Singleton
+@FeatureScope
 class MainViewModel @Inject constructor(
     private val dbUseCase: DbUseCase,
     private val cloudUseCase: CloudUseCase,

@@ -1,12 +1,12 @@
 package com.example.habittracker.di.components
 
 import android.content.Context
+import com.example.habittracker.core_api.di.annotations.ApplicationScope
 import com.example.habittracker.db_api.di.providers.ContextProvider
 import dagger.BindsInstance
 import dagger.Component
-import javax.inject.Singleton
 
-@Singleton
+@ApplicationScope
 @Component
 interface ApplicationComponent : ContextProvider {
 

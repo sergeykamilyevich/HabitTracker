@@ -6,7 +6,6 @@ import com.example.habittracker.core_api.domain.models.HabitDone
 import com.example.habittracker.core_api.domain.repositories.CloudHabitRepository
 import javax.inject.Inject
 
-//@Singleton
 class PostHabitDoneToCloudUseCase @Inject constructor(
     private val cloudHabitRepository: CloudHabitRepository
 ) {

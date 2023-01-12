@@ -1,6 +1,7 @@
 package com.example.habittracker.feature_habits.di.components
 
 import android.app.Application
+import com.example.habittracker.core_api.di.annotations.FeatureScope
 import com.example.habittracker.db_api.di.mediators.DbFacadeComponentProviders
 import com.example.habittracker.feature_habits.data.di.modules.DataModule
 import com.example.habittracker.feature_habits.di.modules.FeatureHabitsModule
@@ -10,9 +11,8 @@ import com.example.habittracker.feature_habits.presentation.ui.MainActivity
 import com.example.habittracker.network_api.di.mediators.NetworkFacadeComponentProviders
 import dagger.BindsInstance
 import dagger.Component
-import javax.inject.Singleton
 
-@Singleton
+@FeatureScope
 @Component(
     dependencies = [NetworkFacadeComponentProviders::class, DbFacadeComponentProviders::class],
     modules = [

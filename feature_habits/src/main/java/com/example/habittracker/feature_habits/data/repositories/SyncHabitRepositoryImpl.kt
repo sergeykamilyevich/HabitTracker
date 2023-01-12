@@ -13,7 +13,6 @@ import com.example.habittracker.core_api.domain.repositories.DbHabitRepository
 import com.example.habittracker.core_api.domain.repositories.SyncHabitRepository
 import javax.inject.Inject
 
-//@Singleton
 class SyncHabitRepositoryImpl @Inject constructor(
     private val dbHabitRepository: DbHabitRepository,
     private val cloudHabitRepository: CloudHabitRepository

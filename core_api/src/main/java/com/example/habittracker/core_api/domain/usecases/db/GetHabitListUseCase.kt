@@ -7,7 +7,6 @@ import com.example.habittracker.core_api.domain.repositories.DbHabitRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-//@Singleton
 class GetHabitListUseCase @Inject constructor(
     private val dbHabitRepository: DbHabitRepository
 ) {

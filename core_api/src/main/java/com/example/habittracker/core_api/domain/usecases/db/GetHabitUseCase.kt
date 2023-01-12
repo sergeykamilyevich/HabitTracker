@@ -6,7 +6,6 @@ import com.example.habittracker.core_api.domain.models.Habit
 import com.example.habittracker.core_api.domain.repositories.DbHabitRepository
 import javax.inject.Inject
 
-//@Singleton
 class GetHabitUseCase @Inject constructor(
     private val dbHabitRepository: DbHabitRepository
 ) {
