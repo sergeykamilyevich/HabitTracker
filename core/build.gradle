@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace 'com.example.habittracker.core_api'
+    namespace 'com.example.habittracker.core'
     compileSdk 33
 
     defaultConfig {
@@ -28,22 +28,15 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
-        freeCompilerArgs += '-opt-in=kotlin.RequiresOptIn'
     }
-    testOptions {
-        unitTests.all {
-            useJUnitPlatform()
-        }
-        unitTests {
-            returnDefaultValues = true
-            includeAndroidResources = true
-        }
-    }
-
 }
 
 apply from: "$project.rootDir/scripts/deps_versions.gradle"
 dependencies {
+
+    //Modules
+    implementation project(path: ':core_impl')
+    api project(path: ':core_api')
 
     //Core
     implementation android_core
@@ -52,8 +45,4 @@ dependencies {
     //DI
     implementation dagger_impl.values()
     kapt dagger_kapt
-
-    //Tests
-    testImplementation tests.values()
-    testImplementation dagger_impl.values()
 }
