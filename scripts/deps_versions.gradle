@@ -65,6 +65,6 @@ ext {
             'core'              : "androidx.test:core:1.4.0",
             'core-ktx'          : "androidx.test:core-ktx:1.4.0",
             'runner'            : "androidx.test:runner:1.4.0",
-            'robolectric'       : "org.robolectric:robolectric:4.8.1"
+            'robolectric'       : "org.robolectric:robolectric:4.9.2"
     ]
 }
