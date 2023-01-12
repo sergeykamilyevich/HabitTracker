@@ -57,6 +57,7 @@ dependencies {
 
     //Modules
     implementation project(path: ':ui_kit')
+    implementation project(path: ':feature_habit_filter_api')
     implementation project(path: ':core_api')
     implementation project(path: ':network_api')
     implementation project(path: ':db_api')
