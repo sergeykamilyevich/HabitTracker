@@ -29,6 +29,15 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+        }
+        unitTests {
+            returnDefaultValues = true
+            includeAndroidResources = true
+        }
+    }
 }
 
 apply from: "$project.rootDir/scripts/deps_versions.gradle"
@@ -52,4 +61,5 @@ dependencies {
 
     //Tests
     testImplementation tests.values()
+    testImplementation dagger_impl.values()
 }

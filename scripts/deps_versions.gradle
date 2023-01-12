@@ -7,6 +7,9 @@ ext {
     okhttp3_version = '4.9.3'
     glide_version = '4.13.0'
     coroutines_version = '1.6.3'
+    androidx_test_ext_junit_version = '1.1.5'
+    androidx_test_version = '1.5.0'
+    mockito_version = '4.5.1'
 
     android_core = "androidx.core:core-ktx:1.9.0"
     appcompat = "androidx.appcompat:appcompat:1.5.1"
@@ -53,18 +56,18 @@ ext {
     tests = [
             'junit'             : 'junit:junit:4.13.2',
             'jupiter'           : 'org.junit.jupiter:junit-jupiter:5.8.2',
-            'mockito-core'      : "org.mockito:mockito-core:4.5.1",
-            'mockito-inline'    : "org.mockito:mockito-inline:4.5.1",
+            'mockito-core'      : "org.mockito:mockito-core:$mockito_version",
+            'mockito-inline'    : "org.mockito:mockito-inline:$mockito_version",
             'mockito-kotlin'    : "org.mockito.kotlin:mockito-kotlin:4.0.0",
             'core-testing'      : "androidx.arch.core:core-testing:2.1.0",
             'truth'             : "com.google.truth:truth:1.1.3",
             'coroutines-test'   : "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.3",
-            'test_ext_junit'    : "androidx.test.ext:junit:1.1.3",
-            'test_ext_junit-ktx': "androidx.test.ext:junit-ktx:1.1.3",
-            'test_ext_truth'    : 'androidx.test.ext:truth:1.4.0',
-            'core'              : "androidx.test:core:1.4.0",
-            'core-ktx'          : "androidx.test:core-ktx:1.4.0",
-            'runner'            : "androidx.test:runner:1.4.0",
+            'test_ext_junit'    : "androidx.test.ext:junit:$androidx_test_ext_junit_version",
+            'test_ext_junit-ktx': "androidx.test.ext:junit-ktx:$androidx_test_ext_junit_version",
+            'test_ext_truth'    : "androidx.test.ext:truth:$androidx_test_version",
+            'core'              : "androidx.test:core:$androidx_test_version",
+            'core-ktx'          : "androidx.test:core-ktx:$androidx_test_version",
+            'runner'            : "androidx.test:runner:1.5.2",
             'robolectric'       : "org.robolectric:robolectric:4.9.2"
     ]
 }

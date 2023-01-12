@@ -33,9 +33,9 @@ android {
 
 apply from: "$project.rootDir/scripts/deps_versions.gradle"
 dependencies {
-    implementation project(path: ':core_api')
 
     //Modules
+    implementation project(path: ':core_api')
 
     //Core
     implementation android_core
