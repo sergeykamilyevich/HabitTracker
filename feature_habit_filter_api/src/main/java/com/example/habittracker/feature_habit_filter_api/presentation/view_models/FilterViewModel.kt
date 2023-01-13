@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import com.example.habittracker.core_api.domain.models.HabitListFilter
 import com.example.habittracker.core_api.domain.models.HabitListOrderBy
 
-interface BottomSheetViewModel {
+interface FilterViewModel {
 
     val habitListFilter: LiveData<HabitListFilter>
 

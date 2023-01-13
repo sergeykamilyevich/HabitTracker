@@ -2,6 +2,7 @@ package com.example.habittracker.feature_habits.presentation.view_models
 
 import android.util.Log
 import androidx.lifecycle.*
+import com.example.habittracker.cloud_sync.domain.usecases.interfaces.SyncUseCase
 import com.example.habittracker.core_api.di.annotations.FeatureScope
 import com.example.habittracker.core_api.domain.errors.Either
 import com.example.habittracker.core_api.domain.errors.Either.Failure
@@ -9,11 +10,10 @@ import com.example.habittracker.core_api.domain.errors.Either.Success
 import com.example.habittracker.core_api.domain.errors.IoError
 import com.example.habittracker.core_api.domain.errors.IoError.*
 import com.example.habittracker.core_api.domain.models.*
-import com.example.habittracker.core_api.domain.usecases.common.SyncUseCase
 import com.example.habittracker.core_api.domain.usecases.db.DbUseCase
 import com.example.habittracker.core_api.domain.usecases.network.CloudUseCase
 import com.example.habittracker.feature_habit_filter_api.di.mediators.HabitFilterMediator
-import com.example.habittracker.feature_habit_filter_api.presentation.view_models.BottomSheetViewModel
+import com.example.habittracker.feature_habit_filter_api.presentation.view_models.FilterViewModel
 import com.example.habittracker.feature_habits.presentation.models.AddHabitSnackBarData
 import com.example.habittracker.ui_kit.R
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -36,8 +36,8 @@ class MainViewModel @Inject constructor(
 //        compareCloudAndDb() //TODO where should it be?
     }
 
-    private val bottomSheetViewModel: BottomSheetViewModel by lazy {
-        habitFilterMediator.getBottomSheetViewModel()
+    private val filterViewModel: FilterViewModel by lazy {
+        habitFilterMediator.filterViewModel()
     }
 
     private val _showSnackbarHabitDone = MutableLiveData<Event<AddHabitSnackBarData>>()
@@ -198,7 +198,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun getHabitList(habitTypeFilter: HabitType?) {
-        habitList = Transformations.switchMap(bottomSheetViewModel.habitListFilter) {
+        habitList = Transformations.switchMap(filterViewModel.habitListFilter) {
             dbUseCase.getHabitListUseCase.invoke(habitTypeFilter, it).asLiveData()
         }
     }

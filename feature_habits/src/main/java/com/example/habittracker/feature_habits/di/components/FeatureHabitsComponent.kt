@@ -1,10 +1,10 @@
 package com.example.habittracker.feature_habits.di.components
 
 import android.app.Application
+import com.example.habittracker.cloud_sync.di.modules.CloudSyncModule
 import com.example.habittracker.core_api.di.annotations.FeatureScope
 import com.example.habittracker.core_api.di.mediators.CoreFacadeComponentProviders
 import com.example.habittracker.db_api.di.mediators.DbFacadeComponentProviders
-import com.example.habittracker.feature_habits.data.di.modules.DataModule
 import com.example.habittracker.feature_habits.di.modules.FeatureHabitsModule
 import com.example.habittracker.feature_habits.presentation.ui.BottomSheetFragment
 import com.example.habittracker.feature_habits.presentation.ui.HabitListFragment
@@ -18,11 +18,11 @@ import dagger.Component
     dependencies = [
         CoreFacadeComponentProviders::class,
         NetworkFacadeComponentProviders::class,
-        DbFacadeComponentProviders::class
+        DbFacadeComponentProviders::class,
     ],
     modules = [
-        DataModule::class,
-        FeatureHabitsModule::class
+        FeatureHabitsModule::class,
+        CloudSyncModule::class
     ]
 )
 interface FeatureHabitsComponent {

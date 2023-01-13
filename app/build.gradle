@@ -66,6 +66,7 @@ dependencies {
     implementation project(path: ':core')
     implementation project(path: ':network')
     implementation project(path: ':db')
+    implementation project(path: ':cloud_sync')
 
     //Core
     implementation android_core

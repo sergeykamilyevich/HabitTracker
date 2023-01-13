@@ -7,13 +7,11 @@ import androidx.lifecycle.ViewModel
 import com.example.habittracker.core_api.di.annotations.ApplicationScope
 import com.example.habittracker.core_api.domain.models.HabitListFilter
 import com.example.habittracker.core_api.domain.models.HabitListOrderBy
-import com.example.habittracker.feature_habit_filter_api.presentation.view_models.BottomSheetViewModel
+import com.example.habittracker.feature_habit_filter_api.presentation.view_models.FilterViewModel
 import javax.inject.Inject
 
 @ApplicationScope
-class BottomSheetViewModelImpl @Inject constructor(
-
-) : ViewModel(), BottomSheetViewModel {
+class FilterViewModelImpl @Inject constructor() : ViewModel(), FilterViewModel {
 
     private var currentHabitListFilter: HabitListFilter = HabitListFilter(HabitListOrderBy.NAME_ASC, "")
 

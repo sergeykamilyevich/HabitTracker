@@ -1,4 +1,4 @@
-package com.example.habittracker.core_api.domain.usecases.common
+package com.example.habittracker.cloud_sync.domain.usecases.impls
 
 import com.example.habittracker.core_api.domain.errors.Either
 import com.example.habittracker.core_api.domain.errors.Either.Failure
@@ -8,15 +8,16 @@ import com.example.habittracker.core_api.domain.errors.failure
 import com.example.habittracker.core_api.domain.errors.success
 import com.example.habittracker.core_api.domain.usecases.db.DbUseCase
 import com.example.habittracker.core_api.domain.usecases.network.CloudUseCase
+import com.example.habittracker.cloud_sync.domain.usecases.interfaces.SyncAllToCloudUseCase
 import javax.inject.Inject
 
-class SyncAllToCloudUseCase @Inject constructor(
+class SyncAllToCloudUseCaseImpl @Inject constructor(
     private val dbUseCase: DbUseCase,
     private val cloudUseCase: CloudUseCase,
-    private val uploadAllToCloudUseCase: UploadAllToCloudUseCase
-) {
+    private val uploadAllToCloudUseCase: UploadAllToCloudUseCaseImpl
+) : SyncAllToCloudUseCase {
 
-    suspend operator fun invoke(): Either<IoError, Unit> {
+    override suspend operator fun invoke(): Either<IoError, Unit> {
         val habitList = dbUseCase.getUnfilteredHabitListUseCase.invoke()
         return when (habitList) {
             is Success -> {

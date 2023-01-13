@@ -1,15 +1,16 @@
-package com.example.habittracker.core_api.domain.usecases.common
+package com.example.habittracker.cloud_sync.domain.usecases.impls
 
 import com.example.habittracker.core_api.domain.errors.Either
 import com.example.habittracker.core_api.domain.errors.IoError
 import com.example.habittracker.core_api.domain.models.Habit
 import com.example.habittracker.core_api.domain.repositories.SyncHabitRepository
+import com.example.habittracker.cloud_sync.domain.usecases.interfaces.UploadAllToCloudUseCase
 import javax.inject.Inject
 
-class UploadAllToCloudUseCase @Inject constructor(
+class UploadAllToCloudUseCaseImpl @Inject constructor(
     private val syncHabitRepository: SyncHabitRepository,
-) {
+) : UploadAllToCloudUseCase {
 
-    suspend operator fun invoke(habitList: List<Habit>): Either<IoError, Unit> =
+    override suspend operator fun invoke(habitList: List<Habit>): Either<IoError, Unit> =
         syncHabitRepository.uploadAllToCloud(habitList)
 }

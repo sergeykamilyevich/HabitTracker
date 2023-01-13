@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.habittracker.cloud_sync.domain.usecases.interfaces.SyncUseCase
 import com.example.habittracker.core_api.domain.errors.Either
 import com.example.habittracker.core_api.domain.errors.Either.Failure
 import com.example.habittracker.core_api.domain.errors.Either.Success
@@ -15,9 +16,8 @@ import com.example.habittracker.core_api.domain.models.Habit
 import com.example.habittracker.core_api.domain.models.HabitPriority
 import com.example.habittracker.core_api.domain.models.HabitType
 import com.example.habittracker.core_api.domain.models.Time
-import com.example.habittracker.feature_habits.di.annotations.HabitItemViewModelScope
-import com.example.habittracker.core_api.domain.usecases.common.SyncUseCase
 import com.example.habittracker.core_api.domain.usecases.db.DbUseCase
+import com.example.habittracker.feature_habits.di.annotations.HabitItemViewModelScope
 import com.example.habittracker.feature_habits.presentation.color.ColorPicker
 import com.example.habittracker.feature_habits.presentation.mappers.HabitItemMapper
 import kotlinx.coroutines.launch
