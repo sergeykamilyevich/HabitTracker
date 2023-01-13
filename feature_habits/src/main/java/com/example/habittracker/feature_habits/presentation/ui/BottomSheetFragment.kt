@@ -10,8 +10,9 @@ import android.widget.Button
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.example.habittracker.core_api.domain.models.HabitListOrderBy
+import com.example.habittracker.feature_habit_filter_api.di.mediators.HabitFilterMediator
+import com.example.habittracker.feature_habit_filter_api.presentation.view_models.BottomSheetViewModel
 import com.example.habittracker.feature_habits.databinding.FragmentBottomSheetBinding
-import com.example.habittracker.feature_habits.presentation.view_models.MainViewModel
 import javax.inject.Inject
 
 class BottomSheetFragment : Fragment() {
@@ -23,7 +24,11 @@ class BottomSheetFragment : Fragment() {
     private lateinit var buttons: ArrayList<Button>
 
     @Inject
-    lateinit var viewModel: MainViewModel
+    lateinit var habitFilterMediator: HabitFilterMediator
+
+    private val bottomSheetViewModel: BottomSheetViewModel by lazy {
+        habitFilterMediator.getBottomSheetViewModel()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,11 +69,11 @@ class BottomSheetFragment : Fragment() {
                 setHabitListOrderByFromSelectedButton(button)
             }
         }
-        if (viewModel.habitListFilter.value == null) {
+        if (bottomSheetViewModel.habitListFilter.value == null) {
             setUpDefaultButtonsState()
         } else {
             setUpSelectedButtonFromHabitListOrderBy(
-                viewModel.habitListFilter.value?.orderBy ?: HabitListOrderBy.NAME_ASC
+                bottomSheetViewModel.habitListFilter.value?.orderBy ?: HabitListOrderBy.NAME_ASC
             )
         }
     }
@@ -81,7 +86,7 @@ class BottomSheetFragment : Fragment() {
 
     private fun setUpBottomSheetTied() {
         binding.tiedSearch.addTextChangedListener {
-            viewModel.updateSearch(it)
+            bottomSheetViewModel.updateSearch(it)
         }
     }
 
@@ -97,7 +102,7 @@ class BottomSheetFragment : Fragment() {
                 else -> throw RuntimeException("Unknown button: ${button.id}")
             }
         }
-        viewModel.updateHabitListOrderBy(habitListOrderBy)
+        bottomSheetViewModel.updateHabitListOrderBy(habitListOrderBy)
     }
 
     private fun setUpSelectedButtonFromHabitListOrderBy(habitListOrderBy: HabitListOrderBy) {

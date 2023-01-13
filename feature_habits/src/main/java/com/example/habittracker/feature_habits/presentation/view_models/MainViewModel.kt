@@ -1,6 +1,5 @@
 package com.example.habittracker.feature_habits.presentation.view_models
 
-import android.text.Editable
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.habittracker.core_api.di.annotations.FeatureScope
@@ -13,6 +12,8 @@ import com.example.habittracker.core_api.domain.models.*
 import com.example.habittracker.core_api.domain.usecases.common.SyncUseCase
 import com.example.habittracker.core_api.domain.usecases.db.DbUseCase
 import com.example.habittracker.core_api.domain.usecases.network.CloudUseCase
+import com.example.habittracker.feature_habit_filter_api.di.mediators.HabitFilterMediator
+import com.example.habittracker.feature_habit_filter_api.presentation.view_models.BottomSheetViewModel
 import com.example.habittracker.feature_habits.presentation.models.AddHabitSnackBarData
 import com.example.habittracker.ui_kit.R
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -27,6 +28,7 @@ class MainViewModel @Inject constructor(
     private val cloudUseCase: CloudUseCase,
     private val syncUseCase: SyncUseCase,
     private val resources: Resources,
+    private val habitFilterMediator: HabitFilterMediator
 ) : ViewModel() {
 
     init {
@@ -34,9 +36,9 @@ class MainViewModel @Inject constructor(
 //        compareCloudAndDb() //TODO where should it be?
     }
 
-    private val _habitListFilter = MutableLiveData<HabitListFilter>()
-    val habitListFilter: LiveData<HabitListFilter>
-        get() = _habitListFilter
+    private val bottomSheetViewModel: BottomSheetViewModel by lazy {
+        habitFilterMediator.getBottomSheetViewModel()
+    }
 
     private val _showSnackbarHabitDone = MutableLiveData<Event<AddHabitSnackBarData>>()
     val showSnackbarHabitDone: LiveData<Event<AddHabitSnackBarData>>
@@ -55,8 +57,6 @@ class MainViewModel @Inject constructor(
         get() = _ioError
 
     private var isHabitDoneButtonsBlocked: Boolean = false
-
-    private var currentHabitListFilter = HabitListFilter(HabitListOrderBy.NAME_ASC, "")
 
     lateinit var habitList: LiveData<List<Habit>>
 
@@ -198,19 +198,9 @@ class MainViewModel @Inject constructor(
     }
 
     fun getHabitList(habitTypeFilter: HabitType?) {
-        habitList = Transformations.switchMap(habitListFilter) {
+        habitList = Transformations.switchMap(bottomSheetViewModel.habitListFilter) {
             dbUseCase.getHabitListUseCase.invoke(habitTypeFilter, it).asLiveData()
         }
-    }
-
-    fun updateHabitListOrderBy(habitListOrderBy: HabitListOrderBy) {
-        currentHabitListFilter.orderBy = habitListOrderBy
-        _habitListFilter.value = currentHabitListFilter
-    }
-
-    fun updateSearch(input: Editable?) {
-        currentHabitListFilter.search = input?.toString() ?: EMPTY_STRING
-        _habitListFilter.value = currentHabitListFilter
     }
 
     fun uploadAllHabitsFromDbToCloud() {
@@ -274,7 +264,6 @@ class MainViewModel @Inject constructor(
     }
 
     companion object {
-        private const val EMPTY_STRING = ""
         private const val EMPTY_CODE_STRING = ""
         private const val UNKNOWN_CODE = 0
     }
