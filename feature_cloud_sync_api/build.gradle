@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace 'com.example.habittracker.feature_sync'
+    namespace 'com.example.habittracker.feature_cloud_sync_api'
     compileSdk 33
 
     defaultConfig {
@@ -34,17 +34,14 @@ android {
 apply from: "$project.rootDir/scripts/deps_versions.gradle"
 dependencies {
 
-    implementation project(path: ":network_api")
-    implementation project(path: ':core_api')
+    //Modules
+    implementation project(path: ':core')
+
+    //Core
+    implementation android_core
+    implementation appcompat
 
     //DI
-    implementation "com.google.dagger:dagger:$dagger_version"
-    kapt "com.google.dagger:dagger-compiler:$dagger_version"
-
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.google.android.material:material:1.7.0'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    implementation dagger_impl.values()
+    kapt dagger_kapt
 }

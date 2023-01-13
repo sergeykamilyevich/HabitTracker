@@ -1,0 +1,48 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+}
+
+android {
+    namespace 'com.example.habittracker.feature_cloud_sync_impl'
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 26
+        targetSdk 33
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+apply from: "$project.rootDir/scripts/deps_versions.gradle"
+dependencies {
+
+    //Modules
+    implementation project(path: ':core')
+    implementation project(path: ':feature_cloud_sync_api')
+
+    //Core
+    implementation android_core
+    implementation appcompat
+
+    //DI
+    implementation dagger_impl.values()
+    kapt dagger_kapt
+}

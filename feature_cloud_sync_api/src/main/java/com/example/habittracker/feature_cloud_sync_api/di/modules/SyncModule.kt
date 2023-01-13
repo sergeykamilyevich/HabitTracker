@@ -1,4 +1,4 @@
-package com.example.habittracker.feature_sync.di.modules
+package com.example.habittracker.feature_cloud_sync_api.di.modules
 
 import dagger.Module
 
