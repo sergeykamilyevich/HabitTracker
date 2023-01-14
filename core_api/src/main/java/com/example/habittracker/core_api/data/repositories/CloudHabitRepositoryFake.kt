@@ -11,7 +11,7 @@ import com.example.habittracker.core_api.domain.models.HabitType
 import com.example.habittracker.core_api.domain.repositories.CloudHabitRepository
 import kotlinx.coroutines.runBlocking
 
-class CloudHabitRepositoryFake :
+class CloudHabitRepositoryFake : //TODO remove to network module
     CloudHabitRepository {
 
     private val habits = mutableListOf<Habit>()

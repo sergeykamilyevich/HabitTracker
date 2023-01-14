@@ -1,8 +1,9 @@
-package com.example.habittracker.core_api.domain.usecases.db
+package com.example.habittracker.db_impl.domain.usecases
 
-import com.example.habittracker.core_api.data.repositories.DbHabitRepositoryFake
+import com.example.habittracker.db_impl.data.repositories.DbHabitRepositoryFake
 import com.example.habittracker.core_api.domain.errors.Either
 import com.example.habittracker.core_api.domain.models.HabitDone
+import com.example.habittracker.db_api.domain.usecases.DeleteHabitDoneUseCase
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -18,9 +19,8 @@ internal class DeleteHabitDoneUseCaseTest {
 
     @BeforeEach
     fun setUp() {
-        dbHabitRepositoryFake =
-            DbHabitRepositoryFake()
-        deleteHabitDoneUseCase = DeleteHabitDoneUseCase(dbHabitRepositoryFake)
+        dbHabitRepositoryFake = DbHabitRepositoryFake()
+        deleteHabitDoneUseCase = DeleteHabitDoneUseCaseImpl(dbHabitRepositoryFake)
         habitDoneToInsert = dbHabitRepositoryFake.habitDoneToInsert
     }
 

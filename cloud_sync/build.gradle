@@ -6,11 +6,11 @@ plugins {
 
 android {
     namespace 'com.example.habittracker.cloud_sync'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         minSdk 26
-        targetSdk 32
+        targetSdk 33
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -35,7 +35,9 @@ apply from: "$project.rootDir/scripts/deps_versions.gradle"
 dependencies {
 
     //Modules
-    implementation project(path: ':core_api')
+    implementation project(path: ':core')
+    implementation project(path: ':db')
+    implementation project(path: ':network')
 
     //Core
     implementation android_core

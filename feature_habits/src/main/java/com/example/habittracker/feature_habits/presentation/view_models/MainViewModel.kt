@@ -10,8 +10,8 @@ import com.example.habittracker.core_api.domain.errors.Either.Success
 import com.example.habittracker.core_api.domain.errors.IoError
 import com.example.habittracker.core_api.domain.errors.IoError.*
 import com.example.habittracker.core_api.domain.models.*
-import com.example.habittracker.core_api.domain.usecases.db.DbUseCase
 import com.example.habittracker.core_api.domain.usecases.network.CloudUseCase
+import com.example.habittracker.db_api.domain.usecases.DbUseCase
 import com.example.habittracker.feature_habit_filter_api.di.mediators.HabitFilterMediator
 import com.example.habittracker.feature_habit_filter_api.presentation.view_models.FilterViewModel
 import com.example.habittracker.feature_habits.presentation.models.AddHabitSnackBarData

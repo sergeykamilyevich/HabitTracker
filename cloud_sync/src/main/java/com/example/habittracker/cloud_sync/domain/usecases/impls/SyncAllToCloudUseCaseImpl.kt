@@ -1,14 +1,14 @@
 package com.example.habittracker.cloud_sync.domain.usecases.impls
 
+import com.example.habittracker.cloud_sync.domain.usecases.interfaces.SyncAllToCloudUseCase
 import com.example.habittracker.core_api.domain.errors.Either
 import com.example.habittracker.core_api.domain.errors.Either.Failure
 import com.example.habittracker.core_api.domain.errors.Either.Success
 import com.example.habittracker.core_api.domain.errors.IoError
 import com.example.habittracker.core_api.domain.errors.failure
 import com.example.habittracker.core_api.domain.errors.success
-import com.example.habittracker.core_api.domain.usecases.db.DbUseCase
 import com.example.habittracker.core_api.domain.usecases.network.CloudUseCase
-import com.example.habittracker.cloud_sync.domain.usecases.interfaces.SyncAllToCloudUseCase
+import com.example.habittracker.db_api.domain.usecases.DbUseCase
 import javax.inject.Inject
 
 class SyncAllToCloudUseCaseImpl @Inject constructor(

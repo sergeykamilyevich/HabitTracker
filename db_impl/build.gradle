@@ -45,7 +45,7 @@ dependencies {
 
     //Modules
     api project(path: ':db_api')
-    implementation project(path: ':core_api')
+    implementation project(path: ':core') //TODO or core-api?
 
     //Core
     implementation android_core
