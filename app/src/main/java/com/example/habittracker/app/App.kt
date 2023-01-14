@@ -4,11 +4,12 @@ import android.app.Application
 import com.example.habittracker.di.components.CoreFacadeComponent
 import com.example.habittracker.di.components.DbFacadeComponent
 import com.example.habittracker.di.components.NetworkFacadeComponent
+import com.example.habittracker.feature_habit_filter_api.di.components.DaggerFeatureHabitFilterComponent
+import com.example.habittracker.feature_habit_filter_api.di.components.FeatureHabitFilterComponent
 import com.example.habittracker.feature_habits.di.components.DaggerFeatureHabitsComponent
 import com.example.habittracker.feature_habits.di.components.FeatureHabitsComponent
-import com.example.habittracker.feature_habits.di.components.FeatureHabitsComponentProvider
 
-class App : Application(), FeatureHabitsComponentProvider, AppWithFacade {
+class App : Application(), FeatureComponentsProvider, AppWithFacade {
 
     override val coreFacadeComponent: CoreFacadeComponent by lazy {
         CoreFacadeComponent.init()
@@ -33,4 +34,14 @@ class App : Application(), FeatureHabitsComponentProvider, AppWithFacade {
             )
     }
 
+    override val featureHabitFilterComponent: FeatureHabitFilterComponent by lazy {
+        DaggerFeatureHabitFilterComponent
+            .factory()
+            .create(
+                application = this,
+                coreFacadeComponentProviders = coreFacadeComponent,
+                networkFacadeComponentProviders = networkFacadeComponent,
+                dbFacadeComponentProviders = dbFacadeComponent
+            )
+    }
 }

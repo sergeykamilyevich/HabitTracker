@@ -17,13 +17,12 @@ import com.example.habittracker.core_api.domain.models.HabitPriority
 import com.example.habittracker.core_api.domain.models.HabitType
 import com.example.habittracker.core_api.domain.models.Time
 import com.example.habittracker.db_api.domain.usecases.DbUseCase
-import com.example.habittracker.feature_habits.di.annotations.HabitItemViewModelScope
 import com.example.habittracker.feature_habits.presentation.color.ColorPicker
 import com.example.habittracker.feature_habits.presentation.mappers.HabitItemMapper
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HabitItemViewModelScope
+//@HabitItemViewModelScope
 class HabitItemViewModel @Inject constructor(
     private val mapper: HabitItemMapper,
     private val mainViewModel: MainViewModel,
@@ -32,10 +31,6 @@ class HabitItemViewModel @Inject constructor(
     private val dbUseCase: DbUseCase,
     private val syncUseCase: SyncUseCase
 ) : ViewModel() {
-
-    init {
-        Log.d("99999", "HabitItemViewModel $this")
-    }
 
     private val _errorInputName = MutableLiveData<Boolean>()
     val errorInputName: LiveData<Boolean>

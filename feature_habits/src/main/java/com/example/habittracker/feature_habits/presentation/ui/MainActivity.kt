@@ -1,7 +1,6 @@
 package com.example.habittracker.feature_habits.presentation.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -16,12 +15,12 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.bumptech.glide.Glide
-import com.example.habittracker.core_api.R.*
+import com.example.habittracker.core_api.R.id
+import com.example.habittracker.core_api.R.menu
 import com.example.habittracker.feature_habits.R
 import com.example.habittracker.feature_habits.databinding.ActivityMainBinding
 import com.example.habittracker.feature_habits.di.components.FeatureHabitsComponent
 import com.example.habittracker.feature_habits.di.components.FeatureHabitsComponentProvider
-import com.example.habittracker.feature_habits.di.components.getComponent
 import com.example.habittracker.feature_habits.presentation.view_models.MainViewModel
 import com.example.habittracker.ui_kit.R.drawable
 import com.example.habittracker.ui_kit.R.string
@@ -36,9 +35,7 @@ class MainActivity : AppCompatActivity() {
     private var currentFragment: Fragment? = null
 
     val featureHabitsComponent: FeatureHabitsComponent by lazy {
-        getComponent {
-            (application as FeatureHabitsComponentProvider).featureHabitsComponent
-        }
+        (application as FeatureHabitsComponentProvider).featureHabitsComponent
     }
 
     @Inject
@@ -60,7 +57,6 @@ class MainActivity : AppCompatActivity() {
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("99999", "MainActivity $this")
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentListener, true)
         setUpFeatureHabitsComponent()
         super.onCreate(savedInstanceState)

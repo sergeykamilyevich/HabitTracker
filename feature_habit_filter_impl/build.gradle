@@ -36,7 +36,9 @@ dependencies {
 
     //Modules
     implementation project(path: ':feature_habit_filter_api')
-    implementation project(path: ':core_api')
+    implementation project(path: ':core')
+    implementation project(path: ':network')
+    implementation project(path: ':db')
 
     //Core
     implementation android_core

@@ -22,6 +22,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    buildFeatures {
+        viewBinding true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -36,10 +41,18 @@ dependencies {
 
     //Modules
     implementation project(path: ':core')
+    implementation project(path: ':ui_kit')
+    implementation project(path: ':core_api') //TODO delete api?
+    implementation project(path: ':network_api')
+    implementation project(path: ':db_api')
+    implementation project(path: ':viewmodels')
 
     //Core
     implementation android_core
     implementation appcompat
+
+    //UI
+    implementation material
 
     //DI
     implementation dagger_impl.values()

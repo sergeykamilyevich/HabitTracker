@@ -21,7 +21,6 @@ import com.example.habittracker.core_api.domain.models.HabitType
 import com.example.habittracker.core_api.domain.models.Time
 import com.example.habittracker.feature_habits.R.layout
 import com.example.habittracker.feature_habits.databinding.FragmentHabitItemBinding
-import com.example.habittracker.feature_habits.di.components.getComponent
 import com.example.habittracker.feature_habits.presentation.color.ColorPicker
 import com.example.habittracker.feature_habits.presentation.mappers.HabitItemMapper
 import com.example.habittracker.feature_habits.presentation.models.ColorRgbHsv
@@ -74,12 +73,11 @@ class HabitItemFragment : Fragment(), HasTitle {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        getComponent {
-            (activity as MainActivity)
-                .featureHabitsComponent
-                .habitItemFragmentComponentFactory()
-                .create()
-        }.inject(this)
+        (activity as MainActivity)
+            .featureHabitsComponent
+            .habitItemFragmentComponentFactory()
+            .create()
+            .inject(this)
     }
 
     override fun onCreateView(

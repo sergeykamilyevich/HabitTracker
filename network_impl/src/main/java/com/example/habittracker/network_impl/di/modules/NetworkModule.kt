@@ -1,6 +1,5 @@
 package com.example.habittracker.network_impl.di.modules
 
-import android.util.Log
 import com.example.habittracker.core_api.di.annotations.ApplicationScope
 import com.example.habittracker.core_api.domain.errors.IoErrorFlow
 import com.example.habittracker.core_api.domain.repositories.CloudHabitRepository
@@ -29,7 +28,6 @@ interface NetworkModule {
 
         @[ApplicationScope Provides]
         fun provideOkHttpClient(apiInterceptor: ApiInterceptor): OkHttpClient {
-            Log.d("99999", "create OkHttpClient")
             val loggingInterceptor = HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             }
@@ -41,7 +39,6 @@ interface NetworkModule {
 
         @[ApplicationScope Provides]
         fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-            Log.d("99999", "create Retrofit")
             val converterFactory = GsonConverterFactory.create()
             return Retrofit.Builder()
                 .baseUrl(BASE_URL)

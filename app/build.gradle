@@ -67,6 +67,7 @@ dependencies {
     implementation project(path: ':network')
     implementation project(path: ':db')
     implementation project(path: ':cloud_sync')
+    implementation project(path: ':viewmodels')
 
     //Core
     implementation android_core

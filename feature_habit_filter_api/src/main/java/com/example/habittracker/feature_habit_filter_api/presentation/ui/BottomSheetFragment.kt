@@ -1,4 +1,4 @@
-package com.example.habittracker.feature_habits.presentation.ui
+package com.example.habittracker.feature_habit_filter_api.presentation.ui
 
 import android.content.Context
 import android.os.Bundle
@@ -10,9 +10,9 @@ import android.widget.Button
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.example.habittracker.core_api.domain.models.HabitListOrderBy
-import com.example.habittracker.feature_habit_filter_api.di.mediators.HabitFilterMediator
-import com.example.habittracker.feature_habit_filter_api.presentation.view_models.FilterViewModel
-import com.example.habittracker.feature_habits.databinding.FragmentBottomSheetBinding
+import com.example.habittracker.feature_habit_filter_api.databinding.FragmentBottomSheetBinding
+import com.example.habittracker.feature_habit_filter_api.di.components.FeatureHabitFilterComponentProvider
+import com.example.habittracker.viewmodels.presentation.FilterViewModel
 import javax.inject.Inject
 
 class BottomSheetFragment : Fragment() {
@@ -24,24 +24,23 @@ class BottomSheetFragment : Fragment() {
     private lateinit var buttons: ArrayList<Button>
 
     @Inject
-    lateinit var habitFilterMediator: HabitFilterMediator
-
-    private val filterViewModel: FilterViewModel by lazy {
-        habitFilterMediator.filterViewModel()
-    }
+    lateinit var filterViewModel: FilterViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
-        Log.d("99999", "BottomSheetFragment $this")
+//        Log.d("99999", "BottomSheetFragment $this")
+        Log.d("99999", "BottomSheetFragment filterViewModel ${filterViewModel}")
         _binding = FragmentBottomSheetBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        (activity as MainActivity).featureHabitsComponent.inject(this)
+        (requireActivity().application as FeatureHabitFilterComponentProvider)
+            .featureHabitFilterComponent
+            .inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

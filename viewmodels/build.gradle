@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace 'com.example.habittracker.cloud_sync_api'
+    namespace 'com.example.habittracker.viewmodels'
     compileSdk 33
 
     defaultConfig {
@@ -35,9 +35,7 @@ apply from: "$project.rootDir/scripts/deps_versions.gradle"
 dependencies {
 
     //Modules
-    implementation project(path: ':core_api')
-    implementation project(path: ':db')
-    implementation project(path: ':network')
+    implementation project(path: ':core')
 
     //Core
     implementation android_core

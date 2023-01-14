@@ -9,13 +9,14 @@ import com.example.habittracker.core_api.domain.errors.Either.Failure
 import com.example.habittracker.core_api.domain.errors.Either.Success
 import com.example.habittracker.core_api.domain.errors.IoError
 import com.example.habittracker.core_api.domain.errors.IoError.*
-import com.example.habittracker.core_api.domain.models.*
+import com.example.habittracker.core_api.domain.models.Habit
+import com.example.habittracker.core_api.domain.models.HabitDone
+import com.example.habittracker.core_api.domain.models.HabitType
 import com.example.habittracker.core_api.domain.usecases.network.CloudUseCase
 import com.example.habittracker.db_api.domain.usecases.DbUseCase
-import com.example.habittracker.feature_habit_filter_api.di.mediators.HabitFilterMediator
-import com.example.habittracker.feature_habit_filter_api.presentation.view_models.FilterViewModel
 import com.example.habittracker.feature_habits.presentation.models.AddHabitSnackBarData
 import com.example.habittracker.ui_kit.R
+import com.example.habittracker.viewmodels.presentation.FilterViewModel
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
@@ -28,16 +29,11 @@ class MainViewModel @Inject constructor(
     private val cloudUseCase: CloudUseCase,
     private val syncUseCase: SyncUseCase,
     private val resources: Resources,
-    private val habitFilterMediator: HabitFilterMediator
+    private val filterViewModel: FilterViewModel,
 ) : ViewModel() {
 
     init {
-        Log.d("99999", "MainViewModel $this")
 //        compareCloudAndDb() //TODO where should it be?
-    }
-
-    private val filterViewModel: FilterViewModel by lazy {
-        habitFilterMediator.filterViewModel()
     }
 
     private val _showSnackbarHabitDone = MutableLiveData<Event<AddHabitSnackBarData>>()

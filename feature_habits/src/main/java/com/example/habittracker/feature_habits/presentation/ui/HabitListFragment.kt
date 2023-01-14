@@ -3,7 +3,6 @@ package com.example.habittracker.feature_habits.presentation.ui
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,7 +38,6 @@ class HabitListFragment : Fragment(), HasTitle {
     private var listMode: HabitTypeApp? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("99999", "HabitListFragment $this")
         super.onCreate(savedInstanceState)
         parseArguments()
     }

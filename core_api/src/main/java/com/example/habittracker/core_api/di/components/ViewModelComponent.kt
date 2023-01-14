@@ -1,4 +1,4 @@
-package com.example.habittracker.feature_habits.di.components
+package com.example.habittracker.core_api.di.components
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

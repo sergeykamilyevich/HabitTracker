@@ -1,7 +1,6 @@
 package com.example.habittracker.feature_habits.presentation.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +25,6 @@ class HabitListPagerFragment : Fragment(), HasTitle {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d("99999", "HabitListPagerFragment $this")
         _binding = FragmentHabitListPagerBinding.inflate(inflater, container, false)
         return binding.root
     }

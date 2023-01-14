@@ -59,9 +59,10 @@ dependencies {
     implementation project(path: ':ui_kit')
     implementation project(path: ':feature_habit_filter_api')
     implementation project(path: ':cloud_sync')
-    implementation project(path: ':core_api')
+    implementation project(path: ':core_api') //TODO delete api?
     implementation project(path: ':network_api')
     implementation project(path: ':db_api')
+    implementation project(path: ':viewmodels')
 
     //Core
     implementation android_core

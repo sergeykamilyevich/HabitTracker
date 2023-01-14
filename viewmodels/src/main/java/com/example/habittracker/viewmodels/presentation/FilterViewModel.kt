@@ -1,4 +1,4 @@
-package com.example.habittracker.feature_habit_filter_impl.presentation.view_models
+package com.example.habittracker.viewmodels.presentation
 
 import android.text.Editable
 import androidx.lifecycle.LiveData
@@ -7,24 +7,24 @@ import androidx.lifecycle.ViewModel
 import com.example.habittracker.core_api.di.annotations.ApplicationScope
 import com.example.habittracker.core_api.domain.models.HabitListFilter
 import com.example.habittracker.core_api.domain.models.HabitListOrderBy
-import com.example.habittracker.feature_habit_filter_api.presentation.view_models.FilterViewModel
 import javax.inject.Inject
 
 @ApplicationScope
-class FilterViewModelImpl @Inject constructor() : ViewModel(), FilterViewModel {
+class FilterViewModel @Inject constructor() : ViewModel()
+{
 
     private var currentHabitListFilter: HabitListFilter = HabitListFilter(HabitListOrderBy.NAME_ASC, "")
 
     private val _habitListFilter = MutableLiveData<HabitListFilter>()
-    override val habitListFilter: LiveData<HabitListFilter>
+    val habitListFilter: LiveData<HabitListFilter>
         get() = _habitListFilter
 
-    override fun updateSearch(input: Editable?) {
+    fun updateSearch(input: Editable?) {
         currentHabitListFilter.search = input?.toString() ?: EMPTY_STRING
         _habitListFilter.value = currentHabitListFilter
     }
 
-    override fun updateHabitListOrderBy(habitListOrderBy: HabitListOrderBy) {
+    fun updateHabitListOrderBy(habitListOrderBy: HabitListOrderBy) {
         currentHabitListFilter.orderBy = habitListOrderBy
         _habitListFilter.value = currentHabitListFilter
     }

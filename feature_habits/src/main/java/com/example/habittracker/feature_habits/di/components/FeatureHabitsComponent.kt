@@ -6,7 +6,6 @@ import com.example.habittracker.core_api.di.annotations.FeatureScope
 import com.example.habittracker.core_api.di.mediators.CoreFacadeComponentProviders
 import com.example.habittracker.db_api.di.mediators.DbFacadeComponentProviders
 import com.example.habittracker.feature_habits.di.modules.FeatureHabitsModule
-import com.example.habittracker.feature_habits.presentation.ui.BottomSheetFragment
 import com.example.habittracker.feature_habits.presentation.ui.HabitListFragment
 import com.example.habittracker.feature_habits.presentation.ui.MainActivity
 import com.example.habittracker.network_api.di.mediators.NetworkFacadeComponentProviders
@@ -37,8 +36,6 @@ interface FeatureHabitsComponent {
             dbFacadeComponentProviders: DbFacadeComponentProviders
         ): FeatureHabitsComponent
     }
-
-    fun inject(bottomSheetFragment: BottomSheetFragment)
 
     fun inject(habitListFragment: HabitListFragment)
 

@@ -1,4 +1,4 @@
-package com.example.habittracker.feature_habits.presentation.ui
+package com.example.habittracker.feature_habit_filter_api.presentation.ui
 
 import android.content.Context
 import android.graphics.Rect

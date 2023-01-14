@@ -36,6 +36,7 @@ dependencies {
 
     //Modules
     implementation project(path: ':core_api')
+    implementation project(path: ':viewmodels')
 
     //Core
     implementation android_core
