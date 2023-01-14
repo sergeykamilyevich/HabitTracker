@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     val featureHabitsComponent: FeatureHabitsComponent by lazy {
         getComponent {
-            (application as FeatureHabitsComponentProvider).featureHabitsComponent()
+            (application as FeatureHabitsComponentProvider).featureHabitsComponent
         }
     }
 
