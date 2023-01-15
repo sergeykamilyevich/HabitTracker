@@ -1,6 +1,7 @@
 package com.example.habittracker.cloud_sync.domain.usecases.impls
 
 import com.example.habittracker.cloud_sync.domain.usecases.interfaces.SyncAllToCloudUseCase
+import com.example.habittracker.cloud_sync.domain.usecases.interfaces.UploadAllToCloudUseCase
 import com.example.habittracker.core_api.domain.errors.Either
 import com.example.habittracker.core_api.domain.errors.Either.Failure
 import com.example.habittracker.core_api.domain.errors.Either.Success
@@ -14,7 +15,7 @@ import javax.inject.Inject
 class SyncAllToCloudUseCaseImpl @Inject constructor(
     private val dbUseCase: DbUseCase,
     private val cloudUseCase: CloudUseCase,
-    private val uploadAllToCloudUseCase: UploadAllToCloudUseCaseImpl
+    private val uploadAllToCloudUseCase: UploadAllToCloudUseCase
 ) : SyncAllToCloudUseCase {
 
     override suspend operator fun invoke(): Either<IoError, Unit> {

@@ -1,12 +1,19 @@
 package com.example.habittracker.cloud_sync.domain.usecases.interfaces
 
-interface SyncUseCase {
+import com.example.habittracker.core_api.domain.errors.Either
+import com.example.habittracker.core_api.domain.errors.IoError
+import com.example.habittracker.core_api.domain.models.Habit
+import javax.inject.Inject
 
-    val syncAllFromCloudUseCase: SyncAllFromCloudUseCase
+class SyncUseCase @Inject constructor(
+    val areCloudAndDbEqualUseCase: AreCloudAndDbEqualUseCase,
+    val syncAllToCloudUseCase: SyncAllToCloudUseCase,
+    val putHabitAndSyncWithDbUseCase: PutHabitAndSyncWithDbUseCase,
+    val syncAllFromCloudUseCase: SyncAllFromCloudUseCase,
+)
 
-    val syncAllToCloudUseCase: SyncAllToCloudUseCase
+fun interface PutHabitAndSyncWithDbUseCase : suspend (Habit) -> Either<IoError, String>
 
-    val putHabitAndSyncWithDbUseCase: PutHabitAndSyncWithDbUseCase
+fun interface SyncAllFromCloudUseCase : suspend () -> Either<IoError, Unit>
 
-    val areCloudAndDbEqualUseCase: AreCloudAndDbEqualUseCase
-}
+fun interface UploadAllToCloudUseCase : suspend (List<Habit>) -> Either<IoError, Unit>
