@@ -25,4 +25,9 @@
         android:name="com.example.habittracker.feature_habits.presentation.ui.HabitListPagerFragment"
         android:label="fragment_habit_list_pager"
         tools:layout="@layout/fragment_habit_list_pager" />
+    <fragment
+        android:id="@+id/authorizationFragment"
+        android:name="com.example.habittracker.feature_authorization.presentation.ui.AuthorizationFragment"
+        android:label="fragment_authorization"
+        tools:layout="@layout/fragment_authorization" />
 </navigation>

@@ -33,7 +33,13 @@ android {
 apply from: "$project.rootDir/scripts/deps_versions.gradle"
 dependencies {
 
+    //Core
     implementation android_core
     implementation appcompat
+
+    //UI
     implementation material
+
+    //Navigation
+    implementation navigation.values()
 }

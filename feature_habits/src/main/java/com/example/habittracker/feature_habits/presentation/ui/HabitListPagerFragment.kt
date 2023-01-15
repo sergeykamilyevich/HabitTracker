@@ -7,10 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.habittracker.core_api.domain.models.Habit
-import com.example.habittracker.feature_habits.R
 import com.example.habittracker.feature_habits.databinding.FragmentHabitListPagerBinding
 import com.example.habittracker.feature_habits.presentation.view_pager.ViewPagerAdapter
-import com.example.habittracker.ui_kit.R.string
+import com.example.habittracker.ui_kit.R
 import com.example.habittracker.ui_kit.presentation.HasTitle
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -38,9 +37,9 @@ class HabitListPagerFragment : Fragment(), HasTitle {
 
     private fun setUpViewPager() {
         val tabNames: Array<String> = arrayOf(
-            getString(string.all_habits),
-            getString(string.good_habits),
-            getString(string.bad_habits)
+            getString(R.string.all_habits),
+            getString(R.string.good_habits),
+            getString(R.string.bad_habits)
         )
         viewPagerAdapter = ViewPagerAdapter(this)
         binding.viewPager2Fragment.adapter = viewPagerAdapter
@@ -61,5 +60,5 @@ class HabitListPagerFragment : Fragment(), HasTitle {
         findNavController().navigate(destinationId, args)
     }
 
-    override fun getTitleResId(): Int = string.habit_list
+    override fun getTitleResId(): Int = R.string.habit_list
 }

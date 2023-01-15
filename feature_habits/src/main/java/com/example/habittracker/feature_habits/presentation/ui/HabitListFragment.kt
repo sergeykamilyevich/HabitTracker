@@ -13,12 +13,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.habittracker.core_api.domain.models.HabitDone
 import com.example.habittracker.core_api.domain.models.HabitType
 import com.example.habittracker.core_api.domain.models.Time
-import com.example.habittracker.feature_habits.R
 import com.example.habittracker.feature_habits.databinding.FragmentHabitListBinding
 import com.example.habittracker.feature_habits.presentation.models.HabitTypeApp
 import com.example.habittracker.feature_habits.presentation.recycler.HabitListAdapter
 import com.example.habittracker.feature_habits.presentation.view_models.MainViewModel
-import com.example.habittracker.ui_kit.R.string
+import com.example.habittracker.ui_kit.R
+import com.example.habittracker.ui_kit.R.*
 import com.example.habittracker.ui_kit.presentation.HasTitle
 import javax.inject.Inject
 

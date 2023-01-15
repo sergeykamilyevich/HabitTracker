@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
     <item
-        android:id="@+id/habitListFragment"
+        android:id="@+id/authorizationFragment"
         android:icon="@drawable/ic_baseline_list_24"
-        android:title="@string/habits" />
+        android:title="@string/authorization_fragment_title" />
     <item
         android:id="@+id/aboutFragment"
         android:icon="@drawable/ic_baseline_info_24"
