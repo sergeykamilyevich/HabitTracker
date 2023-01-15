@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +13,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
-import com.bumptech.glide.Glide
 import com.example.habittracker.core_api.R.id
 import com.example.habittracker.core_api.R.menu
 import com.example.habittracker.feature_habits.R
@@ -22,7 +20,6 @@ import com.example.habittracker.feature_habits.databinding.ActivityMainBinding
 import com.example.habittracker.feature_habits.di.components.FeatureHabitsComponent
 import com.example.habittracker.feature_habits.di.components.FeatureHabitsComponentProvider
 import com.example.habittracker.feature_habits.presentation.view_models.MainViewModel
-import com.example.habittracker.ui_kit.R.drawable
 import com.example.habittracker.ui_kit.R.string
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
@@ -65,20 +62,6 @@ class MainActivity : AppCompatActivity() {
         setUpToolbar()
         setUpNavigation()
         setUpViewModel()
-        setUpHeaderImage()
-    }
-
-    private fun setUpHeaderImage() {
-        val header = binding.navigationView.getHeaderView(DEFAULT_HEADER)
-        val avatar =
-            header.findViewById<ImageView>(R.id.avatar)
-                ?: throw RuntimeException("Header image view is null")
-        Glide.with(this)
-            .load(IMAGE_URL)
-            .placeholder(drawable.placeholder)
-            .error(drawable.no_image_available)
-            .circleCrop()
-            .into(avatar)
     }
 
     private fun setUpFeatureHabitsComponent() {
@@ -180,13 +163,5 @@ class MainActivity : AppCompatActivity() {
             id.menu_compare -> viewModel.compareCloudAndDb()
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    companion object {
-
-        private const val IMAGE_URL =
-            "https://img.freepik.com/free-photo/no-problem-concept-bearded-man-makes-okay-gesture-has-everything-control-all-fine-gesture-wears-spectacles-jumper-poses-against-pink-wall-says-i-got-this-guarantees-something_273609-42817.jpg"
-        private const val DEFAULT_HEADER = 0
-
     }
 }
