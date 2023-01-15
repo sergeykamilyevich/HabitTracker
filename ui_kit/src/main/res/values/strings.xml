@@ -31,6 +31,7 @@
     <string name="about">About</string>
     <string name="habit_list">Habit List</string>
     <string name="habit_item">Habit Item</string>
+    <string name="authorization_fragment_title">Authorization</string>
     <string name="version_name">Version name: %1$s</string>
     <string name="version_code">Version code: %1$d</string>
     <string name="app_description">This application will help you form good habits and get rid of bad ones. You can choose the type of habit (good or bad), the color, the priority and the recurrence.</string>

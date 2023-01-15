@@ -21,6 +21,7 @@ import com.example.habittracker.feature_habits.di.components.FeatureHabitsCompon
 import com.example.habittracker.feature_habits.di.components.FeatureHabitsComponentProvider
 import com.example.habittracker.feature_habits.presentation.view_models.MainViewModel
 import com.example.habittracker.ui_kit.R.string
+import com.example.habittracker.ui_kit.presentation.HasTitle
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 

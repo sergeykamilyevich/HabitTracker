@@ -1,4 +1,4 @@
-package com.example.habittracker.feature_habits.presentation.ui
+package com.example.habittracker.ui_kit.presentation
 
 import androidx.annotation.StringRes
 

@@ -44,4 +44,7 @@ dependencies {
     //DI
     implementation dagger_impl.values()
     kapt dagger_kapt
+
+    //DataStore
+    implementation datastore
 }

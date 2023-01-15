@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.habittracker.feature_habits.databinding.FragmentAboutBinding
 import com.example.habittracker.ui_kit.R.string
+import com.example.habittracker.ui_kit.presentation.HasTitle
 
 class AboutFragment : Fragment(), HasTitle {
 

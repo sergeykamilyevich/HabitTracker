@@ -11,6 +11,7 @@ import com.example.habittracker.feature_habits.R
 import com.example.habittracker.feature_habits.databinding.FragmentHabitListPagerBinding
 import com.example.habittracker.feature_habits.presentation.view_pager.ViewPagerAdapter
 import com.example.habittracker.ui_kit.R.string
+import com.example.habittracker.ui_kit.presentation.HasTitle
 import com.google.android.material.tabs.TabLayoutMediator
 
 class HabitListPagerFragment : Fragment(), HasTitle {

@@ -28,6 +28,7 @@ import com.example.habittracker.feature_habits.presentation.models.HabitPriority
 import com.example.habittracker.feature_habits.presentation.view_models.HabitItemViewModel
 import com.example.habittracker.feature_habits.presentation.view_models.MainViewModel
 import com.example.habittracker.ui_kit.R.string
+import com.example.habittracker.ui_kit.presentation.HasTitle
 import com.google.android.material.textfield.TextInputEditText
 import javax.inject.Inject
 import kotlin.random.Random

@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace 'com.example.habittracker.feature_habit_filter_impl'
+    namespace 'com.example.habittracker.feature_authorization'
     compileSdk 33
 
     defaultConfig {
@@ -22,6 +22,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    buildFeatures {
+        viewBinding true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -39,6 +44,7 @@ dependencies {
     implementation project(path: ':core')
     implementation project(path: ':network')
     implementation project(path: ':db')
+    implementation project(path: ':ui_kit')
 
     //Core
     implementation android_core
@@ -47,4 +53,7 @@ dependencies {
     //DI
     implementation dagger_impl.values()
     kapt dagger_kapt
+
+    //DataStore
+    implementation datastore
 }

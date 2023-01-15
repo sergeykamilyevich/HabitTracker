@@ -58,6 +58,7 @@ dependencies {
     //Modules
     implementation project(path: ':ui_kit')
     implementation project(path: ':feature_habit_filter')
+    implementation project(path: ':feature_authorization')
     implementation project(path: ':cloud_sync')
     implementation project(path: ':core')
     implementation project(path: ':network')

@@ -19,6 +19,7 @@ import com.example.habittracker.feature_habits.presentation.models.HabitTypeApp
 import com.example.habittracker.feature_habits.presentation.recycler.HabitListAdapter
 import com.example.habittracker.feature_habits.presentation.view_models.MainViewModel
 import com.example.habittracker.ui_kit.R.string
+import com.example.habittracker.ui_kit.presentation.HasTitle
 import javax.inject.Inject
 
 class HabitListFragment : Fragment(), HasTitle {
