@@ -2,7 +2,7 @@ package com.example.habittracker.cloud_sync.domain.usecases.impls
 
 import com.example.habittracker.core_api.domain.errors.Either
 import com.example.habittracker.core_api.domain.errors.IoError
-import com.example.habittracker.core_api.domain.repositories.SyncHabitRepository
+import com.example.habittracker.cloud_sync.domain.repositories.SyncHabitRepository
 import com.example.habittracker.cloud_sync.domain.usecases.interfaces.SyncAllFromCloudUseCase
 import javax.inject.Inject
 

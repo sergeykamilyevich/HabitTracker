@@ -1,4 +1,4 @@
-package com.example.habittracker.core_api.data.repositories
+package com.example.habittracker.network_impl.repositories
 
 import com.example.habittracker.core_api.domain.errors.Either
 import com.example.habittracker.core_api.domain.errors.IoError
@@ -8,11 +8,10 @@ import com.example.habittracker.core_api.domain.models.Habit
 import com.example.habittracker.core_api.domain.models.HabitDone
 import com.example.habittracker.core_api.domain.models.HabitPriority
 import com.example.habittracker.core_api.domain.models.HabitType
-import com.example.habittracker.core_api.domain.repositories.CloudHabitRepository
+import com.example.habittracker.network_api.domain.repositories.CloudHabitRepository
 import kotlinx.coroutines.runBlocking
 
-class CloudHabitRepositoryFake : //TODO remove to network module
-    CloudHabitRepository {
+class CloudHabitRepositoryFake : CloudHabitRepository {
 
     private val habits = mutableListOf<Habit>()
     private val habitDones = mutableListOf<HabitDone>()

@@ -1,6 +1,7 @@
-package com.example.habittracker.core_api.domain.usecases.network
+package com.example.habittracker.network_impl.domain.usecases
 
 import com.example.habittracker.core_api.domain.errors.*
+import com.example.habittracker.network_api.domain.usecases.GetCloudErrorUseCase
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -20,7 +21,7 @@ internal class GetCloudErrorUseCaseTest {
     @BeforeEach
     fun setUp() {
         ioErrorFlow = IoErrorFlowFake()
-        getCloudErrorUseCase = GetCloudErrorUseCase(ioErrorFlow)
+        getCloudErrorUseCase = GetCloudErrorUseCase(ioErrorFlow::getError)
         ioError = IoError.CloudError()
     }
 

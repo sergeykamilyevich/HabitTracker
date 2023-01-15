@@ -2,8 +2,9 @@ package com.example.habittracker.network_impl.di.modules
 
 import com.example.habittracker.core_api.di.annotations.ApplicationScope
 import com.example.habittracker.core_api.domain.errors.IoErrorFlow
-import com.example.habittracker.core_api.domain.repositories.CloudHabitRepository
+import com.example.habittracker.network_api.domain.repositories.CloudHabitRepository
 import com.example.habittracker.network_api.di.providers.HabitApi
+import com.example.habittracker.network_api.domain.usecases.*
 import com.example.habittracker.network_impl.data.repositories.CloudHabitRepositoryImpl
 import com.example.habittracker.network_impl.data.retrofit.ApiInterceptor
 import com.example.habittracker.network_impl.data.retrofit.IoErrorFlowImpl
@@ -50,5 +51,25 @@ interface NetworkModule {
         @[ApplicationScope Provides]
         fun provideApiService(retrofit: Retrofit): HabitApi = retrofit.create(HabitApi::class.java)
         private const val BASE_URL = "https://droid-test-server.doubletapp.ru/"
+
+        @Provides
+        fun provideDeleteAllHabitsFromCloudUseCase(cloudHabitRepository: CloudHabitRepository): DeleteAllHabitsFromCloudUseCase =
+            DeleteAllHabitsFromCloudUseCase(cloudHabitRepository::deleteAllHabits)
+
+        @Provides
+        fun provideDeleteHabitFromCloudUseCase(cloudHabitRepository: CloudHabitRepository): DeleteHabitFromCloudUseCase =
+            DeleteHabitFromCloudUseCase(cloudHabitRepository::deleteHabit)
+
+        @Provides
+        fun provideGetHabitListFromCloudUseCase(cloudHabitRepository: CloudHabitRepository): GetHabitListFromCloudUseCase =
+            GetHabitListFromCloudUseCase(cloudHabitRepository::getHabitList)
+
+        @Provides
+        fun providePostHabitDoneToCloudUseCase(cloudHabitRepository: CloudHabitRepository): PostHabitDoneToCloudUseCase =
+            PostHabitDoneToCloudUseCase(cloudHabitRepository::postHabitDone)
+
+        @Provides
+        fun provideGetCloudErrorUseCase(ioErrorFlow: IoErrorFlow): GetCloudErrorUseCase =
+            GetCloudErrorUseCase(ioErrorFlow::getError)
     }
 }

@@ -12,7 +12,7 @@ import com.example.habittracker.core_api.domain.errors.IoError.*
 import com.example.habittracker.core_api.domain.models.Habit
 import com.example.habittracker.core_api.domain.models.HabitDone
 import com.example.habittracker.core_api.domain.models.HabitType
-import com.example.habittracker.core_api.domain.usecases.network.CloudUseCase
+import com.example.habittracker.network_api.domain.usecases.CloudUseCase
 import com.example.habittracker.db_api.domain.usecases.DbUseCase
 import com.example.habittracker.feature_habits.presentation.models.AddHabitSnackBarData
 import com.example.habittracker.ui_kit.R
