@@ -45,6 +45,9 @@ android {
 apply from: "$project.rootDir/scripts/deps_versions.gradle"
 dependencies {
 
+    //Modules
+    implementation project(path: ':ui_kit')
+
     //Core
     implementation android_core
     implementation appcompat
