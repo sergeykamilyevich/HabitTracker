@@ -59,6 +59,9 @@ dependencies {
     //Navigation
     implementation navigation.values()
 
+    //Lifecycle
+    implementation lifecycle.values()
+
     //DataStore
     implementation datastore
 

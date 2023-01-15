@@ -2,7 +2,7 @@ package com.example.habittracker.core_impl.data.crypto
 
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
-import java.security.*
+import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
@@ -44,7 +44,7 @@ class EncryptionImpl @Inject constructor(
                 .setBlockModes(BLOCK_MODE_CBC)
                 .setEncryptionPaddings(PADDING_PKCS7)
                 .setUserAuthenticationRequired(false)
-                .setRandomizedEncryptionRequired(false)
+                .setRandomizedEncryptionRequired(true)
                 .build()
         )
     }.generateKey()

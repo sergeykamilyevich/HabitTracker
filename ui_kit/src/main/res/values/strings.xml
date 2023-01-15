@@ -69,7 +69,8 @@
     <string name="cancel">Cancel</string>
     <string name="compare_device_habits_with_the_server">Compare device habits with the server</string>
     <string name="save_token">Save token</string>
-    <string name="input_token">Input token</string>
+    <string name="input_token">Input your authorization token here</string>
+    <string name="authorization_description">You have to get the authorization token to sync with cloud, but you can use the app without sync.\n\nYour data will be stored in the local storage.</string>
 
     <plurals name="plurals_times">
         <item quantity="one">%d time</item>

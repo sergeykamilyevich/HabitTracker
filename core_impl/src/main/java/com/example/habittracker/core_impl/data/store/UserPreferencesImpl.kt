@@ -31,7 +31,7 @@ class UserPreferencesImpl
 
     override suspend fun saveAccessTokens(accessToken: CharSequence?) {
         val accessTokenEncryptionResult =
-            encryption.encrypt((accessToken as? String)?.encodeToByteArray())
+            encryption.encrypt((accessToken.toString()).encodeToByteArray())
 
         dataStore.edit { preferences ->
             preferences[ACCESS_TOKEN] = accessTokenEncryptionResult.bytes.toStringNoWrap()

@@ -14,13 +14,13 @@ import javax.inject.Inject
 
 class ApiInterceptor @Inject constructor(
     private val ioErrorFlow: IoErrorFlow,
-    private val userPreferences: UserPreferences
-    ) : Interceptor {
+    private val userPreferences: UserPreferences,
+) : Interceptor {
 
     private lateinit var response: Response
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val token  = runBlocking { userPreferences.accessToken.first() } ?: ""
+        val token = runBlocking { userPreferences.accessToken.first() } ?: EMPTY_TOKEN
         val request = chain.request().newBuilder()
             .addHeader("Authorization", token.toString())
             .build()
@@ -63,8 +63,8 @@ class ApiInterceptor @Inject constructor(
     }
 
     companion object {
-        private const val API_TOKEN = "05b550ee-1713-43f1-a842-9815d354460d"
         private const val MAX_COUNT_RETRY = Long.MAX_VALUE
         private const val UNKNOWN_NETWORK_ERROR_MESSAGE = "Unknown network error"
+        private const val EMPTY_TOKEN = ""
     }
 }
