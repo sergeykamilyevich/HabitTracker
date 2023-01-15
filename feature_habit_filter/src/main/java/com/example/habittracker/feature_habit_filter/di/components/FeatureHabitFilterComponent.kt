@@ -1,11 +1,11 @@
-package com.example.habittracker.feature_habit_filter_api.di.components
+package com.example.habittracker.feature_habit_filter.di.components
 
 import android.app.Application
 import com.example.habittracker.core_api.di.annotations.ApplicationScope
 import com.example.habittracker.core_api.di.mediators.CoreFacadeComponentProviders
 import com.example.habittracker.db_api.di.mediators.DbFacadeComponentProviders
-import com.example.habittracker.feature_habit_filter_api.di.modules.FeatureHabitFilterModule
-import com.example.habittracker.feature_habit_filter_api.presentation.ui.BottomSheetFragment
+import com.example.habittracker.feature_habit_filter.di.modules.FeatureHabitFilterModule
+import com.example.habittracker.feature_habit_filter.presentation.ui.BottomSheetFragment
 import com.example.habittracker.network_api.di.mediators.NetworkFacadeComponentProviders
 import dagger.BindsInstance
 import dagger.Component

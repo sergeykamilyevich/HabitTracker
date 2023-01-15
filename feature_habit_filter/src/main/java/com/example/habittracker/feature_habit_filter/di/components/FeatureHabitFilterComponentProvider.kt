@@ -1,4 +1,4 @@
-package com.example.habittracker.feature_habit_filter_api.di.components
+package com.example.habittracker.feature_habit_filter.di.components
 
 interface FeatureHabitFilterComponentProvider {
 

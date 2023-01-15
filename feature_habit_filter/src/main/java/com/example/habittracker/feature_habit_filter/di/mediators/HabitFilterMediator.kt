@@ -1,4 +1,4 @@
-package com.example.habittracker.feature_habit_filter_api.di.mediators
+package com.example.habittracker.feature_habit_filter.di.mediators
 
 import androidx.lifecycle.LiveData
 import com.example.habittracker.core_api.domain.models.HabitListFilter

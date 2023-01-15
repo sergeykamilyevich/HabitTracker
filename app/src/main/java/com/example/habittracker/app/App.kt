@@ -4,8 +4,8 @@ import android.app.Application
 import com.example.habittracker.di.components.CoreFacadeComponent
 import com.example.habittracker.di.components.DbFacadeComponent
 import com.example.habittracker.di.components.NetworkFacadeComponent
-import com.example.habittracker.feature_habit_filter_api.di.components.DaggerFeatureHabitFilterComponent
-import com.example.habittracker.feature_habit_filter_api.di.components.FeatureHabitFilterComponent
+import com.example.habittracker.feature_habit_filter.di.components.DaggerFeatureHabitFilterComponent
+import com.example.habittracker.feature_habit_filter.di.components.FeatureHabitFilterComponent
 import com.example.habittracker.feature_habits.di.components.DaggerFeatureHabitsComponent
 import com.example.habittracker.feature_habits.di.components.FeatureHabitsComponent
 

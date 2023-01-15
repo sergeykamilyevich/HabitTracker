@@ -1,4 +1,4 @@
-package com.example.habittracker.feature_habit_filter_api.presentation.ui
+package com.example.habittracker.feature_habit_filter.presentation.ui
 
 import android.content.Context
 import android.os.Bundle
@@ -9,8 +9,8 @@ import android.widget.Button
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.example.habittracker.core_api.domain.models.HabitListOrderBy
-import com.example.habittracker.feature_habit_filter_api.databinding.FragmentBottomSheetBinding
-import com.example.habittracker.feature_habit_filter_api.di.components.FeatureHabitFilterComponentProvider
+import com.example.habittracker.feature_habit_filter.databinding.FragmentBottomSheetBinding
+import com.example.habittracker.feature_habit_filter.di.components.FeatureHabitFilterComponentProvider
 import com.example.habittracker.viewmodels.presentation.FilterViewModel
 import javax.inject.Inject
 

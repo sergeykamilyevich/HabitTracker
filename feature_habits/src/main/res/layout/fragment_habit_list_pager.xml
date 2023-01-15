@@ -50,11 +50,11 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/bottom_sheet"
-            android:name="com.example.habittracker.feature_habit_filter_api.presentation.ui.BottomSheetFragment"
+            android:name="com.example.habittracker.feature_habit_filter.presentation.ui.BottomSheetFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_rectangle"
-            app:layout_behavior="com.example.habittracker.feature_habit_filter_api.presentation.ui.AutoCollapseBottomSheetBehavior"
+            app:layout_behavior="com.example.habittracker.feature_habit_filter.presentation.ui.AutoCollapseBottomSheetBehavior"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">

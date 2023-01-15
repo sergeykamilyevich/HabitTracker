@@ -46,7 +46,7 @@ dependencies {
 
     //Modules
     api project(path: ':network_api')
-    implementation project(path: ':core_api')
+    implementation project(path: ':core')
 
     //Core
     implementation android_core

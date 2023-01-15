@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.habittracker.feature_habit_filter_api.presentation.ui.BottomSheetFragment">
+    tools:context="com.example.habittracker.feature_habit_filter.presentation.ui.BottomSheetFragment">
 
     <TextView
         android:id="@+id/tv_bottom_sheet_title"

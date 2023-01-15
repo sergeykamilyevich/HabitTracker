@@ -1,4 +1,4 @@
-package com.example.habittracker.feature_habit_filter_api.di.modules
+package com.example.habittracker.feature_habit_filter.di.modules
 
 import com.example.habittracker.viewmodels.presentation.FilterViewModel
 import dagger.Module

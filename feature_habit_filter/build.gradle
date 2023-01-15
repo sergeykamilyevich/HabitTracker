@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace 'com.example.habittracker.feature_habit_filter_api'
+    namespace 'com.example.habittracker.feature_habit_filter'
     compileSdk 33
 
     defaultConfig {
@@ -42,9 +42,8 @@ dependencies {
     //Modules
     implementation project(path: ':core')
     implementation project(path: ':ui_kit')
-    implementation project(path: ':core_api') //TODO delete api?
-    implementation project(path: ':network_api')
-    implementation project(path: ':db_api')
+    implementation project(path: ':network')
+    implementation project(path: ':db')
     implementation project(path: ':viewmodels')
 
     //Core
