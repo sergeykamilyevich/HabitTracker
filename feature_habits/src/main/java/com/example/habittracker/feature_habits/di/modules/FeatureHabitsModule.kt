@@ -2,7 +2,7 @@ package com.example.habittracker.feature_habits.di.modules
 
 import com.example.habittracker.cloud_sync.domain.repositories.SyncHabitRepository
 import com.example.habittracker.viewmodels.presentation.FilterViewModel
-import com.example.habittracker.feature_habits.data.repositories.SyncHabitRepositoryImpl
+import com.example.habittracker.cloud_sync.data.repositories.SyncHabitRepositoryImpl
 import com.example.habittracker.feature_habits.presentation.view_models.Resources
 import dagger.Binds
 import dagger.Module

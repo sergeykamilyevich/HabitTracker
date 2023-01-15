@@ -1,4 +1,4 @@
-package com.example.habittracker.feature_habits.data.repositories
+package com.example.habittracker.cloud_sync.data.repositories
 
 import com.example.habittracker.core_api.domain.errors.Either
 import com.example.habittracker.core_api.domain.errors.Either.Failure
