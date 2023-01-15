@@ -12,7 +12,7 @@ import com.example.habittracker.feature_habits.di.components.FeatureHabitsCompon
 class App : Application(), FeatureComponentsProvider, AppWithFacade {
 
     override val coreFacadeComponent: CoreFacadeComponent by lazy {
-        CoreFacadeComponent.init()
+        CoreFacadeComponent.init(context = this)
     }
 
     override val networkFacadeComponent: NetworkFacadeComponent by lazy {

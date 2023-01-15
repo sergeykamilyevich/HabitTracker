@@ -2,19 +2,19 @@ package com.example.habittracker.di.components
 
 import android.content.Context
 import com.example.habittracker.core_api.di.annotations.ApplicationScope
-import com.example.habittracker.db_api.di.providers.ContextProvider
+import com.example.habittracker.core_api.di.providers.CoreContextProvider
 import dagger.BindsInstance
 import dagger.Component
 
 @ApplicationScope
 @Component
-interface ApplicationComponent : ContextProvider {
+interface ApplicationComponent : CoreContextProvider {
 
     companion object {
 
         private var applicationComponent: ApplicationComponent? = null
 
-        fun getApplicationComponent(context: Context): ContextProvider =
+        fun getApplicationComponent(context: Context): CoreContextProvider =
             applicationComponent ?: DaggerApplicationComponent
                 .factory()
                 .create(context)
@@ -26,9 +26,7 @@ interface ApplicationComponent : ContextProvider {
     @Component.Factory
     interface Factory {
 
-        fun create(
-            @BindsInstance context: Context
-        ): ApplicationComponent
+        fun create(@BindsInstance context: Context): ApplicationComponent
     }
 
 }

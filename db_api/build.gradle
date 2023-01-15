@@ -35,7 +35,7 @@ apply from: "$project.rootDir/scripts/deps_versions.gradle"
 dependencies {
 
     //Modules
-    implementation project(path: ':core_api')
+    implementation project(path: ':core')
     implementation project(path: ':viewmodels')
 
     //Core
