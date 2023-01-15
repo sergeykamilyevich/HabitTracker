@@ -2,7 +2,6 @@ package com.example.habittracker.feature_habit_filter_api.presentation.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,8 +29,6 @@ class BottomSheetFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-//        Log.d("99999", "BottomSheetFragment $this")
-        Log.d("99999", "BottomSheetFragment filterViewModel ${filterViewModel}")
         _binding = FragmentBottomSheetBinding.inflate(inflater, container, false)
         return binding.root
     }
