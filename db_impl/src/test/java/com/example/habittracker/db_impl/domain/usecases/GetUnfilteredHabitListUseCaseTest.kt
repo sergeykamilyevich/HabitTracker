@@ -1,9 +1,9 @@
 package com.example.habittracker.db_impl.domain.usecases
 
-import com.example.habittracker.db_impl.data.repositories.DbHabitRepositoryFake
 import com.example.habittracker.core_api.domain.errors.Either.Failure
 import com.example.habittracker.core_api.domain.errors.Either.Success
 import com.example.habittracker.db_api.domain.usecases.GetUnfilteredHabitListUseCase
+import com.example.habittracker.db_impl.data.repositories.DbHabitRepositoryFake
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -19,7 +19,8 @@ internal class GetUnfilteredHabitListUseCaseTest {
     @BeforeEach
     fun setUp() = runTest {
         dbHabitRepositoryFake = DbHabitRepositoryFake()
-        getUnfilteredHabitListUseCase = GetUnfilteredHabitListUseCaseImpl(dbHabitRepositoryFake)
+        getUnfilteredHabitListUseCase =
+            GetUnfilteredHabitListUseCase(dbHabitRepositoryFake::getUnfilteredList)
         dbHabitRepositoryFake.initFilling()
     }
 

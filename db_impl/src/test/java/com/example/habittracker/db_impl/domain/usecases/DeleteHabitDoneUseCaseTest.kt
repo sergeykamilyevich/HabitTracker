@@ -20,7 +20,7 @@ internal class DeleteHabitDoneUseCaseTest {
     @BeforeEach
     fun setUp() {
         dbHabitRepositoryFake = DbHabitRepositoryFake()
-        deleteHabitDoneUseCase = DeleteHabitDoneUseCaseImpl(dbHabitRepositoryFake)
+        deleteHabitDoneUseCase = DeleteHabitDoneUseCase(dbHabitRepositoryFake::deleteHabitDone)
         habitDoneToInsert = dbHabitRepositoryFake.habitDoneToInsert
     }
 

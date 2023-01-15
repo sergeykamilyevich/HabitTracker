@@ -24,7 +24,7 @@ internal class DeleteAllHabitsUseCaseTest {
     fun setUp() {
         dbHabitRepositoryFake =
             DbHabitRepositoryFake()
-        deleteAllHabitsUseCase = DeleteAllHabitsUseCaseImpl(dbHabitRepositoryFake)
+        deleteAllHabitsUseCase = DeleteAllHabitsUseCase(dbHabitRepositoryFake::deleteAllHabits)
         habitToInsert = dbHabitRepositoryFake.habitToInsert
     }
 

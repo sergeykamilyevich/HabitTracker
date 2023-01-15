@@ -29,7 +29,7 @@ internal class GetHabitListUseCaseTest {
     @BeforeEach
     fun setUp() = runBlocking {
         dbHabitRepositoryFake = DbHabitRepositoryFake()
-        getHabitListUseCase = GetHabitListUseCaseImpl(dbHabitRepositoryFake)
+        getHabitListUseCase = GetHabitListUseCase(dbHabitRepositoryFake::getHabitList)
         successHabit = dbHabitRepositoryFake.habitToInsert
         dbHabitRepositoryFake.upsertHabit(successHabit)
         dbHabitRepositoryFake.initFilling()

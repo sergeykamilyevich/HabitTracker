@@ -23,7 +23,7 @@ internal class AddHabitDoneUseCaseTest {
     @BeforeEach
     fun setUp() {
         dbHabitRepositoryFake = DbHabitRepositoryFake()
-        addHabitDoneUseCase = AddHabitDoneUseCaseImpl(dbHabitRepositoryFake)
+        addHabitDoneUseCase = AddHabitDoneUseCase(dbHabitRepositoryFake::addHabitDone)
         habitDoneToInsert = dbHabitRepositoryFake.habitDoneToInsert
     }
 

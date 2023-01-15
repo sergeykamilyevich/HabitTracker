@@ -23,7 +23,7 @@ internal class UpsertHabitUseCaseTest {
     @BeforeEach
     fun setUp() {
         dbHabitRepositoryFake = DbHabitRepositoryFake()
-        upsertHabitUseCase = UpsertHabitUseCaseImpl(dbHabitRepositoryFake)
+        upsertHabitUseCase = UpsertHabitUseCase(dbHabitRepositoryFake::upsertHabit)
         habitToInsert = dbHabitRepositoryFake.habitToInsert
     }
 

@@ -9,9 +9,4 @@ interface DbComponentProvider {
 
     fun provideDbUseCase(): DbUseCase
 
-//    fun provideApiService(): HabitApi
-//
-//    fun provideCloudHabitRepository(): CloudHabitRepository
-//
-//    fun provideIoErrorFlow(): IoErrorFlow
 }
