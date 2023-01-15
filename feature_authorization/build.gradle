@@ -50,6 +50,11 @@ dependencies {
     implementation android_core
     implementation appcompat
 
+    //UI
+    implementation fragment
+    implementation material
+    implementation constraintlayout
+
     //DI
     implementation dagger_impl.values()
     kapt dagger_kapt

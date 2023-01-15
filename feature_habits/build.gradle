@@ -88,10 +88,6 @@ dependencies {
     implementation dagger_impl.values()
     kapt dagger_kapt
 
-    //Glide
-    implementation "com.github.bumptech.glide:glide:$glide_version"
-    kapt "com.github.bumptech.glide:compiler:$glide_version"
-
     //Tests
     testImplementation tests.values()
     testImplementation dagger_impl.values()
