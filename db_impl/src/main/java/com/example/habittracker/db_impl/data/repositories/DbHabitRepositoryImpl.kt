@@ -1,4 +1,4 @@
-package com.example.habittracker.db_impl.di.repositories
+package com.example.habittracker.db_impl.data.repositories
 
 import com.example.habittracker.core_api.domain.errors.Either
 import com.example.habittracker.core_api.domain.errors.Either.Failure
@@ -11,7 +11,7 @@ import com.example.habittracker.core_api.domain.models.Habit
 import com.example.habittracker.core_api.domain.models.HabitDone
 import com.example.habittracker.core_api.domain.models.HabitListFilter
 import com.example.habittracker.core_api.domain.models.HabitType
-import com.example.habittracker.core_api.domain.repositories.DbHabitRepository
+import com.example.habittracker.db_api.domain.repositories.DbHabitRepository
 import com.example.habittracker.db_api.data.db.models.HabitDbModel
 import com.example.habittracker.db_api.data.db.models.HabitDoneDbModel
 import com.example.habittracker.db_api.data.db.models.HabitWithDoneDbModel

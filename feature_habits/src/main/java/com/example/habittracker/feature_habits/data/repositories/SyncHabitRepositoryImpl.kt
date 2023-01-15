@@ -9,7 +9,7 @@ import com.example.habittracker.core_api.domain.errors.success
 import com.example.habittracker.core_api.domain.models.Habit
 import com.example.habittracker.core_api.domain.models.HabitDone
 import com.example.habittracker.core_api.domain.repositories.CloudHabitRepository
-import com.example.habittracker.core_api.domain.repositories.DbHabitRepository
+import com.example.habittracker.db_api.domain.repositories.DbHabitRepository
 import com.example.habittracker.core_api.domain.repositories.SyncHabitRepository
 import javax.inject.Inject
 

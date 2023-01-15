@@ -9,8 +9,8 @@ import com.example.habittracker.core_api.domain.models.HabitListOrderBy
 import com.example.habittracker.core_api.domain.models.HabitListOrderBy.*
 import com.example.habittracker.core_api.domain.models.HabitType
 import com.example.habittracker.db_impl.data.db.room.HabitDaoFake
-import com.example.habittracker.db_impl.di.repositories.DbHabitRepositoryImpl
-import com.example.habittracker.db_impl.di.repositories.DbHabitRepositoryImpl.Companion.ITEM_NOT_ADDED
+import com.example.habittracker.db_impl.data.repositories.DbHabitRepositoryImpl
+import com.example.habittracker.db_impl.data.repositories.DbHabitRepositoryImpl.Companion.ITEM_NOT_ADDED
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.runBlocking

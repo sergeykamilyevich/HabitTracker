@@ -6,8 +6,8 @@ import com.example.habittracker.db_api.data.db.models.HabitDbModel
 import com.example.habittracker.db_api.data.db.models.HabitDoneDbModel
 import com.example.habittracker.db_api.data.db.models.HabitWithDoneDbModel
 import com.example.habittracker.db_api.data.db.room.HabitDao
-import com.example.habittracker.db_impl.di.repositories.DbHabitRepositoryImpl.Companion.PRIMARY_KEY_CONSTRAINT_MESSAGE
-import com.example.habittracker.db_impl.di.repositories.DbHabitRepositoryImpl.Companion.UNIQUE_CONSTRAINT_MESSAGE
+import com.example.habittracker.db_impl.data.repositories.DbHabitRepositoryImpl.Companion.PRIMARY_KEY_CONSTRAINT_MESSAGE
+import com.example.habittracker.db_impl.data.repositories.DbHabitRepositoryImpl.Companion.UNIQUE_CONSTRAINT_MESSAGE
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
