@@ -1,21 +1,28 @@
 package com.example.habittracker.network_impl.data.retrofit
 
 import android.util.Log
+import com.example.habittracker.core_api.data.store.UserPreferences
 import com.example.habittracker.core_api.domain.errors.IoError.CloudError
 import com.example.habittracker.core_api.domain.errors.IoErrorFlow
 import com.example.habittracker.core_api.domain.errors.failure
 import com.example.habittracker.core_api.domain.errors.success
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
 
-class ApiInterceptor @Inject constructor(private val ioErrorFlow: IoErrorFlow) : Interceptor {
+class ApiInterceptor @Inject constructor(
+    private val ioErrorFlow: IoErrorFlow,
+    private val userPreferences: UserPreferences
+    ) : Interceptor {
 
     private lateinit var response: Response
 
     override fun intercept(chain: Interceptor.Chain): Response {
+        val token  = runBlocking { userPreferences.accessToken.first() } ?: ""
         val request = chain.request().newBuilder()
-            .addHeader("Authorization", API_TOKEN)
+            .addHeader("Authorization", token.toString())
             .build()
         val delayForRetryRequest = DelayForRetryRequest()
         var responseIsSuccess = false

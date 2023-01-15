@@ -68,6 +68,8 @@
     <string name="upload_to_the_server">Upload to the server</string>
     <string name="cancel">Cancel</string>
     <string name="compare_device_habits_with_the_server">Compare device habits with the server</string>
+    <string name="save_token">Save token</string>
+    <string name="input_token">Input token</string>
 
     <plurals name="plurals_times">
         <item quantity="one">%d time</item>

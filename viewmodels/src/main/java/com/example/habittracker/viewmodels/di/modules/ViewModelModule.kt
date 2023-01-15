@@ -1,5 +1,6 @@
 package com.example.habittracker.viewmodels.di.modules
 
+import com.example.habittracker.viewmodels.presentation.AuthorizationViewModel
 import com.example.habittracker.viewmodels.presentation.FilterViewModel
 import dagger.Binds
 import dagger.Module
@@ -12,5 +13,10 @@ interface ViewModelModule {
     @IntoMap
     @ClassKey(FilterViewModel::class)
     @Binds
-    fun bindFilterViewModelImpl(impl: FilterViewModel): Any
+    fun bindFilterViewModel(impl: FilterViewModel): Any
+
+    @IntoMap
+    @ClassKey(AuthorizationViewModel::class)
+    @Binds
+    fun bindAuthorizationViewModel(impl: AuthorizationViewModel): Any
 }

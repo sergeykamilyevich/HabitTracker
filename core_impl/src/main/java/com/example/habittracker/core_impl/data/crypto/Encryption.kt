@@ -1,4 +1,4 @@
-package com.example.habittracker.feature_authorization.data.crypto
+package com.example.habittracker.core_impl.data.crypto
 
 interface Encryption {
 

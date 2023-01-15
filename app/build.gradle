@@ -73,6 +73,9 @@ dependencies {
     implementation android_core
     implementation appcompat
 
+    //DataStore
+    implementation datastore
+
     //DI
     implementation dagger_impl.values()
     kapt dagger_kapt

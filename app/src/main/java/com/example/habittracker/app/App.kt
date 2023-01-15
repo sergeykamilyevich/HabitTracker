@@ -18,7 +18,7 @@ class App : Application(), FeatureComponentsProvider, AppWithFacade {
     }
 
     override val networkFacadeComponent: NetworkFacadeComponent by lazy {
-        NetworkFacadeComponent.init()
+        NetworkFacadeComponent.init(context = this)
     }
 
     override val dbFacadeComponent: DbFacadeComponent by lazy {

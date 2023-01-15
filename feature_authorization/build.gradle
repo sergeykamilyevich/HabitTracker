@@ -45,6 +45,7 @@ dependencies {
     implementation project(path: ':network')
     implementation project(path: ':db')
     implementation project(path: ':ui_kit')
+    implementation project(path: ':viewmodels')
 
     //Core
     implementation android_core
@@ -55,10 +56,14 @@ dependencies {
     implementation material
     implementation constraintlayout
 
+    //Navigation
+    implementation navigation.values()
+
+    //DataStore
+    implementation datastore
+
     //DI
     implementation dagger_impl.values()
     kapt dagger_kapt
 
-    //DataStore
-    implementation datastore
 }

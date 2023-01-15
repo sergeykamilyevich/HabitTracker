@@ -1,22 +1,23 @@
-package com.example.habittracker.feature_authorization.data.store
+package com.example.habittracker.core_impl.data.store
 
 import android.util.Base64
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.example.habittracker.feature_authorization.data.crypto.Encryption
+import com.example.habittracker.core_api.data.store.UserPreferences
+import com.example.habittracker.core_impl.data.crypto.Encryption
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class UserPreferences
+class UserPreferencesImpl
 @Inject constructor(
     private val encryption: Encryption,
     private val dataStore: DataStore<Preferences>
-) {
+) : UserPreferences {
 
-    val accessToken: Flow<CharSequence?>
+    override val accessToken: Flow<CharSequence?>
         get() = dataStore.data.map { preferences ->
             val iv = preferences[ACCESS_TOKEN_IV]
             iv?.let {
@@ -28,7 +29,7 @@ class UserPreferences
             }
         }
 
-    suspend fun saveAccessTokens(accessToken: CharSequence?) {
+    override suspend fun saveAccessTokens(accessToken: CharSequence?) {
         val accessTokenEncryptionResult =
             encryption.encrypt((accessToken as? String)?.encodeToByteArray())
 
@@ -41,7 +42,7 @@ class UserPreferences
     private fun String.toByteArrayNoWrap(): ByteArray = Base64.decode(this, Base64.NO_WRAP)
     private fun ByteArray.toStringNoWrap(): String = Base64.encodeToString(this, Base64.NO_WRAP)
 
-    suspend fun clear() {
+    override suspend fun clear() {
         dataStore.edit { preferences ->
             preferences.clear()
         }

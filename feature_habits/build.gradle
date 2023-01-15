@@ -84,6 +84,9 @@ dependencies {
     //Navigation
     implementation navigation.values()
 
+    //DataStore
+    implementation datastore
+
     //DI
     implementation dagger_impl.values()
     kapt dagger_kapt

@@ -59,6 +59,9 @@ dependencies {
     //Retrofit
     implementation retrofit.values()
 
+    //DataStore
+    implementation datastore
+
     //Tests
     testImplementation tests.values()
     testImplementation dagger_impl.values()

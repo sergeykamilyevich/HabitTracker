@@ -3,6 +3,7 @@ package com.example.habittracker.feature_authorization.di.components
 import android.app.Application
 import com.example.habittracker.core_api.di.annotations.ApplicationScope
 import com.example.habittracker.core_api.di.mediators.CoreFacadeComponentProviders
+import com.example.habittracker.feature_authorization.di.modules.FeatureAuthorizationModule
 import com.example.habittracker.feature_authorization.presentation.ui.AuthorizationFragment
 import dagger.BindsInstance
 import dagger.Component
@@ -13,7 +14,7 @@ import dagger.Component
         CoreFacadeComponentProviders::class
     ],
     modules = [
-//        FeatureHabitFilterModule::class
+        FeatureAuthorizationModule::class
     ]
 )
 interface FeatureAuthorizationComponent {

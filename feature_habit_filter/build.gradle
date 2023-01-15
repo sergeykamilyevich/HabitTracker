@@ -51,6 +51,9 @@ dependencies {
     //UI
     implementation material
 
+    //DataStore
+    implementation datastore
+
     //DI
     implementation dagger_impl.values()
     kapt dagger_kapt
