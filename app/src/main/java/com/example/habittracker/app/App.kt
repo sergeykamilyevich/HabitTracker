@@ -39,9 +39,7 @@ class App : Application(), FeatureComponentsProvider, AppWithFacade {
             .factory()
             .create(
                 application = this,
-                coreFacadeComponentProviders = coreFacadeComponent,
-                networkFacadeComponentProviders = networkFacadeComponent,
-                dbFacadeComponentProviders = dbFacadeComponent
+                coreFacadeComponentProviders = coreFacadeComponent
             )
     }
 }

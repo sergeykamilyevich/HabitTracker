@@ -42,8 +42,6 @@ dependencies {
     //Modules
     implementation project(path: ':core')
     implementation project(path: ':ui_kit')
-    implementation project(path: ':network')
-    implementation project(path: ':db')
     implementation project(path: ':viewmodels')
 
     //Core

@@ -3,19 +3,15 @@ package com.example.habittracker.feature_habit_filter.di.components
 import android.app.Application
 import com.example.habittracker.core_api.di.annotations.ApplicationScope
 import com.example.habittracker.core_api.di.mediators.CoreFacadeComponentProviders
-import com.example.habittracker.db_api.di.mediators.DbFacadeComponentProviders
 import com.example.habittracker.feature_habit_filter.di.modules.FeatureHabitFilterModule
 import com.example.habittracker.feature_habit_filter.presentation.ui.BottomSheetFragment
-import com.example.habittracker.network_api.di.mediators.NetworkFacadeComponentProviders
 import dagger.BindsInstance
 import dagger.Component
 
 @ApplicationScope
 @Component(
     dependencies = [
-        CoreFacadeComponentProviders::class,
-        NetworkFacadeComponentProviders::class,
-        DbFacadeComponentProviders::class,
+        CoreFacadeComponentProviders::class
     ],
     modules = [
         FeatureHabitFilterModule::class
@@ -28,9 +24,7 @@ interface FeatureHabitFilterComponent {
 
         fun create(
             @BindsInstance application: Application,
-            coreFacadeComponentProviders: CoreFacadeComponentProviders,
-            networkFacadeComponentProviders: NetworkFacadeComponentProviders,
-            dbFacadeComponentProviders: DbFacadeComponentProviders,
+            coreFacadeComponentProviders: CoreFacadeComponentProviders
         ): FeatureHabitFilterComponent
     }
 
