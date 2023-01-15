@@ -39,6 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="60dp"
+            app:tint="@color/white"
             android:backgroundTint="@color/purple_200"
             android:clickable="true"
             android:contentDescription="@string/button_add_habit"
