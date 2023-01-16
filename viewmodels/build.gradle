@@ -35,9 +35,9 @@ apply from: "$project.rootDir/scripts/deps_versions.gradle"
 dependencies {
 
     //Modules
-    implementation project(path: ':core')
-    implementation project(path: ':viewmodels_impl') //TODO remove
+    implementation project(path: ':viewmodels_impl')
     api project(path: ':viewmodels_api')
+    implementation project(path: ':core')
     implementation project(path: ':db')
     implementation project(path: ':network')
 

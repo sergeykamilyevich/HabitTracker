@@ -15,14 +15,16 @@ interface CoreFacadeComponent : CoreFacadeComponentProviders {
 
     companion object {
 
-        fun init(context: Context): CoreFacadeComponent =
-            DaggerCoreFacadeComponent
+        fun init(context: Context): CoreFacadeComponent {
+            val coreContextProvider =
+                ApplicationComponent.getApplicationComponent(context)
+            val coreComponentProvider =
+                CoreProvidersFactory.getCoreComponent(coreContextProvider)
+
+            return DaggerCoreFacadeComponent
                 .builder()
-                .coreComponentProvider(
-                    CoreProvidersFactory.getCoreComponent(
-                        ApplicationComponent.getApplicationComponent(context)
-                    )
-                )
+                .coreComponentProvider(coreComponentProvider)
                 .build()
+        }
     }
 }

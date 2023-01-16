@@ -16,19 +16,18 @@ interface NetworkFacadeComponent : NetworkFacadeComponentProviders {
 
     companion object {
 
-        fun init(context: Context): NetworkFacadeComponent =
-            DaggerNetworkFacadeComponent
+        fun init(context: Context): NetworkFacadeComponent {
+            val coreContextProvider =
+                ApplicationComponent.getApplicationComponent(context)
+            val coreComponentProvider =
+                CoreProvidersFactory.getCoreComponent(coreContextProvider)
+            val networkComponentProvider =
+                NetworkProvidersFactory.getNetworkComponent(coreComponentProvider)
+
+            return DaggerNetworkFacadeComponent
                 .builder()
-                .networkComponentProvider(
-                    NetworkProvidersFactory
-                        .getNetworkComponent(
-                            CoreProvidersFactory
-                                .getCoreComponent(
-                                    ApplicationComponent
-                                        .getApplicationComponent(context)
-                                )
-                        )
-                )
+                .networkComponentProvider(networkComponentProvider)
                 .build()
+        }
     }
 }

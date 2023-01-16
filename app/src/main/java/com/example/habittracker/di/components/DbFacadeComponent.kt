@@ -15,10 +15,15 @@ interface DbFacadeComponent : DbFacadeComponentProviders {
 
     companion object {
 
-        fun init(context: Context): DbFacadeComponent =
-            DaggerDbFacadeComponent
+        fun init(context: Context): DbFacadeComponent {
+            val coreContextProvider =
+                ApplicationComponent.getApplicationComponent(context)
+            val dbComponentProvider =
+                DbProvidersFactory.getDbComponent(coreContextProvider)
+            return DaggerDbFacadeComponent
                 .builder()
-                .dbComponentProvider(DbProvidersFactory.getDbComponent(ApplicationComponent.getApplicationComponent(context)))
+                .dbComponentProvider(dbComponentProvider)
                 .build()
+        }
     }
 }

@@ -18,37 +18,32 @@ import dagger.Component
         CoreContextProvider::class,
     ]
 )
-interface ViewModelsFacadeComponent : ViewModelsFacadeComponentProviders
-{
+interface ViewModelsFacadeComponent : ViewModelsFacadeComponentProviders {
 
     companion object {
 
-        fun init(context: Context): ViewModelsFacadeComponent =
-            DaggerViewModelsFacadeComponent
+        fun init(context: Context): ViewModelsFacadeComponent {
+            val coreContextProvider =
+                ApplicationComponent.getApplicationComponent(context)
+            val coreComponentProvider =
+                CoreProvidersFactory.getCoreComponent(coreContextProvider)
+            val networkComponentProvider =
+                NetworkProvidersFactory.getNetworkComponent(coreComponentProvider)
+            val dbComponentProvider =
+                DbProvidersFactory.getDbComponent(coreContextProvider)
+            return DaggerViewModelsFacadeComponent
                 .builder()
                 .viewModelsComponentProvider(
                     ViewModelsProvidersFactory
                         .getViewModelsComponent(
-                            coreComponentProvider = CoreProvidersFactory
-                                .getCoreComponent(
-                                    ApplicationComponent
-                                        .getApplicationComponent(context)
-                                ),
-                            dbComponentProvider = DbProvidersFactory.getDbComponent(ApplicationComponent.getApplicationComponent(context)),
-                            networkComponentProvider = NetworkProvidersFactory
-                                .getNetworkComponent(
-                                    CoreProvidersFactory
-                                        .getCoreComponent(
-                                            ApplicationComponent
-                                                .getApplicationComponent(context)
-                                        )
-                                )
-
+                            coreComponentProvider = coreComponentProvider,
+                            dbComponentProvider = dbComponentProvider,
+                            networkComponentProvider = networkComponentProvider
                         )
                 )
-                .coreContextProvider(ApplicationComponent
-                    .getApplicationComponent(context)
-                )
+                .coreContextProvider(coreContextProvider)
                 .build()
+        }
+
     }
 }
