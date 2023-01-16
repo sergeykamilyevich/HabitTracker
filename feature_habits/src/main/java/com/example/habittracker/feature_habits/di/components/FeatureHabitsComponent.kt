@@ -5,7 +5,6 @@ import com.example.habittracker.cloud_sync.di.modules.CloudSyncModule
 import com.example.habittracker.core_api.di.annotations.ApplicationScope
 import com.example.habittracker.core_api.di.mediators.CoreFacadeComponentProviders
 import com.example.habittracker.db_api.di.mediators.DbFacadeComponentProviders
-import com.example.habittracker.feature_habits.di.modules.FeatureHabitsModule
 import com.example.habittracker.feature_habits.presentation.ui.HabitListFragment
 import com.example.habittracker.feature_habits.presentation.ui.MainActivity
 import com.example.habittracker.network_api.di.mediators.NetworkFacadeComponentProviders
@@ -22,7 +21,6 @@ import dagger.Component
         ViewModelsFacadeComponentProviders::class,
     ],
     modules = [
-        FeatureHabitsModule::class,
         CloudSyncModule::class
     ]
 )
