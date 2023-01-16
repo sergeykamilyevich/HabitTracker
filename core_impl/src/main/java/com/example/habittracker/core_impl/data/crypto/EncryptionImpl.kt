@@ -2,6 +2,8 @@ package com.example.habittracker.core_impl.data.crypto
 
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
+import com.example.habittracker.core_api.data.crypto.Encryption
+import com.example.habittracker.core_api.data.crypto.EncryptionResult
 import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator

@@ -1,4 +1,4 @@
-package com.example.habittracker.core_impl.data.crypto
+package com.example.habittracker.core_api.data.crypto
 
 data class EncryptionResult(
     val bytes: ByteArray,

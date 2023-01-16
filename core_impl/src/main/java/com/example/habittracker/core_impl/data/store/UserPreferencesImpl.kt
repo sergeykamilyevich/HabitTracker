@@ -6,7 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.example.habittracker.core_api.data.store.UserPreferences
-import com.example.habittracker.core_impl.data.crypto.Encryption
+import com.example.habittracker.core_api.data.crypto.Encryption
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

@@ -6,7 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.habittracker.core_api.data.store.UserPreferences
 import com.example.habittracker.core_api.di.annotations.ApplicationScope
-import com.example.habittracker.core_impl.data.crypto.Encryption
+import com.example.habittracker.core_api.data.crypto.Encryption
 import com.example.habittracker.core_impl.data.crypto.EncryptionImpl
 import com.example.habittracker.core_impl.data.store.UserPreferencesImpl
 import dagger.Module
