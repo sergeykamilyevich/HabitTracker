@@ -15,8 +15,8 @@ import com.example.habittracker.feature_authorization.databinding.FragmentAuthor
 import com.example.habittracker.feature_authorization.di.components.FeatureAuthorizationComponentProvider
 import com.example.habittracker.ui_kit.R.string
 import com.example.habittracker.ui_kit.presentation.HasTitle
-import com.example.habittracker.viewmodels_impl.presentation.view_models.AuthorizationViewModel
-import com.example.habittracker.viewmodels_impl.presentation.view_models.ViewModelFactory
+import com.example.habittracker.viewmodels_api.presentation.view_models.AuthorizationViewModel
+import com.example.habittracker.viewmodels_api.presentation.view_models.ViewModelFactory
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

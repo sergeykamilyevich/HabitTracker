@@ -43,7 +43,6 @@ dependencies {
     implementation project(path: ':core')
     implementation project(path: ':ui_kit')
     implementation project(path: ':viewmodels')
-    implementation project(path: ':viewmodels_impl') //TODO remove, replace viewmodels impls to interfaces
 
     //Core
     implementation android_core

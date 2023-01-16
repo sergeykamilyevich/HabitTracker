@@ -15,13 +15,13 @@ import com.example.habittracker.core_api.domain.models.HabitDone
 import com.example.habittracker.core_api.domain.models.HabitType
 import com.example.habittracker.core_api.domain.models.Time
 import com.example.habittracker.feature_habits.databinding.FragmentHabitListBinding
-import com.example.habittracker.viewmodels_api.presentation.models.HabitTypeApp
 import com.example.habittracker.feature_habits.presentation.recycler.HabitListAdapter
-import com.example.habittracker.viewmodels_impl.presentation.view_models.MainViewModel
 import com.example.habittracker.ui_kit.R
 import com.example.habittracker.ui_kit.R.*
 import com.example.habittracker.ui_kit.presentation.HasTitle
-import com.example.habittracker.viewmodels_impl.presentation.view_models.ViewModelFactory
+import com.example.habittracker.viewmodels_api.presentation.models.HabitTypeApp
+import com.example.habittracker.viewmodels_api.presentation.view_models.MainViewModel
+import com.example.habittracker.viewmodels_api.presentation.view_models.ViewModelFactory
 import javax.inject.Inject
 
 class HabitListFragment : Fragment(), HasTitle {

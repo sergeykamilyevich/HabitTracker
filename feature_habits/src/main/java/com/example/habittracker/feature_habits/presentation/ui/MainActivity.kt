@@ -18,10 +18,10 @@ import com.example.habittracker.feature_habits.R
 import com.example.habittracker.feature_habits.databinding.ActivityMainBinding
 import com.example.habittracker.feature_habits.di.components.FeatureHabitsComponent
 import com.example.habittracker.feature_habits.di.components.FeatureHabitsComponentProvider
-import com.example.habittracker.viewmodels_impl.presentation.view_models.MainViewModel
 import com.example.habittracker.ui_kit.R.*
 import com.example.habittracker.ui_kit.presentation.HasTitle
-import com.example.habittracker.viewmodels_impl.presentation.view_models.ViewModelFactory
+import com.example.habittracker.viewmodels_api.presentation.view_models.MainViewModel
+import com.example.habittracker.viewmodels_api.presentation.view_models.ViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 

@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.habittracker.core_api.domain.models.HabitListOrderBy
 import com.example.habittracker.feature_habit_filter.databinding.FragmentBottomSheetBinding
 import com.example.habittracker.feature_habit_filter.di.components.FeatureHabitFilterComponentProvider
-import com.example.habittracker.viewmodels_impl.presentation.view_models.FilterViewModel
+import com.example.habittracker.viewmodels_api.presentation.view_models.FilterViewModel
+import com.example.habittracker.viewmodels_api.presentation.view_models.ViewModelFactory
 import javax.inject.Inject
 
 class BottomSheetFragment : Fragment() {
@@ -23,7 +25,11 @@ class BottomSheetFragment : Fragment() {
     private lateinit var buttons: ArrayList<Button>
 
     @Inject
-    lateinit var filterViewModel: FilterViewModel
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val filterViewModel: FilterViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[FilterViewModel::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -18,6 +18,7 @@ import com.example.habittracker.ui_kit.R
 import com.example.habittracker.viewmodels_api.presentation.models.AddHabitSnackBarData
 import com.example.habittracker.viewmodels_api.presentation.tools.Event
 import com.example.habittracker.viewmodels_api.presentation.tools.Resources
+import com.example.habittracker.viewmodels_api.presentation.view_models.MainViewModel
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
@@ -25,38 +26,38 @@ import javax.inject.Inject
 import kotlin.math.abs
 
 @ApplicationScope
-class MainViewModel @Inject constructor(
+class MainViewModelImpl @Inject constructor(
     private val dbUseCase: DbUseCase,
     private val cloudUseCase: CloudUseCase,
     private val syncUseCase: SyncUseCase,
     private val resources: Resources,
-    private val filterViewModel: FilterViewModel,
-) : ViewModel() {
+    private val filterViewModel: FilterViewModelImpl,
+) : MainViewModel() {
 
     private val _showSnackbarHabitDone = MutableLiveData<Event<AddHabitSnackBarData>>()
-    val showSnackbarHabitDone: LiveData<Event<AddHabitSnackBarData>>
+    override val showSnackbarHabitDone: LiveData<Event<AddHabitSnackBarData>>
         get() = _showSnackbarHabitDone
 
     private val _showResultToast = MutableLiveData<Event<String>>()
-    val showResultToast: LiveData<Event<String>>
+    override val showResultToast: LiveData<Event<String>>
         get() = _showResultToast
 
     private val _showHabitsAreNotSyncDialogAlert = MutableLiveData<Unit>()
-    val showHabitsAreNotSyncDialogAlert: LiveData<Unit>
+    override val showHabitsAreNotSyncDialogAlert: LiveData<Unit>
         get() = _showHabitsAreNotSyncDialogAlert
 
     private val _ioError = MutableLiveData<Event<String>>()
-    val ioError: LiveData<Event<String>>
+    override val ioError: LiveData<Event<String>>
         get() = _ioError
 
     private var isHabitDoneButtonsBlocked: Boolean = false
 
-    lateinit var habitList: LiveData<List<Habit>>
+    override lateinit var habitList: LiveData<List<Habit>>
 
     private val errorFlow by lazy {
         cloudUseCase.getCloudErrorUseCase.invoke()
     }
-    val cloudError: LiveData<Event<String>> by lazy {
+    override val cloudError: LiveData<Event<String>> by lazy {
         MediatorLiveData<Event<String>>().apply {
             addSource(errorFlow.asLiveData()) {
                 Log.e("ErrorApp", "Flow $it")
@@ -65,21 +66,21 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun showErrorToast(error: IoError) {
+    override fun showErrorToast(error: IoError) {
         _ioError.value = eventErrorText(error)
     }
 
-    fun isHabitDoneButtonsBlocked() = isHabitDoneButtonsBlocked
+    override fun isHabitDoneButtonsBlocked() = isHabitDoneButtonsBlocked
 
-    fun blockHabitDoneButtons() {
+    override fun blockHabitDoneButtons() {
         isHabitDoneButtonsBlocked = true
     }
 
-    fun unblockHabitDoneButtons() {
+    override fun unblockHabitDoneButtons() {
         isHabitDoneButtonsBlocked = false
     }
 
-    fun deleteHabitItem(habit: Habit) {
+    override fun deleteHabitItem(habit: Habit) {
         viewModelScope.launch {
             val resultDb = dbUseCase.deleteHabitUseCase.invoke(habit)
             if (resultDb is Failure) _ioError.value = eventErrorText(resultDb.error)
@@ -88,7 +89,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun deleteAllHabitsFromCloud() {
+    override fun deleteAllHabitsFromCloud() {
         viewModelScope.launch {
             val result = cloudUseCase.deleteAllHabitsFromCloudUseCase.invoke()
             if (result is Failure) {
@@ -98,7 +99,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun deleteAllHabitsFromDb() {
+    override fun deleteAllHabitsFromDb() {
         viewModelScope.launch {
             val result = dbUseCase.deleteAllHabitsUseCase.invoke()
             if (result is Failure) {
@@ -108,7 +109,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun snackbarText(habit: Habit): String {
+    override fun snackbarText(habit: Habit): String {
         val habitType = habit.type
         val habitRecurrenceNumber = habit.recurrenceNumber
         val actualDoneListSize = habit.actualDoneListSize()
@@ -132,7 +133,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun eventErrorText(error: IoError): Event<String> {
+    override fun eventErrorText(error: IoError): Event<String> {
         Log.e("ErrorApp eventErrorText", error.toString())
         val errorTextFromRes = when (error) {
             is HabitAlreadyExistsError -> R.string.habit_already_exists
@@ -155,7 +156,7 @@ class MainViewModel @Inject constructor(
         else EMPTY_CODE_STRING
 
 
-    fun addHabitDone(habitDone: HabitDone) {
+    override fun addHabitDone(habitDone: HabitDone) {
         viewModelScope.launch {
             val habitDoneIdAdded = dbUseCase.addHabitDoneUseCase.invoke(habitDone)
             when (habitDoneIdAdded) {
@@ -175,7 +176,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun addHabitDoneToCloud(habitDone: HabitDone) {
+    override fun addHabitDoneToCloud(habitDone: HabitDone) {
         viewModelScope.launch {
             val result = cloudUseCase.postHabitDoneToCloudUseCase.invoke(habitDone)
             if (result is Failure) {
@@ -184,31 +185,31 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun deleteHabitDone(habitDoneId: Int) {
+    override fun deleteHabitDone(habitDoneId: Int) {
         viewModelScope.launch {
             dbUseCase.deleteHabitDoneUseCase.invoke(habitDoneId)
         }
     }
 
-    fun getHabitList(habitTypeFilter: HabitType?) {
+    override fun getHabitList(habitTypeFilter: HabitType?) {
         habitList = Transformations.switchMap(filterViewModel.habitListFilter) {
             dbUseCase.getHabitListUseCase.invoke(habitTypeFilter, it).asLiveData()
         }
     }
 
-    fun uploadAllHabitsFromDbToCloud() {
+    override fun uploadAllHabitsFromDbToCloud() {
         viewModelScope.launch {
             handleSyncResult(syncUseCase.syncAllToCloudUseCase.invoke())
         }
     }
 
-    fun downloadAllHabitsFromCloudToDb() {
+    override fun downloadAllHabitsFromCloudToDb() {
         viewModelScope.launch {
             handleSyncResult(syncUseCase.syncAllFromCloudUseCase.invoke())
         }
     }
 
-    fun snackbarCallback(habitDone: HabitDone) =
+    override fun snackbarCallback(habitDone: HabitDone) =
         object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
 
             override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
@@ -237,7 +238,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun compareCloudAndDb() {
+    override fun compareCloudAndDb() {
         viewModelScope.launch {
             val result = syncUseCase.areCloudAndDbEqualUseCase.invoke()
             when (result) {

@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.annotation.ColorInt
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.habittracker.cloud_sync.domain.usecases.interfaces.SyncUseCase
 import com.example.habittracker.core_api.domain.errors.Either
@@ -19,66 +18,67 @@ import com.example.habittracker.core_api.domain.models.Time
 import com.example.habittracker.db_api.domain.usecases.DbUseCase
 import com.example.habittracker.viewmodels_api.presentation.color.ColorPicker
 import com.example.habittracker.viewmodels_api.presentation.mappers.HabitItemMapper
+import com.example.habittracker.viewmodels_api.presentation.view_models.HabitItemViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class HabitItemViewModel @Inject constructor(
+class HabitItemViewModelImpl @Inject constructor(
     private val mapper: HabitItemMapper,
-    private val mainViewModel: MainViewModel,
+    private val mainViewModel: MainViewModelImpl,
     private val time: Time,
     private val colorPicker: ColorPicker,
     private val dbUseCase: DbUseCase,
     private val syncUseCase: SyncUseCase
-) : ViewModel() {
+) : HabitItemViewModel() {
 
     private val _errorInputName = MutableLiveData<Boolean>()
-    val errorInputName: LiveData<Boolean>
+    override val errorInputName: LiveData<Boolean>
         get() = _errorInputName
 
     private val _errorInputDescription = MutableLiveData<Boolean>()
-    val errorInputDescription: LiveData<Boolean>
+    override val errorInputDescription: LiveData<Boolean>
         get() = _errorInputDescription
 
     private val _errorInputRecurrenceNumber = MutableLiveData<Boolean>()
-    val errorInputRecurrenceNumber: LiveData<Boolean>
+    override val errorInputRecurrenceNumber: LiveData<Boolean>
         get() = _errorInputRecurrenceNumber
 
     private val _errorInputRecurrencePeriod = MutableLiveData<Boolean>()
-    val errorInputRecurrencePeriod: LiveData<Boolean>
+    override val errorInputRecurrencePeriod: LiveData<Boolean>
         get() = _errorInputRecurrencePeriod
 
     private val _currentFragmentHabit = MutableLiveData<Habit>()
-    val currentFragmentHabit: LiveData<Habit>
+    override val currentFragmentHabit: LiveData<Habit>
         get() = _currentFragmentHabit
 
 
     private val _canCloseItemFragment = MutableLiveData<Unit>()
-    val canCloseItemFragment: LiveData<Unit>
+    override val canCloseItemFragment: LiveData<Unit>
         get() = _canCloseItemFragment
 
     private var currentColor = colorPicker.colors()[0]
-    fun currentColor(): Int = currentColor
+    override fun currentColor(): Int = currentColor
 
-    fun saveCurrentColor(@ColorInt color: Int) {
+    override fun saveCurrentColor(@ColorInt color: Int) {
         currentColor = color
     }
 
-    fun validateName(input: Editable?) {
+    override fun validateName(input: Editable?) {
         val name = mapper.parseString(input)
         _errorInputName.value = !validateString(name)
     }
 
-    fun validateDescription(input: Editable?) {
+    override fun validateDescription(input: Editable?) {
         val name = mapper.parseString(input)
         _errorInputDescription.value = !validateString(name)
     }
 
-    fun validateRecurrenceNumber(input: Editable?) {
+    override fun validateRecurrenceNumber(input: Editable?) {
         val recurrenceNumber = mapper.parseNumber(input)
         _errorInputRecurrenceNumber.value = !validateNumber(recurrenceNumber)
     }
 
-    fun validateRecurrencePeriod(input: Editable?) {
+    override fun validateRecurrencePeriod(input: Editable?) {
         val recurrencePeriod = mapper.parseNumber(input)
         _errorInputRecurrencePeriod.value = !validateNumber(recurrencePeriod)
     }
@@ -87,7 +87,7 @@ class HabitItemViewModel @Inject constructor(
 
     private fun validateNumber(input: Int): Boolean = input > 0
 
-    fun chooseScreenMode(habitId: Int) {
+    override fun chooseScreenMode(habitId: Int) {
         if (habitId == Habit.UNDEFINED_ID) setEmptyCurrentHabit()
         else setCurrentHabitFromDb(habitId)
     }
@@ -120,7 +120,7 @@ class HabitItemViewModel @Inject constructor(
         }
     }
 
-    fun addHabit(habit: Habit) {
+    override fun addHabit(habit: Habit) {
         viewModelScope.launch {
             val item = Habit(
                 name = habit.name,
@@ -136,7 +136,7 @@ class HabitItemViewModel @Inject constructor(
         }
     }
 
-    fun upsertHabitItem(habit: Habit) {
+    override fun upsertHabitItem(habit: Habit) {
         _currentFragmentHabit.value?.let { oldItem ->
             viewModelScope.launch {
                 val item = oldItem.copy(

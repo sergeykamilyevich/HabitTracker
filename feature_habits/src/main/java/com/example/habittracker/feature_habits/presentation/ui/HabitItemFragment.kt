@@ -28,8 +28,8 @@ import com.example.habittracker.viewmodels_api.presentation.color.ColorPicker
 import com.example.habittracker.viewmodels_api.presentation.mappers.HabitItemMapper
 import com.example.habittracker.viewmodels_api.presentation.models.HabitPriorityApp
 import com.example.habittracker.viewmodels_api.presentation.models.ViewDataToHabit
-import com.example.habittracker.viewmodels_impl.presentation.view_models.HabitItemViewModel
-import com.example.habittracker.viewmodels_impl.presentation.view_models.ViewModelFactory
+import com.example.habittracker.viewmodels_api.presentation.view_models.HabitItemViewModel
+import com.example.habittracker.viewmodels_api.presentation.view_models.ViewModelFactory
 import com.google.android.material.textfield.TextInputEditText
 import javax.inject.Inject
 import kotlin.random.Random

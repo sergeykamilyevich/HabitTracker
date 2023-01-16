@@ -1,6 +1,6 @@
 package com.example.habittracker.feature_authorization.di.modules
 
-import com.example.habittracker.viewmodels_impl.presentation.view_models.AuthorizationViewModel
+import com.example.habittracker.viewmodels_api.presentation.view_models.AuthorizationViewModel
 import dagger.Module
 import dagger.Provides
 import javax.inject.Provider
