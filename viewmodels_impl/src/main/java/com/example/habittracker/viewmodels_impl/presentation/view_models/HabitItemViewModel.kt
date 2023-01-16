@@ -22,7 +22,6 @@ import com.example.habittracker.viewmodels_api.presentation.mappers.HabitItemMap
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-//@HabitItemViewModelScope
 class HabitItemViewModel @Inject constructor(
     private val mapper: HabitItemMapper,
     private val mainViewModel: MainViewModel,
@@ -159,7 +158,6 @@ class HabitItemViewModel @Inject constructor(
         val resultOfUpserting: Either<IoError, Int> = dbUseCase.upsertHabitUseCase.invoke(habit)
         when (resultOfUpserting) {
             is Success -> {
-                closeItemFragment()
                 val habitToPut = habit.copy(id = resultOfUpserting.result)
                 val putResult =
                     syncUseCase.putHabitAndSyncWithDbUseCase.invoke(habitToPut)
@@ -167,6 +165,7 @@ class HabitItemViewModel @Inject constructor(
                 if (putResult is Failure) {
                     mainViewModel.showErrorToast(putResult.error)
                 }
+                closeItemFragment()
             }
             is Failure -> mainViewModel.showErrorToast(resultOfUpserting.error)
         }

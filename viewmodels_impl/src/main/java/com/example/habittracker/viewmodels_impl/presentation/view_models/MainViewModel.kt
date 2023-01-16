@@ -3,6 +3,7 @@ package com.example.habittracker.viewmodels_impl.presentation.view_models
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.habittracker.cloud_sync.domain.usecases.interfaces.SyncUseCase
+import com.example.habittracker.core_api.di.annotations.ApplicationScope
 import com.example.habittracker.core_api.domain.errors.Either
 import com.example.habittracker.core_api.domain.errors.Either.Failure
 import com.example.habittracker.core_api.domain.errors.Either.Success
@@ -23,7 +24,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.abs
 
-//@FeatureScope
+@ApplicationScope
 class MainViewModel @Inject constructor(
     private val dbUseCase: DbUseCase,
     private val cloudUseCase: CloudUseCase,
@@ -31,10 +32,6 @@ class MainViewModel @Inject constructor(
     private val resources: Resources,
     private val filterViewModel: FilterViewModel,
 ) : ViewModel() {
-
-    init {
-//        compareCloudAndDb() //TODO where should it be?
-    }
 
     private val _showSnackbarHabitDone = MutableLiveData<Event<AddHabitSnackBarData>>()
     val showSnackbarHabitDone: LiveData<Event<AddHabitSnackBarData>>

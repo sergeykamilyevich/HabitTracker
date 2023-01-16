@@ -22,16 +22,14 @@ import com.example.habittracker.core_api.domain.models.HabitType
 import com.example.habittracker.core_api.domain.models.Time
 import com.example.habittracker.feature_habits.R.layout
 import com.example.habittracker.feature_habits.databinding.FragmentHabitItemBinding
-import com.example.habittracker.viewmodels_api.presentation.mappers.HabitItemMapper
-import com.example.habittracker.viewmodels_api.presentation.models.HabitPriorityApp
 import com.example.habittracker.ui_kit.R.string
 import com.example.habittracker.ui_kit.presentation.HasTitle
-import com.example.habittracker.viewmodels_impl.presentation.view_models.ViewModelFactory
 import com.example.habittracker.viewmodels_api.presentation.color.ColorPicker
+import com.example.habittracker.viewmodels_api.presentation.mappers.HabitItemMapper
+import com.example.habittracker.viewmodels_api.presentation.models.HabitPriorityApp
 import com.example.habittracker.viewmodels_api.presentation.models.ViewDataToHabit
-import com.example.habittracker.viewmodels_impl.presentation.view_models.AuthorizationViewModel
 import com.example.habittracker.viewmodels_impl.presentation.view_models.HabitItemViewModel
-import com.example.habittracker.viewmodels_impl.presentation.view_models.MainViewModel
+import com.example.habittracker.viewmodels_impl.presentation.view_models.ViewModelFactory
 import com.google.android.material.textfield.TextInputEditText
 import javax.inject.Inject
 import kotlin.random.Random
@@ -52,15 +50,9 @@ class HabitItemFragment : Fragment(), HasTitle {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
-    private val viewModel: AuthorizationViewModel by lazy {
-        ViewModelProvider(this, viewModelFactory)[AuthorizationViewModel::class.java]
+    private val habitItemViewModel: HabitItemViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[HabitItemViewModel::class.java]
     }
-
-    @Inject
-    lateinit var habitItemViewModel: HabitItemViewModel
-
-    @Inject
-    lateinit var mainViewModel: MainViewModel
 
     private val habitId by lazy {
         arguments?.getInt(HABIT_ITEM_ID, UNDEFINED_ID)

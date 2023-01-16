@@ -23,9 +23,6 @@ import javax.inject.Inject
 
 class AuthorizationFragment : Fragment(), HasTitle {
 
-//    @Inject
-//    lateinit var viewModel: AuthorizationViewModel
-
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 

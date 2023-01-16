@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
@@ -20,6 +21,7 @@ import com.example.habittracker.feature_habits.di.components.FeatureHabitsCompon
 import com.example.habittracker.viewmodels_impl.presentation.view_models.MainViewModel
 import com.example.habittracker.ui_kit.R.*
 import com.example.habittracker.ui_kit.presentation.HasTitle
+import com.example.habittracker.viewmodels_impl.presentation.view_models.ViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
@@ -35,7 +37,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     @Inject
-    lateinit var viewModel: MainViewModel
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
+    }
 
     private val fragmentListener =
         object : FragmentManager.FragmentLifecycleCallbacks() {

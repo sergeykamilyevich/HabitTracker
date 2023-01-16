@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +21,7 @@ import com.example.habittracker.viewmodels_impl.presentation.view_models.MainVie
 import com.example.habittracker.ui_kit.R
 import com.example.habittracker.ui_kit.R.*
 import com.example.habittracker.ui_kit.presentation.HasTitle
+import com.example.habittracker.viewmodels_impl.presentation.view_models.ViewModelFactory
 import javax.inject.Inject
 
 class HabitListFragment : Fragment(), HasTitle {
@@ -29,7 +31,11 @@ class HabitListFragment : Fragment(), HasTitle {
         get() = _binding ?: throw RuntimeException("FragmentHabitListBinding is null")
 
     @Inject
-    lateinit var viewModel: MainViewModel
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
+    }
 
     @Inject
     lateinit var time: Time

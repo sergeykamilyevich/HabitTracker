@@ -2,7 +2,7 @@ package com.example.habittracker.feature_habits.di.components
 
 import android.app.Application
 import com.example.habittracker.cloud_sync.di.modules.CloudSyncModule
-import com.example.habittracker.core_api.di.annotations.FeatureScope
+import com.example.habittracker.core_api.di.annotations.ApplicationScope
 import com.example.habittracker.core_api.di.mediators.CoreFacadeComponentProviders
 import com.example.habittracker.db_api.di.mediators.DbFacadeComponentProviders
 import com.example.habittracker.feature_habits.di.modules.FeatureHabitsModule
@@ -13,7 +13,7 @@ import com.example.habittracker.viewmodels_api.di.mediators.ViewModelsFacadeComp
 import dagger.BindsInstance
 import dagger.Component
 
-@FeatureScope
+@ApplicationScope
 @Component(
     dependencies = [
         CoreFacadeComponentProviders::class,
