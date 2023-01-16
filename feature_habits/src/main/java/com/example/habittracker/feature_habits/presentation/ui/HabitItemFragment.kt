@@ -23,7 +23,6 @@ import com.example.habittracker.feature_habits.R.layout
 import com.example.habittracker.feature_habits.databinding.FragmentHabitItemBinding
 import com.example.habittracker.feature_habits.presentation.color.ColorPicker
 import com.example.habittracker.feature_habits.presentation.mappers.HabitItemMapper
-import com.example.habittracker.feature_habits.presentation.models.ColorRgbHsv
 import com.example.habittracker.feature_habits.presentation.models.HabitPriorityApp
 import com.example.habittracker.feature_habits.presentation.view_models.HabitItemViewModel
 import com.example.habittracker.feature_habits.presentation.view_models.MainViewModel
@@ -242,18 +241,8 @@ class HabitItemFragment : Fragment(), HasTitle {
 
     private fun setUpColorViews(@ColorInt color: Int) {
         with(binding) {
-            val colorRgbHsv = ColorRgbHsv.fromColor(color)
             currentColor.setBackgroundColor(color)
             habitItemViewModel.saveCurrentColor(color)
-            tvCurrentColorRgb.text =
-                getString(string.rgb_color, colorRgbHsv.red, colorRgbHsv.green, colorRgbHsv.blue)
-            tvCurrentColorHsv.text =
-                getString(
-                    string.hsv_color,
-                    colorRgbHsv.hue,
-                    colorRgbHsv.saturation,
-                    colorRgbHsv.value
-                )
         }
     }
 
