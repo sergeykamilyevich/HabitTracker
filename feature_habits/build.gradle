@@ -64,6 +64,7 @@ dependencies {
     implementation project(path: ':network')
     implementation project(path: ':db')
     implementation project(path: ':viewmodels')
+    implementation project(path: ':viewmodels_impl') //TODO remove, replace viewmodels impls to interfaces
 
     //Core
     implementation android_core
@@ -93,5 +94,6 @@ dependencies {
 
     //Tests
     testImplementation tests.values()
+    androidTestImplementation tests.values()
     testImplementation dagger_impl.values()
 }

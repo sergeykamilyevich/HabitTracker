@@ -4,8 +4,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.habittracker.core_api.domain.models.Habit
 import com.example.habittracker.core_api.domain.models.Time
 import com.example.habittracker.feature_habits.databinding.ItemHabitBinding
-import com.example.habittracker.feature_habits.presentation.models.HabitPriorityApp
-import com.example.habittracker.feature_habits.presentation.models.HabitTypeApp
+import com.example.habittracker.viewmodels_api.presentation.models.HabitPriorityApp
+import com.example.habittracker.viewmodels_api.presentation.models.HabitTypeApp
 import com.example.habittracker.ui_kit.R
 
 

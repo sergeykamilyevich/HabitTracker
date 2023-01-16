@@ -36,6 +36,10 @@ dependencies {
 
     //Modules
     implementation project(path: ':core')
+    implementation project(path: ':viewmodels_impl') //TODO remove
+    api project(path: ':viewmodels_api')
+    implementation project(path: ':db')
+    implementation project(path: ':network')
 
     //Core
     implementation android_core

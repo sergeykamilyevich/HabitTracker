@@ -1,17 +1,12 @@
 package com.example.habittracker.feature_habits.di.modules
 
-import com.example.habittracker.feature_habits.presentation.view_models.Resources
-import com.example.habittracker.viewmodels.presentation.FilterViewModel
-import dagger.Binds
+import com.example.habittracker.viewmodels_impl.presentation.view_models.FilterViewModel
 import dagger.Module
 import dagger.Provides
 import javax.inject.Provider
 
 @Module
 interface FeatureHabitsModule {
-
-    @[Binds]
-    fun bindResources(impl: Resources.Base): Resources
 
     companion object {
 

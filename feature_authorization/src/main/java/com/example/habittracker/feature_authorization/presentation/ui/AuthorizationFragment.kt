@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -14,22 +15,23 @@ import com.example.habittracker.feature_authorization.databinding.FragmentAuthor
 import com.example.habittracker.feature_authorization.di.components.FeatureAuthorizationComponentProvider
 import com.example.habittracker.ui_kit.R.string
 import com.example.habittracker.ui_kit.presentation.HasTitle
-import com.example.habittracker.viewmodels.presentation.AuthorizationViewModel
+import com.example.habittracker.viewmodels_impl.presentation.view_models.AuthorizationViewModel
+import com.example.habittracker.viewmodels_impl.presentation.view_models.ViewModelFactory
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 class AuthorizationFragment : Fragment(), HasTitle {
 
-    @Inject
-    lateinit var viewModel: AuthorizationViewModel
-
 //    @Inject
-//    lateinit var viewModelFactory: ViewModelFactory
-//
-//    private val viewModel: AuthorizationViewModel by lazy {
-//        ViewModelProvider(this, viewModelFactory)[AuthorizationViewModel::class.java]
-//    }
+//    lateinit var viewModel: AuthorizationViewModel
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val viewModel: AuthorizationViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[AuthorizationViewModel::class.java]
+    }
 
     private var _binding: FragmentAuthorizationBinding? = null
     private val binding: FragmentAuthorizationBinding

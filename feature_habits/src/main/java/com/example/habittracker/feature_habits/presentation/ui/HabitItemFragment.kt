@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.habittracker.core_api.domain.models.Habit
 import com.example.habittracker.core_api.domain.models.Habit.Companion.UNDEFINED_ID
@@ -21,13 +22,16 @@ import com.example.habittracker.core_api.domain.models.HabitType
 import com.example.habittracker.core_api.domain.models.Time
 import com.example.habittracker.feature_habits.R.layout
 import com.example.habittracker.feature_habits.databinding.FragmentHabitItemBinding
-import com.example.habittracker.feature_habits.presentation.color.ColorPicker
-import com.example.habittracker.feature_habits.presentation.mappers.HabitItemMapper
-import com.example.habittracker.feature_habits.presentation.models.HabitPriorityApp
-import com.example.habittracker.feature_habits.presentation.view_models.HabitItemViewModel
-import com.example.habittracker.feature_habits.presentation.view_models.MainViewModel
+import com.example.habittracker.viewmodels_api.presentation.mappers.HabitItemMapper
+import com.example.habittracker.viewmodels_api.presentation.models.HabitPriorityApp
 import com.example.habittracker.ui_kit.R.string
 import com.example.habittracker.ui_kit.presentation.HasTitle
+import com.example.habittracker.viewmodels_impl.presentation.view_models.ViewModelFactory
+import com.example.habittracker.viewmodels_api.presentation.color.ColorPicker
+import com.example.habittracker.viewmodels_api.presentation.models.ViewDataToHabit
+import com.example.habittracker.viewmodels_impl.presentation.view_models.AuthorizationViewModel
+import com.example.habittracker.viewmodels_impl.presentation.view_models.HabitItemViewModel
+import com.example.habittracker.viewmodels_impl.presentation.view_models.MainViewModel
 import com.google.android.material.textfield.TextInputEditText
 import javax.inject.Inject
 import kotlin.random.Random
@@ -44,6 +48,13 @@ class HabitItemFragment : Fragment(), HasTitle {
     @Inject
     lateinit var colorPicker: ColorPicker
     private val colors by lazy { colorPicker.colors() }
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val viewModel: AuthorizationViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[AuthorizationViewModel::class.java]
+    }
 
     @Inject
     lateinit var habitItemViewModel: HabitItemViewModel
@@ -166,7 +177,19 @@ class HabitItemFragment : Fragment(), HasTitle {
     private fun setButtonSaveClickListener() {
         binding.btnSave.setOnClickListener {
             if (isFieldsFilled()) {
-                habitItemViewModel.upsertHabitItem(habitItemMapper.mapViewToHabit(binding))
+                habitItemViewModel.upsertHabitItem(
+                    habitItemMapper.mapViewToHabit(
+                        ViewDataToHabit(
+                            tiedName = binding.tiedName.text,
+                            tiedDescription = binding.tiedDescription.text,
+                            spinnerPriority = binding.spinnerPriority,
+                            radioGroup = binding.radioGroup,
+                            color = (binding.currentColor.background as ColorDrawable).color,
+                            tiedRecurrenceNumber = binding.tiedRecurrenceNumber.text,
+                            tiedRecurrencePeriod = binding.tiedRecurrencePeriod.text
+                        )
+                    )
+                )
             } else {
                 Toast.makeText(
                     requireActivity(),
@@ -233,7 +256,10 @@ class HabitItemFragment : Fragment(), HasTitle {
                 .getPosition(getString(habitPriorityApp.resourceId))
             spinnerPriority.setSelection(spinnerPosition)
             val checkedRadioButtonId =
-                habitItemMapper.mapHabitTypeToRadioButton(habit.type, binding)
+                habitItemMapper.mapHabitTypeToRadioButton(
+                    habitType = habit.type,
+                    rbGoodId = binding.rbGood.id,
+                    rbBadId = binding.rbBad.id)
             radioGroup.check(checkedRadioButtonId)
             setUpColorViews(habit.color)
         }

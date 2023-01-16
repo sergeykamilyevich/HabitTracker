@@ -9,6 +9,7 @@ import com.example.habittracker.feature_habits.di.modules.FeatureHabitsModule
 import com.example.habittracker.feature_habits.presentation.ui.HabitListFragment
 import com.example.habittracker.feature_habits.presentation.ui.MainActivity
 import com.example.habittracker.network_api.di.mediators.NetworkFacadeComponentProviders
+import com.example.habittracker.viewmodels_api.di.mediators.ViewModelsFacadeComponentProviders
 import dagger.BindsInstance
 import dagger.Component
 
@@ -18,6 +19,7 @@ import dagger.Component
         CoreFacadeComponentProviders::class,
         NetworkFacadeComponentProviders::class,
         DbFacadeComponentProviders::class,
+        ViewModelsFacadeComponentProviders::class,
     ],
     modules = [
         FeatureHabitsModule::class,
@@ -33,7 +35,8 @@ interface FeatureHabitsComponent {
             @BindsInstance application: Application,
             coreFacadeComponentProviders: CoreFacadeComponentProviders,
             networkFacadeComponentProviders: NetworkFacadeComponentProviders,
-            dbFacadeComponentProviders: DbFacadeComponentProviders
+            dbFacadeComponentProviders: DbFacadeComponentProviders,
+            viewModelsFacadeComponentProviders: ViewModelsFacadeComponentProviders,
         ): FeatureHabitsComponent
     }
 

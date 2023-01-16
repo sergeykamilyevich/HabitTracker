@@ -4,6 +4,7 @@ import android.app.Application
 import com.example.habittracker.di.components.CoreFacadeComponent
 import com.example.habittracker.di.components.DbFacadeComponent
 import com.example.habittracker.di.components.NetworkFacadeComponent
+import com.example.habittracker.di.components.ViewModelsFacadeComponent
 import com.example.habittracker.feature_authorization.di.components.DaggerFeatureAuthorizationComponent
 import com.example.habittracker.feature_authorization.di.components.FeatureAuthorizationComponent
 import com.example.habittracker.feature_habit_filter.di.components.DaggerFeatureHabitFilterComponent
@@ -15,6 +16,9 @@ class App : Application(), FeatureComponentsProvider, AppWithFacade {
 
     override val coreFacadeComponent: CoreFacadeComponent by lazy {
         CoreFacadeComponent.init(context = this)
+    }
+    override val viewModelsFacadeComponent: ViewModelsFacadeComponent by lazy {
+        ViewModelsFacadeComponent.init(context = this)
     }
 
     override val networkFacadeComponent: NetworkFacadeComponent by lazy {
@@ -32,7 +36,8 @@ class App : Application(), FeatureComponentsProvider, AppWithFacade {
                 application = this,
                 coreFacadeComponentProviders = coreFacadeComponent,
                 networkFacadeComponentProviders = networkFacadeComponent,
-                dbFacadeComponentProviders = dbFacadeComponent
+                dbFacadeComponentProviders = dbFacadeComponent,
+                viewModelsFacadeComponentProviders = viewModelsFacadeComponent
             )
     }
 
@@ -41,7 +46,8 @@ class App : Application(), FeatureComponentsProvider, AppWithFacade {
             .factory()
             .create(
                 application = this,
-                coreFacadeComponentProviders = coreFacadeComponent
+                coreFacadeComponentProviders = coreFacadeComponent,
+                viewModelsFacadeComponentProviders = viewModelsFacadeComponent
             )
     }
     override val featureAuthorizationComponent: FeatureAuthorizationComponent by lazy {
@@ -49,7 +55,8 @@ class App : Application(), FeatureComponentsProvider, AppWithFacade {
             .factory()
             .create(
                 application = this,
-                coreFacadeComponentProviders = coreFacadeComponent
+                coreFacadeComponentProviders = coreFacadeComponent,
+                viewModelsFacadeComponentProviders = viewModelsFacadeComponent
             )
     }
 }

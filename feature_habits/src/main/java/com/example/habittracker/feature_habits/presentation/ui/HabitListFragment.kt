@@ -14,9 +14,9 @@ import com.example.habittracker.core_api.domain.models.HabitDone
 import com.example.habittracker.core_api.domain.models.HabitType
 import com.example.habittracker.core_api.domain.models.Time
 import com.example.habittracker.feature_habits.databinding.FragmentHabitListBinding
-import com.example.habittracker.feature_habits.presentation.models.HabitTypeApp
+import com.example.habittracker.viewmodels_api.presentation.models.HabitTypeApp
 import com.example.habittracker.feature_habits.presentation.recycler.HabitListAdapter
-import com.example.habittracker.feature_habits.presentation.view_models.MainViewModel
+import com.example.habittracker.viewmodels_impl.presentation.view_models.MainViewModel
 import com.example.habittracker.ui_kit.R
 import com.example.habittracker.ui_kit.R.*
 import com.example.habittracker.ui_kit.presentation.HasTitle
@@ -53,6 +53,7 @@ class HabitListFragment : Fragment(), HasTitle {
             listMode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 it.getParcelable(LIST_MODE, HabitTypeApp::class.java)
             } else {
+                @Suppress("DEPRECATION")
                 it.getParcelable(LIST_MODE)
             }
         }

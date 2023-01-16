@@ -1,6 +1,6 @@
 package com.example.habittracker.feature_habit_filter.di.modules
 
-import com.example.habittracker.viewmodels.presentation.FilterViewModel
+import com.example.habittracker.viewmodels_impl.presentation.view_models.FilterViewModel
 import dagger.Module
 import dagger.Provides
 import javax.inject.Provider
@@ -12,7 +12,7 @@ interface FeatureHabitFilterModule {
 
         @Provides
         fun provideFilterViewModelImpl(map: Map<Class<*>, @JvmSuppressWildcards Provider<Any>>):
-        FilterViewModel =
+                FilterViewModel =
             map[FilterViewModel::class.java]?.get() as? FilterViewModel
                 ?: throw RuntimeException("FilterViewModel is absent into map")
 

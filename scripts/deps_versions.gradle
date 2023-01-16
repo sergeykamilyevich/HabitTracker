@@ -5,11 +5,11 @@ ext {
     dagger_version = '2.41'
     retrofit2_version = '2.9.0'
     okhttp3_version = '4.9.3'
-    glide_version = '4.13.0'
     coroutines_version = '1.6.4'
     androidx_test_ext_junit_version = '1.1.5'
     androidx_test_version = '1.5.0'
     mockito_version = '4.5.1'
+    espresso_version = '3.4.0'
 
     android_core = "androidx.core:core-ktx:1.9.0"
     appcompat = "androidx.appcompat:appcompat:1.5.1"
@@ -69,6 +69,10 @@ ext {
             'core'              : "androidx.test:core:$androidx_test_version",
             'core-ktx'          : "androidx.test:core-ktx:$androidx_test_version",
             'runner'            : "androidx.test:runner:1.5.2",
-            'robolectric'       : "org.robolectric:robolectric:4.9.2"
+            'robolectric'       : "org.robolectric:robolectric:4.9.2",
+            'espresso'          : "androidx.test.espresso:espresso-core:$espresso_version",
+            'espresso-contrib'  : "androidx.test.espresso:espresso-contrib:$espresso_version",
+            'test-runner'       : "androidx.test:runner:1.4.0",
+            'test-rules'       : "androidx.test:rules:1.4.0"
     ]
 }
