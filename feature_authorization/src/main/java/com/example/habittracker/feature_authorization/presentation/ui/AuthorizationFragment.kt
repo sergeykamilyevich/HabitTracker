@@ -53,7 +53,7 @@ class AuthorizationFragment : Fragment(), HasTitle {
         super.onViewCreated(view, savedInstanceState)
         with(binding) {
             viewModel.accessToken.asLiveData().observe(viewLifecycleOwner) { token ->
-                tiedToken.text = SpannableStringBuilder(token)
+                token?.let { tiedToken.text = SpannableStringBuilder(it) }
             }
 
             btnSave.setOnClickListener {
