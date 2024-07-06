@@ -19,11 +19,13 @@ class SyncHabitRepositoryImpl @Inject constructor(
 ) : SyncHabitRepository {
 
     override suspend fun uploadAllToCloud(habitList: List<Habit>): Either<IoError, Unit> {
-        var cloudError: Either<IoError, Unit> = Unit.success()
         habitList.forEach { habit ->
             val habitForUpload = habit.clearUid()
             val newUid = putAndSyncWithDb(habitForUpload)
             when (newUid) {
+                is Failure -> {
+                    return newUid.error.failure()
+                }
                 is Success -> {
                     habit.done.forEach { date ->
                         val habitDoneWithNewUid = HabitDone(
@@ -32,15 +34,12 @@ class SyncHabitRepositoryImpl @Inject constructor(
                         )
                         val postResult: Either<IoError, Unit> =
                             cloudHabitRepository.postHabitDone(habitDoneWithNewUid)
-                        if (postResult is Failure) cloudError = postResult
+                        if (postResult is Failure) return postResult
                     }
-                }
-                is Failure -> {
-                    cloudError = newUid.error.failure()
                 }
             }
         }
-        return cloudError
+        return Unit.success()
     }
 
     override suspend fun upsertAndSyncWithCloud(habit: Habit): Either<IoError, Int> {
@@ -63,13 +62,18 @@ class SyncHabitRepositoryImpl @Inject constructor(
 
     override suspend fun syncAllFromCloud(): Either<IoError, Unit> {
         val habitList = cloudHabitRepository.getHabitList()
-        var result: Either<IoError, Unit> = Unit.success()
         when (habitList) {
+            is Failure -> {
+                return habitList.error.failure()
+            }
             is Success -> {
                 dbHabitRepository.deleteAllHabits()
                 habitList.result.forEach { habit ->
                     val habitId = dbHabitRepository.upsertHabit(habit)
                     when (habitId) {
+                        is Failure -> {
+                            return habitId.error.failure()
+                        }
                         is Success -> {
                             habit.done.forEach {
                                 dbHabitRepository.addHabitDone(
@@ -81,17 +85,11 @@ class SyncHabitRepositoryImpl @Inject constructor(
                                 )
                             }
                         }
-                        is Failure -> {
-                            result = habitId.error.failure()
-                        }
                     }
                 }
 
             }
-            is Failure -> {
-                result = habitList.error.failure()
-            }
         }
-        return result
+        return Unit.success()
     }
 }
