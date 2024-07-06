@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habittracker.core_api.domain.models.HabitDone
 import com.example.habittracker.core_api.domain.models.HabitType
-import com.example.habittracker.core_api.domain.models.Time
 import com.example.habittracker.feature_habits.databinding.FragmentHabitListBinding
 import com.example.habittracker.feature_habits.presentation.recycler.HabitListAdapter
 import com.example.habittracker.ui_kit.R

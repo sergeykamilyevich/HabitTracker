@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +18,6 @@ import com.example.habittracker.core_api.domain.models.Habit
 import com.example.habittracker.core_api.domain.models.Habit.Companion.UNDEFINED_ID
 import com.example.habittracker.core_api.domain.models.HabitPriority
 import com.example.habittracker.core_api.domain.models.HabitType
-import com.example.habittracker.core_api.domain.models.Time
 import com.example.habittracker.feature_habits.R.layout
 import com.example.habittracker.feature_habits.databinding.FragmentHabitItemBinding
 import com.example.habittracker.ui_kit.R.string

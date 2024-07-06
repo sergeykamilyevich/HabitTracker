@@ -19,7 +19,6 @@ import com.example.habittracker.ui_kit.R
 import com.example.habittracker.viewmodels_api.presentation.models.AddHabitSnackBarData
 import com.example.habittracker.viewmodels_api.presentation.tools.Event
 import com.example.habittracker.viewmodels_api.presentation.tools.Resources
-import com.example.habittracker.viewmodels_api.presentation.view_models.FilterViewModel
 import com.example.habittracker.viewmodels_api.presentation.view_models.MainViewModel
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
