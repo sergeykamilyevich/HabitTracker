@@ -37,9 +37,6 @@ class HabitListFragment : Fragment(), HasTitle {
         ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
     }
 
-    @Inject
-    lateinit var time: Time
-
     private lateinit var habitListAdapter: HabitListAdapter
 
     private var listMode: HabitTypeApp? = null
@@ -105,7 +102,7 @@ class HabitListFragment : Fragment(), HasTitle {
                 viewModel.addHabitDone(
                     HabitDone(
                         habitId = it.id,
-                        date = time.currentUtcDateInSeconds(),
+                        date = viewModel.currentUtcDateInSeconds(),
                         habitUid = it.uid
                     )
                 )

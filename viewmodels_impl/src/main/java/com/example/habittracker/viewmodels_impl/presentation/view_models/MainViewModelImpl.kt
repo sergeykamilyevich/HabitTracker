@@ -9,6 +9,7 @@ import com.example.habittracker.core_api.domain.errors.Either.Failure
 import com.example.habittracker.core_api.domain.errors.Either.Success
 import com.example.habittracker.core_api.domain.errors.IoError
 import com.example.habittracker.core_api.domain.errors.IoError.*
+import com.example.habittracker.core_api.domain.interactor.TimeConvertInteractor
 import com.example.habittracker.core_api.domain.models.Habit
 import com.example.habittracker.core_api.domain.models.HabitDone
 import com.example.habittracker.core_api.domain.models.HabitType
@@ -18,6 +19,7 @@ import com.example.habittracker.ui_kit.R
 import com.example.habittracker.viewmodels_api.presentation.models.AddHabitSnackBarData
 import com.example.habittracker.viewmodels_api.presentation.tools.Event
 import com.example.habittracker.viewmodels_api.presentation.tools.Resources
+import com.example.habittracker.viewmodels_api.presentation.view_models.FilterViewModel
 import com.example.habittracker.viewmodels_api.presentation.view_models.MainViewModel
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
@@ -32,6 +34,7 @@ class MainViewModelImpl @Inject constructor(
     private val syncUseCase: SyncUseCase,
     private val resources: Resources,
     private val filterViewModel: FilterViewModelImpl,
+    private val timeConvertInteractor: TimeConvertInteractor,
 ) : MainViewModel() {
 
     private val _showSnackbarHabitDone = MutableLiveData<Event<AddHabitSnackBarData>>()
@@ -256,6 +259,8 @@ class MainViewModelImpl @Inject constructor(
             }
         }
     }
+
+    override fun currentUtcDateInSeconds(): Int = timeConvertInteractor.currentUtcDateInSeconds()
 
     companion object {
         private const val EMPTY_CODE_STRING = ""

@@ -7,8 +7,11 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.example.habittracker.core_api.data.store.UserPreferences
 import com.example.habittracker.core_api.di.annotations.ApplicationScope
 import com.example.habittracker.core_api.data.crypto.Encryption
+import com.example.habittracker.core_api.domain.interactor.TimeConvertInteractor
 import com.example.habittracker.core_impl.data.crypto.EncryptionImpl
 import com.example.habittracker.core_impl.data.store.UserPreferencesImpl
+import com.example.habittracker.core_impl.domain.interactor.TimeConvertInteractorImpl
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import java.security.KeyStore
@@ -16,6 +19,8 @@ import java.security.KeyStore
 @Module
 interface CoreModule {
 
+    @Binds
+    fun bindTimeConvertInteractor(interactor: TimeConvertInteractorImpl): TimeConvertInteractor
 
     companion object {
 

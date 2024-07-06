@@ -59,4 +59,6 @@ abstract class MainViewModel : ViewModel() {
     abstract fun snackbarCallback(habitDone: HabitDone): BaseTransientBottomBar.BaseCallback<Snackbar>
 
     abstract fun compareCloudAndDb()
+
+    abstract fun currentUtcDateInSeconds(): Int
 }

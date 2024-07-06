@@ -58,7 +58,7 @@ class AuthorizationFragment : Fragment(), HasTitle {
 
             btnSave.setOnClickListener {
                 viewLifecycleOwner.lifecycleScope.launch {
-                    viewModel.saveToken(tiedToken.text as? CharSequence ?: EMPTY_TOKEN as CharSequence)
+                    viewModel.saveToken(tiedToken.text as? CharSequence ?: TOKEN_NOT_PROVIDED)
                 }
                 findNavController().popBackStack()
             }
@@ -67,7 +67,7 @@ class AuthorizationFragment : Fragment(), HasTitle {
 
     companion object {
 
-        private val EMPTY_TOKEN = ""
+        private val TOKEN_NOT_PROVIDED: CharSequence = ""
     }
 
     override fun getTitleResId(): Int = string.authorization_fragment_title

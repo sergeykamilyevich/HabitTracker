@@ -87,7 +87,6 @@ class HabitItemFragment : Fragment(), HasTitle {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d("99999", "HabitItemFragment $this")
         _binding = FragmentHabitItemBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -203,7 +202,7 @@ class HabitItemFragment : Fragment(), HasTitle {
                     colors[Random.nextInt(16)],
                     Random.nextInt(10) + 1,
                     Random.nextInt(30) + 1,
-                    date = Time().currentUtcDateInSeconds(),
+                    date = habitItemViewModel.currentUtcDateInSeconds(),
                     done = listOf()
                 )
             )

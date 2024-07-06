@@ -38,5 +38,5 @@ abstract class HabitItemViewModel  : ViewModel() {
 
     abstract fun upsertHabitItem(habit: Habit)
 
-
+    abstract fun currentUtcDateInSeconds(): Int
 }

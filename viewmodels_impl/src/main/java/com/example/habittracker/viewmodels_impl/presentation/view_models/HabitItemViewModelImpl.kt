@@ -11,10 +11,10 @@ import com.example.habittracker.core_api.domain.errors.Either
 import com.example.habittracker.core_api.domain.errors.Either.Failure
 import com.example.habittracker.core_api.domain.errors.Either.Success
 import com.example.habittracker.core_api.domain.errors.IoError
+import com.example.habittracker.core_api.domain.interactor.TimeConvertInteractor
 import com.example.habittracker.core_api.domain.models.Habit
 import com.example.habittracker.core_api.domain.models.HabitPriority
 import com.example.habittracker.core_api.domain.models.HabitType
-import com.example.habittracker.core_api.domain.models.Time
 import com.example.habittracker.db_api.domain.usecases.DbUseCase
 import com.example.habittracker.viewmodels_api.presentation.color.ColorPicker
 import com.example.habittracker.viewmodels_api.presentation.mappers.HabitItemMapper
@@ -25,10 +25,10 @@ import javax.inject.Inject
 class HabitItemViewModelImpl @Inject constructor(
     private val mapper: HabitItemMapper,
     private val mainViewModel: MainViewModelImpl,
-    private val time: Time,
+    private val timeConvertInteractor: TimeConvertInteractor,
     private val colorPicker: ColorPicker,
     private val dbUseCase: DbUseCase,
-    private val syncUseCase: SyncUseCase
+    private val syncUseCase: SyncUseCase,
 ) : HabitItemViewModel() {
 
     private val _errorInputName = MutableLiveData<Boolean>()
@@ -94,8 +94,8 @@ class HabitItemViewModelImpl @Inject constructor(
 
     private fun setEmptyCurrentHabit() {
         _currentFragmentHabit.value = Habit(
-            name = EMPTY_STRING,
-            description = EMPTY_STRING,
+            name = EMPTY_FIELD,
+            description = EMPTY_FIELD,
             priority = HabitPriority.NORMAL,
             type = HabitType.GOOD,
             color = colorPicker.colors()[0],
@@ -130,7 +130,7 @@ class HabitItemViewModelImpl @Inject constructor(
                 color = habit.color,
                 recurrenceNumber = habit.recurrenceNumber,
                 recurrencePeriod = habit.recurrencePeriod,
-                date = time.currentUtcDateInSeconds()
+                date = timeConvertInteractor.currentUtcDateInSeconds()
             )
             upsertHabit(item)
         }
@@ -147,12 +147,14 @@ class HabitItemViewModelImpl @Inject constructor(
                     color = habit.color,
                     recurrenceNumber = habit.recurrenceNumber,
                     recurrencePeriod = habit.recurrencePeriod,
-                    date = time.currentUtcDateInSeconds()
+                    date = timeConvertInteractor.currentUtcDateInSeconds()
                 )
                 upsertHabit(item)
             }
         }
     }
+
+    override fun currentUtcDateInSeconds(): Int = timeConvertInteractor.currentUtcDateInSeconds()
 
     private suspend fun upsertHabit(habit: Habit) {
         val resultOfUpserting: Either<IoError, Int> = dbUseCase.upsertHabitUseCase.invoke(habit)
@@ -176,7 +178,7 @@ class HabitItemViewModelImpl @Inject constructor(
     }
 
     companion object {
-        private const val EMPTY_STRING = ""
+        private const val EMPTY_FIELD = ""
     }
 
 }

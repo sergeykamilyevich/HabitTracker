@@ -22,7 +22,7 @@ class BottomSheetFragment : Fragment() {
     private val binding: FragmentBottomSheetBinding
         get() = _binding ?: throw RuntimeException("FragmentBottomSheetBinding is null")
 
-    private lateinit var buttons: ArrayList<Button>
+    private val buttons = mutableListOf<Button>()
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -57,13 +57,15 @@ class BottomSheetFragment : Fragment() {
     }
 
     private fun setUpBottomSheetButtons() {
-        buttons = arrayListOf(
-            binding.btnNameAsc,
-            binding.btnNameDesc,
-            binding.btnCreationAsc,
-            binding.btnCreationDesc,
-            binding.btnPriorityAsc,
-            binding.btnPriorityDesc
+        buttons.addAll(
+            listOf(
+                binding.btnNameAsc,
+                binding.btnNameDesc,
+                binding.btnCreationAsc,
+                binding.btnCreationDesc,
+                binding.btnPriorityAsc,
+                binding.btnPriorityDesc
+            )
         )
         buttons.forEachIndexed { index, button ->
             button.setOnClickListener {
@@ -73,11 +75,11 @@ class BottomSheetFragment : Fragment() {
         }
         if (filterViewModel.habitListFilter.value == null) {
             setUpDefaultButtonsState()
-        } else {
-            setUpSelectedButtonFromHabitListOrderBy(
-                filterViewModel.habitListFilter.value?.orderBy ?: HabitListOrderBy.NAME_ASC
-            )
+            return
         }
+        setUpSelectedButtonFromHabitListOrderBy(
+            filterViewModel.habitListFilter.value?.orderBy ?: HabitListOrderBy.NAME_ASC
+        )
     }
 
     private fun setCurrentButtonIsSelected(selectedButtonIndex: Int) {
